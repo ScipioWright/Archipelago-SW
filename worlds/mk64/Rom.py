@@ -1,0 +1,252 @@
+import math
+import hashlib
+import os
+
+import settings
+import Utils
+from BaseClasses import MultiWorld
+from worlds.Files import APDeltaPatch
+
+from .Locations import ID_BASE
+from .Options import Opt, ShuffleDriftAbilities, CourseOrder
+
+
+# ROM ADDRESSES
+class Addr:
+    # *** ROM ADDRESSES ***
+    COURSE_IDS = 0xF37B4
+    COURSE_NAMEPLATES = 0x12F772
+    SAVE = 0xC00000
+    SAVE_SIZE = 0x200
+    SAVE_LOCATIONS_CHECKED = SAVE + 0x20
+    PLAYER_NAME = SAVE + SAVE_SIZE
+    PLAYER_NAME_SIZE = 64
+    SEED_NAME = PLAYER_NAME + PLAYER_NAME_SIZE
+    SEED_NAME_SIZE = 20
+    # Game Settings
+    TWO_PLAYER = SEED_NAME + SEED_NAME_SIZE
+    GAME_MODE = TWO_PLAYER + 1
+    MIRROR_COURSES = GAME_MODE + 1
+    FREE_MINI_TURBO = MIRROR_COURSES + 2
+    SHUFFLE_RAILINGS = FREE_MINI_TURBO + 1
+    FEATHER_AVAILABLE = SHUFFLE_RAILINGS + 1
+    # Custom Course Order
+    # COURSE_ORDER = FEATHER_AVAILABLE + 1
+    # CUSTOM_ORDER = COURSE_ORDER + 40
+    # Generation Flags
+    GENERATION_DONE = FEATHER_AVAILABLE + 1
+    GENERATION_LOCKED = GENERATION_DONE + 1
+    # AP Items and pickup strings
+    ITEMS = 0xC002E0  # APItem[583] at 4 bytes each
+    ITEM_SIZE = 4
+    PICKUP_PLAYER_NAMES = 0xC00C00  # char[256][16]
+    ASCII_PLAYER_NAME_SIZE = 16
+    PICKUP_ITEM_NAMES = 0xC01A60  # char[256][40]
+    ITEM_NAME_SIZE = 40
+
+    # *** RAM ADDRESSES ***
+    NUM_ITEMS_RECEIVED = 0x40001F
+    LOCATIONS_CHECKED = 0x400020
+    LOCATIONS_CHECKED_BYTES = 73
+    RECEIVE_ITEM_ID = 0x4002A6
+    RECEIVE_CLASSIFICATION = RECEIVE_ITEM_ID + 1
+    RECEIVE_PLAYER_NAME = RECEIVE_CLASSIFICATION + 1
+    RECEIVE_ITEM_NAME = RECEIVE_PLAYER_NAME + ASCII_PLAYER_NAME_SIZE
+
+
+def generate_rom_patch(multiworld: MultiWorld,
+                       player: int,
+                       opt: Opt,
+                       output_directory: str,
+                       driver_unlocks: int,
+                       order: list[int]) -> None:
+    random = multiworld.per_slot_randoms[player]
+    base_out_path = os.path.join(output_directory, multiworld.get_out_file_name_base(player))
+    patch_path = base_out_path + MK64DeltaPatch.patch_file_ending     # AP_<seed>_<player>.apmk64
+    rom_out_path = base_out_path + MK64DeltaPatch.result_file_ending  # AP_<seed>_<player>.z64
+
+    rom = Rom()
+    try:
+        # PATCHING START
+
+        # Patch save file
+        save_id = hashlib.md5((multiworld.seed_name + multiworld.player_name[player]).encode()).digest()[:8]
+        locked_courses = 0xFFFF << 16 - opt.locked_courses & 0xFFFF
+        drift = ((opt.drift == ShuffleDriftAbilities.option_off and 0xAAAA) or
+                 (opt.drift == ShuffleDriftAbilities.option_free_drift and 0x5555) or 0)
+        blues = 0 if opt.shuffle_blues else 0b11
+        tires_off_road = 0 if opt.traction else 0xFF
+        tires_winter = 0 if opt.traction else 0xFF
+        switches = 0 if opt.path_fences or opt.obstacle_fences or opt.item_fences else 0b1111
+        # Pack to bytes ordered to the basepatch's save data struct bitfields which align to 4-byte boundaries
+        rom.write_bytes(Addr.SAVE,      save_id)  # replaces DATETIME pseudo-hash in basepatch
+        rom.write_int16(Addr.SAVE + 0x8,  locked_courses)
+        rom.write_int16(Addr.SAVE + 0xA, drift)
+        rom.write_byte(Addr.SAVE + 0xF,  blues)
+        rom.write_byte(Addr.SAVE + 0x14,  tires_off_road)
+        rom.write_byte(Addr.SAVE + 0x17,  0b1110)  # locked_cups; only Mushroom Cup starts unlocked
+        rom.write_byte(Addr.SAVE + 0x18,  tires_winter)
+        rom.write_byte(Addr.SAVE + 0x1B,  switches)
+        rom.write_byte(Addr.SAVE + 0x1C,  driver_unlocks)
+
+        # Patch player name and multiworld seed_name for later ROM authentication with the client
+        player_name_bytes = multiworld.player_name[player].encode("utf-8")
+        if len(player_name_bytes) > 64:
+            raise ValueError(f"Player name {multiworld.player_name[player]} was longer than the 64 byte expectation.")
+        rom.write_bytes(Addr.PLAYER_NAME, [0] * Addr.PLAYER_NAME_SIZE)
+        rom.write_bytes(Addr.PLAYER_NAME, player_name_bytes)
+        seed_name_bytes = multiworld.seed_name.encode("utf-8")
+        if len(seed_name_bytes) > 20:
+            raise ValueError(f"Multiworld.seed_name {multiworld.seed_name} was longer than the 20 byte expectation.")
+        rom.write_bytes(Addr.SEED_NAME, [0] * Addr.SEED_NAME_SIZE)
+        rom.write_bytes(Addr.SEED_NAME, seed_name_bytes)
+
+        # Patch game settings
+        mirror_courses = 0
+        for i in range(16):
+            if random.random() < opt.mirror_chance:
+                mirror_courses |= 1 << i
+        rom.write_byte(Addr.TWO_PLAYER, opt.two_player)
+        rom.write_byte(Addr.GAME_MODE, opt.mode)
+        rom.write_byte(Addr.FREE_MINI_TURBO, opt.drift == ShuffleDriftAbilities.option_free_mini_turbo)
+        rom.write_int16(Addr.MIRROR_COURSES, mirror_courses)
+        rom.write_byte(Addr.SHUFFLE_RAILINGS, opt.railings)
+        rom.write_byte(Addr.FEATHER_AVAILABLE, opt.feather)
+        rom.write_byte(Addr.GENERATION_DONE, 1)
+        rom.write_byte(Addr.GENERATION_LOCKED, 1)
+
+        # Write custom course order
+        if opt.course_order != CourseOrder.option_vanilla:
+            course_ids = [0x8,  0x9, 0x6, 0xB,
+                          0xA,  0x5, 0x1, 0x0,
+                          0xE,  0xC, 0x7, 0x2,
+                          0x12, 0x4, 0x3, 0xD]
+            course_nameplate_ids = [0x4C, 0x50, 0x43, 0x59,
+                                    0x54, 0x3E, 0x2A, 0x25,
+                                    0x65, 0x5D, 0x48, 0x2F,
+                                    0x75, 0x3A, 0x34, 0x61]
+            for i, c in enumerate(order):
+                rom.write_byte(Addr.COURSE_IDS + 2 * i + 1, course_ids[c])
+                rom.write_byte(Addr.COURSE_NAMEPLATES + 20 * math.floor(1.25 * i), course_nameplate_ids[c])
+
+        # Write items, and marked unavailable locations as checked
+        prechecked_locs = bytearray([0xFF] * 73)
+        for i, loc in enumerate(multiworld.get_locations(player)):
+            if loc.address is None:  # Skip Victory Event Location (will leave one index i blank, but 256 spots suffice)
+                continue
+            local_loc_id = loc.address - ID_BASE
+            prechecked_locs[local_loc_id // 8] &= ~(1 << local_loc_id % 8)
+            # Write items
+            addr = Addr.ITEMS + Addr.ITEM_SIZE * local_loc_id
+            rom.write_byte(addr + 2, loc.item.classification & 0b111)  # 0=FILLER, 1=PROGRESSION, 2=USEFUL, 4=TRAP
+            rom.write_byte(addr + 3, i)  # pickup_id, used by the game to reference player name and item name
+            pickup_item_name = loc.item.name.encode("ascii")[:Addr.ITEM_NAME_SIZE]
+            rom.write_bytes(Addr.PICKUP_ITEM_NAMES + i * Addr.ITEM_NAME_SIZE, pickup_item_name)
+            if loc.item.player == player:
+                rom.write_int16(addr, loc.item.code - ID_BASE)  # local_id (0 to 210)
+            else:
+                rom.write_int16(addr, 0xFFFF)  # local_id of 0xFFFF indicates nonlocal item  # TODO: Change to byte/0xFF, check alignment in ROM
+                pickup_player_name = multiworld.player_name[loc.item.player].encode("ascii")
+                rom.write_bytes(Addr.PICKUP_PLAYER_NAMES + Addr.ASCII_PLAYER_NAME_SIZE * i, pickup_player_name)
+        rom.write_bytes(Addr.SAVE_LOCATIONS_CHECKED, prechecked_locs)
+
+        # PATCHING DONE
+
+        rom.write_to_file(rom_out_path)
+        patch = MK64DeltaPatch(patch_path, player, multiworld.player_name[player], patched_path=rom_out_path)
+        patch.write()
+        print("Done generating one patch.")
+    except Exception as e:
+        print("Mario Kart 64 failed its generate_output routine.")
+        raise e
+    finally:  # TODO: Maybe find out unlink() too.
+        if os.path.exists(rom_out_path):
+            os.unlink(rom_out_path)
+
+
+def get_base_rom_path(file_name: str = "") -> str:
+    host_settings = settings.get_settings()
+    # Utils.get_options()
+    if not file_name:
+        file_name = host_settings["mk64_options"]["rom_file"]
+    if not os.path.exists(file_name):
+        file_name = Utils.user_path(file_name)
+    return file_name
+
+
+class MK64DeltaPatch(APDeltaPatch):
+    hash = "3a67d9986f54eb282924fca4cd5f6dff"
+    patch_file_ending = ".apmk64"
+    result_file_ending = ".z64"
+    game = "Mario Kart 64"
+
+    base_rom_bytes = None
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        if not cls.base_rom_bytes:
+            file_name = get_base_rom_path()
+            cls.base_rom_bytes = bytes(open(file_name, "rb").read())
+            basemd5 = hashlib.md5()
+            basemd5.update(cls.base_rom_bytes)
+            if MK64DeltaPatch.hash != basemd5.hexdigest():
+                pass    # for testing only until the basepatch is properly handled
+                # raise Exception('Supplied base ROM does not match known MD5 for US release of Mario Kart 64.'
+                #                'Get the correct game, then dump it.')
+        return cls.base_rom_bytes
+
+
+class Rom:
+    def __init__(self, file=get_base_rom_path()):
+        self.orig_buffer = None
+
+        with open(file, 'rb') as stream:
+            self.buffer = bytearray(stream.read())
+
+    def read_bit(self, address: int, bit_number: int) -> bool:
+        bitflag = (1 << bit_number)
+        return (self.buffer[address] & bitflag) != 0
+
+    def read_byte(self, address: int) -> int:
+        return self.buffer[address]
+
+    def read_bytes(self, startaddress: int, length: int) -> bytes:
+        return self.buffer[startaddress:startaddress + length]
+
+    def write_byte(self, address: int, value: int):
+        self.buffer[address] = value
+
+    def write_bytes(self, startaddress: int, values: list | bytes | bytearray):
+        self.buffer[startaddress:startaddress + len(values)] = values
+
+    def write_int16(self, address, value: int):
+        value = value & 0xFFFF
+        self.write_bytes(address, [(value >> 8) & 0xFF, value & 0xFF])
+
+    def write_int16s(self, startaddress, values: list):
+        for i, value in enumerate(values):
+            self.write_int16(startaddress + (i * 2), value)
+
+    def write_int24(self, address, value: int):
+        value = value & 0xFFFFFF
+        self.write_bytes(address, [(value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
+
+    def write_int24s(self, startaddress, values: list):
+        for i, value in enumerate(values):
+            self.write_int24(startaddress + (i * 3), value)
+
+    def write_int32(self, address, value: int):
+        value = value & 0xFFFFFFFF
+        self.write_bytes(address, [(value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
+
+    def write_int32s(self, startaddress, values: list):
+        for i, value in enumerate(values):
+            self.write_int32(startaddress + (i * 4), value)
+
+    def write_to_file(self, file):
+        with open(file, 'wb') as outfile:
+            outfile.write(self.buffer)
+
+    def read_from_file(self, file):
+        with open(file, 'rb') as stream:
+            self.buffer = bytearray(stream.read())
