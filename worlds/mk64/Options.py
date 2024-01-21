@@ -168,6 +168,12 @@ class MinimumFillerItems(Range):
     default = 0
 
 
+class FixResultsMusic(DefaultOnToggle):
+    """Fixes the race win results screen music so the first section repeats 2 times, not 64 times.
+    The official soundtrack uses this AABB form."""
+    display_name = "Fix Winning Results Music"
+
+
 class SoundMode(Choice):    # TODO: Add support for this
     """Sets the sound mode in the game's option menu ahead of time."""
     display_name = "Sound Mode"
@@ -177,6 +183,7 @@ class SoundMode(Choice):    # TODO: Add support for this
     default = 0
 
 
+# Options as they will appear in YAML settings, and multiworld attributes
 mk64_options: Dict[str, AssembleOptions] = {
     "start_inventory_from_pool": StartInventoryPool,
     "two_player": TwoPlayer,
@@ -199,6 +206,7 @@ mk64_options: Dict[str, AssembleOptions] = {
     "shuffle_item_box_clusters": ShuffleItemBoxClusters,
     "filler_trap_percentage": FillerTrapPercentage,
     "minimum_filler_items": MinimumFillerItems,
+    "fix_results_music": FixResultsMusic,
     "sound_mode": SoundMode
 }
 
@@ -227,3 +235,4 @@ class Opt:
         self.clusters =        multiworld.shuffle_item_box_clusters[player].value
         self.trap_percentage = multiworld.filler_trap_percentage[player].value
         self.min_filler =      multiworld.minimum_filler_items[player].value
+        self.fix_music =       multiworld.fix_results_music[player].value

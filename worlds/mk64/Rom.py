@@ -16,6 +16,7 @@ class Addr:
     # *** ROM ADDRESSES ***
     COURSE_IDS = 0xF37B4
     COURSE_NAMEPLATES = 0x12F772
+    RESULTS_MUSIC_REPETITIONS = 0xBDA883
     SAVE = 0xC00000
     SAVE_SIZE = 0x200
     SAVE_LOCATIONS_CHECKED = SAVE + 0x20
@@ -128,6 +129,10 @@ def generate_rom_patch(multiworld: MultiWorld,
             for i, c in enumerate(order):
                 rom.write_byte(Addr.COURSE_IDS + 2 * i + 1, course_ids[c])
                 rom.write_byte(Addr.COURSE_NAMEPLATES + 20 * math.floor(1.25 * i), course_nameplate_ids[c])
+
+        # Patch optional fixes
+        # The basepatch may already have the music fix set, so we set either case here just in case
+        rom.write_byte(Addr.RESULTS_MUSIC_REPETITIONS, 0x2 if opt.fix_music else 0x40)
 
         # Write items, and marked unavailable locations as checked
         prechecked_locs = bytearray([0xFF] * 73)
