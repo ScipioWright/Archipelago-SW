@@ -10,7 +10,7 @@ from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 
 from .Locations import ID_BASE
-from .Options import Opt, ShuffleDriftAbilities, CourseOrder
+from .Options import Opt, CourseOrder, ShuffleDriftAbilities, ConsistentItemBoxes
 
 
 # ROM ADDRESSES
@@ -24,6 +24,9 @@ class Addr:
     SAVE = 0xC00000
     SAVE_SIZE = 0x200
     SAVE_LOCATIONS_UNCHECKED = SAVE + 0x24
+    SAVE_LOCATIONS_UNCHECKED_SIZE = 73
+    SAVE_IDENTIFIED_ITEM_BOXES = SAVE + 0x6D
+    SAVE_IDENTIFIED_ITEM_BOXES_SIZE = 43
     PLAYER_NAME = SAVE + SAVE_SIZE
     PLAYER_NAME_SIZE = 64
     SEED_NAME = PLAYER_NAME + PLAYER_NAME_SIZE
@@ -53,7 +56,6 @@ class Addr:
     # *** RAM ADDRESSES ***
     NUM_ITEMS_RECEIVED = 0x40001A
     LOCATIONS_UNCHECKED = 0x400024
-    LOCATIONS_UNCHECKED_SIZE = 73
     RECEIVE_ITEM_ID = 0x40028E
     RECEIVE_CLASSIFICATION = RECEIVE_ITEM_ID + 1
     RECEIVE_PLAYER_NAME = RECEIVE_CLASSIFICATION + 1
@@ -86,14 +88,14 @@ def generate_rom_patch(multiworld: MultiWorld,
         locked_cups = 0b1110    # only Mushroom Cup starts unlocked
         switches = 0 if opt.path_fences or opt.obstacle_fences or opt.item_fences else 0b1111
         # Pack to bytes ordered to the basepatch's SaveData struct bitfields
-        rom.write_bytes(Addr.SAVE,      save_id)  # replaces DATETIME pseudo-hash in basepatch
-        rom.write_int16(Addr.SAVE + 0x8,  locked_courses)
+        rom.write_bytes(Addr.SAVE,       save_id)  # replaces DATETIME pseudo-hash in basepatch
+        rom.write_int16(Addr.SAVE + 0x8, locked_courses)
         rom.write_int16(Addr.SAVE + 0xA, drift)
         rom.write_byte(Addr.SAVE + 0xF,  blues)
-        rom.write_byte(Addr.SAVE + 0x14,  driver_unlocks)
-        rom.write_byte(Addr.SAVE + 0x15,  tires_off_road)
-        rom.write_byte(Addr.SAVE + 0x16,  tires_winter)
-        rom.write_byte(Addr.SAVE + 0x17,  (locked_cups << 4) | switches)
+        rom.write_byte(Addr.SAVE + 0x14, driver_unlocks)
+        rom.write_byte(Addr.SAVE + 0x15, tires_off_road)
+        rom.write_byte(Addr.SAVE + 0x16, tires_winter)
+        rom.write_byte(Addr.SAVE + 0x17, (locked_cups << 4) | switches)
 
         # Patch player name and multiworld seed_name for later ROM authentication with the client
         player_name_bytes = multiworld.player_name[player].encode("utf-8")
@@ -118,6 +120,9 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_int16(Addr.MIRROR_COURSES, mirror_courses)
         rom.write_byte(Addr.SHUFFLE_RAILINGS, opt.railings)
         rom.write_byte(Addr.FEATHER_AVAILABLE, opt.feather)
+        rom.write_byte(Addr.CONSISTENT_ITEM_BOXES, opt.consistent)
+        if opt.consistent == ConsistentItemBoxes.option_on:
+            rom.write_bytes(Addr.SAVE_IDENTIFIED_ITEM_BOXES, [0xFF] * Addr.SAVE_IDENTIFIED_ITEM_BOXES_SIZE)
         rom.write_byte(Addr.GENERATION_DONE, 1)
         rom.write_byte(Addr.GENERATION_LOCKED, 1)
 
@@ -140,7 +145,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_byte(Addr.RESULTS_MUSIC_REPETITIONS, 0x2 if opt.fix_music else 0x40)
 
         # Write items, and marked unavailable locations as checked
-        prechecked_locs = bytearray(Addr.LOCATIONS_UNCHECKED_SIZE)  # bytearray([0xFF] * Addr.LOCATIONS_UNCHECKED_SIZE)
+        prechecked_locs = bytearray(Addr.SAVE_LOCATIONS_UNCHECKED_SIZE)
         for i, loc in enumerate(multiworld.get_locations(player)):
             if loc.address is None:  # Skip Victory Event Location (will leave one index i blank, but 256 spots suffice)
                 continue

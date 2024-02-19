@@ -138,6 +138,16 @@ class FeatherItem(Toggle):
     display_name = "Feather Item"
 
 
+class ConsistentItemBoxes(Choice):
+    """Make each item box always give the same item. "On" will always show which item will be given instead of a
+    question mark (?) inside the item boxes. "Identify" will only show which item will be given after triggering the
+    item roulette once."""
+    display_name = "Consistent Item Boxes"
+    option_off = 0
+    option_on = 1
+    option_identify = 2
+
+
 class ShuffleBlueShellItemBoxes(Toggle):
     """Whether to shuffle the blue shell item boxes on Luigi Raceway and Koopa Troopa Beach into the item pool."""
     display_name = "Shuffle Blue Shell Item Boxes"
@@ -202,6 +212,7 @@ mk64_options: Dict[str, AssembleOptions] = {
     "fences_as_obstacles": FencesAsObstacles,
     "fences_block_item_boxes": FencesBlockItemBoxes,
     "feather_item": FeatherItem,
+    "consistent_item_boxes": ConsistentItemBoxes,
     "shuffle_blue_shell_item_boxes": ShuffleBlueShellItemBoxes,
     "shuffle_item_box_clusters": ShuffleItemBoxClusters,
     "filler_trap_percentage": FillerTrapPercentage,
@@ -231,6 +242,7 @@ class Opt:
         self.obstacle_fences = multiworld.fences_as_obstacles[player].value
         self.item_fences =     multiworld.fences_block_item_boxes[player].value
         self.feather =         multiworld.feather_item[player].value
+        self.consistent =      multiworld.consistent_item_boxes[player].value
         self.shuffle_blues =   multiworld.shuffle_blue_shell_item_boxes[player].value
         self.clusters =        multiworld.shuffle_item_box_clusters[player].value
         self.trap_percentage = multiworld.filler_trap_percentage[player].value
