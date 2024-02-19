@@ -100,7 +100,7 @@ class MarioKart64Client(BizHawkClient):
             # Read Game State
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [
                 (Addr.NUM_ITEMS_RECEIVED, 1, "RDRAM"),
-                (Addr.LOCATIONS_CHECKED, Addr.LOCATIONS_CHECKED_BYTES, "RDRAM")])
+                (Addr.LOCATIONS_UNCHECKED, Addr.LOCATIONS_UNCHECKED_SIZE, "RDRAM")])
             num_received_items = int.from_bytes(read_state[0], "big")
             locs_state = read_state[1]
 

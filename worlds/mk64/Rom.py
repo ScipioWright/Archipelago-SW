@@ -1,5 +1,7 @@
 import math
 import hashlib
+import itertools
+import struct
 import os
 
 import settings
@@ -14,42 +16,45 @@ from .Options import Opt, ShuffleDriftAbilities, CourseOrder
 # ROM ADDRESSES
 class Addr:
     # *** ROM ADDRESSES ***
+    # ** Native **
     COURSE_IDS = 0xF37B4
     COURSE_NAMEPLATES = 0x12F772
     RESULTS_MUSIC_REPETITIONS = 0xBDA883
+    # ** Basepatch **
     SAVE = 0xC00000
     SAVE_SIZE = 0x200
-    SAVE_LOCATIONS_CHECKED = SAVE + 0x20
+    SAVE_LOCATIONS_UNCHECKED = SAVE + 0x24
     PLAYER_NAME = SAVE + SAVE_SIZE
     PLAYER_NAME_SIZE = 64
     SEED_NAME = PLAYER_NAME + PLAYER_NAME_SIZE
     SEED_NAME_SIZE = 20
+    GENERATION_DONE = SEED_NAME + SEED_NAME_SIZE
+    GENERATION_LOCKED = GENERATION_DONE + 1
     # Game Settings
-    TWO_PLAYER = SEED_NAME + SEED_NAME_SIZE
-    GAME_MODE = TWO_PLAYER + 1
+    TWO_PLAYER_POWERS = GENERATION_LOCKED + 1
+    GAME_MODE = TWO_PLAYER_POWERS + 1
     MIRROR_COURSES = GAME_MODE + 1
     FREE_MINI_TURBO = MIRROR_COURSES + 2
     SHUFFLE_RAILINGS = FREE_MINI_TURBO + 1
     FEATHER_AVAILABLE = SHUFFLE_RAILINGS + 1
+    CONSISTENT_ITEM_BOXES = FEATHER_AVAILABLE + 1
     # Custom Course Order
-    # COURSE_ORDER = FEATHER_AVAILABLE + 1
+    # COURSE_ORDER = CONSISTENT_ITEM_BOXES + 1
     # CUSTOM_ORDER = COURSE_ORDER + 40
     # Generation Flags
-    GENERATION_DONE = FEATHER_AVAILABLE + 1
-    GENERATION_LOCKED = GENERATION_DONE + 1
     # AP Items and pickup strings
-    ITEMS = 0xC002E0  # APItem[583] at 4 bytes each
-    ITEM_SIZE = 4
-    PICKUP_PLAYER_NAMES = 0xC00C00  # char[256][16]
+    ITEMS = 0xC002C8  # APItem[583] at 3 bytes each
+    ITEM_SIZE = 3
+    PICKUP_PLAYER_NAMES = 0xC009A0  # char[220][16]
     ASCII_PLAYER_NAME_SIZE = 16
-    PICKUP_ITEM_NAMES = 0xC01A60  # char[256][40]
+    PICKUP_ITEM_NAMES = 0xC01760  # char[220][40]
     ITEM_NAME_SIZE = 40
 
     # *** RAM ADDRESSES ***
-    NUM_ITEMS_RECEIVED = 0x40001F
-    LOCATIONS_CHECKED = 0x400020
-    LOCATIONS_CHECKED_BYTES = 73
-    RECEIVE_ITEM_ID = 0x4002A6
+    NUM_ITEMS_RECEIVED = 0x40001A
+    LOCATIONS_UNCHECKED = 0x400024
+    LOCATIONS_UNCHECKED_SIZE = 73
+    RECEIVE_ITEM_ID = 0x40028E
     RECEIVE_CLASSIFICATION = RECEIVE_ITEM_ID + 1
     RECEIVE_PLAYER_NAME = RECEIVE_CLASSIFICATION + 1
     RECEIVE_ITEM_NAME = RECEIVE_PLAYER_NAME + ASCII_PLAYER_NAME_SIZE
@@ -75,20 +80,20 @@ def generate_rom_patch(multiworld: MultiWorld,
         locked_courses = 0xFFFF << 16 - opt.locked_courses & 0xFFFF
         drift = ((opt.drift == ShuffleDriftAbilities.option_off and 0xAAAA) or
                  (opt.drift == ShuffleDriftAbilities.option_free_drift and 0x5555) or 0)
-        blues = 0 if opt.shuffle_blues else 0b11
+        blues = 0b11 if opt.shuffle_blues else 0
         tires_off_road = 0 if opt.traction else 0xFF
         tires_winter = 0 if opt.traction else 0xFF
+        locked_cups = 0b1110    # only Mushroom Cup starts unlocked
         switches = 0 if opt.path_fences or opt.obstacle_fences or opt.item_fences else 0b1111
-        # Pack to bytes ordered to the basepatch's save data struct bitfields which align to 4-byte boundaries
+        # Pack to bytes ordered to the basepatch's SaveData struct bitfields
         rom.write_bytes(Addr.SAVE,      save_id)  # replaces DATETIME pseudo-hash in basepatch
         rom.write_int16(Addr.SAVE + 0x8,  locked_courses)
         rom.write_int16(Addr.SAVE + 0xA, drift)
         rom.write_byte(Addr.SAVE + 0xF,  blues)
-        rom.write_byte(Addr.SAVE + 0x14,  tires_off_road)
-        rom.write_byte(Addr.SAVE + 0x17,  0b1110)  # locked_cups; only Mushroom Cup starts unlocked
-        rom.write_byte(Addr.SAVE + 0x18,  tires_winter)
-        rom.write_byte(Addr.SAVE + 0x1B,  switches)
-        rom.write_byte(Addr.SAVE + 0x1C,  driver_unlocks)
+        rom.write_byte(Addr.SAVE + 0x14,  driver_unlocks)
+        rom.write_byte(Addr.SAVE + 0x15,  tires_off_road)
+        rom.write_byte(Addr.SAVE + 0x16,  tires_winter)
+        rom.write_byte(Addr.SAVE + 0x17,  (locked_cups << 4) | switches)
 
         # Patch player name and multiworld seed_name for later ROM authentication with the client
         player_name_bytes = multiworld.player_name[player].encode("utf-8")
@@ -107,7 +112,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         for i in range(16):
             if random.random() < opt.mirror_chance:
                 mirror_courses |= 1 << i
-        rom.write_byte(Addr.TWO_PLAYER, opt.two_player)
+        rom.write_byte(Addr.TWO_PLAYER_POWERS, opt.two_player)
         rom.write_byte(Addr.GAME_MODE, opt.mode)
         rom.write_byte(Addr.FREE_MINI_TURBO, opt.drift == ShuffleDriftAbilities.option_free_mini_turbo)
         rom.write_int16(Addr.MIRROR_COURSES, mirror_courses)
@@ -135,25 +140,25 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_byte(Addr.RESULTS_MUSIC_REPETITIONS, 0x2 if opt.fix_music else 0x40)
 
         # Write items, and marked unavailable locations as checked
-        prechecked_locs = bytearray([0xFF] * 73)
+        prechecked_locs = bytearray(Addr.LOCATIONS_UNCHECKED_SIZE)  # bytearray([0xFF] * Addr.LOCATIONS_UNCHECKED_SIZE)
         for i, loc in enumerate(multiworld.get_locations(player)):
             if loc.address is None:  # Skip Victory Event Location (will leave one index i blank, but 256 spots suffice)
                 continue
             local_loc_id = loc.address - ID_BASE
-            prechecked_locs[local_loc_id // 8] &= ~(1 << local_loc_id % 8)
+            prechecked_locs[local_loc_id // 8] |= 1 << local_loc_id % 8
             # Write items
             addr = Addr.ITEMS + Addr.ITEM_SIZE * local_loc_id
-            rom.write_byte(addr + 2, loc.item.classification & 0b111)  # 0=FILLER, 1=PROGRESSION, 2=USEFUL, 4=TRAP
-            rom.write_byte(addr + 3, i)  # pickup_id, used by the game to reference player name and item name
+            rom.write_byte(addr + 1, loc.item.classification & 0b111)  # 0=FILLER,1=PROGRESSION,2=USEFUL,3=EMPTY,4=TRAP
+            rom.write_byte(addr + 2, i)  # pickup_id, used by the game to reference player name and item name
             pickup_item_name = loc.item.name.encode("ascii")[:Addr.ITEM_NAME_SIZE]
             rom.write_bytes(Addr.PICKUP_ITEM_NAMES + i * Addr.ITEM_NAME_SIZE, pickup_item_name)
             if loc.item.player == player:
-                rom.write_int16(addr, loc.item.code - ID_BASE)  # local_id (0 to 210)
+                rom.write_byte(addr, loc.item.code - ID_BASE)  # local_id (0 to 211)
             else:
-                rom.write_int16(addr, 0xFFFF)  # local_id of 0xFFFF indicates nonlocal item  # TODO: Change to byte/0xFF, check alignment in ROM
+                rom.write_byte(addr, 0xFF)  # local_id of 0xFF indicates nonlocal item
                 pickup_player_name = multiworld.player_name[loc.item.player].encode("ascii")
                 rom.write_bytes(Addr.PICKUP_PLAYER_NAMES + Addr.ASCII_PLAYER_NAME_SIZE * i, pickup_player_name)
-        rom.write_bytes(Addr.SAVE_LOCATIONS_CHECKED, prechecked_locs)
+        rom.write_bytes(Addr.SAVE_LOCATIONS_UNCHECKED, prechecked_locs)
 
         # PATCHING DONE
 
