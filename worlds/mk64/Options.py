@@ -7,7 +7,10 @@ from Options import AssembleOptions, Choice, DefaultOnToggle, Toggle, Range, Opt
 
 
 class TwoPlayer(Toggle):
-    """For local, couch co-op multiplayer. Sets the game to two-player mode and starts with two characters unlocked."""
+    """Start with two characters unlocked and shuffle a separate Player 2 set of item powers into the item pool.
+
+    This is the intended way to do local multiplayer, but you can still access the 2-player grand prix mode
+    with this off, and the 1-player grand prix mode with it on."""
     display_name = "Two Player Couch Co-op"
 
 
