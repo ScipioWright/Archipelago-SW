@@ -145,12 +145,12 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_byte(Addr.RESULTS_MUSIC_REPETITIONS, 0x2 if opt.fix_music else 0x40)
 
         # Write items, and marked unavailable locations as checked
-        prechecked_locs = bytearray(Addr.SAVE_LOCATIONS_UNCHECKED_SIZE)
+        initial_unchecked_locs = bytearray(Addr.SAVE_LOCATIONS_UNCHECKED_SIZE)
         for i, loc in enumerate(multiworld.get_locations(player)):
             if loc.address is None:  # Skip Victory Event Location (will leave one index i blank, but 256 spots suffice)
                 continue
             local_loc_id = loc.address - ID_BASE
-            prechecked_locs[local_loc_id // 8] |= 1 << local_loc_id % 8
+            initial_unchecked_locs[local_loc_id // 8] |= 1 << local_loc_id % 8
             # Write items
             addr = Addr.ITEMS + Addr.ITEM_SIZE * local_loc_id
             rom.write_byte(addr + 1, loc.item.classification & 0b111)  # 0=FILLER,1=PROGRESSION,2=USEFUL,3=EMPTY,4=TRAP
@@ -163,7 +163,7 @@ def generate_rom_patch(multiworld: MultiWorld,
                 rom.write_byte(addr, 0xFF)  # local_id of 0xFF indicates nonlocal item
                 pickup_player_name = multiworld.player_name[loc.item.player].encode("ascii")
                 rom.write_bytes(Addr.PICKUP_PLAYER_NAMES + Addr.ASCII_PLAYER_NAME_SIZE * i, pickup_player_name)
-        rom.write_bytes(Addr.SAVE_LOCATIONS_UNCHECKED, prechecked_locs)
+        rom.write_bytes(Addr.SAVE_LOCATIONS_UNCHECKED, initial_unchecked_locs)
 
         # UPDATE CRC
         rom.write_bytes(0x10, rom.calculate_crc_6102())

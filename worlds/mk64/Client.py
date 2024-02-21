@@ -52,7 +52,7 @@ class MarioKart64Client(BizHawkClient):
         super().__init__()
         self.local_checked_locations = set()
         self.rom_slot_name = None
-        self.checked_locs: bytearray = bytearray(73)
+        self.unchecked_locs: bytearray = bytearray([0xFF] * Addr.SAVE_LOCATIONS_UNCHECKED_SIZE)
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -104,6 +104,14 @@ class MarioKart64Client(BizHawkClient):
             num_received_items = int.from_bytes(read_state[0], "big")
             locs_state = read_state[1]
 
+            # Confirm we read real data rather than an unloaded ROM
+            if num_received_items == 0:
+                for byte in locs_state:
+                    if byte != 0:
+                        break
+                else:
+                    return
+
             # Receive item if we have one
             if num_received_items < len(ctx.items_received):
                 receive_item = ctx.items_received[num_received_items]
@@ -120,11 +128,11 @@ class MarioKart64Client(BizHawkClient):
             # Check for new locations to send
             new_locs = list()
             for i, byte in enumerate(locs_state):
-                if byte != self.checked_locs[i]:
+                if byte != self.unchecked_locs[i]:
                     for j in range(8):
-                        if byte & 1 << j != self.checked_locs[i] & 1 << j:
+                        if byte & 1 << j != self.unchecked_locs[i] & 1 << j:
                             new_locs.append(ID_BASE + 8 * i + j)
-                    self.checked_locs[i] = byte
+                    self.unchecked_locs[i] = byte
 
             # Send new locations
             if new_locs is not None:
