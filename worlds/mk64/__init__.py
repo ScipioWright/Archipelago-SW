@@ -82,7 +82,7 @@ class MK64World(World):
         # Count items without a paired location and vice versa, based on player options
         # hardcoded for speed, and because duplicating the the world generation logic here would be excessive.
         # Tests may be needed to keep this from being fragile, or it may need to be refactored to later into generation.
-        num_unpaired_items = ((not opt.feather and not opt.two_player and 21)  # 20 to 154
+        num_unpaired_items = ((not opt.feather and not opt.two_player and 21)  # 20 to 155
                               + (opt.feather and not opt.two_player and 22)
                               + (not opt.feather and opt.two_player and 34)
                               + (opt.feather and opt.two_player and 36)
@@ -94,22 +94,23 @@ class MK64World(World):
                               + (opt.starting_items and 8)
                               + (opt.railings and 13)
                               + ((opt.path_fences or opt.obstacle_fences or opt.item_fences) and 4)
+                              + (opt.box_respawning and 1)
                               + opt.min_filler)
         num_unpaired_locations = ((67 if opt.mode == GameMode.option_cups else 47)  # 47 to 88
                                   + (opt.hazards and 11)
                                   + (opt.secrets and 10))
 
-        num_extra_locs = max(num_unpaired_items - num_unpaired_locations, 0)  # 0 to 107
-        num_extra_items = max(num_unpaired_locations - num_unpaired_items, 0)
-        self.num_filler_items = opt.min_filler + num_extra_items  # 0 to 65
+        num_needed_extra_locs = max(num_unpaired_items - num_unpaired_locations, 0)  # 0 to 108
+        num_needed_extra_items = max(num_unpaired_locations - num_unpaired_items, 0)
+        self.num_filler_items = opt.min_filler + num_needed_extra_items  # 0 to 65
         self.shuffle_clusters = ([True] * opt.clusters + [False] * (72 - opt.clusters))
-        self.use_item_spots = ([True] * num_extra_locs + [False] * (338 - num_extra_locs - opt.clusters))
+        self.use_item_spots = ([True] * num_needed_extra_locs + [False] * (338 - num_needed_extra_locs - opt.clusters))
         # TODO: Determine whether we can/should notify this at generation time like this.
-        if num_extra_locs:
-            print(f"{num_extra_locs} extra Mario Kart 64 locations will be made"
+        if num_needed_extra_locs:
+            print(f"{num_needed_extra_locs} extra Mario Kart 64 locations will be made"
                   f" for {self.multiworld.get_player_name(self.player)} to match their number of items.")
-        elif num_extra_items:
-            print(f"{num_extra_items} extra Mario Kart 64 filler items will be made"
+        elif num_needed_extra_items:
+            print(f"{num_needed_extra_items} extra Mario Kart 64 filler items will be made"
                   f" for {self.multiworld.get_player_name(self.player)} to match their number of locations.")
 
     def create_regions(self) -> None:

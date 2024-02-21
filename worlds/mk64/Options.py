@@ -141,6 +141,11 @@ class FeatherItem(Toggle):
     display_name = "Feather Item"
 
 
+class ShuffleItemBoxRespawning(Toggle):
+    """Causes item boxes to not respawn mid-race, and shuffles one "item box respawning" item into the item pool."""
+    display_name = "Shuffle Item Box Respawning"
+
+
 class ConsistentItemBoxes(Choice):
     """Make each item box always give the same item. "On" will always show which item will be given instead of a
     question mark (?) inside the item boxes. "Identify" will only show which item will be given after triggering the
@@ -215,6 +220,7 @@ mk64_options: Dict[str, AssembleOptions] = {
     "fences_as_obstacles": FencesAsObstacles,
     "fences_block_item_boxes": FencesBlockItemBoxes,
     "feather_item": FeatherItem,
+    "shuffle_item_box_respawning": ShuffleItemBoxRespawning,
     "consistent_item_boxes": ConsistentItemBoxes,
     "shuffle_blue_shell_item_boxes": ShuffleBlueShellItemBoxes,
     "shuffle_item_box_clusters": ShuffleItemBoxClusters,
@@ -245,6 +251,7 @@ class Opt:
         self.obstacle_fences = multiworld.fences_as_obstacles[player].value
         self.item_fences =     multiworld.fences_block_item_boxes[player].value
         self.feather =         multiworld.feather_item[player].value
+        self.box_respawning =  multiworld.shuffle_item_box_respawning[player].value
         self.consistent =      multiworld.consistent_item_boxes[player].value
         self.shuffle_blues =   multiworld.shuffle_blue_shell_item_boxes[player].value
         self.clusters =        multiworld.shuffle_item_box_clusters[player].value

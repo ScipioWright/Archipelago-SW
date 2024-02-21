@@ -87,6 +87,8 @@ def generate_rom_patch(multiworld: MultiWorld,
         tires_winter = 0 if opt.traction else 0xFF
         locked_cups = 0b1110    # only Mushroom Cup starts unlocked
         switches = 0 if opt.path_fences or opt.obstacle_fences or opt.item_fences else 0b1111
+        box_respawning_byte = 0 if opt.box_respawning else 0b100
+
         # Pack to bytes ordered to the basepatch's SaveData struct bitfields
         rom.write_bytes(Addr.SAVE,       save_id)  # replaces DATETIME pseudo-hash in basepatch
         rom.write_int16(Addr.SAVE + 0x8, locked_courses)
@@ -96,6 +98,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_byte(Addr.SAVE + 0x15, tires_off_road)
         rom.write_byte(Addr.SAVE + 0x16, tires_winter)
         rom.write_byte(Addr.SAVE + 0x17, (locked_cups << 4) | switches)
+        rom.write_byte(Addr.SAVE + 0x19, box_respawning_byte)
 
         # Patch player name and multiworld seed_name for later ROM authentication with the client
         player_name_bytes = multiworld.player_name[player].encode("utf-8")
