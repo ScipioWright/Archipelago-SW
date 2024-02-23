@@ -64,6 +64,15 @@ class MirrorCourseChance(Range):
     default = 25
 
 
+class TwoLapCourses(Choice):
+    """Reduce the number of laps in a race from 3 to 2 on long courses."""
+    display_name = "Two Lap Courses"
+    option_off = 0
+    option_rainbow_road = 1
+    option_wario_stadium = 2
+    option_rainbow_road_and_wario_stadium = 3
+
+
 class HazardLocations(DefaultOnToggle):
     """Whether to include hazards which can be destroyed or defeated by the star power as location checks."""
     display_name = "Add Hazard Locations"
@@ -210,6 +219,7 @@ mk64_options: Dict[str, AssembleOptions] = {
     "course_order": CourseOrder,
     "final_course_pool": FinalCoursePool,
     "mirror_course_chance": MirrorCourseChance,
+    "two_lap_courses": TwoLapCourses,
     "hazard_locations": HazardLocations,
     "secret_locations": SecretLocations,
     "shuffle_drift_abilities": ShuffleDriftAbilities,
@@ -241,6 +251,7 @@ class Opt:
         self.locked_courses =  multiworld.locked_courses[player].value
         self.final_pool =      multiworld.final_course_pool[player].value
         self.mirror_chance =   multiworld.mirror_course_chance[player].value
+        self.two_lap_courses = multiworld.two_lap_courses[player].value
         self.hazards =         multiworld.hazard_locations[player].value
         self.secrets =         multiworld.secret_locations[player].value
         self.drift =           multiworld.shuffle_drift_abilities[player].value
@@ -250,6 +261,7 @@ class Opt:
         self.path_fences =     multiworld.fences_block_paths[player].value
         self.obstacle_fences = multiworld.fences_as_obstacles[player].value
         self.item_fences =     multiworld.fences_block_item_boxes[player].value
+        self.fences =          multiworld.fences_block_paths[player].value + multiworld.fences_as_obstacles[player].value + multiworld.fences_block_item_boxes[player].value
         self.feather =         multiworld.feather_item[player].value
         self.box_respawning =  multiworld.shuffle_item_box_respawning[player].value
         self.consistent =      multiworld.consistent_item_boxes[player].value

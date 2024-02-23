@@ -37,7 +37,8 @@ class Addr:
     TWO_PLAYER_POWERS = GENERATION_LOCKED + 1
     GAME_MODE = TWO_PLAYER_POWERS + 1
     MIRROR_COURSES = GAME_MODE + 1
-    FREE_MINI_TURBO = MIRROR_COURSES + 2
+    TWO_LAP_COURSES = MIRROR_COURSES + 2
+    FREE_MINI_TURBO = TWO_LAP_COURSES + 2
     SHUFFLE_RAILINGS = FREE_MINI_TURBO + 1
     FEATHER_AVAILABLE = SHUFFLE_RAILINGS + 1
     CONSISTENT_ITEM_BOXES = FEATHER_AVAILABLE + 1
@@ -117,10 +118,13 @@ def generate_rom_patch(multiworld: MultiWorld,
         for i in range(16):
             if random.random() < opt.mirror_chance:
                 mirror_courses |= 1 << i
+        two_lap_mapping = {0: 0, 1: 0x8000, 2: 0x0100, 3: 0x8100}
+        two_lap_courses = two_lap_mapping[opt.two_lap_courses]
         rom.write_byte(Addr.TWO_PLAYER_POWERS, opt.two_player)
         rom.write_byte(Addr.GAME_MODE, opt.mode)
         rom.write_byte(Addr.FREE_MINI_TURBO, opt.drift == ShuffleDriftAbilities.option_free_mini_turbo)
         rom.write_int16(Addr.MIRROR_COURSES, mirror_courses)
+        rom.write_int16(Addr.TWO_LAP_COURSES, two_lap_courses)
         rom.write_byte(Addr.SHUFFLE_RAILINGS, opt.railings)
         rom.write_byte(Addr.FEATHER_AVAILABLE, opt.feather)
         rom.write_byte(Addr.CONSISTENT_ITEM_BOXES, opt.consistent)
@@ -279,10 +283,10 @@ class Rom:
         u32 = 0xFFFFFFFF
 
         m1 = self.read_bytes(0x1000, 0x100000)
-        words = struct.unpack('>{length}I'.format(length=len(m1)//4), m1)
+        words = struct.unpack(f'>{len(m1)//4}I', m1)
 
         m2 = self.read_bytes(0x750, 0x100)
-        words2 = struct.unpack('>{length}I'.format(length=len(m2)//4), m2)
+        words2 = struct.unpack(f'>{len(m2)//4}I', m2)
 
         for d, d2 in zip(words, itertools.cycle(words2)):
             # keep t2 and t6 in u32 for comparisons; others can wait to be truncated
