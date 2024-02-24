@@ -42,9 +42,6 @@ class Addr:
     SHUFFLE_RAILINGS = FREE_MINI_TURBO + 1
     FEATHER_AVAILABLE = SHUFFLE_RAILINGS + 1
     CONSISTENT_ITEM_BOXES = FEATHER_AVAILABLE + 1
-    # Custom Course Order
-    # COURSE_ORDER = CONSISTENT_ITEM_BOXES + 1
-    # CUSTOM_ORDER = COURSE_ORDER + 40
     # Generation Flags
     # AP Items and pickup strings
     ITEMS = 0xC002C8  # APItem[583] at 3 bytes each
@@ -172,7 +169,7 @@ def generate_rom_patch(multiworld: MultiWorld,
                 rom.write_bytes(Addr.PICKUP_PLAYER_NAMES + Addr.ASCII_PLAYER_NAME_SIZE * i, pickup_player_name)
         rom.write_bytes(Addr.SAVE_LOCATIONS_UNCHECKED, initial_unchecked_locs)
 
-        # UPDATE CRC
+        # Update CRC
         rom.write_bytes(0x10, rom.calculate_crc_6102())
 
         # PATCHING DONE

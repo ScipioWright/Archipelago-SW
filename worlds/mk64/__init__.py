@@ -65,7 +65,7 @@ class MK64World(World):
         self.opt = None
         self.num_filler_items = None
         self.shuffle_clusters = None
-        self.use_item_spots = None
+        self.filler_spots = None
         self.victory_location = None
         self.course_order = None
         self.driver_unlocks = 0
@@ -104,7 +104,7 @@ class MK64World(World):
         num_needed_extra_items = max(num_unpaired_locations - num_unpaired_items, 0)
         self.num_filler_items = opt.min_filler + num_needed_extra_items  # 0 to 65
         self.shuffle_clusters = ([True] * opt.clusters + [False] * (72 - opt.clusters))
-        self.use_item_spots = ([True] * num_needed_extra_locs + [False] * (338 - num_needed_extra_locs - opt.clusters))
+        self.filler_spots = ([True] * num_needed_extra_locs + [False] * (338 - num_needed_extra_locs - opt.clusters))
         # TODO: Determine whether we can/should notify this at generation time like this.
         if num_needed_extra_locs:
             print(f"{num_needed_extra_locs} extra Mario Kart 64 locations will be made"
@@ -119,7 +119,7 @@ class MK64World(World):
             self.player,
             self.opt,
             self.shuffle_clusters,
-            self.use_item_spots
+            self.filler_spots
         )
 
     def create_item(self, name: str) -> Item:
