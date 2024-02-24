@@ -95,26 +95,20 @@ def create_regions_locations_connections(multiworld: MultiWorld,
 
     # Create Course & Cup Connections
     if opt.mode == GameMode.option_cups:
-        menu_region.connect(course_regions[0], "Mushroom Cup 1")
-        course_regions[0].connect(course_regions[1], "Mushroom Cup 2", lambda state: course_qualify_rules[order[0]](state, player, opt.logic))
-        course_regions[1].connect(course_regions[2], "Mushroom Cup 3", lambda state: course_qualify_rules[order[1]](state, player, opt.logic))
-        course_regions[2].connect(course_regions[3], "Mushroom Cup 4", lambda state: course_qualify_rules[order[2]](state, player, opt.logic))
-        course_regions[3].connect(cup_regions[0], "Mushroom Cup Finish")
-        menu_region.connect(course_regions[4], "Flower Cup 1", lambda state: state.has("Progressive Cup Unlock", player, 1))
-        course_regions[4].connect(course_regions[5], "Flower Cup 2", lambda state: course_qualify_rules[order[4]](state, player, opt.logic))
-        course_regions[5].connect(course_regions[6], "Flower Cup 3", lambda state: course_qualify_rules[order[5]](state, player, opt.logic))
-        course_regions[6].connect(course_regions[7], "Flower Cup 4", lambda state: course_qualify_rules[order[6]](state, player, opt.logic))
-        course_regions[7].connect(cup_regions[1], "Flower Cup Finish")
-        menu_region.connect(course_regions[8], "Star Cup 1", lambda state: state.has("Progressive Cup Unlock", player, 2))
-        course_regions[8].connect(course_regions[9], "Star Cup 2", lambda state: course_qualify_rules[order[8]](state, player, opt.logic))
-        course_regions[9].connect(course_regions[10], "Star Cup 3", lambda state: course_qualify_rules[order[9]](state, player, opt.logic))
-        course_regions[10].connect(course_regions[11], "Star Cup 4", lambda state: course_qualify_rules[order[10]](state, player, opt.logic))
-        course_regions[11].connect(cup_regions[2], "Star Cup Finish")
-        menu_region.connect(course_regions[12], "Special Cup 1", lambda state: state.has("Progressive Cup Unlock", player, 3))
-        course_regions[12].connect(course_regions[13], "Special Cup 2", lambda state: course_qualify_rules[order[12]](state, player, opt.logic))
-        course_regions[13].connect(course_regions[14], "Special Cup 3", lambda state: course_qualify_rules[order[13]](state, player, opt.logic))
-        course_regions[14].connect(course_regions[15], "Special Cup 4", lambda state: course_qualify_rules[order[14]](state, player, opt.logic))
-        course_regions[15].connect(cup_regions[3], "Special Cup Finish")
+        entrance_names = ["Mushroom Cup 1", "Mushroom Cup 2", "Mushroom Cup 3", "Mushroom Cup 4",
+                          "Flower Cup 1",   "Flower Cup 2",   "Flower Cup 3",   "Flower Cup 4",
+                          "Star Cup 1",     "Star Cup 2",     "Star Cup 3",     "Star Cup 4",
+                          "Special Cup 1",  "Special Cup 2",  "Special Cup 3",  "Special Cup 4"]
+        for c in range(16):
+            if c % 4:
+                course_regions[c-1].connect(
+                    course_regions[c],
+                    entrance_names[c],
+                    lambda state, qualify_rule=course_qualify_rules[order[c-1]]: qualify_rule(state, player, opt.logic))
+            else:
+                menu_region.connect(course_regions[c], entrance_names[c],
+                                    lambda state, count=c//4: state.has("Progressive Cup Unlock", player, count))
+                course_regions[c+3].connect(cup_regions[c//4], entrance_names[c][:-1] + "Finish")
     else:  # GameMode.option_courses
         for i in range(16):
             locks = max(0, i + opt.locked_courses - 15)
