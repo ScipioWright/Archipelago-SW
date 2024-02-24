@@ -54,7 +54,8 @@ class MK64World(World):
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id
 
-    # item_name_groups = Items.item_name_groups  # TODO: Is this needed? Which name groups do people want to hint for?
+    item_name_groups = Items.item_name_groups
+
     data_version = 1
 
     web = MK64Web()
@@ -93,7 +94,7 @@ class MK64World(World):
                               + (opt.traction and 16)
                               + (opt.starting_items and 8)
                               + (opt.railings and 13)
-                              + ((opt.path_fences or opt.obstacle_fences or opt.item_fences) and 4)
+                              + (opt.fences and 4)
                               + (opt.box_respawning and 1)
                               + opt.min_filler)
         num_unpaired_locations = ((67 if opt.mode == GameMode.option_cups else 47)  # 47 to 88
@@ -136,7 +137,14 @@ class MK64World(World):
         )
 
     def set_rules(self) -> None:
-        Rules.create_rules(self.multiworld, self.player, self.opt, self.victory_location)
+        Rules.create_rules(
+            self.multiworld,
+            self.player,
+            self.opt,
+            self.driver_unlocks,
+            self.victory_location,
+            self.course_order
+        )
 
     def generate_output(self, output_directory: str) -> None:
         Rom.generate_rom_patch(

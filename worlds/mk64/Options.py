@@ -16,14 +16,35 @@ class TwoPlayer(Toggle):
 
 class GameMode(Choice):
     """Determines how to advance through the game. Cups is closest to the vanilla game.
+
     Cups: Courses are raced in sets of four, place 4th or better to advance each race. Unlock each cup progressively.
     The Cups victory condition is beating the Special Cup on 150cc.
+
     Courses: Each course is run individually. Unlock the final courses progressively to reach the final race.
     The Courses victory condition is winning 1st place on the last course."""
     display_name = "Game Mode"
     option_cups = 0
     option_courses = 1
     default = 0
+
+
+class LogicDifficulty(Choice):
+    """Scales the logic threshhold where skill is involved. Specifically, how many good items are available before you
+    are expected to be able to qualify and win on tough courses.
+
+    Basic: Balanced runs for a competent karter.
+
+    Advanced: Low logic, high randomness, high skill. Few good items may be available early in the run.
+
+    Generous: Makes sure you have plenty of good items early. For easier play, or skipping 50 cc.
+
+    No Logic: If fences are enabled, THE RUN MAY BE IMPOSSIBLE!"""
+    display_name = "Logic Difficulty"
+    option_basic = 2
+    option_advanced = 0
+    option_generous = 4
+    option_no_logic = -100
+    default = 2
 
 
 class LockedCourses(Range):
@@ -48,8 +69,11 @@ class CourseOrder(Choice):
 class FinalCoursePool(OptionList):
     """When Course Order is set to shuffle, the final course will be chosen from the Final Course Pool.
     Leaving this blank will allow any course to come last.
+
     For Rainbow Road to come last use: ["Rainbow Road"].
+
     For Bowser's Castle to come last use: ["Bowser's Castle"].
+
     For any course longer than 1000 meters to come last use: ["Rainbow Road", "Wario Stadium", "Toad's Turnpike"]."""
     display_name = "Final Course Pool"
     valid_keys = frozenset({course_name.casefold() for course_name in Locations.course_locations.keys()})
@@ -71,6 +95,7 @@ class TwoLapCourses(Choice):
     option_rainbow_road = 1
     option_wario_stadium = 2
     option_rainbow_road_and_wario_stadium = 3
+    default = 0
 
 
 class HazardLocations(DefaultOnToggle):
@@ -163,6 +188,7 @@ class ConsistentItemBoxes(Choice):
     option_off = 0
     option_on = 1
     option_identify = 2
+    default = 0
 
 
 class ShuffleBlueShellItemBoxes(Toggle):
@@ -217,6 +243,7 @@ mk64_options: Dict[str, AssembleOptions] = {
     "game_mode": GameMode,
     "locked_courses": LockedCourses,
     "course_order": CourseOrder,
+    "logic_difficulty": LogicDifficulty,
     "final_course_pool": FinalCoursePool,
     "mirror_course_chance": MirrorCourseChance,
     "two_lap_courses": TwoLapCourses,
@@ -249,6 +276,7 @@ class Opt:
         self.mode =            multiworld.game_mode[player].value
         self.course_order =    multiworld.course_order[player].value
         self.locked_courses =  multiworld.locked_courses[player].value
+        self.logic =           multiworld.logic_difficulty[player].value
         self.final_pool =      multiworld.final_course_pool[player].value
         self.mirror_chance =   multiworld.mirror_course_chance[player].value
         self.two_lap_courses = multiworld.two_lap_courses[player].value
