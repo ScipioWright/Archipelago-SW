@@ -3,6 +3,8 @@ import hashlib
 import itertools
 import struct
 import os
+import bsdiff4
+import pkgutil
 
 import settings
 import Utils
@@ -196,34 +198,37 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
+def get_base_rom_bytes(file_name: str = "") -> bytes:
+    base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
+    if not base_rom_bytes:
+        file_name = get_base_rom_path(file_name)
+        base_rom_bytes = bytes(open(file_name, "rb").read())
+        basemd5 = hashlib.md5()
+        basemd5.update(base_rom_bytes)
+        if MK64DeltaPatch.hash != basemd5.hexdigest():
+            raise Exception('Supplied base ROM does not match known MD5 for US release of Mario Kart 64. '
+                            'Please provide the correct ROM version.')
+        get_base_rom_bytes.base_rom_bytes = base_rom_bytes
+    return base_rom_bytes
+
+
 class MK64DeltaPatch(APDeltaPatch):
     hash = "3a67d9986f54eb282924fca4cd5f6dff"
     patch_file_ending = ".apmk64"
     result_file_ending = ".z64"
     game = "Mario Kart 64"
 
-    base_rom_bytes = None
-
     @classmethod
     def get_source_data(cls) -> bytes:
-        if not cls.base_rom_bytes:
-            file_name = get_base_rom_path()
-            cls.base_rom_bytes = bytes(open(file_name, "rb").read())
-            basemd5 = hashlib.md5()
-            basemd5.update(cls.base_rom_bytes)
-            if MK64DeltaPatch.hash != basemd5.hexdigest():
-                pass    # for testing only until the basepatch is properly handled
-                # raise Exception('Supplied base ROM does not match known MD5 for US release of Mario Kart 64.'
-                #                'Get the correct game, then dump it.')
-        return cls.base_rom_bytes
+        return get_base_rom_bytes()
 
 
 class Rom:
     def __init__(self, file=get_base_rom_path()):
         self.orig_buffer = None
-
-        with open(file, 'rb') as stream:
-            self.buffer = bytearray(stream.read())
+        base_rom_bytes = get_base_rom_bytes(file)
+        patch_bytes = pkgutil.get_data(__name__, "data/mk64-ap-basepatch.bsdiff")
+        self.buffer = bytearray(bsdiff4.patch(base_rom_bytes, patch_bytes))
 
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
