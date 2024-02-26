@@ -106,7 +106,7 @@ course_qualify_rules = [    # TODO: Refactor with coupling among score types aft
     lambda state, player, ease: ease + 1 <= score_off_road_qualify(state, player),               # Wario Stadium
     lambda state, player, ease: ease + 1 <= score_winter_qualify(state, player),                 # Sherbet Land
     lambda state, player, ease: ease + 2 <= score_off_road_qualify(state, player),               # Royal Raceway
-    lambda state, player, ease: ease + 1 <= score_off_road_qualify(state, player),               # Bowser's Castle
+    lambda state, player, ease: ease + 2 <= score_off_road_qualify(state, player),               # Bowser's Castle
     lambda state, player, ease: ease + 1 <= (score_off_road_qualify(state, player)               # D.K.'s Jungle Parkway
                                              + state.has("Railings D.K.'s Jungle Parkway", player)),
     lambda state, player, ease: ease + 4 <= (score_off_road_qualify(state, player)               # Yoshi Valley
@@ -137,7 +137,7 @@ course_win_rules = [    # TODO: Refactor with coupling among score types after m
     lambda state, player, ease: ease + 3 <= score_off_road_win(state, player),                   # Wario Stadium
     lambda state, player, ease: ease + 3 <= score_winter_win(state, player),                     # Sherbet Land
     lambda state, player, ease: ease + 4 <= score_off_road_win(state, player),                   # Royal Raceway
-    lambda state, player, ease: ease + 3 <= score_off_road_win(state, player),                   # Bowser's Castle
+    lambda state, player, ease: ease + 4 <= score_off_road_win(state, player),                   # Bowser's Castle
     lambda state, player, ease: ease + 3 <= (score_off_road_win(state, player)                   # D.K.'s Jungle Parkway
                                              + state.has("Railings D.K.'s Jungle Parkway", player)),
     lambda state, player, ease: ease + 6 <= (score_off_road_win(state, player)                   # Yoshi Valley
