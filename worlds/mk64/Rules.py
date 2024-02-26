@@ -158,9 +158,9 @@ def set_star_access_rule(loc_name: str, multiworld: MultiWorld, player: int, opt
     # Relevant Option
     if opt.two_player:
         set_rule(multiworld.get_location(loc_name, player),
-                 lambda state: state.has("P1 Star Power", player) or state.has("P2 Star Power", player))
+                 lambda state: state.has_any({"Star Power", "P2 Star Power"}, player))
     else:
-        set_rule(multiworld.get_location(loc_name, player), lambda state: state.has("P1 Star Power", player))
+        set_rule(multiworld.get_location(loc_name, player), lambda state: state.has("Star Power", player))
 
 
 def create_rules(multiworld: MultiWorld,
@@ -180,16 +180,6 @@ def create_rules(multiworld: MultiWorld,
     #              lambda state: state.has("Progressive Cup Unlock", player, 3))
     # elif opt_game_mode == GameMode.option_courses:
     #     pass
-
-    # Location Rules
-    # for _, l in Locations.course_locations.items():
-    #     for name, (_, flag) in l.items():
-    #         if flag == Locations.Group.hazard and opt_hazard_locations:
-    #             if opt_two_player:
-    #                 set_rule(multiworld.get_location(name, player),
-    #                          lambda state: state.has("P1 Star Power", player) or state.has("P2 Star Power", player))
-    #             else:
-    #                 set_rule(multiworld.get_location(name, player), lambda state: state.has("P1 Star Power", player))
 
     # Base Course Rules # TODO: Clean this up, probably combine with Star Access Rules section
     for locations in Locations.course_locations.values():
@@ -240,7 +230,7 @@ def create_rules(multiworld: MultiWorld,
                      course_win_rules[order[4*c+1]](state, player, opt.logic + engine_class) +
                      course_win_rules[order[4*c+2]](state, player, opt.logic + engine_class) +
                      course_win_rules[order[4*c+3]](state, player, opt.logic + engine_class))
-                     # Would these rules run faster? But we could only use them for the base tropies, not higher cc ones
+                     # TODO: Would these rules run faster? But we could only use them for the base tropies, not higher cc ones
                      # state.can_reach(course_regions[4*c].locations[2]) +
                      # state.can_reach(course_regions[4*c+1].locations[2]) +
                      # state.can_reach(course_regions[4*c+2].locations[2]) +
