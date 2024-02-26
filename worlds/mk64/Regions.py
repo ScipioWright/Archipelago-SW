@@ -20,7 +20,7 @@ def create_regions_locations_connections(multiworld: MultiWorld,
     location_group_mask = (Locations.Group.base
                            | (opt.hazards and Locations.Group.hazard)
                            | (opt.secrets and Locations.Group.secret)
-                           | (opt.shuffle_blues and Locations.Group.blue_shell_item_spot))
+                           | (opt.special_boxes and Locations.Group.blue_shell_item_spot))
 
     # Prepare Region Handling
     menu_region = Region("Menu", player, multiworld)

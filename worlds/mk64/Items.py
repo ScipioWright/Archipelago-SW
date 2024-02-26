@@ -22,7 +22,7 @@ class Group(IntFlag):
     railings = auto()
     fences = auto()
     box_respawning = auto()
-    blue_shell_box = auto()
+    special_box = auto()
     item_boxes = auto()
     queueable = auto()
     trap = auto()
@@ -55,7 +55,7 @@ def create_items(multiworld: MultiWorld,
                        | (opt.railings and Group.railings)
                        | ((opt.path_fences or opt.obstacle_fences or opt.item_fences) and Group.fences)
                        | (opt.box_respawning and Group.box_respawning)
-                       | (opt.shuffle_blues and Group.blue_shell_box))
+                       | (opt.special_boxes and Group.special_box))
 
     # Create unlock items based on game mode
     match opt.mode:
@@ -204,8 +204,8 @@ item_table = {
     "Green Switch":                             (46600_87, Group.fences, ItemClassification.progression),
     "Blue Switch":                              (46600_88, Group.fences, ItemClassification.progression),
     "Item Box Respawning":                      (46600_89, Group.box_respawning, ItemClassification.useful),
-    "Luigi Raceway Blue Shell Item Box":        (46600_90, Group.blue_shell_box, ItemClassification.filler),
-    "Koopa Troopa Beach Blue Shell Item Box":   (46600_91, Group.blue_shell_box, ItemClassification.filler),
+    "Luigi Raceway Special Item Box":           (46600_90, Group.special_box, ItemClassification.filler),
+    "Koopa Troopa Beach Special Item Box":      (46600_91, Group.special_box, ItemClassification.filler),
     "Luigi Raceway Item Boxes 1":               (46600_92, Group.item_boxes, ItemClassification.filler),
     "Luigi Raceway Item Boxes 2":               (46600_93, Group.item_boxes, ItemClassification.filler),
     "Luigi Raceway Item Boxes 3":               (46600_94, Group.item_boxes, ItemClassification.filler),
@@ -278,7 +278,7 @@ item_table = {
     "Rainbow Road Item Boxes 6":                (4660_161, Group.item_boxes, ItemClassification.filler),
     "Rainbow Road Item Boxes 7":                (4660_162, Group.item_boxes, ItemClassification.filler),
     "Rainbow Road Item Boxes 8":                (4660_163, Group.item_boxes, ItemClassification.filler),
-    "Roulette":                                 (4660_207, Group.queueable, ItemClassification.filler),
+    "Random Item":                              (4660_207, Group.queueable, ItemClassification.filler),
     "Banana Trap":                              (4660_208, Group.trap, ItemClassification.trap),
     "Green Shell Trap":                         (4660_209, Group.trap, ItemClassification.trap),
     "Bomb Trap":                                (4660_210, Group.trap, ItemClassification.trap),

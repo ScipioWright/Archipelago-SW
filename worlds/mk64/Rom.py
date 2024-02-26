@@ -82,7 +82,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         locked_courses = 0xFFFF << 16 - opt.locked_courses & 0xFFFF
         drift = ((opt.drift == ShuffleDriftAbilities.option_off and 0xAAAA) or
                  (opt.drift == ShuffleDriftAbilities.option_free_drift and 0x5555) or 0)
-        blues = 0b11 if opt.shuffle_blues else 0
+        blues = 0b11 if opt.special_boxes else 0
         tires_off_road = 0 if opt.traction else 0xFF
         tires_winter = 0 if opt.traction else 0xFF
         locked_cups = 0b1110    # only Mushroom Cup starts unlocked

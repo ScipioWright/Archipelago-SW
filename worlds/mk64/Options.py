@@ -191,9 +191,10 @@ class ConsistentItemBoxes(Choice):
     default = 0
 
 
-class ShuffleBlueShellItemBoxes(Toggle):
-    """Whether to shuffle the blue shell item boxes on Luigi Raceway and Koopa Troopa Beach into the item pool."""
-    display_name = "Shuffle Blue Shell Item Boxes"
+class ShuffleSpecialItemBoxes(Toggle):
+    """Whether to shuffle the special item boxes which always give blue shells into the item pool. One is attached to
+    the hot air balloon on Luigi Raceway, and the other is on the big rock on Koopa Troopa Beach."""
+    display_name = "Shuffle Special Item Boxes"
 
 
 class ShuffleItemBoxClusters(Range):
@@ -259,7 +260,7 @@ mk64_options: Dict[str, AssembleOptions] = {
     "feather_item": FeatherItem,
     "shuffle_item_box_respawning": ShuffleItemBoxRespawning,
     "consistent_item_boxes": ConsistentItemBoxes,
-    "shuffle_blue_shell_item_boxes": ShuffleBlueShellItemBoxes,
+    "shuffle_special_item_boxes": ShuffleSpecialItemBoxes,
     "shuffle_item_box_clusters": ShuffleItemBoxClusters,
     "filler_trap_percentage": FillerTrapPercentage,
     "minimum_filler_items": MinimumFillerItems,
@@ -293,7 +294,7 @@ class Opt:
         self.feather =         multiworld.feather_item[player].value
         self.box_respawning =  multiworld.shuffle_item_box_respawning[player].value
         self.consistent =      multiworld.consistent_item_boxes[player].value
-        self.shuffle_blues =   multiworld.shuffle_blue_shell_item_boxes[player].value
+        self.special_boxes =   multiworld.shuffle_special_item_boxes[player].value
         self.clusters =        multiworld.shuffle_item_box_clusters[player].value
         self.trap_percentage = multiworld.filler_trap_percentage[player].value
         self.min_filler =      multiworld.minimum_filler_items[player].value
