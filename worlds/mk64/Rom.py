@@ -54,6 +54,7 @@ class Addr:
     ITEM_NAME_SIZE = 40
 
     # *** RAM ADDRESSES ***
+    GAME_STATUS_BYTE = 0x400019
     NUM_ITEMS_RECEIVED = 0x40001A
     LOCATIONS_UNCHECKED = 0x400024
     RECEIVE_ITEM_ID = 0x40028E
@@ -87,7 +88,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         tires_winter = 0 if opt.traction else 0xFF
         locked_cups = 0b1110    # only Mushroom Cup starts unlocked
         switches = 0 if opt.path_fences or opt.obstacle_fences or opt.item_fences else 0b1111
-        box_respawning_byte = 0 if opt.box_respawning else 0b100
+        misc_byte = 1 if opt.box_respawning else 0b101  # game_clear (initially 0), connected status bit (always 1)
 
         # Pack to bytes ordered to the basepatch's SaveData struct bitfields
         rom.write_bytes(Addr.SAVE,       save_id)  # replaces DATETIME pseudo-hash in basepatch
@@ -98,7 +99,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_byte(Addr.SAVE + 0x15, tires_off_road)
         rom.write_byte(Addr.SAVE + 0x16, tires_winter)
         rom.write_byte(Addr.SAVE + 0x17, (locked_cups << 4) | switches)
-        rom.write_byte(Addr.SAVE + 0x19, box_respawning_byte)
+        rom.write_byte(Addr.SAVE + 0x19, misc_byte)
 
         # Patch player name and multiworld seed_name for later ROM authentication with the client
         player_name_bytes = multiworld.player_name[player].encode("utf-8")
@@ -153,13 +154,13 @@ def generate_rom_patch(multiworld: MultiWorld,
         # Write items, and marked unavailable locations as checked
         initial_unchecked_locs = bytearray(Addr.SAVE_LOCATIONS_UNCHECKED_SIZE)
         for i, loc in enumerate(multiworld.get_locations(player)):
-            if loc.address is None:  # Skip Victory Event Location (will leave one index i blank, but 256 spots suffice)
+            if loc.address is None:  # Skip Victory Event Location
                 continue
             local_loc_id = loc.address - ID_BASE
             initial_unchecked_locs[local_loc_id // 8] |= 1 << local_loc_id % 8
             # Write items
             addr = Addr.ITEMS + Addr.ITEM_SIZE * local_loc_id
-            rom.write_byte(addr + 1, loc.item.classification & 0b111)  # 0=FILLER,1=PROGRESSION,2=USEFUL,3=EMPTY,4=TRAP
+            rom.write_byte(addr + 1, loc.item.classification & 0b111)  # 0=FILLER,1=PROGRESSION,2=USEFUL,4=TRAP
             rom.write_byte(addr + 2, i)  # pickup_id, used by the game to reference player name and item name
             pickup_item_name = loc.item.name.encode("ascii")[:Addr.ITEM_NAME_SIZE]
             rom.write_bytes(Addr.PICKUP_ITEM_NAMES + i * Addr.ITEM_NAME_SIZE, pickup_item_name)

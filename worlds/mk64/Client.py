@@ -99,18 +99,16 @@ class MarioKart64Client(BizHawkClient):
         try:
             # Read Game State
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [
+                (Addr.GAME_STATUS_BYTE, 1, "RDRAM"),
                 (Addr.NUM_ITEMS_RECEIVED, 1, "RDRAM"),
                 (Addr.LOCATIONS_UNCHECKED, Addr.SAVE_LOCATIONS_UNCHECKED_SIZE, "RDRAM")])
-            num_received_items = int.from_bytes(read_state[0], "big")
-            locs_state = read_state[1]
 
-            # Confirm we read real data rather than an unloaded ROM
-            if num_received_items == 0:
-                for byte in locs_state:
-                    if byte != 0:
-                        break
-                else:
-                    return
+            if not read_state[0][0]:  # first bit is always 1 to indicate valid connection
+                return
+
+            game_clear = (read_state[0][0] >> 1) & 1
+            num_received_items = read_state[1][0]
+            locs_state = read_state[2]
 
             # Receive item if we have one
             if num_received_items < len(ctx.items_received):
@@ -139,6 +137,13 @@ class MarioKart64Client(BizHawkClient):
                 await ctx.send_msgs([{
                     "cmd": "LocationChecks",
                     "locations": new_locs
+                }])
+
+            # Send game clear
+            if not ctx.finished_game and game_clear:
+                await ctx.send_msgs([{
+                    "cmd":    "StatusUpdate",
+                    "status": ClientStatus.CLIENT_GOAL
                 }])
 
         except bizhawk.RequestFailedError:
