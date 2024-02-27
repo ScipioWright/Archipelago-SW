@@ -25,8 +25,10 @@ class Addr:
     # ** Basepatch **
     SAVE = 0xC00000
     SAVE_SIZE = 0x200
-    SAVE_LOCATIONS_UNCHECKED = SAVE + 0x24
-    SAVE_LOCATIONS_UNCHECKED_SIZE = 73
+    SAVE_LOCKED_ITEM_CLUSTERS = SAVE + 0x1B
+    SAVE_LOCKED_ITEM_CLUSTERS_SIZE = 9
+    SAVE_UNCHECKED_LOCATIONS = SAVE + 0x24
+    SAVE_UNCHECKED_LOCATIONS_SIZE = 73
     SAVE_IDENTIFIED_ITEM_BOXES = SAVE + 0x6D
     SAVE_IDENTIFIED_ITEM_BOXES_SIZE = 43
     PLAYER_NAME = SAVE + SAVE_SIZE
@@ -68,6 +70,7 @@ def generate_rom_patch(multiworld: MultiWorld,
                        opt: Opt,
                        output_directory: str,
                        driver_unlocks: int,
+                       shuffle_clusters: list[bool],
                        order: list[int]) -> None:
     random = multiworld.per_slot_randoms[player]
     base_out_path = os.path.join(output_directory, multiworld.get_out_file_name_base(player))
@@ -100,6 +103,13 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_byte(Addr.SAVE + 0x16, tires_winter)
         rom.write_byte(Addr.SAVE + 0x17, (locked_cups << 4) | switches)
         rom.write_byte(Addr.SAVE + 0x19, misc_byte)
+
+        # Patch Locked Item Clusters
+        initial_locked_clusters = bytearray(Addr.SAVE_LOCKED_ITEM_CLUSTERS_SIZE)
+        for c, cluster in enumerate(shuffle_clusters):
+            if cluster:
+                initial_locked_clusters[c // 8] |= 1 << c % 8
+        rom.write_bytes(Addr.SAVE_LOCKED_ITEM_CLUSTERS, initial_locked_clusters)
 
         # Patch player name and multiworld seed_name for later ROM authentication with the client
         player_name_bytes = multiworld.player_name[player].encode("utf-8")
@@ -152,7 +162,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_byte(Addr.RESULTS_MUSIC_REPETITIONS, 0x2 if opt.fix_music else 0x40)
 
         # Write items, and marked unavailable locations as checked
-        initial_unchecked_locs = bytearray(Addr.SAVE_LOCATIONS_UNCHECKED_SIZE)
+        initial_unchecked_locs = bytearray(Addr.SAVE_UNCHECKED_LOCATIONS_SIZE)
         for i, loc in enumerate(multiworld.get_locations(player)):
             if loc.address is None:  # Skip Victory Event Location
                 continue
@@ -170,7 +180,7 @@ def generate_rom_patch(multiworld: MultiWorld,
                 rom.write_byte(addr, 0xFF)  # local_id of 0xFF indicates nonlocal item
                 pickup_player_name = multiworld.player_name[loc.item.player].encode("ascii")
                 rom.write_bytes(Addr.PICKUP_PLAYER_NAMES + Addr.ASCII_PLAYER_NAME_SIZE * i, pickup_player_name)
-        rom.write_bytes(Addr.SAVE_LOCATIONS_UNCHECKED, initial_unchecked_locs)
+        rom.write_bytes(Addr.SAVE_UNCHECKED_LOCATIONS, initial_unchecked_locs)
 
         # Update CRC
         rom.write_bytes(0x10, rom.calculate_crc_6102())

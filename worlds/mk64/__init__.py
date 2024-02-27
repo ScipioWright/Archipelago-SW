@@ -153,6 +153,7 @@ class MK64World(World):
             self.opt,
             output_directory,
             self.driver_unlocks,
+            self.shuffle_clusters,
             self.course_order
         )
         # Uncomment to export PUML location visualization

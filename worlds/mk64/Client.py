@@ -52,7 +52,7 @@ class MarioKart64Client(BizHawkClient):
         super().__init__()
         self.local_checked_locations = set()
         self.rom_slot_name = None
-        self.unchecked_locs: bytearray = bytearray([0xFF] * Addr.SAVE_LOCATIONS_UNCHECKED_SIZE)
+        self.unchecked_locs: bytearray = bytearray([0xFF] * Addr.SAVE_UNCHECKED_LOCATIONS_SIZE)
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -101,7 +101,7 @@ class MarioKart64Client(BizHawkClient):
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [
                 (Addr.GAME_STATUS_BYTE, 1, "RDRAM"),
                 (Addr.NUM_ITEMS_RECEIVED, 1, "RDRAM"),
-                (Addr.LOCATIONS_UNCHECKED, Addr.SAVE_LOCATIONS_UNCHECKED_SIZE, "RDRAM")])
+                (Addr.LOCATIONS_UNCHECKED, Addr.SAVE_UNCHECKED_LOCATIONS_SIZE, "RDRAM")])
 
             if not read_state[0][0]:  # first bit is always 1 to indicate valid connection
                 return
