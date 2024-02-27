@@ -44,7 +44,7 @@ class MK64World(World):
     """
     Mario Kart 64 is the original 3D kart racing game. Collect and fire off items,
     maneuver around hazards, execute drifts and mini-turbos, risk shortcuts but
-    stay on the track, and race your way to victory in each course and cup.
+    stay on the track, and race to victory in each course and cup.
     """
     game = "Mario Kart 64"
     option_definitions = mk64_options
@@ -155,6 +155,9 @@ class MK64World(World):
             self.driver_unlocks,
             self.course_order
         )
+        # Uncomment to export PUML location visualization
+        # from Utils import visualize_regions
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "mk64.puml")
 
     def modify_multidata(self, multidata: dict) -> None:
         player_name = self.multiworld.player_name[self.player]
