@@ -59,35 +59,35 @@ def winter_score(state: CollectionState, player: int) -> int:  # 0 to 4
     return max(ratings, default=0)
 
 
-def fence_score(state: CollectionState, player: int) -> int:  # 0 to 6  # TODO: Check for feather item boxes on course
-    switch_ratings = [0, 3, 5, 6, 6]
+def fence_score(state: CollectionState, player: int) -> int:  # 0 to 8  # TODO: Check for feather item boxes on course
+    switch_ratings = [0, 4, 6, 7, 8]
     feather_ratings = [2, 1, 0, 0, 0]
     switch_count = state.count_group("Switches", player)
     return (switch_ratings[switch_count]
             + (state.has_any({"Feather Power", "P2 Feather Power"}, player) and feather_ratings[switch_count]))
 
 
-def score_track_qualify(state: CollectionState, player: int) -> int:  # 0 to 14
+def score_track_qualify(state: CollectionState, player: int) -> int:  # 0 to 16
     return fence_score(state, player) + track_score(state, player) + item_qualify_score(state, player)
 
 
-def score_off_road_qualify(state: CollectionState, player: int) -> int:  # 0 to 15
+def score_off_road_qualify(state: CollectionState, player: int) -> int:  # 0 to 17
     return fence_score(state, player) + off_road_score(state, player) + item_qualify_score(state, player)
 
 
-def score_winter_qualify(state: CollectionState, player: int) -> int:  # 0 to 16
+def score_winter_qualify(state: CollectionState, player: int) -> int:  # 0 to 18
     return fence_score(state, player) + winter_score(state, player) + item_qualify_score(state, player)
 
 
-def score_track_win(state: CollectionState, player: int) -> int:  # 0 to 13
+def score_track_win(state: CollectionState, player: int) -> int:  # 0 to 15
     return fence_score(state, player) + track_score(state, player) + item_win_score(state, player)
 
 
-def score_off_road_win(state: CollectionState, player: int) -> int:  # 0 to 14
+def score_off_road_win(state: CollectionState, player: int) -> int:  # 0 to 16
     return fence_score(state, player) + off_road_score(state, player) + item_win_score(state, player)
 
 
-def score_winter_win(state: CollectionState, player: int) -> int:  # 0 to 15
+def score_winter_win(state: CollectionState, player: int) -> int:  # 0 to 17
     return fence_score(state, player) + winter_score(state, player) + item_win_score(state, player)
 
 
@@ -95,27 +95,27 @@ course_qualify_rules = [    # TODO: Refactor with coupling among score types aft
     # lambda:           score threshhold <= fence_score + terrain score + item power score + optional railings score
     lambda state, player, ease: True,                                                            # Luigi Raceway
     lambda state, player, ease: ease - 1 <= score_track_qualify(state, player),                  # Moo Moo Farm
-    lambda state, player, ease: ease + 2 <= score_track_qualify(state, player),                  # Koopa Troopa Beach
+    lambda state, player, ease: ease + 3 <= score_track_qualify(state, player),                  # Koopa Troopa Beach
     lambda state, player, ease: (ease - 1 <= score_off_road_qualify(state, player))              # Kalimari Desert
                                 or (state.has("Yellow Switch", player)
                                     and state.has_any({"Star Power", "P2 Star Power"}, player)),
     lambda state, player, ease: ease - 1 <= score_track_qualify(state, player),                  # Toad's Turnpike
-    lambda state, player, ease: ease + 3 <= score_winter_qualify(state, player),                 # Frappe Snowland
+    lambda state, player, ease: ease + 4 <= score_winter_qualify(state, player),                 # Frappe Snowland
     lambda state, player, ease: ease + 0 <= score_off_road_qualify(state, player),               # Choco Mountain
     lambda state, player, ease: ease + 0 <= score_off_road_qualify(state, player),               # Mario Raceway
-    lambda state, player, ease: ease + 1 <= score_off_road_qualify(state, player),               # Wario Stadium
-    lambda state, player, ease: ease + 1 <= score_winter_qualify(state, player),                 # Sherbet Land
-    lambda state, player, ease: ease + 2 <= score_off_road_qualify(state, player),               # Royal Raceway
-    lambda state, player, ease: ease + 2 <= score_off_road_qualify(state, player),               # Bowser's Castle
-    lambda state, player, ease: ease + 1 <= (score_off_road_qualify(state, player)               # D.K.'s Jungle Parkway
+    lambda state, player, ease: ease + 2 <= score_off_road_qualify(state, player),               # Wario Stadium
+    lambda state, player, ease: ease + 2 <= score_winter_qualify(state, player),                 # Sherbet Land
+    lambda state, player, ease: ease + 3 <= score_off_road_qualify(state, player),               # Royal Raceway
+    lambda state, player, ease: ease + 3 <= score_off_road_qualify(state, player),               # Bowser's Castle
+    lambda state, player, ease: ease + 2 <= (score_off_road_qualify(state, player)               # D.K.'s Jungle Parkway
                                              + state.has("Railings D.K.'s Jungle Parkway", player)),
-    lambda state, player, ease: ease + 4 <= (score_off_road_qualify(state, player)               # Yoshi Valley
+    lambda state, player, ease: ease + 5 <= (score_off_road_qualify(state, player)               # Yoshi Valley
                                              + state.has("Railings Yoshi Valley Main Track", player)
                                              + state.has("Railings Yoshi Valley Maze", player)),
-    lambda state, player, ease: ease + 2 <= (score_track_qualify(state, player)                  # Banshee Boardwalk
+    lambda state, player, ease: ease + 3 <= (score_track_qualify(state, player)                  # Banshee Boardwalk
                                              + state.has("Railings Banshee Boardwalk North", player)
                                              + state.has("Railings Banshee Boardwalk North", player)),
-    lambda state, player, ease: ease + 3 <= (score_track_qualify(state, player)                  # Rainbow Road
+    lambda state, player, ease: ease + 4 <= (score_track_qualify(state, player)                  # Rainbow Road
                                              + 2 * state.has("Railings Rainbow Road 1", player)
                                              + 2 * state.has("Railings Rainbow Road 2", player)
                                              + 2 * state.has("Railings Rainbow Road 3", player)
@@ -126,27 +126,27 @@ course_win_rules = [    # TODO: Refactor with coupling among score types after m
     # lambda:           score threshhold <= fence_score + terrain score + item power score + optional railings score
     lambda state, player, ease: True,                                                            # Luigi Raceway
     lambda state, player, ease: ease + 1 <= score_track_win(state, player),                      # Moo Moo Farm
-    lambda state, player, ease: ease + 4 <= score_track_win(state, player),                      # Koopa Troopa Beach
+    lambda state, player, ease: ease + 5 <= score_track_win(state, player),                      # Koopa Troopa Beach
     lambda state, player, ease: (ease + 1 <= score_off_road_win(state, player))                  # Kalimari Desert
                                 or (state.has("Yellow Switch", player)
                                     and state.has_any({"Star Power", "P2 Star Power"}, player)),
     lambda state, player, ease: ease + 1 <= score_track_win(state, player),                      # Toad's Turnpike
-    lambda state, player, ease: ease + 5 <= score_winter_win(state, player),                     # Frappe Snowland
-    lambda state, player, ease: ease + 2 <= score_off_road_win(state, player),                   # Choco Mountain
-    lambda state, player, ease: ease + 2 <= score_off_road_win(state, player),                   # Mario Raceway
-    lambda state, player, ease: ease + 3 <= score_off_road_win(state, player),                   # Wario Stadium
-    lambda state, player, ease: ease + 3 <= score_winter_win(state, player),                     # Sherbet Land
-    lambda state, player, ease: ease + 4 <= score_off_road_win(state, player),                   # Royal Raceway
-    lambda state, player, ease: ease + 4 <= score_off_road_win(state, player),                   # Bowser's Castle
-    lambda state, player, ease: ease + 3 <= (score_off_road_win(state, player)                   # D.K.'s Jungle Parkway
+    lambda state, player, ease: ease + 6 <= score_winter_win(state, player),                     # Frappe Snowland
+    lambda state, player, ease: ease + 3 <= score_off_road_win(state, player),                   # Choco Mountain
+    lambda state, player, ease: ease + 3 <= score_off_road_win(state, player),                   # Mario Raceway
+    lambda state, player, ease: ease + 4 <= score_off_road_win(state, player),                   # Wario Stadium
+    lambda state, player, ease: ease + 4 <= score_winter_win(state, player),                     # Sherbet Land
+    lambda state, player, ease: ease + 5 <= score_off_road_win(state, player),                   # Royal Raceway
+    lambda state, player, ease: ease + 5 <= score_off_road_win(state, player),                   # Bowser's Castle
+    lambda state, player, ease: ease + 4 <= (score_off_road_win(state, player)                   # D.K.'s Jungle Parkway
                                              + state.has("Railings D.K.'s Jungle Parkway", player)),
-    lambda state, player, ease: ease + 6 <= (score_off_road_win(state, player)                   # Yoshi Valley
+    lambda state, player, ease: ease + 7 <= (score_off_road_win(state, player)                   # Yoshi Valley
                                              + state.has("Railings Yoshi Valley Main Track", player)
                                              + state.has("Railings Yoshi Valley Maze", player)),
-    lambda state, player, ease: ease + 4 <= (score_track_win(state, player)                      # Banshee Boardwalk
+    lambda state, player, ease: ease + 5 <= (score_track_win(state, player)                      # Banshee Boardwalk
                                              + state.has("Railings Banshee Boardwalk North", player)
                                              + state.has("Railings Banshee Boardwalk North", player)),
-    lambda state, player, ease: ease + 5 <= (score_track_win(state, player)                      # Rainbow Road
+    lambda state, player, ease: ease + 6 <= (score_track_win(state, player)                      # Rainbow Road
                                              + 2 * state.has("Railings Rainbow Road 1", player)
                                              + 2 * state.has("Railings Rainbow Road 2", player)
                                              + 2 * state.has("Railings Rainbow Road 3", player)

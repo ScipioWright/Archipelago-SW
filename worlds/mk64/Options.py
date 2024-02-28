@@ -40,11 +40,11 @@ class LogicDifficulty(Choice):
 
     No Logic: If fences are enabled, THE RUN MAY BE IMPOSSIBLE!"""
     display_name = "Logic Difficulty"
-    option_basic = 2
+    option_basic = 3
     option_advanced = 0
-    option_generous = 4
+    option_generous = 6
     option_no_logic = -100
-    default = 2
+    default = 3
 
 
 class LockedCourses(Range):
