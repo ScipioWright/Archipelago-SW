@@ -187,10 +187,10 @@ def create_rules(multiworld: MultiWorld,
             if group == Locations.Group.base:
                 if code % 3 < 2:
                     set_rule(multiworld.get_location(name, player),
-                             lambda state: course_win_rules[(code - 4660000) // 3](state, player, 4))
+                             lambda state: course_win_rules[(code - 4660000) // 3](state, player, opt.logic))
                 else:
                     set_rule(multiworld.get_location(name, player),
-                             lambda state: course_qualify_rules[(code - 4660000) // 3](state, player, 4))
+                             lambda state: course_qualify_rules[(code - 4660000) // 3](state, player, opt.logic))
 
     # Item Spot Access Rules moved to Regions.py for context that knows which item box spots to apply rules to
 
