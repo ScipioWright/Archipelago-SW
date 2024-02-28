@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
 from enum import IntFlag, auto
 
-from BaseClasses import Item, ItemClassification, MultiWorld, Location
+from BaseClasses import Item, ItemClassification
 
-from .Options import GameMode, ShuffleDriftAbilities, Opt
+from .Options import GameMode, ShuffleDriftAbilities
+
+if TYPE_CHECKING:
+    from . import MK64World
 
 
 class MK64Item(Item):
@@ -35,15 +39,12 @@ def create_item(name: str, player: int, classification: ItemClassification = -1)
     return MK64Item(name, classification, item_data[0], player)
 
 
-def create_items(multiworld: MultiWorld,
-                 player: int,
-                 opt: Opt,
-                 shuffle_clusters: list[bool],
-                 num_filler: int,
-                 victory_location: Location) -> int:
-
-    itempool = multiworld.itempool
-    random = multiworld.random
+def create_items(world: "MK64World") -> int:
+    player = world.player
+    opt = world.opt
+    num_filler = world.num_filler_items
+    itempool = world.multiworld.itempool
+    random = world.multiworld.random
 
     item_group_mask = (Group.base
                        | (opt.feather and Group.feather)
@@ -79,7 +80,7 @@ def create_items(multiworld: MultiWorld,
                 elif opt.drift == ShuffleDriftAbilities.option_plentiful:
                     itempool += [create_item(name, player), create_item(name, player)]
         elif group == Group.item_boxes:
-            if shuffle_clusters[cluster_id]:
+            if world.shuffle_clusters[cluster_id]:
                 itempool.append(create_item(name, player))
             cluster_id += 1
         elif group == Group.driver:
@@ -94,7 +95,7 @@ def create_items(multiworld: MultiWorld,
     for _ in range(1 + opt.two_player):
         driver_index = random.randrange(len(drivers))
         starting_driver = drivers.pop(driver_index)
-        multiworld.push_precollected(create_item(starting_driver, player, ItemClassification.progression))
+        world.multiworld.push_precollected(create_item(starting_driver, player, ItemClassification.progression))
         driver_unlocks |= 1 << (driver_ids[driver_index] - min_driver_id)
     for driver in drivers:
         itempool.append(create_item(driver, player))
@@ -105,7 +106,7 @@ def create_items(multiworld: MultiWorld,
 
     # Create and place Victory item event
     victory_item = MK64Item("Victory", ItemClassification.progression_skip_balancing, None, player)
-    victory_location.place_locked_item(victory_item)
+    world.victory_location.place_locked_item(victory_item)
 
     return driver_unlocks
 

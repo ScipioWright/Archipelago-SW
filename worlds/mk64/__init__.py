@@ -7,7 +7,8 @@ from worlds.AutoWorld import World, WebWorld
 
 from . import Items, Locations, Regions, Rom, Rules
 from .Client import MarioKart64Client  # Import to register client with BizHawkClient
-from .Options import mk64_options, GameMode, Opt, ShuffleDriftAbilities
+from .Locations import MK64Location
+from .Options import MK64Options, GameMode, Opt, ShuffleDriftAbilities
 
 
 class MK64Web(WebWorld):
@@ -36,40 +37,32 @@ class MK64Settings(settings.Group):
 
 
 class MK64World(World):
-    # """
-    # Mario Kart 64 is the first true 3D kart racing game. Use offensive
-    # and defensive items, dodge hazards, drift and mini-turbo around corners,
-    # and stay on the track to win races and the gold trophy in each cup.
-    # """
     """
     Mario Kart 64 is the original 3D kart racing game. Collect and fire off items,
     maneuver around hazards, execute drifts and mini-turbos, risk shortcuts but
     stay on the track, and race to victory in each course and cup.
     """
     game = "Mario Kart 64"
-    option_definitions = mk64_options
+    web = MK64Web()
+    topology_present = False
+
+    options: MK64Options
+    options_dataclass = MK64Options
     settings: typing.ClassVar[MK64Settings]
-    topology_present = False  # Show path to required checks in spoiler log? TODO: Is this desired?
 
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id
-
     item_name_groups = Items.item_name_groups
 
     data_version = 1
 
-    web = MK64Web()
-
-    # Declare variables needed in multiple generation steps so they are tracked in MK64World state
-    def __init__(self, multiworld: "MultiWorld", player: int):
-        super().__init__(multiworld, player)
-        self.opt = None
-        self.num_filler_items = None
-        self.shuffle_clusters = None
-        self.filler_spots = None
-        self.victory_location = None
-        self.course_order = None
-        self.driver_unlocks = 0
+    opt: Opt
+    num_filler_items: int
+    shuffle_clusters: list[bool]
+    filler_spots: list[bool]
+    victory_location: MK64Location
+    course_order: list[int]
+    driver_unlocks: int
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -78,7 +71,7 @@ class MK64World(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
-        self.opt = opt = Opt(self.multiworld, self.player)
+        self.opt = opt = Opt(self)
 
         # Count items without a paired location and vice versa, based on player options
         # hardcoded for speed, and because duplicating the the world generation logic here would be excessive.
@@ -115,47 +108,19 @@ class MK64World(World):
                   f" for {self.multiworld.get_player_name(self.player)} to match their number of locations.")
 
     def create_regions(self) -> None:
-        self.victory_location, self.course_order = Regions.create_regions_locations_connections(
-            self.multiworld,
-            self.player,
-            self.opt,
-            self.shuffle_clusters,
-            self.filler_spots
-        )
+        self.victory_location, self.course_order = Regions.create_regions_locations_connections(self)
 
     def create_item(self, name: str) -> Item:
         return Items.create_item(name, self.player)
 
     def create_items(self) -> None:
-        self.driver_unlocks = Items.create_items(
-            self.multiworld,
-            self.player,
-            self.opt,
-            self.shuffle_clusters,
-            self.num_filler_items,
-            self.victory_location
-        )
+        self.driver_unlocks = Items.create_items(self)
 
     def set_rules(self) -> None:
-        Rules.create_rules(
-            self.multiworld,
-            self.player,
-            self.opt,
-            self.driver_unlocks,
-            self.victory_location,
-            self.course_order
-        )
+        Rules.create_rules(self)
 
     def generate_output(self, output_directory: str) -> None:
-        Rom.generate_rom_patch(
-            self.multiworld,
-            self.player,
-            self.opt,
-            output_directory,
-            self.driver_unlocks,
-            self.shuffle_clusters,
-            self.course_order
-        )
+        Rom.generate_rom_patch(self, output_directory)
         # Uncomment to export PUML location visualization
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "mk64.puml")
@@ -164,6 +129,3 @@ class MK64World(World):
         player_name = self.multiworld.player_name[self.player]
         slot_name = player_name + "_" + self.multiworld.seed_name
         multidata["connect_names"][slot_name] = multidata["connect_names"][player_name]
-
-    def fill_slot_data(self):
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}

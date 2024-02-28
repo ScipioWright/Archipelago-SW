@@ -1,7 +1,10 @@
-from BaseClasses import MultiWorld
+from typing import TYPE_CHECKING
 
 from . import Locations
-from .Options import CourseOrder, Opt, LogicDifficulty
+from .Options import CourseOrder, LogicDifficulty
+
+if TYPE_CHECKING:
+    from . import MK64World
 
 LR = 0    # Luigi Raceway
 MMF = 1   # Moo Moo Farm
@@ -25,8 +28,9 @@ medium_course_pool = easy_course_pool + [WS, SL, DK, BB]
 hard_course_pool = medium_course_pool + [KTB, RoR, BC]
 
 
-def determine_order(multiworld: MultiWorld, opt: Opt) -> list[int]:
-    random = multiworld.random
+def determine_order(world: "MK64World") -> list[int]:
+    random = world.multiworld.random
+    opt = world.opt
 
     match opt.course_order:
         case CourseOrder.option_short_to_long:

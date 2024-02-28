@@ -1,8 +1,16 @@
-from BaseClasses import MultiWorld, Region, Location
+from typing import TYPE_CHECKING
+from BaseClasses import Region, Location
 
 from . import Locations, Courses
-from .Options import GameMode, Opt
+from .Options import GameMode
 from .Rules import course_qualify_rules
+
+if TYPE_CHECKING:
+    from . import MK64World
+
+
+def add_region(world: "MK64World", region_name: str, region_group: list[Region]) -> None:
+    region_group.append(Region(region_name, world.player, world.multiworld))
 
 
 def add_location(player: int, loc_name: str, code: int, region: Region) -> Locations.MK64Location:
@@ -11,12 +19,13 @@ def add_location(player: int, loc_name: str, code: int, region: Region) -> Locat
     return location
 
 
-def create_regions_locations_connections(multiworld: MultiWorld,
-                                         player: int,
-                                         opt: Opt,
-                                         shuffle_clusters: list[bool],
-                                         filler_spots: list[bool]) -> tuple[Location, list[int]]:
-    random = multiworld.random
+def create_regions_locations_connections(world: "MK64World") -> tuple[Location, list[int]]:
+    multiworld = world.multiworld
+    player = world.player
+    opt = world.opt
+    shuffle_clusters = world.shuffle_clusters
+    filler_spots = world.filler_spots
+
     location_group_mask = (Locations.Group.base
                            | (opt.hazards and Locations.Group.hazard)
                            | (opt.secrets and Locations.Group.secret)
@@ -29,15 +38,15 @@ def create_regions_locations_connections(multiworld: MultiWorld,
     cup_regions: list[Region] = []
 
     # Construct item_spot_locations for shuffled item clusters and extra locations
-    random.shuffle(shuffle_clusters)
-    random.shuffle(filler_spots)
+    world.random.shuffle(shuffle_clusters)
+    world.random.shuffle(filler_spots)
     item_spot_data = []
     c, s, t = 0, 0, -1
     for region in Locations.item_cluster_locations:
         item_spot_data.append([])
         for cluster in region:
             if shuffle_clusters[c]:
-                t = random.randrange(0, len(cluster))
+                t = world.random.randrange(0, len(cluster))
             c += 1
             for i, spot_data in enumerate(cluster):
                 if i == t:
@@ -50,7 +59,7 @@ def create_regions_locations_connections(multiworld: MultiWorld,
 
     # Construct Course Regions and Locations
     for (course_name, locs), spot_data_clusters in zip(Locations.course_locations.items(), item_spot_data):
-        course_regions.append(Region(course_name, player, multiworld))
+        add_region(world, course_name, course_regions)
         for loc_name, (code, group) in locs.items():
             if group & location_group_mask:
                 add_location(player, loc_name, code, course_regions[-1])
@@ -62,7 +71,7 @@ def create_regions_locations_connections(multiworld: MultiWorld,
     # Shared Hazard Regions & Locations & Connections
     if opt.hazards:
         for name, (code, courses) in Locations.shared_hazard_locations.items():
-            shared_hazard_regions.append(Region(name, player, multiworld))
+            add_region(world, name, shared_hazard_regions)
             add_location(player, name, code, shared_hazard_regions[-1])
             for region in course_regions:
                 if region.name in courses:
@@ -71,12 +80,12 @@ def create_regions_locations_connections(multiworld: MultiWorld,
     # Cup Regions & Locations
     if opt.mode == GameMode.option_cups:
         for cup, locations in Locations.cup_locations.items():
-            cup_regions.append(Region(cup, player, multiworld))
+            add_region(world, cup, cup_regions)
             for name, code in locations.items():
                 add_location(player, name, code, cup_regions[-1])
 
     # Determine Course Order
-    order = Courses.determine_order(multiworld, opt)
+    order = Courses.determine_order(world)
     course_regions = [course_regions[i] for i in order]
 
     # Create Course & Cup Connections

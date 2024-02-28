@@ -1,9 +1,11 @@
-from typing import Dict
-
-from BaseClasses import MultiWorld
+from typing import TYPE_CHECKING
+from dataclasses import dataclass
 
 from . import Locations
-from Options import AssembleOptions, Choice, DefaultOnToggle, Toggle, Range, OptionList, StartInventoryPool
+from Options import Choice, DefaultOnToggle, Toggle, Range, OptionList, StartInventoryPool, PerGameCommonOptions
+
+if TYPE_CHECKING:
+    from . import MK64World
 
 
 class TwoPlayer(Toggle):
@@ -237,65 +239,65 @@ class SoundMode(Choice):    # TODO: Add support for this
     default = 0
 
 
-# Options as they will appear in YAML settings, and multiworld attributes
-mk64_options: Dict[str, AssembleOptions] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "two_player": TwoPlayer,
-    "game_mode": GameMode,
-    "locked_courses": LockedCourses,
-    "course_order": CourseOrder,
-    "logic_difficulty": LogicDifficulty,
-    "final_course_pool": FinalCoursePool,
-    "mirror_course_chance": MirrorCourseChance,
-    "two_lap_courses": TwoLapCourses,
-    "hazard_locations": HazardLocations,
-    "secret_locations": SecretLocations,
-    "shuffle_drift_abilities": ShuffleDriftAbilities,
-    "add_traction_tires": TractionTires,
-    "add_starting_items": StartingItems,
-    "shuffle_railings": ShuffleRailings,
-    "fences_block_paths": FencesBlockPaths,
-    "fences_as_obstacles": FencesAsObstacles,
-    "fences_block_item_boxes": FencesBlockItemBoxes,
-    "feather_item": FeatherItem,
-    "shuffle_item_box_respawning": ShuffleItemBoxRespawning,
-    "consistent_item_boxes": ConsistentItemBoxes,
-    "shuffle_special_item_boxes": ShuffleSpecialItemBoxes,
-    "shuffle_item_box_clusters": ShuffleItemBoxClusters,
-    "filler_trap_percentage": FillerTrapPercentage,
-    "minimum_filler_items": MinimumFillerItems,
-    "fix_results_music": FixResultsMusic,
-    "sound_mode": SoundMode
-}
+# Options as they will appear in YAML settings
+@dataclass
+class MK64Options(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    two_player: TwoPlayer
+    game_mode: GameMode
+    locked_courses: LockedCourses
+    course_order: CourseOrder
+    logic_difficulty: LogicDifficulty
+    final_course_pool: FinalCoursePool
+    mirror_course_chance: MirrorCourseChance
+    two_lap_courses: TwoLapCourses
+    hazard_locations: HazardLocations
+    secret_locations: SecretLocations
+    shuffle_drift_abilities: ShuffleDriftAbilities
+    add_traction_tires: TractionTires
+    add_starting_items: StartingItems
+    shuffle_railings: ShuffleRailings
+    fences_block_paths: FencesBlockPaths
+    fences_as_obstacles: FencesAsObstacles
+    fences_block_item_boxes: FencesBlockItemBoxes
+    feather_item: FeatherItem
+    shuffle_item_box_respawning: ShuffleItemBoxRespawning
+    consistent_item_boxes: ConsistentItemBoxes
+    shuffle_special_item_boxes: ShuffleSpecialItemBoxes
+    shuffle_item_box_clusters: ShuffleItemBoxClusters
+    filler_trap_percentage: FillerTrapPercentage
+    minimum_filler_items: MinimumFillerItems
+    fix_results_music: FixResultsMusic
+    sound_mode: SoundMode
 
 
 # Used for shorthand/faster access to relevant options during world generation
 class Opt:
-    def __init__(self, multiworld: MultiWorld, player: int):
+    def __init__(self, world: "MK64World"):
         # Relevant Options
-        self.two_player =      multiworld.two_player[player].value
-        self.mode =            multiworld.game_mode[player].value
-        self.course_order =    multiworld.course_order[player].value
-        self.locked_courses =  multiworld.locked_courses[player].value
-        self.logic =           multiworld.logic_difficulty[player].value
-        self.final_pool =      multiworld.final_course_pool[player].value
-        self.mirror_chance =   multiworld.mirror_course_chance[player].value
-        self.two_lap_courses = multiworld.two_lap_courses[player].value
-        self.hazards =         multiworld.hazard_locations[player].value
-        self.secrets =         multiworld.secret_locations[player].value
-        self.drift =           multiworld.shuffle_drift_abilities[player].value
-        self.traction =        multiworld.add_traction_tires[player].value
-        self.starting_items =  multiworld.add_starting_items[player].value
-        self.railings =        multiworld.shuffle_railings[player].value
-        self.path_fences =     multiworld.fences_block_paths[player].value
-        self.obstacle_fences = multiworld.fences_as_obstacles[player].value
-        self.item_fences =     multiworld.fences_block_item_boxes[player].value
-        self.fences =          multiworld.fences_block_paths[player].value + multiworld.fences_as_obstacles[player].value + multiworld.fences_block_item_boxes[player].value
-        self.feather =         multiworld.feather_item[player].value
-        self.box_respawning =  multiworld.shuffle_item_box_respawning[player].value
-        self.consistent =      multiworld.consistent_item_boxes[player].value
-        self.special_boxes =   multiworld.shuffle_special_item_boxes[player].value
-        self.clusters =        multiworld.shuffle_item_box_clusters[player].value
-        self.trap_percentage = multiworld.filler_trap_percentage[player].value
-        self.min_filler =      multiworld.minimum_filler_items[player].value
-        self.fix_music =       multiworld.fix_results_music[player].value
+        self.two_player =      world.options.two_player.value
+        self.mode =            world.options.game_mode.value
+        self.course_order =    world.options.course_order.value
+        self.locked_courses =  world.options.locked_courses.value
+        self.logic =           world.options.logic_difficulty.value
+        self.final_pool =      world.options.final_course_pool.value
+        self.mirror_chance =   world.options.mirror_course_chance.value
+        self.two_lap_courses = world.options.two_lap_courses.value
+        self.hazards =         world.options.hazard_locations.value
+        self.secrets =         world.options.secret_locations.value
+        self.drift =           world.options.shuffle_drift_abilities.value
+        self.traction =        world.options.add_traction_tires.value
+        self.starting_items =  world.options.add_starting_items.value
+        self.railings =        world.options.shuffle_railings.value
+        self.path_fences =     world.options.fences_block_paths.value
+        self.obstacle_fences = world.options.fences_as_obstacles.value
+        self.item_fences =     world.options.fences_block_item_boxes.value
+        self.fences =          world.options.fences_block_paths.value + world.options.fences_as_obstacles.value + world.options.fences_block_item_boxes.value
+        self.feather =         world.options.feather_item.value
+        self.box_respawning =  world.options.shuffle_item_box_respawning.value
+        self.consistent =      world.options.consistent_item_boxes.value
+        self.special_boxes =   world.options.shuffle_special_item_boxes.value
+        self.clusters =        world.options.shuffle_item_box_clusters.value
+        self.trap_percentage = world.options.filler_trap_percentage.value
+        self.min_filler =      world.options.minimum_filler_items.value
+        self.fix_music =       world.options.fix_results_music.value

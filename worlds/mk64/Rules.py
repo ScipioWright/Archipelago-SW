@@ -1,9 +1,13 @@
-from BaseClasses import MultiWorld, Location, CollectionState, Region
+from typing import TYPE_CHECKING
+from BaseClasses import MultiWorld, CollectionState
 from ..generic.Rules import add_rule, set_rule
 
 from . import Locations
 from .Options import Opt
 from .Items import item_name_groups
+
+if TYPE_CHECKING:
+    from . import MK64World
 
 karts = item_name_groups["Karts"]
 qualify_item_score_values = {
@@ -163,12 +167,11 @@ def set_star_access_rule(loc_name: str, multiworld: MultiWorld, player: int, opt
         set_rule(multiworld.get_location(loc_name, player), lambda state: state.has("Star Power", player))
 
 
-def create_rules(multiworld: MultiWorld,
-                 player: int,
-                 opt: Opt,
-                 driver_unlocks: int,
-                 victory_location: Location,
-                 order: list[int]) -> None:
+def create_rules(world: "MK64World") -> None:
+    multiworld = world.multiworld
+    player = world.player
+    opt = world.opt
+    order = world.course_order
 
     # Region (Entrance) Rules (handled in Regions.py instead for now)
     # if opt_game_mode == GameMode.option_cups:
@@ -243,5 +246,5 @@ def create_rules(multiworld: MultiWorld,
     # Technically they are needed to get past the driver select screen, but checking the rule for victory is cleaner
     # in code and runtime, and functionally identical since items cannot be lost.
     for k in range(8):
-        if driver_unlocks >> k & 1:
-            add_rule(victory_location, lambda state, k=k: state.has(item_name_groups["Karts"][k], player))
+        if world.driver_unlocks >> k & 1:
+            add_rule(world.victory_location, lambda state, k=k: state.has(item_name_groups["Karts"][k], player))

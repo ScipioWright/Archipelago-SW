@@ -6,13 +6,16 @@ import os
 import bsdiff4
 import pkgutil
 
+from typing import TYPE_CHECKING
 import settings
 import Utils
-from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 
 from .Locations import ID_BASE
-from .Options import Opt, CourseOrder, ShuffleDriftAbilities, ConsistentItemBoxes
+from .Options import CourseOrder, ShuffleDriftAbilities, ConsistentItemBoxes
+
+if TYPE_CHECKING:
+    from . import MK64World
 
 
 # ROM ADDRESSES
@@ -65,13 +68,11 @@ class Addr:
     RECEIVE_ITEM_NAME = RECEIVE_PLAYER_NAME + ASCII_PLAYER_NAME_SIZE
 
 
-def generate_rom_patch(multiworld: MultiWorld,
-                       player: int,
-                       opt: Opt,
-                       output_directory: str,
-                       driver_unlocks: int,
-                       shuffle_clusters: list[bool],
-                       order: list[int]) -> None:
+def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
+    multiworld = world.multiworld
+    player = world.player
+    opt = world.opt
+
     random = multiworld.per_slot_randoms[player]
     base_out_path = os.path.join(output_directory, multiworld.get_out_file_name_base(player))
     patch_path = base_out_path + MK64DeltaPatch.patch_file_ending     # AP_<seed>_<player>.apmk64
@@ -98,7 +99,7 @@ def generate_rom_patch(multiworld: MultiWorld,
         rom.write_int16(Addr.SAVE + 0x8, locked_courses)
         rom.write_int16(Addr.SAVE + 0xA, drift)
         rom.write_byte(Addr.SAVE + 0xF,  blues)
-        rom.write_byte(Addr.SAVE + 0x14, driver_unlocks)
+        rom.write_byte(Addr.SAVE + 0x14, world.driver_unlocks)
         rom.write_byte(Addr.SAVE + 0x15, tires_off_road)
         rom.write_byte(Addr.SAVE + 0x16, tires_winter)
         rom.write_byte(Addr.SAVE + 0x17, (locked_cups << 4) | switches)
@@ -106,7 +107,7 @@ def generate_rom_patch(multiworld: MultiWorld,
 
         # Patch Locked Item Clusters
         initial_locked_clusters = bytearray(Addr.SAVE_LOCKED_ITEM_CLUSTERS_SIZE)
-        for c, cluster in enumerate(shuffle_clusters):
+        for c, cluster in enumerate(world.shuffle_clusters):
             if cluster:
                 initial_locked_clusters[c // 8] |= 1 << c % 8
         rom.write_bytes(Addr.SAVE_LOCKED_ITEM_CLUSTERS, initial_locked_clusters)
@@ -153,7 +154,7 @@ def generate_rom_patch(multiworld: MultiWorld,
                                     0x54, 0x3E, 0x2A, 0x25,
                                     0x65, 0x5D, 0x48, 0x2F,
                                     0x75, 0x3A, 0x34, 0x61]
-            for i, c in enumerate(order):
+            for i, c in enumerate(world.course_order):
                 rom.write_byte(Addr.COURSE_IDS + 2 * i + 1, course_ids[c])
                 rom.write_byte(Addr.COURSE_NAMEPLATES + 20 * math.floor(1.25 * i), course_nameplate_ids[c])
 
