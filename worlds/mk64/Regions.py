@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld, Region, Location
 
-from . import Locations
-from .Options import GameMode, CourseOrder, Opt
+from . import Locations, Courses
+from .Options import GameMode, Opt
 from .Rules import course_qualify_rules
 
 
@@ -76,21 +76,7 @@ def create_regions_locations_connections(multiworld: MultiWorld,
                 add_location(player, name, code, cup_regions[-1])
 
     # Determine Course Order
-    order = list(range(16))
-    match opt.course_order:
-        case CourseOrder.option_short_to_long:
-            order = [1, 7, 6, 2, 0, 5, 14, 3, 9, 13, 11, 12, 10, 4, 8, 15]
-        case CourseOrder.option_long_to_short:
-            order = [15, 8, 4, 10, 12, 11, 13, 9, 3, 14, 5, 0, 2, 6, 7, 1]
-        case CourseOrder.option_alphabetical:
-            order = [14, 11, 6, 12, 5, 3, 2, 0, 7, 1, 15, 10, 9, 4, 8, 13]
-        case CourseOrder.option_shuffle:
-            random.shuffle(order)
-            while order[0] in {5, 13}:  # Prevent Frappe Snowland and Yoshi Valley from coming first
-                random.shuffle(order)
-            if opt.final_pool:
-                order.append(tuple(Locations.course_locations).index(random.choice(opt.final_pool)))
-                order.remove(order[-1])
+    order = Courses.determine_order(multiworld, opt)
     course_regions = [course_regions[i] for i in order]
 
     # Create Course & Cup Connections
@@ -122,6 +108,7 @@ def create_regions_locations_connections(multiworld: MultiWorld,
     for i in range(16):
         entrance = course_regions[i].entrances[0]
         multiworld.spoiler.set_entrance(entrance.name, entrance.connected_region.name, "entrance", player)
+        print(entrance.name + " => " + entrance.connected_region.name)
 
     # Place Victory Event Location
     if opt.mode == GameMode.option_cups:
