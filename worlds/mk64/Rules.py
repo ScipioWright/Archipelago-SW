@@ -220,6 +220,10 @@ def create_rules(world: "MK64World") -> None:
         for name, _ in Locations.shared_hazard_locations.items():
             set_star_access_rule(name, multiworld, player, opt)
 
+    # Add Blue Fence rule to Mario sign
+    add_rule(multiworld.get_location("Destroy Mario Sign", player),
+             lambda state: state.has("Blue Switch", player))
+
     # Cup Trophy Rules
     trophy_class_mapping = {"Bronze": 1, "Silver": 2, "Gold": 3}
     engine_class_mapping = {"100cc": 2, "150cc": 3}  # 50cc is 0
