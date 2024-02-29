@@ -78,7 +78,7 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
     patch_path = base_out_path + MK64DeltaPatch.patch_file_ending     # AP_<seed>_<player>.apmk64
     rom_out_path = base_out_path + MK64DeltaPatch.result_file_ending  # AP_<seed>_<player>.z64
 
-    rom = Rom()
+    rom = Rom(get_base_rom_path())
     try:
         # PATCHING START
 
@@ -236,7 +236,7 @@ class MK64DeltaPatch(APDeltaPatch):
 
 
 class Rom:
-    def __init__(self, file=get_base_rom_path()):
+    def __init__(self, file):
         self.orig_buffer = None
         base_rom_bytes = get_base_rom_bytes(file)
         patch_bytes = pkgutil.get_data(__name__, "data/mk64-ap-basepatch.bsdiff")
