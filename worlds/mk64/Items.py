@@ -54,7 +54,7 @@ def create_items(world: "MK64World") -> int:
                        | (opt.traction and Group.traction)
                        | (opt.starting_items and Group.starting_items)
                        | (opt.railings and Group.railings)
-                       | ((opt.path_fences or opt.obstacle_fences or opt.item_fences) and Group.fences)
+                       | (opt.fences and Group.fences)
                        | (opt.box_respawning and Group.box_respawning)
                        | (opt.special_boxes and Group.special_box))
 

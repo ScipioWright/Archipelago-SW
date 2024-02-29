@@ -91,7 +91,7 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
         tires_off_road = 0 if opt.traction else 0xFF
         tires_winter = 0 if opt.traction else 0xFF
         locked_cups = 0b1110    # only Mushroom Cup starts unlocked
-        switches = 0 if opt.path_fences or opt.obstacle_fences or opt.item_fences else 0b1111
+        switches = 0 if opt.fences else 0b1111
         misc_byte = 1 if opt.box_respawning else 0b101  # game_clear (initially 0), connected status bit (always 1)
 
         # Pack to bytes ordered to the basepatch's SaveData struct bitfields

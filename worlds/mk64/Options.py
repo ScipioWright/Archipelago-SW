@@ -9,7 +9,8 @@ if TYPE_CHECKING:
 
 
 class TwoPlayer(Toggle):
-    """Start with two characters unlocked and shuffle a separate Player 2 set of item powers into the item pool.
+    """(NOT YET SUPPORTED)
+    Start with two characters unlocked and shuffle a separate Player 2 set of item powers into the item pool.
 
     This is the intended way to do local multiplayer, but you can still access the 2-player grand prix mode
     with this off, and the 1-player grand prix mode with it on."""
@@ -22,8 +23,8 @@ class GameMode(Choice):
     Cups: Courses are raced in sets of four, place 4th or better to advance each race. Unlock each cup progressively.
     The Cups victory condition is beating the Special Cup on 150cc.
 
-    Courses: Each course is run individually. Unlock the final courses progressively to reach the final race.
-    The Courses victory condition is winning 1st place on the last course."""
+    Courses (NOT YET SUPPORTED): Each course is run individually. Unlock the final courses progressively to reach the
+    final race. The Courses victory condition is winning 1st place on the last course."""
     display_name = "Game Mode"
     option_cups = 0
     option_courses = 1
@@ -39,6 +40,8 @@ class LogicDifficulty(Choice):
     Advanced: Low logic, high randomness, high skill. Few good items may be available early in the run.
 
     Generous: Makes sure you have plenty of good items early. For easier play, or skipping 50 cc.
+    (Generous is more likely to fail generation. To raise chances try increasing shuffle_item_box_clusters and
+    minimum_filler_items. Future versions will be less fragile to generation failure.)
 
     No Logic: If fences are enabled, THE RUN MAY BE IMPOSSIBLE!"""
     display_name = "Logic Difficulty"
@@ -50,7 +53,8 @@ class LogicDifficulty(Choice):
 
 
 class LockedCourses(Range):
-    """In Courses Game Mode, how many final courses are locked until Progressive Course Unlock items are found."""
+    """(NOT YET SUPPORTED)
+    In Courses Game Mode, how many final courses are locked until Progressive Course Unlock items are found."""
     display_name = "Locked Courses"
     range_start = 0
     range_end = 15
@@ -83,11 +87,11 @@ class FinalCoursePool(OptionList):
 
 
 class MirrorCourseChance(Range):
-    """Percent chance for a course to be mirrored."""
+    """(NOT YET SUPPORTED) Percent chance for a course to be mirrored."""
     display_name = "Mirror Course Chance"
     range_start = 0
     range_end = 100
-    default = 25
+    default = 0
 
 
 class TwoLapCourses(Choice):
@@ -129,7 +133,7 @@ class ShuffleDriftAbilities(Choice):
     default = 1
 
 
-class TractionTires(Toggle):
+class TractionTires(DefaultOnToggle):
     """Optionally shuffle into the item pool the ability to have traction on off-road and winter surface types,
     per driver. "Off" means karts always have traction, as in the vanilla game."""
     display_name = "Add Traction Tires"
@@ -146,34 +150,16 @@ class ShuffleRailings(DefaultOnToggle):
     display_name = "Shuffle Railings"
 
 
-class FencesBlockPaths(Toggle):
-    """Fences Block Paths: Adds fences where the track splits to block the optimal path.
-
-    If any fence options are on, four Fence Switch items are added to the item pool to deactivate the corresponding
-    color: yellow, red, green, and blue. Fences can be vaulted with items. CPU drivers and items pass through fences."""
+class Fences(DefaultOnToggle):
+    """Adds colored fences to every course to add variety to the player's racing lines, and blocks about 20% of
+    item boxes. Also adds Yellow/Red/Green/Blue Switch items to the item pool which disable that color of fences.
+    Fences only affect player karts; shells and CPU karts path through them."""
     display_name = "Fences Block Paths"
 
 
-class FencesAsObstacles(Toggle):
-    """Fences As Obstacles: Adds fences in various places to disrupt the optimal racing line.
-
-    If any fence options are on, four Fence Switch items are added to the item pool to deactivate the corresponding
-    color: yellow, red, green, and blue. Fences can be vaulted with items. CPU drivers and items pass through fences."""
-    display_name = "Fences As Obstacles"
-
-
-class FencesBlockItemBoxes(Toggle):
-    """Fences Block Item Boxes: Fences will be added around groups of item boxes on a few courses,
-    with the matching switch handled as a prerequisite for those locations in logic.
-
-    If any fence options are on, four Fence Switch items are added to the item pool to deactivate the corresponding
-    color: yellow, red, green, and blue. Fences can be vaulted with items. CPU drivers and items pass through fences."""
-    display_name = "Fences Block Item Boxes"
-
-
-class FeatherItem(Toggle):
+class FeatherItem(DefaultOnToggle):
     """Adds the feather item as seen in Super Mario Kart and the early demos of Mario Kart 64. It can be used to vault
-    fences. Having access to the feather also puts locations blocked by fences in logic."""
+    fences. Having access to the feather puts locations blocked by fences in logic."""
     display_name = "Feather Item"
 
 
@@ -193,7 +179,7 @@ class ConsistentItemBoxes(Choice):
     default = 0
 
 
-class ShuffleSpecialItemBoxes(Toggle):
+class ShuffleSpecialItemBoxes(DefaultOnToggle):
     """Whether to shuffle the special item boxes which always give blue shells into the item pool. One is attached to
     the hot air balloon on Luigi Raceway, and the other is on the big rock on Koopa Troopa Beach."""
     display_name = "Shuffle Special Item Boxes"
@@ -201,7 +187,8 @@ class ShuffleSpecialItemBoxes(Toggle):
 
 class ShuffleItemBoxClusters(Range):
     """How many item box clusters to shuffle into the item pool. At least one item spot from each shuffled cluster will
-    be used as a location check."""
+    be used as a location check.
+    (More shuffled clusters helps generation succeed. Future versions will be less fragile to generation failure.)"""
     display_name = "Shuffle Item Box Clusters"
     range_start = 0
     range_end = 72
@@ -217,11 +204,12 @@ class FillerTrapPercentage(Range):
 
 
 class MinimumFillerItems(Range):
-    """Force more filler items than needed to match the number of locations."""
+    """Force more filler items than needed to match the number of locations.
+    (More filler items helps generation succeed. Future versions will be less fragile to generation failure.)"""
     display_name = "Minimum Filler Items"
     range_start = 0
     range_end = 40
-    default = 0
+    default = 30
 
 
 class FixResultsMusic(DefaultOnToggle):
@@ -231,7 +219,8 @@ class FixResultsMusic(DefaultOnToggle):
 
 
 class SoundMode(Choice):    # TODO: Add support for this
-    """Sets the sound mode in the game's option menu ahead of time."""
+    """(NOT YET SUPPORTED)
+    Sets the sound mode in the game's option menu ahead of time."""
     display_name = "Sound Mode"
     option_stereo = 0
     option_headphones = 1
@@ -257,9 +246,7 @@ class MK64Options(PerGameCommonOptions):
     add_traction_tires: TractionTires
     add_starting_items: StartingItems
     shuffle_railings: ShuffleRailings
-    fences_block_paths: FencesBlockPaths
-    fences_as_obstacles: FencesAsObstacles
-    fences_block_item_boxes: FencesBlockItemBoxes
+    fences: Fences
     feather_item: FeatherItem
     shuffle_item_box_respawning: ShuffleItemBoxRespawning
     consistent_item_boxes: ConsistentItemBoxes
@@ -289,10 +276,7 @@ class Opt:
         self.traction =        world.options.add_traction_tires.value
         self.starting_items =  world.options.add_starting_items.value
         self.railings =        world.options.shuffle_railings.value
-        self.path_fences =     world.options.fences_block_paths.value
-        self.obstacle_fences = world.options.fences_as_obstacles.value
-        self.item_fences =     world.options.fences_block_item_boxes.value
-        self.fences =          world.options.fences_block_paths.value + world.options.fences_as_obstacles.value + world.options.fences_block_item_boxes.value
+        self.fences =          world.options.fences.value
         self.feather =         world.options.feather_item.value
         self.box_respawning =  world.options.shuffle_item_box_respawning.value
         self.consistent =      world.options.consistent_item_boxes.value
