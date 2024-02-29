@@ -117,7 +117,8 @@ def create_regions_locations_connections(world: "MK64World") -> tuple[Location, 
     for i in range(16):
         entrance = course_regions[i].entrances[0]
         multiworld.spoiler.set_entrance(entrance.name, entrance.connected_region.name, "entrance", player)
-        print(entrance.name + " => " + entrance.connected_region.name)
+        # Uncomment to print course order at generation time
+        # print(entrance.name + " => " + entrance.connected_region.name)
 
     # Place Victory Event Location
     if opt.mode == GameMode.option_cups:

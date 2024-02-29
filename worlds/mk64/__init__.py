@@ -99,13 +99,13 @@ class MK64World(World):
         self.num_filler_items = opt.min_filler + num_needed_extra_items  # 0 to 65
         self.shuffle_clusters = ([True] * opt.clusters + [False] * (72 - opt.clusters))
         self.filler_spots = ([True] * num_needed_extra_locs + [False] * (338 - num_needed_extra_locs - opt.clusters))
-        # TODO: Determine whether we can/should notify this at generation time like this.
-        if num_needed_extra_locs:
-            print(f"{num_needed_extra_locs} extra Mario Kart 64 locations will be made"
-                  f" for {self.multiworld.get_player_name(self.player)} to match their number of items.")
-        elif num_needed_extra_items:
-            print(f"{num_needed_extra_items} extra Mario Kart 64 filler items will be made"
-                  f" for {self.multiworld.get_player_name(self.player)} to match their number of locations.")
+        # Uncomment to print at generation time extra locations/items
+        # if num_needed_extra_locs:
+        #     print(f"{num_needed_extra_locs} extra Mario Kart 64 locations will be made"
+        #           f" for {self.multiworld.get_player_name(self.player)} to match their number of items.")
+        # elif num_needed_extra_items:
+        #     print(f"{num_needed_extra_items} extra Mario Kart 64 filler items will be made"
+        #           f" for {self.multiworld.get_player_name(self.player)} to match their number of locations.")
 
     def create_regions(self) -> None:
         self.victory_location, self.course_order = Regions.create_regions_locations_connections(self)
