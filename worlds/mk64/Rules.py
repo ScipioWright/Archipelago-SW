@@ -198,31 +198,34 @@ def create_rules(world: "MK64World") -> None:
     # Item Spot Access Rules moved to Regions.py for context that knows which item box spots to apply rules to
 
     # Koopa Troopa Beach Rock Access
-    set_rule(multiworld.get_location("Koopa Troopa Beach Rock", player),
-             lambda state: state.has_all({"Yellow Switch", "Blue Switch"}, player)
-                           or state.has_all({"Red Switch", "Green Switch"}, player))
+    if opt.special_boxes:
+        set_rule(multiworld.get_location("Koopa Troopa Beach Rock", player),
+                 lambda state: state.has_all({"Yellow Switch", "Blue Switch"}, player)
+                               or state.has_all({"Red Switch", "Green Switch"}, player))
 
-    # Kalimari Desert Secret Access
-    set_rule(multiworld.get_location("Kalimari Desert Secret", player),
-             lambda state: state.has_any({"Yellow Switch", "Red Switch", "Blue Switch",
-                                          "Feather Power", "P2 Feather Power"}, player))
+    if opt.secrets:
+        # Kalimari Desert Secret Access
+        set_rule(multiworld.get_location("Kalimari Desert Secret", player),
+                 lambda state: state.has_any({"Yellow Switch", "Red Switch", "Blue Switch",
+                                              "Feather Power", "P2 Feather Power"}, player))
 
-    # Marty's Secret Access
-    set_rule(multiworld.get_location("Marty's Secret", player),
-             lambda state: state.has_any({"Green Switch", "Feather Power", "P2 Feather Power"}, player))
+        # Marty's Secret Access
+        set_rule(multiworld.get_location("Marty's Secret", player),
+                 lambda state: state.has_any({"Green Switch", "Feather Power", "P2 Feather Power"}, player))
 
-    # Hazard Access, all use Star Power
     if opt.hazards:
-        for locations in Locations.course_locations.values():
-            for name, (_, group) in locations.items():
-                if group == Locations.Group.hazard:
-                    set_star_access_rule(name, multiworld, player, opt)
-        for name, _ in Locations.shared_hazard_locations.items():
-            set_star_access_rule(name, multiworld, player, opt)
+        # Hazard Access, all use Star Power
+        if opt.hazards:
+            for locations in Locations.course_locations.values():
+                for name, (_, group) in locations.items():
+                    if group == Locations.Group.hazard:
+                        set_star_access_rule(name, multiworld, player, opt)
+            for name, _ in Locations.shared_hazard_locations.items():
+                set_star_access_rule(name, multiworld, player, opt)
 
-    # Add Blue Fence rule to Mario sign
-    add_rule(multiworld.get_location("Destroy Mario Sign", player),
-             lambda state: state.has("Blue Switch", player))
+        # Add Blue Fence rule to Mario sign
+        add_rule(multiworld.get_location("Destroy Mario Sign", player),
+                 lambda state: state.has("Blue Switch", player))
 
     # Cup Trophy Rules
     trophy_class_mapping = {"Bronze": 1, "Silver": 2, "Gold": 3}
