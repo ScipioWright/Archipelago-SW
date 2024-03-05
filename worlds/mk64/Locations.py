@@ -18,7 +18,7 @@ class Group(IntFlag):
 
 
 # Mappings of each Region to dictionary of location data
-# 4660000 - 4660583
+# 4660000 - 4660584
 
 #   Region: { Location:                    (location id, Group) }
 course_locations = {
@@ -32,46 +32,46 @@ course_locations = {
         "Moo Moo Farm Take the Lead":       (466000_3, Group.base),
         "Moo Moo Farm Qualify":             (466000_4, Group.base),
         "Moo Moo Farm 1st":                 (466000_5, Group.base),
-        "Defeat Chubby":                    (46600_97, Group.hazard),
+        "Defeat Chubby":                    (46600_96, Group.hazard),
     },
     "Koopa Troopa Beach": {
         "Koopa Troopa Beach Take the Lead": (466000_6, Group.base),
         "Koopa Troopa Beach Qualify":       (466000_7, Group.base),
         "Koopa Troopa Beach 1st":           (466000_8, Group.base),
         "Koopa Troopa Beach Secret":        (4660_574, Group.secret),
-        "Koopa Troopa Beach Rock":          (4660_109, Group.blue_shell_item_spot),  # Needs Yellow & Blue switch, or Red & Green, or just feather
+        "Koopa Troopa Beach Rock":          (4660_109, Group.blue_shell_item_spot),  # Needs Yellow & Blue Switch, or Red & Green, (should just feather be in logic too?)
     },
     "Kalimari Desert": {
         "Kalimari Desert Take the Lead":    (466000_9, Group.base),
         "Kalimari Desert Qualify":          (46600_10, Group.base),
         "Kalimari Desert 1st":              (46600_11, Group.base),
-        "Destroy Cactus":                   (46600_98, Group.hazard),
-        "Kalimari Desert Secret":           (4660_575, Group.secret),
+        "Destroy Cactus":                   (46600_97, Group.hazard),
+        "Kalimari Desert Secret":           (4660_575, Group.secret),  # Needs Yellow, Red, or Blue Switch, or Feather
     },
     "Toad's Turnpike": {
         "Toad's Turnpike Take the Lead":    (46600_12, Group.base),
         "Toad's Turnpike Qualify":          (46600_13, Group.base),
         "Toad's Turnpike 1st":              (46600_14, Group.base),
-        "Toads Turnpike Secret":            (4660_576, Group.secret),
+        "Toad's Turnpike Secret":           (4660_576, Group.secret),
     },
     "Frappe Snowland": {
         "Frappe Snowland Take the Lead":    (46600_15, Group.base),
         "Frappe Snowland Qualify":          (46600_16, Group.base),
         "Frappe Snowland 1st":              (46600_17, Group.base),
-        "Defeat Snowman Bomb":              (46600_99, Group.hazard),
+        "Defeat Snowman Bomb":              (46600_98, Group.hazard),
         "Snow Yoshi's Secret":              (4660_577, Group.secret),
     },
     "Choco Mountain": {
         "Choco Mountain Take the Lead":     (46600_18, Group.base),
         "Choco Mountain Qualify":           (46600_19, Group.base),
         "Choco Mountain 1st":               (46600_20, Group.base),
-        # "Deflect Boulder":                (4660_100, Group.hazard),  omit because this hazard sucks (bad gameplay)
+        "Deflect Boulder":                  (46600_99, Group.hazard),
     },
     "Mario Raceway": {
         "Mario Raceway Take the Lead":      (46600_21, Group.base),
         "Mario Raceway Qualify":            (46600_22, Group.base),
         "Mario Raceway 1st":                (46600_23, Group.base),
-        "Destroy Mario Sign":               (4660_102, Group.hazard),
+        "Destroy Mario Sign":               (4660_101, Group.hazard),
     },
     "Wario Stadium": {
         "Wario Stadium Take the Lead":      (46600_24, Group.base),
@@ -82,30 +82,32 @@ course_locations = {
         "Sherbet Land Take the Lead":       (46600_27, Group.base),
         "Sherbet Land Qualify":             (46600_28, Group.base),
         "Sherbet Land 1st":                 (46600_29, Group.base),
-        "Spin Baby Penguin":                (4660_103, Group.hazard),
-        "Spin Adult Penguin":               (4660_104, Group.hazard),
+        "Spin Baby Penguin":                (4660_102, Group.hazard),
+        "Spin Adult Penguin":               (4660_103, Group.hazard),
+        "Giant Penguin's Secret":           (4660_578, Group.secret),  # Not in the game yet
     },
     "Royal Raceway": {
         "Royal Raceway Take the Lead":      (46600_30, Group.base),
         "Royal Raceway Qualify":            (46600_31, Group.base),
         "Royal Raceway 1st":                (46600_32, Group.base),
-        "Peach's Castle Secret":            (4660_578, Group.secret),
-        "Peach's Castle Trail Secret":      (4660_579, Group.secret),
-        "Peach's Castle Moat Ramp Secret":  (4660_580, Group.secret),
+        "Peach's Castle Secret":            (4660_579, Group.secret),
+        "Peach's Castle Trail Secret":      (4660_580, Group.secret),
+        "Peach's Castle Moat Ramp Secret":  (4660_581, Group.secret),
     },
     "Bowser's Castle": {
         "Bowser's Castle Take the Lead":    (46600_33, Group.base),
         "Bowser's Castle Qualify":          (46600_34, Group.base),
         "Bowser's Castle 1st":              (46600_35, Group.base),
-        "Destroy Bush":                     (4660_105, Group.hazard),
-        "Destroy Thwomp":                   (4660_106, Group.hazard),
-        "Marty's Secret":                   (4660_581, Group.secret),  # Needs Green Switch or Feather
+        "Destroy Bush":                     (4660_104, Group.hazard),
+        "Destroy Thwomp":                   (4660_105, Group.hazard),
+        "Marty's Secret":                   (4660_582, Group.secret),  # Needs Green Switch or Feather
     },
     "D.K.'s Jungle Parkway": {
         "D.K.'s Jungle Parkway Take the Lead": (46600_36, Group.base),
         "D.K.'s Jungle Parkway Qualify":    (46600_37, Group.base),
         "D.K.'s Jungle Parkway 1st":        (46600_38, Group.base),
-        "D.K.'s Jungle Parkway Secret":     (4660_582, Group.secret),
+        "Deflect Kiwano Fruit":             (4660_106, Group.hazard),
+        "D.K.'s Jungle Parkway Secret":     (4660_583, Group.secret),
     },
     "Yoshi Valley": {
         "Yoshi Valley Take the Lead":       (46600_39, Group.base),
@@ -117,7 +119,7 @@ course_locations = {
         "Banshee Boardwalk Take the Lead":  (46600_42, Group.base),
         "Banshee Boardwalk Qualify":        (46600_43, Group.base),
         "Banshee Boardwalk 1st":            (46600_44, Group.base),
-        "Banshee Boardwalk Secret":         (4660_583, Group.secret),
+        "Banshee Boardwalk Secret":         (4660_584, Group.secret),
     },
     "Rainbow Road": {
         "Rainbow Road Take the Lead":       (46600_45, Group.base),
@@ -128,8 +130,8 @@ course_locations = {
 
 #   Region/Location:          (location id, entrances from course region indices) }
 shared_hazard_locations = {
-    "Destroy Tree":           (46600_96, (0, 2, 5, 7, 10, 12, 13)),
-    "Destroy Piranha Plant":  (4660_101, (7, 10)),
+    "Destroy Tree":           (46600_95, (0, 2, 5, 7, 10, 12, 13)),
+    "Destroy Piranha Plant":  (4660_100, (7, 10)),
 }
 
 
@@ -377,29 +379,29 @@ item_cluster_locations = [
         ],
     ], [
         [
-           SpotData("Sherbet Land First Items Spot 1", 4660_290),
-           SpotData("Sherbet Land First Items Spot 2", 4660_291, ["Green Switch", "Feather Power", "P2 Feather Power"]),
-           SpotData("Sherbet Land First Items Spot 3", 4660_292, ["Green Switch", "Feather Power", "P2 Feather Power"]),
-           SpotData("Sherbet Land First Items Spot 4", 4660_293, ["Green Switch", "Feather Power", "P2 Feather Power"]),
-           SpotData("Sherbet Land First Items Spot 5", 4660_294, ["Green Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 1 Spot 1", 4660_290),
+           SpotData("Sherbet Land Items 1 Spot 2", 4660_291, ["Green Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 1 Spot 3", 4660_292, ["Green Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 1 Spot 4", 4660_293, ["Green Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 1 Spot 5", 4660_294, ["Green Switch", "Feather Power", "P2 Feather Power"]),
         ], [
-           SpotData("Sherbet Land Left of Rock Items Spot 1", 4660_295, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
-           SpotData("Sherbet Land Left of Rock Items Spot 2", 4660_296, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
-           SpotData("Sherbet Land Left of Rock Items Spot 3", 4660_297, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
-           SpotData("Sherbet Land Left of Rock Items Spot 4", 4660_298, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 2 Spot 1", 4660_295, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 2 Spot 2", 4660_296, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 2 Spot 3", 4660_297, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
+           SpotData("Sherbet Land Items 2 Spot 4", 4660_298, ["Red Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),
         ], [
-           SpotData("Sherbet Land Right of Rock Item Spot", 4660_299),
+           SpotData("Sherbet Land Bypass Spot", 4660_299),
         ], [
-           SpotData("Sherbet Land Cave Items Spot 1", 4660_300),
-           SpotData("Sherbet Land Cave Items Spot 2", 4660_301),
-           SpotData("Sherbet Land Cave Items Spot 3", 4660_302),
-           SpotData("Sherbet Land Cave Items Spot 4", 4660_303),
-           SpotData("Sherbet Land Cave Items Spot 5", 4660_304),
+           SpotData("Sherbet Land Items 3 Spot 1", 4660_300),
+           SpotData("Sherbet Land Items 3 Spot 2", 4660_301),
+           SpotData("Sherbet Land Items 3 Spot 3", 4660_302),
+           SpotData("Sherbet Land Items 3 Spot 4", 4660_303),
+           SpotData("Sherbet Land Items 3 Spot 5", 4660_304),
         ], [
-           SpotData("Sherbet Land Last Items Spot 1", 4660_305),
-           SpotData("Sherbet Land Last Items Spot 2", 4660_306),
-           SpotData("Sherbet Land Last Items Spot 3", 4660_307),
-           SpotData("Sherbet Land Last Items Spot 4", 4660_308),
+           SpotData("Sherbet Land Items 4 Spot 1", 4660_305),
+           SpotData("Sherbet Land Items 4 Spot 2", 4660_306),
+           SpotData("Sherbet Land Items 4 Spot 3", 4660_307),
+           SpotData("Sherbet Land Items 4 Spot 4", 4660_308),
         ],
     ], [
         [
@@ -480,10 +482,10 @@ item_cluster_locations = [
            SpotData("Yoshi Valley Field Items Spot 3", 4660_365),
            SpotData("Yoshi Valley Field Items Spot 4", 4660_366),
         ], [
-           SpotData("Yoshi Valley Maze Entry Right Items Spot 1", 4660_367),
-           SpotData("Yoshi Valley Maze Entry Right Items Spot 2", 4660_368),
-           SpotData("Yoshi Valley Maze Entry Right Items Spot 3", 4660_369),
-           SpotData("Yoshi Valley Maze Entry Right Items Spot 4", 4660_370),
+           SpotData("Yoshi Valley Maze Entry Items Spot 1", 4660_367),
+           SpotData("Yoshi Valley Maze Entry Items Spot 2", 4660_368),
+           SpotData("Yoshi Valley Maze Entry Items Spot 3", 4660_369),
+           SpotData("Yoshi Valley Maze Entry Items Spot 4", 4660_370),
         ], [
            SpotData("Yoshi Valley Maze Bridge Items Spot 1", 4660_371, ["Green Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),  # Can reach with skilled use of Mushroom, etc if the Maze Railing is still down
            SpotData("Yoshi Valley Maze Bridge Items Spot 2", 4660_372, ["Green Switch", "Blue Switch", "Feather Power", "P2 Feather Power"]),  # Can reach with skilled use of Mushroom, etc if the Maze Railing is still down
@@ -498,15 +500,15 @@ item_cluster_locations = [
            SpotData("Yoshi Valley Rightmost Items Spot 5", 4660_380, ["Blue Switch", "Feather Power", "P2 Feather Power"]),
            SpotData("Yoshi Valley Rightmost Items Spot 6", 4660_381, ["Blue Switch", "Feather Power", "P2 Feather Power"]),
         ], [
-           SpotData("Yoshi Valley Leftmost Fork Items Spot 1", 4660_382),
-           SpotData("Yoshi Valley Leftmost Fork Items Spot 2", 4660_383),
-           SpotData("Yoshi Valley Leftmost Fork Items Spot 3", 4660_384),
-           SpotData("Yoshi Valley Leftmost Fork Items Spot 4", 4660_385),
+           SpotData("Yoshi Valley Left Fork Items Spot 1", 4660_382),
+           SpotData("Yoshi Valley Left Fork Items Spot 2", 4660_383),
+           SpotData("Yoshi Valley Left Fork Items Spot 3", 4660_384),
+           SpotData("Yoshi Valley Left Fork Items Spot 4", 4660_385),
         ], [
-           SpotData("Yoshi Valley Leftmost Ledge Items Spot 1", 4660_386),
-           SpotData("Yoshi Valley Leftmost Ledge Items Spot 2", 4660_387),
-           SpotData("Yoshi Valley Leftmost Ledge Items Spot 3", 4660_388),
-           SpotData("Yoshi Valley Leftmost Ledge Items Spot 4", 4660_389),
+           SpotData("Yoshi Valley Left Ledge Items Spot 1", 4660_386),
+           SpotData("Yoshi Valley Left Ledge Items Spot 2", 4660_387),
+           SpotData("Yoshi Valley Left Ledge Items Spot 3", 4660_388),
+           SpotData("Yoshi Valley Left Ledge Items Spot 4", 4660_389),
         ], [
            SpotData("Yoshi Valley Hairpin Turn Items Spot 1", 4660_390),
            SpotData("Yoshi Valley Hairpin Turn Items Spot 2", 4660_391),
@@ -590,60 +592,48 @@ item_cluster_locations = [
 #   Region: { Location:                location id }
 cup_locations = {
     "Mushroom Cup Trophy Ceremony": {
-        "Mushroom Cup Bronze":         46600_48,
-        "Mushroom Cup Silver":         46600_49,
-        "Mushroom Cup Gold":           46600_50,
-        # "Mushroom Cup 50cc Bronze":  46600_51,  Might do more cup difficulty unlock options later on
-        # "Mushroom Cup 50cc Silver":  46600_52,
-        # "Mushroom Cup 50cc Gold":    46600_53,
-        # "Mushroom Cup 100cc Bronze": 46600_54,
-        # "Mushroom Cup 100cc Silver": 46600_55,
-        "Mushroom Cup 100cc Gold":     46600_56,
-        # "Mushroom Cup 150cc Bronze": 46600_57,
-        # "Mushroom Cup 150cc Silver": 46600_58,
-        "Mushroom Cup 150cc Gold":     46600_59,
+        "Mushroom Cup Bronze":       46600_48,
+        "Mushroom Cup Silver":       46600_49,
+        "Mushroom Cup Gold":         46600_50,
+        "Mushroom Cup 100cc Bronze": 46600_51,
+        "Mushroom Cup 100cc Silver": 46600_52,
+        "Mushroom Cup 100cc Gold":   46600_53,
+        "Mushroom Cup 150cc Bronze": 46600_54,
+        "Mushroom Cup 150cc Silver": 46600_55,
+        "Mushroom Cup 150cc Gold":   46600_56,
     },
     "Flower Cup Trophy Ceremony": {
-        "Flower Cup Bronze":         46600_60,
-        "Flower Cup Silver":         46600_61,
-        "Flower Cup Gold":           46600_62,
-        # "Flower Cup 50cc Bronze":  46600_63,
-        # "Flower Cup 50cc Silver":  46600_64,
-        # "Flower Cup 50cc Gold":    46600_65,
-        # "Flower Cup 100cc Bronze": 46600_66,
-        # "Flower Cup 100cc Silver": 46600_67,
-        "Flower Cup 100cc Gold":     46600_68,
-        # "Flower Cup 150cc Bronze": 46600_69,
-        # "Flower Cup 150cc Silver": 46600_70,
-        "Flower Cup 150cc Gold":     46600_71,
+        "Flower Cup Bronze":       46600_57,
+        "Flower Cup Silver":       46600_58,
+        "Flower Cup Gold":         46600_59,
+        "Flower Cup 100cc Bronze": 46600_60,
+        "Flower Cup 100cc Silver": 46600_61,
+        "Flower Cup 100cc Gold":   46600_62,
+        "Flower Cup 150cc Bronze": 46600_63,
+        "Flower Cup 150cc Silver": 46600_64,
+        "Flower Cup 150cc Gold":   46600_65,
     },
     "Star Cup Trophy Ceremony": {
-        "Star Cup Bronze":         46600_72,
-        "Star Cup Silver":         46600_73,
-        "Star Cup Gold":           46600_74,
-        # "Star Cup 50cc Bronze":  46600_75,
-        # "Star Cup 50cc Silver":  46600_76,
-        # "Star Cup 50cc Gold":    46600_77,
-        # "Star Cup 100cc Bronze": 46600_78,
-        # "Star Cup 100cc Silver": 46600_79,
-        "Star Cup 100cc Gold":     46600_80,
-        # "Star Cup 150cc Bronze": 46600_81,
-        # "Star Cup 150cc Silver": 46600_82,
-        "Star Cup 150cc Gold":     46600_83,
+        "Star Cup Bronze":       46600_66,
+        "Star Cup Silver":       46600_67,
+        "Star Cup Gold":         46600_68,
+        "Star Cup 100cc Bronze": 46600_69,
+        "Star Cup 100cc Silver": 46600_70,
+        "Star Cup 100cc Gold":   46600_71,
+        "Star Cup 150cc Bronze": 46600_72,
+        "Star Cup 150cc Silver": 46600_73,
+        "Star Cup 150cc Gold":   46600_74,
     },
     "Special Cup Trophy Ceremony": {
-        "Special Cup Bronze":         46600_84,
-        "Special Cup Silver":         46600_85,
-        "Special Cup Gold":           46600_86,
-        # "Special Cup 50cc Bronze":  46600_87,
-        # "Special Cup 50cc Silver":  46600_88,
-        # "Special Cup 50cc Gold":    46600_89,
-        # "Special Cup 100cc Bronze": 46600_90,
-        # "Special Cup 100cc Silver": 46600_91,
-        "Special Cup 100cc Gold":     46600_92,
-        # "Special Cup 150cc Bronze": 46600_93,
-        # "Special Cup 150cc Silver": 46600_94,
-        "Special Cup 150cc Gold":     46600_95,
+        "Special Cup Bronze":       46600_75,
+        "Special Cup Silver":       46600_76,
+        "Special Cup Gold":         46600_77,
+        "Special Cup 100cc Bronze": 46600_78,
+        "Special Cup 100cc Silver": 46600_79,
+        "Special Cup 100cc Gold":   46600_80,
+        "Special Cup 150cc Bronze": 46600_81,
+        "Special Cup 150cc Silver": 46600_82,
+        "Special Cup 150cc Gold":   46600_83,
     }
 }
 

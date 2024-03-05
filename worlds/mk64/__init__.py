@@ -54,7 +54,7 @@ class MK64World(World):
     location_name_to_id = Locations.location_name_to_id
     item_name_groups = Items.item_name_groups
 
-    data_version = 1
+    data_version = 2
 
     opt: Opt
     num_filler_items: int
