@@ -159,7 +159,6 @@ course_win_rules = [    # TODO: Refactor with coupling among score types after m
 
 
 def set_star_access_rule(loc_name: str, multiworld: MultiWorld, player: int, opt: Opt) -> None:
-    # Relevant Option
     if opt.two_player:
         set_rule(multiworld.get_location(loc_name, player),
                  lambda state: state.has_any({"Star Power", "P2 Star Power"}, player))
@@ -213,14 +212,13 @@ def create_rules(world: "MK64World") -> None:
         set_rule(multiworld.get_location("Marty's Secret", player),
                  lambda state: state.has_any({"Green Switch", "Feather Power", "P2 Feather Power"}, player))
 
+    # Hazard Access, all use Star Power
     if opt.hazards:
-        # Hazard Access, all use Star Power
-        if opt.hazards:
-            for locations in Locations.course_locations.values():
-                for name, (_, group) in locations.items():
-                    if group == Locations.Group.hazard:
-                        set_star_access_rule(name, multiworld, player, opt)
-            for name, _ in Locations.shared_hazard_locations.items():
+        for locations in Locations.course_locations.values():
+            for name, (_, group) in locations.items():
+                if group == Locations.Group.hazard:
+                    set_star_access_rule(name, multiworld, player, opt)
+        for name, _ in Locations.shared_hazard_locations.items():
                 set_star_access_rule(name, multiworld, player, opt)
 
         # Add Blue Fence rule to Mario sign

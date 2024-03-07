@@ -61,9 +61,9 @@ def create_items(world: "MK64World") -> int:
     # Create unlock items based on game mode
     match opt.mode:
         case GameMode.option_cups:
-            itempool += [create_item("Progressive Cup Unlock", player) for _ in range(3)]
+            itempool += [create_item("Progressive Cup", player) for _ in range(3)]
         case GameMode.option_courses:
-            itempool += [create_item("Progressive Course Unlock", player) for _ in range(opt.locked_courses)]
+            itempool += [create_item("Progressive Course", player) for _ in range(opt.locked_courses)]
 
     # Create items based on player options
     cluster_id = 0

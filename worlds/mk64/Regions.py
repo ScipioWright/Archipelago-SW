@@ -102,12 +102,12 @@ def create_regions_locations_connections(world: "MK64World") -> tuple[Location, 
                     lambda state, qualify_rule=course_qualify_rules[order[c-1]]: qualify_rule(state, player, opt.logic))
             else:
                 menu_region.connect(course_regions[c], entrance_names[c],
-                                    lambda state, count=c//4: state.has("Progressive Cup Unlock", player, count))
+                                    lambda state, count=c//4: state.has("Progressive Cup", player, count))
                 course_regions[c+3].connect(cup_regions[c//4], entrance_names[c][:-1] + "Finish")
     else:  # GameMode.option_courses
         for i in range(16):
             locks = max(0, i + opt.locked_courses - 15)
-            rule = (lambda state, k=locks: state.has("Progressive Course Unlock", player, k)) if locks > 0 else None
+            rule = (lambda state, k=locks: state.has("Progressive Course", player, k)) if locks > 0 else None
             menu_region.connect(course_regions[i], f"Course {i + 1}", rule)
 
     # Register regions (and locations)
