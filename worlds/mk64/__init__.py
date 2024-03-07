@@ -90,8 +90,8 @@ class MK64World(World):
                               + (opt.fences and 4)
                               + (opt.box_respawning and 1)
                               + opt.min_filler)
-        num_unpaired_locations = ((67 if opt.mode == GameMode.option_cups else 47)  # 47 to 88
-                                  + (opt.hazards and 11)
+        num_unpaired_locations = ((83 if opt.mode == GameMode.option_cups else 47)  # 47 to 88
+                                  + (opt.hazards and 13)
                                   + (opt.secrets and 10))
 
         num_needed_extra_locs = max(num_unpaired_items - num_unpaired_locations, 0)  # 0 to 108
