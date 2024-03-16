@@ -62,7 +62,7 @@ class MK64World(World):
     filler_spots: list[bool]
     victory_location: MK64Location
     course_order: list[int]
-    driver_unlocks: int
+    starting_karts: list[str]
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -114,7 +114,7 @@ class MK64World(World):
         return Items.create_item(name, self.player)
 
     def create_items(self) -> None:
-        self.driver_unlocks = Items.create_items(self)
+        self.starting_karts = Items.create_items(self)
 
     def set_rules(self) -> None:
         Rules.create_rules(self)

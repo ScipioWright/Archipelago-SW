@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, CollectionState
 from ..generic.Rules import add_rule, set_rule
 
 from . import Locations
-from .Options import Opt
+from .Options import Opt, GameMode
 from .Items import item_name_groups
 
 if TYPE_CHECKING:
@@ -172,6 +172,14 @@ def create_rules(world: "MK64World") -> None:
     opt = world.opt
     order = world.course_order
 
+    # Make starting driver(s) required, which has them show up in the spoiler log Playthrough.
+    if opt.mode == GameMode.option_cups:
+        first_entrance = world.multiworld.get_region("Menu", player).get_exits()[0]
+        if len(world.starting_karts) == 1:
+            first_entrance.access_rule = lambda state, kart=world.starting_karts[0]: state.has(kart, player)
+        else:
+            first_entrance.access_rule = lambda state, kts=frozenset(world.starting_karts): state.has_all(kts, player)
+
     # Region (Entrance) Rules (handled in Regions.py instead for now)
     # if opt_game_mode == GameMode.option_cups:
     #    set_rule(multiworld.get_entrance("Flower Cup 1", player),
@@ -219,7 +227,7 @@ def create_rules(world: "MK64World") -> None:
                 if group == Locations.Group.hazard:
                     set_star_access_rule(name, multiworld, player, opt)
         for name, _ in Locations.shared_hazard_locations.items():
-                set_star_access_rule(name, multiworld, player, opt)
+            set_star_access_rule(name, multiworld, player, opt)
 
         # Add Blue Fence rule to Mario sign
         add_rule(multiworld.get_location("Destroy Mario Sign", player),
@@ -248,10 +256,3 @@ def create_rules(world: "MK64World") -> None:
 
     # Completion Condition (Victory Rule)
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
-
-    # Add starting drivers to sphere 0 spoiler log by adding minimum driver(s) as an access rule to the victory location
-    # Technically they are needed to get past the driver select screen, but checking the rule for victory is cleaner
-    # in code and runtime, and functionally identical since items cannot be lost.
-    for k in range(8):
-        if world.driver_unlocks >> k & 1:
-            add_rule(world.victory_location, lambda state, k=k: state.has(item_name_groups["Karts"][k], player))

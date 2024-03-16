@@ -11,6 +11,7 @@ import settings
 import Utils
 from worlds.Files import APDeltaPatch
 
+from . import Items
 from .Locations import ID_BASE
 from .Options import CourseOrder, ShuffleDriftAbilities, ConsistentItemBoxes
 
@@ -88,6 +89,7 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
         drift = ((opt.drift == ShuffleDriftAbilities.option_off and 0xAAAA) or
                  (opt.drift == ShuffleDriftAbilities.option_free_drift and 0x5555) or 0)
         blues = 0b11 if opt.special_boxes else 0
+        driver_unlocks = sum(1 << Items.item_name_groups["Karts"].index(kart) for kart in world.starting_karts)
         tires_off_road = 0 if opt.traction else 0xFF
         tires_winter = 0 if opt.traction else 0xFF
         locked_cups = 0b1110    # only Mushroom Cup starts unlocked
@@ -99,7 +101,7 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
         rom.write_int16(Addr.SAVE + 0x8, locked_courses)
         rom.write_int16(Addr.SAVE + 0xA, drift)
         rom.write_byte(Addr.SAVE + 0xF,  blues)
-        rom.write_byte(Addr.SAVE + 0x14, world.driver_unlocks)
+        rom.write_byte(Addr.SAVE + 0x14, driver_unlocks)
         rom.write_byte(Addr.SAVE + 0x15, tires_off_road)
         rom.write_byte(Addr.SAVE + 0x16, tires_winter)
         rom.write_byte(Addr.SAVE + 0x17, (locked_cups << 4) | switches)

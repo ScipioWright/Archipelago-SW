@@ -39,7 +39,7 @@ def create_item(name: str, player: int, classification: ItemClassification = -1)
     return MK64Item(name, classification, item_data[0], player)
 
 
-def create_items(world: "MK64World") -> int:
+def create_items(world: "MK64World") -> list[str]:
     player = world.player
     opt = world.opt
     num_filler = world.num_filler_items
@@ -68,10 +68,9 @@ def create_items(world: "MK64World") -> int:
     # Create items based on player options
     cluster_id = 0
     drivers = []
-    driver_ids = []
     filler_items = []
     trap_items = []
-    for name, (item_id, group, _) in item_table.items():
+    for name, (_, group, _) in item_table.items():
         if group & item_group_mask:
             itempool.append(create_item(name, player))
             if group == Group.drift:
@@ -85,18 +84,15 @@ def create_items(world: "MK64World") -> int:
             cluster_id += 1
         elif group == Group.driver:
             drivers.append(name)
-            driver_ids.append(item_id)
         elif group == Group.queueable:
             filler_items.append(name)
         elif group == Group.trap:
             trap_items.append(name)
-    min_driver_id = min(driver_ids)
-    driver_unlocks = 0
+    starting_karts = []
     for _ in range(1 + opt.two_player):
         driver_index = random.randrange(len(drivers))
-        starting_driver = drivers.pop(driver_index)
-        world.multiworld.push_precollected(create_item(starting_driver, player, ItemClassification.progression))
-        driver_unlocks |= 1 << (driver_ids[driver_index] - min_driver_id)
+        starting_karts.append(drivers.pop(driver_index))
+        world.multiworld.push_precollected(create_item(starting_karts[-1], player, ItemClassification.progression))
     for driver in drivers:
         itempool.append(create_item(driver, player))
     for _ in range(round(num_filler * (100 - opt.trap_percentage) * 0.01)):
@@ -108,7 +104,7 @@ def create_items(world: "MK64World") -> int:
     victory_item = MK64Item("Victory", ItemClassification.progression_skip_balancing, None, player)
     world.victory_location.place_locked_item(victory_item)
 
-    return driver_unlocks
+    return starting_karts
 
 
 # Item data table
