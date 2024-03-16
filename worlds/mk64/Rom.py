@@ -5,6 +5,7 @@ import struct
 import os
 import bsdiff4
 import pkgutil
+import unicodedata
 
 from typing import TYPE_CHECKING
 import settings
@@ -175,13 +176,15 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
             addr = Addr.ITEMS + Addr.ITEM_SIZE * local_loc_id
             rom.write_byte(addr + 1, loc.item.classification & 0b111)  # 0=FILLER,1=PROGRESSION,2=USEFUL,4=TRAP
             rom.write_byte(addr + 2, i)  # pickup_id, used by the game to reference player name and item name
-            pickup_item_name = loc.item.name.encode("ascii")[:Addr.ITEM_NAME_SIZE]
+            pickup_item_name = unicodedata.normalize("NFKD", loc.item.name)\
+                                          .encode("ascii", "ignore")[:Addr.ITEM_NAME_SIZE]
             rom.write_bytes(Addr.PICKUP_ITEM_NAMES + i * Addr.ITEM_NAME_SIZE, pickup_item_name)
             if loc.item.player == player:
                 rom.write_byte(addr, loc.item.code - ID_BASE)  # local_id (0 to 211)
             else:
                 rom.write_byte(addr, 0xFF)  # local_id of 0xFF indicates nonlocal item
-                pickup_player_name = multiworld.player_name[loc.item.player].encode("ascii")
+                pickup_player_name = unicodedata.normalize("NFKD", multiworld.player_name[loc.item.player])\
+                                                .encode("ascii", "ignore")[:Addr.ASCII_PLAYER_NAME_SIZE]
                 rom.write_bytes(Addr.PICKUP_PLAYER_NAMES + Addr.ASCII_PLAYER_NAME_SIZE * i, pickup_player_name)
         rom.write_bytes(Addr.SAVE_UNCHECKED_LOCATIONS, initial_unchecked_locs)
 
