@@ -590,57 +590,57 @@ item_cluster_locations = [
     ],
 ]
 
-#   Region: { Location:                location id }
+#   Region: (Location,             location id, option filter)
 cup_locations = {
-    "Mushroom Cup Trophy Ceremony": {
-        "Mushroom Cup Bronze":       46600_48,
-        "Mushroom Cup Silver":       46600_49,
-        "Mushroom Cup Gold":         46600_50,
-        "Mushroom Cup 100cc Bronze": 46600_51,
-        "Mushroom Cup 100cc Silver": 46600_52,
-        "Mushroom Cup 100cc Gold":   46600_53,
-        "Mushroom Cup 150cc Bronze": 46600_54,
-        "Mushroom Cup 150cc Silver": 46600_55,
-        "Mushroom Cup 150cc Gold":   46600_56,
-    },
-    "Flower Cup Trophy Ceremony": {
-        "Flower Cup Bronze":       46600_57,
-        "Flower Cup Silver":       46600_58,
-        "Flower Cup Gold":         46600_59,
-        "Flower Cup 100cc Bronze": 46600_60,
-        "Flower Cup 100cc Silver": 46600_61,
-        "Flower Cup 100cc Gold":   46600_62,
-        "Flower Cup 150cc Bronze": 46600_63,
-        "Flower Cup 150cc Silver": 46600_64,
-        "Flower Cup 150cc Gold":   46600_65,
-    },
-    "Star Cup Trophy Ceremony": {
-        "Star Cup Bronze":       46600_66,
-        "Star Cup Silver":       46600_67,
-        "Star Cup Gold":         46600_68,
-        "Star Cup 100cc Bronze": 46600_69,
-        "Star Cup 100cc Silver": 46600_70,
-        "Star Cup 100cc Gold":   46600_71,
-        "Star Cup 150cc Bronze": 46600_72,
-        "Star Cup 150cc Silver": 46600_73,
-        "Star Cup 150cc Gold":   46600_74,
-    },
-    "Special Cup Trophy Ceremony": {
-        "Special Cup Bronze":       46600_75,
-        "Special Cup Silver":       46600_76,
-        "Special Cup Gold":         46600_77,
-        "Special Cup 100cc Bronze": 46600_78,
-        "Special Cup 100cc Silver": 46600_79,
-        "Special Cup 100cc Gold":   46600_80,
-        "Special Cup 150cc Bronze": 46600_81,
-        "Special Cup 150cc Silver": 46600_82,
-        "Special Cup 150cc Gold":   46600_83,
-    }
+    "Mushroom Cup Trophy Ceremony": [
+        ("Mushroom Cup Bronze",       46600_48, 0b0011),
+        ("Mushroom Cup Silver",       46600_49, 0b0001),
+        ("Mushroom Cup Gold",         46600_50, 0b0001),
+        ("Mushroom Cup 100cc Bronze", 46600_51, 0b1000),
+        ("Mushroom Cup 100cc Silver", 46600_52, 0b0010),
+        ("Mushroom Cup 100cc Gold",   46600_53, 0b0100),
+        ("Mushroom Cup 150cc Bronze", 46600_54, 0b1000),
+        ("Mushroom Cup 150cc Silver", 46600_55, 0b1000),
+        ("Mushroom Cup 150cc Gold",   46600_56, 0b0110),
+    ],
+    "Flower Cup Trophy Ceremony": [
+        ("Flower Cup Bronze",       46600_57, 0b0011),
+        ("Flower Cup Silver",       46600_58, 0b0001),
+        ("Flower Cup Gold",         46600_59, 0b0001),
+        ("Flower Cup 100cc Bronze", 46600_60, 0b1000),
+        ("Flower Cup 100cc Silver", 46600_61, 0b0010),
+        ("Flower Cup 100cc Gold",   46600_62, 0b0100),
+        ("Flower Cup 150cc Bronze", 46600_63, 0b1000),
+        ("Flower Cup 150cc Silver", 46600_64, 0b1000),
+        ("Flower Cup 150cc Gold",   46600_65, 0b0110),
+    ],
+    "Star Cup Trophy Ceremony": [
+        ("Star Cup Bronze",       46600_66, 0b0011),
+        ("Star Cup Silver",       46600_67, 0b0001),
+        ("Star Cup Gold",         46600_68, 0b0001),
+        ("Star Cup 100cc Bronze", 46600_69, 0b1000),
+        ("Star Cup 100cc Silver", 46600_70, 0b0010),
+        ("Star Cup 100cc Gold",   46600_71, 0b0100),
+        ("Star Cup 150cc Bronze", 46600_72, 0b1000),
+        ("Star Cup 150cc Silver", 46600_73, 0b1000),
+        ("Star Cup 150cc Gold",   46600_74, 0b0110),
+    ],
+    "Special Cup Trophy Ceremony": [
+        ("Special Cup Bronze",       46600_75, 0b0011),
+        ("Special Cup Silver",       46600_76, 0b0001),
+        ("Special Cup Gold",         46600_77, 0b0001),
+        ("Special Cup 100cc Bronze", 46600_78, 0b1000),
+        ("Special Cup 100cc Silver", 46600_79, 0b0010),
+        ("Special Cup 100cc Gold",   46600_80, 0b0100),
+        ("Special Cup 150cc Bronze", 46600_81, 0b1000),
+        ("Special Cup 150cc Silver", 46600_82, 0b1000),
+        ("Special Cup 150cc Gold",   46600_83, 0b0110),
+    ]
 }
 
 location_name_to_id = (
     {name: code for r in course_locations.values() for name, (code, _) in r.items()} |
     {name: code for name, (code, _) in shared_hazard_locations.items()} |
     {spot.name: spot.code for r in item_cluster_locations for c in r for spot in c} |
-    {name: code for r in cup_locations.values() for name, code in r.items()}
+    {name: code for r in cup_locations.values() for name, code, _ in r}
 )

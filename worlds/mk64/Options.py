@@ -104,6 +104,24 @@ class TwoLapCourses(Choice):
     default = 0
 
 
+class CupTrophyLocations(Choice):
+    """Which sets of trophies are used as location checks. Finishing a cup will reward items for that trophy and engine
+    class, and all below. For example, getting 100cc Silver will also give 100cc Bronze, 50cc Silver, and 50cc Bronze.
+
+    ▃ Three: Bronze, Silver, and Gold (any engine class)
+    ▞ Three Scaling: Bronze, 100cc Silver, 150cc Gold
+    ▟ Five: Bronze, Silver, and Gold, 100cc Gold, 150cc Gold
+    ▟ Six: Bronze, Silver, and Gold, 100cc Silver, 100cc Gold, 150cc Gold
+    █ Nine: All three trophies in all three engine classes"""
+    display_name = "Cup Trophy Locations"
+    option_three = 0b0001
+    option_three_scaling = 0b0010
+    option_five = 0b0101
+    option_six = 0b0111
+    option_nine = 0b1111
+    default = 0b0101
+
+
 class HazardLocations(DefaultOnToggle):
     """Whether to include hazards which can be destroyed or defeated by the star power as location checks."""
     display_name = "Add Hazard Locations"
@@ -240,6 +258,7 @@ class MK64Options(PerGameCommonOptions):
     final_course_pool: FinalCoursePool
     mirror_course_chance: MirrorCourseChance
     two_lap_courses: TwoLapCourses
+    cup_trophy_locations: CupTrophyLocations
     hazard_locations: HazardLocations
     secret_locations: SecretLocations
     shuffle_drift_abilities: ShuffleDriftAbilities
@@ -270,6 +289,7 @@ class Opt:
         self.final_pool =      world.options.final_course_pool.value
         self.mirror_chance =   world.options.mirror_course_chance.value
         self.two_lap_courses = world.options.two_lap_courses.value
+        self.trophies =        world.options.cup_trophy_locations.value
         self.hazards =         world.options.hazard_locations.value
         self.secrets =         world.options.secret_locations.value
         self.drift =           world.options.shuffle_drift_abilities.value

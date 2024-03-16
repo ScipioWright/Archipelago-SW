@@ -81,8 +81,9 @@ def create_regions_locations_connections(world: "MK64World") -> tuple[Location, 
     if opt.mode == GameMode.option_cups:
         for cup, locations in Locations.cup_locations.items():
             add_region(world, cup, cup_regions)
-            for name, code in locations.items():
-                add_location(player, name, code, cup_regions[-1])
+            for name, code, option_filter in locations:
+                if option_filter & opt.trophies:
+                    add_location(player, name, code, cup_regions[-1])
 
     # Determine Course Order
     order = Courses.determine_order(world)

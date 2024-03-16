@@ -226,23 +226,25 @@ def create_rules(world: "MK64World") -> None:
                  lambda state: state.has("Blue Switch", player))
 
     # Cup Trophy Rules
-    trophy_class_mapping = {"Bronze": 1, "Silver": 2, "Gold": 3}
-    engine_class_mapping = {"100cc": 2, "150cc": 3}  # 50cc is 0
-    for c, locations in enumerate(Locations.cup_locations.values()):
-        for loc_name in locations.keys():
-            difficulty, trophy = loc_name.rsplit(" ", 1)[-2:]
-            trophy_class = trophy_class_mapping[trophy]
-            engine_class = engine_class_mapping.get(difficulty, 0)
-            set_rule(multiworld.get_location(loc_name, player), lambda state: trophy_class <=
-                     course_win_rules[order[4*c]](state, player, opt.logic + engine_class) +
-                     course_win_rules[order[4*c+1]](state, player, opt.logic + engine_class) +
-                     course_win_rules[order[4*c+2]](state, player, opt.logic + engine_class) +
-                     course_win_rules[order[4*c+3]](state, player, opt.logic + engine_class))
-                     # TODO: Would these rules run faster? But we could only use them for the base tropies, not higher cc ones
-                     # state.can_reach(course_regions[4*c].locations[2]) +
-                     # state.can_reach(course_regions[4*c+1].locations[2]) +
-                     # state.can_reach(course_regions[4*c+2].locations[2]) +
-                     # state.can_reach(course_regions[4*c+3].locations[2]))
+    if opt.mode == GameMode.option_cups:
+        trophy_class_mapping = {"Bronze": 1, "Silver": 2, "Gold": 3}
+        engine_class_mapping = {"100cc": 2, "150cc": 3}  # 50cc is 0
+        for c, locations in enumerate(Locations.cup_locations.values()):
+            for loc_name, _, option_filter in locations:
+                if option_filter & opt.trophies:
+                    difficulty, trophy = loc_name.rsplit(" ", 1)[-2:]
+                    trophy_class = trophy_class_mapping[trophy]
+                    engine_class = engine_class_mapping.get(difficulty, 0)
+                    set_rule(multiworld.get_location(loc_name, player), lambda state: trophy_class <=
+                             course_win_rules[order[4*c]](state, player, opt.logic + engine_class) +
+                             course_win_rules[order[4*c+1]](state, player, opt.logic + engine_class) +
+                             course_win_rules[order[4*c+2]](state, player, opt.logic + engine_class) +
+                             course_win_rules[order[4*c+3]](state, player, opt.logic + engine_class))
+                             # TODO: Would these rules run faster? But we could only use them for the base tropies, not higher cc ones
+                             # state.can_reach(course_regions[4*c].locations[2]) +
+                             # state.can_reach(course_regions[4*c+1].locations[2]) +
+                             # state.can_reach(course_regions[4*c+2].locations[2]) +
+                             # state.can_reach(course_regions[4*c+3].locations[2]))
 
     # Completion Condition (Victory Rule)
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
