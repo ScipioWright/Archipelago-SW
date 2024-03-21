@@ -51,6 +51,7 @@ class Addr:
     SHUFFLE_RAILINGS = FREE_MINI_TURBO + 1
     FEATHER_AVAILABLE = SHUFFLE_RAILINGS + 1
     CONSISTENT_ITEM_BOXES = FEATHER_AVAILABLE + 1
+    ENGINE_CLASSES = CONSISTENT_ITEM_BOXES + 1
     # Generation Flags
     # AP Items and pickup strings
     ITEMS = 0xC002C8  # APItem[583] at 3 bytes each
@@ -134,6 +135,14 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
                 mirror_courses |= 1 << i
         two_lap_mapping = {0: 0, 1: 0x8000, 2: 0x0100, 3: 0x8100}
         two_lap_courses = two_lap_mapping[opt.two_lap_courses]
+        if opt.low_engine == 0:
+            opt.low_engine = random.randrange(35, opt.middle_engine - 24)
+        elif opt.low_engine > opt.middle_engine - 25:
+            opt.low_engine = opt.middle_engine - 25
+        if opt.high_engine == 0:
+            opt.high_engine = random.randrange(opt.middle_engine + 25, 201)
+        elif opt.high_engine < opt.middle_engine + 25:
+            opt.high_engine = opt.middle_engine + 25
         rom.write_byte(Addr.TWO_PLAYER_POWERS, opt.two_player)
         rom.write_byte(Addr.GAME_MODE, opt.mode)
         rom.write_byte(Addr.FREE_MINI_TURBO, opt.drift == ShuffleDriftAbilities.option_free_mini_turbo)
@@ -144,6 +153,9 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
         rom.write_byte(Addr.CONSISTENT_ITEM_BOXES, opt.consistent)
         if opt.consistent == ConsistentItemBoxes.option_on:
             rom.write_bytes(Addr.SAVE_IDENTIFIED_ITEM_BOXES, [0xFF] * Addr.SAVE_IDENTIFIED_ITEM_BOXES_SIZE)
+        rom.write_int16(Addr.ENGINE_CLASSES, opt.low_engine)
+        rom.write_int16(Addr.ENGINE_CLASSES + 2, opt.middle_engine)
+        rom.write_int16(Addr.ENGINE_CLASSES + 4, opt.high_engine)
         rom.write_byte(Addr.GENERATION_DONE, 1)
         rom.write_byte(Addr.GENERATION_LOCKED, 1)
 

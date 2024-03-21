@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 from dataclasses import dataclass
 
 from . import Locations
-from Options import Choice, DefaultOnToggle, Toggle, Range, OptionList, StartInventoryPool, PerGameCommonOptions
+from Options import Choice, DefaultOnToggle, Toggle, Range, OptionList, StartInventoryPool, PerGameCommonOptions, \
+    NamedRange
 
 if TYPE_CHECKING:
     from . import MK64World
@@ -230,6 +231,46 @@ class MinimumFillerItems(Range):
     default = 30
 
 
+class LowEngineClass(NamedRange):
+    """Adjust the 50cc engine class. Capped 25cc below the Middle Engine Class.
+
+    Below Middle Random: A flat random distribution from 35cc to 25cc below Middle Engine Class.
+
+    Can be changed later with /low_engine_class [value]"""
+    display_name = "Low Engine Class"
+    range_start = 35
+    range_end = 150
+    default = 50
+    special_range_names = {
+        "random_below_middle": 0
+    }
+
+
+class MiddleEngineClass(NamedRange):
+    """Adjust the 100cc engine class.
+
+    Can be changed later with /middle_engine_class [value]"""
+    display_name = "Middle Engine Class"
+    range_start = 60
+    range_end = 175
+    default = 100
+
+
+class HighEngineClass(NamedRange):
+    """Adjust the 150cc engine class. Capped 25cc above the Middle Engine Class.
+
+    Above Middle Random: A flat random distribution from 25cc above the Middle Engine Class to 200cc.
+
+    Can be changed later with /high_engine_class [value]"""
+    display_name = "High Engine Class"
+    range_start = 85
+    range_end = 200
+    default = 150
+    special_range_names = {
+        "random_above_middle": 0
+    }
+
+
 class FixResultsMusic(DefaultOnToggle):
     """Fixes the race win results screen music so the first section repeats 2 times, not 64 times.
     The official soundtrack uses this AABB form."""
@@ -273,6 +314,9 @@ class MK64Options(PerGameCommonOptions):
     shuffle_item_box_clusters: ShuffleItemBoxClusters
     filler_trap_percentage: FillerTrapPercentage
     minimum_filler_items: MinimumFillerItems
+    low_engine_class: LowEngineClass
+    middle_engine_class: MiddleEngineClass
+    high_engine_class: HighEngineClass
     fix_results_music: FixResultsMusic
     sound_mode: SoundMode
 
@@ -304,4 +348,7 @@ class Opt:
         self.clusters =        world.options.shuffle_item_box_clusters.value
         self.trap_percentage = world.options.filler_trap_percentage.value
         self.min_filler =      world.options.minimum_filler_items.value
+        self.low_engine =      world.options.low_engine_class.value
+        self.middle_engine =   world.options.middle_engine_class.value
+        self.high_engine =     world.options.high_engine_class.value
         self.fix_music =       world.options.fix_results_music.value
