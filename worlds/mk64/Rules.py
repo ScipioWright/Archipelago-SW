@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState
 from ..generic.Rules import add_rule, set_rule
 
-from . import Locations
+from .Locations import course_locations, Group, shared_hazard_locations, cup_locations
 from .Options import Opt, GameMode, Goal, CupTrophyLocations
 from .Items import item_name_groups
 
@@ -165,12 +165,12 @@ def can_win_trophy(state: CollectionState, player: int, courses: list[int], trop
                          + course_win_rules[courses[3]](state, player, ease)
 
 
-def set_star_access_rule(loc_name: str, multiworld: MultiWorld, player: int, opt: Opt) -> None:
+def set_star_access_rule(world: "MK64World", loc_name: str, player: int, opt: Opt) -> None:
     if opt.two_player:
-        set_rule(multiworld.get_location(loc_name, player),
+        set_rule(world.get_location(loc_name),
                  lambda state: state.has_any({"Star Power", "P2 Star Power"}, player))
     else:
-        set_rule(multiworld.get_location(loc_name, player), lambda state: state.has("Star Power", player))
+        set_rule(world.get_location(loc_name), lambda state: state.has("Star Power", player))
 
 
 def create_rules(world: "MK64World") -> None:
@@ -199,58 +199,57 @@ def create_rules(world: "MK64World") -> None:
     #     pass
 
     # Base Course Rules # TODO: Clean this up, probably combine with Star Access Rules section
-    for locations in Locations.course_locations.values():
+    for locations in course_locations.values():
         for name, (code, group) in locations.items():
-            if group == Locations.Group.base:
+            if group == Group.base:
                 if code % 3 < 2:
-                    set_rule(multiworld.get_location(name, player),
+                    set_rule(world.get_location(name),
                              lambda state: course_win_rules[(code - 4660000) // 3](state, player, opt.logic))
                 else:
-                    set_rule(multiworld.get_location(name, player),
+                    set_rule(world.get_location(name),
                              lambda state: course_qualify_rules[(code - 4660000) // 3](state, player, opt.logic))
 
     # Item Spot Access Rules moved to Regions.py for context that knows which item box spots to apply rules to
 
     # Koopa Troopa Beach Rock Access
     if opt.special_boxes:
-        set_rule(multiworld.get_location("Koopa Troopa Beach Rock", player),
+        set_rule(world.get_location("Koopa Troopa Beach Rock"),
                  lambda state: state.has_all({"Yellow Switch", "Blue Switch"}, player)
                                or state.has_all({"Red Switch", "Green Switch"}, player))
 
     if opt.secrets:
         # Kalimari Desert Secret Access
-        set_rule(multiworld.get_location("Kalimari Desert Secret", player),
+        set_rule(world.get_location("Kalimari Desert Secret"),
                  lambda state: state.has_any({"Yellow Switch", "Red Switch", "Blue Switch",
                                               "Feather Power", "P2 Feather Power"}, player))
 
         # Marty's Secret Access
-        set_rule(multiworld.get_location("Marty's Secret", player),
+        set_rule(world.get_location("Marty's Secret"),
                  lambda state: state.has_any({"Green Switch", "Feather Power", "P2 Feather Power"}, player))
 
     # Hazard Access, all use Star Power
     if opt.hazards:
-        for locations in Locations.course_locations.values():
+        for locations in course_locations.values():
             for name, (_, group) in locations.items():
-                if group == Locations.Group.hazard:
-                    set_star_access_rule(name, multiworld, player, opt)
-        for name, _ in Locations.shared_hazard_locations.items():
-            set_star_access_rule(name, multiworld, player, opt)
+                if group == Group.hazard:
+                    set_star_access_rule(world, name, player, opt)
+        for name, _ in shared_hazard_locations.items():
+            set_star_access_rule(world, name, player, opt)
 
         # Add Blue Fence rule to Mario sign
-        add_rule(multiworld.get_location("Destroy Mario Sign", player),
-                 lambda state: state.has("Blue Switch", player))
+        add_rule(world.get_location("Destroy Mario Sign"), lambda state: state.has("Blue Switch", player))
 
     # Cup Trophy Rules
     if opt.mode == GameMode.option_cups:
         trophy_class_mapping = {"Bronze": 1, "Silver": 2, "Gold": 3}
         engine_class_mapping = {"100cc": 2, "150cc": 3}  # 50cc is 0
-        for c, locations in enumerate(Locations.cup_locations.values()):
+        for c, locations in enumerate(cup_locations.values()):
             for loc_name, _, option_filter in locations:
                 if option_filter & opt.trophies:
                     difficulty, trophy = loc_name.rsplit(" ", 1)[-2:]
                     trophy_class = trophy_class_mapping[trophy]
                     engine_class = engine_class_mapping.get(difficulty, 0)
-                    set_rule(multiworld.get_location(loc_name, player), lambda state: trophy_class <=
+                    set_rule(world.get_location(loc_name), lambda state: trophy_class <=
                              course_win_rules[order[4*c]](state, player, opt.logic + engine_class) +
                              course_win_rules[order[4*c+1]](state, player, opt.logic + engine_class) +
                              course_win_rules[order[4*c+2]](state, player, opt.logic + engine_class) +

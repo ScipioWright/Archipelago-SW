@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from BaseClasses import Region, Location
+from BaseClasses import Region
 
 from . import Courses
 from .Locations import (MK64Location, Group, item_cluster_locations, course_locations, shared_hazard_locations,
@@ -28,10 +28,10 @@ def create_regions_locations_connections(world: "MK64World"):
     shuffle_clusters = world.shuffle_clusters
     filler_spots = world.filler_spots
 
-    location_group_mask = (Locations.Group.base
-                           | (opt.hazards and Locations.Group.hazard)
-                           | (opt.secrets and Locations.Group.secret)
-                           | (opt.special_boxes and Locations.Group.blue_shell_item_spot))
+    location_group_mask = (Group.base
+                           | (opt.hazards and Group.hazard)
+                           | (opt.secrets and Group.secret)
+                           | (opt.special_boxes and Group.blue_shell_item_spot))
 
     # Prepare Region Handling
     menu_region = Region("Menu", player, multiworld)
@@ -44,7 +44,7 @@ def create_regions_locations_connections(world: "MK64World"):
     world.random.shuffle(filler_spots)
     item_spot_data = []
     c, s, t = 0, 0, -1
-    for region in Locations.item_cluster_locations:
+    for region in item_cluster_locations:
         item_spot_data.append([])
         for cluster in region:
             if shuffle_clusters[c]:
@@ -60,7 +60,7 @@ def create_regions_locations_connections(world: "MK64World"):
                     s += 1
 
     # Construct Course Regions and Locations
-    for (course_name, locs), spot_data_clusters in zip(Locations.course_locations.items(), item_spot_data):
+    for (course_name, locs), spot_data_clusters in zip(course_locations.items(), item_spot_data):
         add_region(world, course_name, course_regions)
         for loc_name, (code, group) in locs.items():
             if group & location_group_mask:
@@ -72,7 +72,7 @@ def create_regions_locations_connections(world: "MK64World"):
 
     # Shared Hazard Regions & Locations & Connections
     if opt.hazards:
-        for name, (code, courses) in Locations.shared_hazard_locations.items():
+        for name, (code, courses) in shared_hazard_locations.items():
             add_region(world, name, shared_hazard_regions)
             add_location(player, name, code, shared_hazard_regions[-1])
             for region in course_regions:
@@ -81,7 +81,7 @@ def create_regions_locations_connections(world: "MK64World"):
 
     # Cup Regions & Locations
     if opt.mode == GameMode.option_cups:
-        for cup, locations in Locations.cup_locations.items():
+        for cup, locations in cup_locations.items():
             add_region(world, cup, cup_regions)
             for name, code, option_filter in locations:
                 if option_filter & opt.trophies:
