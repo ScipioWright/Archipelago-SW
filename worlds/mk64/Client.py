@@ -1,4 +1,5 @@
 import unicodedata
+import logging
 
 from typing import TYPE_CHECKING, Optional, Set
 
@@ -11,6 +12,8 @@ from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
+
+logger = logging.getLogger("Client")
 
 
 class MarioKart64Client(BizHawkClient):
@@ -25,6 +28,8 @@ class MarioKart64Client(BizHawkClient):
         self.local_checked_locations = set()
         self.rom_slot_name = None
         self.unchecked_locs: bytearray = bytearray([0xFF] * Addr.SAVE_UNCHECKED_LOCATIONS_SIZE)
+        self.displacements = None
+        self.engine_class_changed = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -38,10 +43,11 @@ class MarioKart64Client(BizHawkClient):
             # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
             # validating a ROM where there's no slot name to read.
             try:
-                player_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx,
-                                                      [(Addr.PLAYER_NAME, Addr.PLAYER_NAME_SIZE, "ROM")]))[0]
-                seed_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx,
-                                                      [(Addr.SEED_NAME, Addr.SEED_NAME_SIZE, "ROM")]))[0]
+                read_state = await bizhawk.read(ctx.bizhawk_ctx, [(Addr.PLAYER_NAME, Addr.PLAYER_NAME_SIZE, "ROM"),
+                                                                  (Addr.SEED_NAME, Addr.SEED_NAME_SIZE, "ROM"),
+                                                                  (Addr.ENGINE_CLASSES, 6, "ROM")])
+                player_name_bytes = read_state[0]
+                seed_name_bytes = read_state[1]
                 self.rom_slot_name = (bytes([byte for byte in player_name_bytes if byte != 0]).decode("utf-8")
                                       + "_"
                                       + bytes([byte for byte in seed_name_bytes if byte != 0]).decode("ascii"))
@@ -55,6 +61,13 @@ class MarioKart64Client(BizHawkClient):
 
         ctx.game = self.game
         ctx.items_handling = 0b001  # Client handles items sent from other worlds, but not from your own world.
+        ctx.command_processor.commands["low_engine_class"] = cmd_low_engine_class
+        ctx.command_processor.commands["middle_engine_class"] = cmd_middle_engine_class
+        ctx.command_processor.commands["high_engine_class"] = cmd_high_engine_class
+        ec = read_state[2]
+        self.displacements = [ec[0] << 8 | ec[1],
+                              ec[2] << 8 | ec[3],
+                              ec[4] << 8 | ec[5]]
         ctx.want_slot_data = False
         return True
 
@@ -109,6 +122,15 @@ class MarioKart64Client(BizHawkClient):
                     "locations": new_locs
                 }])
 
+            # Send new engine class displacements
+            if self.engine_class_changed:
+                self.engine_class_changed = False
+                cc = self.displacements
+                displacement_bytes = [(cc[0] >> 8) & 0xFF, cc[0] & 0xFF,
+                                      (cc[1] >> 8) & 0xFF, cc[1] & 0xFF,
+                                      (cc[2] >> 8) & 0xFF, cc[2] & 0xFF]
+                await bizhawk.write(ctx.bizhawk_ctx, [(Addr.ENGINE_CLASSES_RAM, displacement_bytes, "RDRAM")])
+
             # Send game clear
             if not ctx.finished_game and game_clear:
                 await ctx.send_msgs([{
@@ -119,3 +141,77 @@ class MarioKart64Client(BizHawkClient):
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.
             pass
+
+
+def padl(x: int) -> str:
+    return ("  " if x < 100 else "") + str(x)
+
+
+def padr(x: int) -> str:
+    return str(x) + ("  " if x < 100 else "")
+
+
+def set_engine_class(ctx, engine_class: int, displacement: str, range_min: int, range_max: int) -> bool:
+    if ctx.game != "Mario Kart 64":
+        logger.warning("This command can only be used while playing Mario Kart 64.")
+        return False
+    cc = ctx.client_handler.displacements
+    if not displacement:
+        logger.info("              Current    Wiggle Room    Full Allowed Range")
+        logger.info(f"  Low:     {padl(cc[0])}cc           35 – {padr(cc[1] - 25)}             35 – 150")
+        logger.info(f"  Middle: {padl(cc[1])}cc        {padl(cc[0] + 25)} – {padr(cc[2] - 25)}             60 – 175")
+        logger.info(f"  High:     {padl(cc[2])}cc        {padl(cc[1] + 25)} – 200             85 – 200")
+        logger.info("Include a number to change that engine class. "
+                    "Adjacent classes may change to maintain 25cc spacing.")
+        return False
+    try:
+        displacement_number = int(''.join(filter(str.isdigit, displacement)))
+    except ValueError:
+        logger.warning(f"Unable to parse '{displacement}'. Enter a number between {range_min} and {range_max}.")
+        return False
+    if not (range_min <= displacement_number <= range_max):
+        logger.warning(f"Could not find engines in that size. Enter a number between {range_min} and {range_max}.")
+        return False
+    cc[engine_class] = displacement_number
+    logger.info(f"{['Low', 'Middle', 'High'][engine_class]} Engine Class set to {displacement_number}cc.")
+    ctx.client_handler.engine_class_changed = True
+    return True
+
+
+def cmd_low_engine_class(self, displacement: str = ""):
+    """Sets the low engine class (50cc is standard)."""
+    if not set_engine_class(self.ctx, 0, displacement, 35, 150):
+        return
+    cc = self.ctx.client_handler.displacements
+    if cc[0] + 25 > cc[1]:
+        logger.warning(f"Adjacent Middle Engine Class increased from {cc[1]}cc to {cc[0] + 25}cc.")
+        self.ctx.client_handler.displacements[1] = cc[0] + 25
+    if cc[0] + 50 > cc[2]:
+        logger.warning(f"Adjacent High Engine Class increased from {cc[2]}cc to {cc[0] + 50}cc.")
+        self.ctx.client_handler.displacements[2] = cc[0] + 50
+
+
+def cmd_middle_engine_class(self, displacement: str = ""):
+    """Sets the middle engine class (100cc is standard)."""
+    if not set_engine_class(self.ctx, 1, displacement, 60, 175):
+        return
+    cc = self.ctx.client_handler.displacements
+    if cc[1] - 25 < cc[0]:
+        logger.warning(f"Adjacent Low Engine Class decreased from {cc[0]}cc to {cc[1] - 25}cc.")
+        self.ctx.client_handler.displacements[0] = cc[1] - 25
+    if cc[1] + 25 > cc[2]:
+        logger.warning(f"Adjacent High Engine Class increased from {cc[2]}cc to {cc[1] + 25}cc.")
+        self.ctx.client_handler.displacements[2] = cc[1] + 25
+
+
+def cmd_high_engine_class(self, displacement: str = ""):
+    """Sets the high engine class (150cc is standard)."""
+    if not set_engine_class(self.ctx, 2, displacement, 85, 200):
+        return
+    cc = self.ctx.client_handler.displacements
+    if cc[2] - 50 < cc[0]:
+        logger.warning(f"Adjacent Low Engine Class decreased from {cc[0]}cc to {cc[2] - 50}cc.")
+        self.ctx.client_handler.displacements[0] = cc[2] - 50
+    if cc[2] - 25 < cc[1]:
+        logger.warning(f"Adjacent Middle Engine Class decreased from {cc[1]}cc to {cc[2] - 25}cc.")
+        self.ctx.client_handler.displacements[1] = cc[2] - 25
