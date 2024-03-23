@@ -219,7 +219,7 @@ class FillerTrapPercentage(Range):
     display_name = "Filler Trap Percentage"
     range_start = 0
     range_end = 100
-    default = 20
+    default = 10
 
 
 class MinimumFillerItems(Range):
@@ -227,7 +227,7 @@ class MinimumFillerItems(Range):
     (More filler items helps generation succeed. Future versions will be less fragile to generation failure.)"""
     display_name = "Minimum Filler Items"
     range_start = 0
-    range_end = 40
+    range_end = 60
     default = 30
 
 

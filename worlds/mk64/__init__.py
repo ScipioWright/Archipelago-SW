@@ -8,7 +8,7 @@ from worlds.AutoWorld import World, WebWorld
 from . import Items, Locations, Regions, Rom, Rules
 from .Client import MarioKart64Client  # Import to register client with BizHawkClient
 from .Locations import MK64Location
-from .Options import MK64Options, GameMode, Opt, ShuffleDriftAbilities
+from .Options import MK64Options, GameMode, Goal, CupTrophyLocations, Opt, ShuffleDriftAbilities
 
 
 class MK64Web(WebWorld):
@@ -76,7 +76,7 @@ class MK64World(World):
         # Count items without a paired location and vice versa, based on player options
         # hardcoded for speed, and because duplicating the the world generation logic here would be excessive.
         # Tests may be needed to keep this from being fragile, or it may need to be refactored to later into generation.
-        num_unpaired_items = ((not opt.feather and not opt.two_player and 21)  # 20 to 155
+        num_unpaired_items = ((not opt.feather and not opt.two_player and 21)  # 21 to 177
                               + (opt.feather and not opt.two_player and 22)
                               + (not opt.feather and opt.two_player and 34)
                               + (opt.feather and opt.two_player and 36)
@@ -90,16 +90,23 @@ class MK64World(World):
                               + (opt.fences and 4)
                               + (opt.box_respawning and 1)
                               + opt.min_filler)
-        num_unpaired_locations = ((83 if opt.mode == GameMode.option_cups else 47)  # 47 to 88
+        num_unpaired_locations = (16 * 3  # base course locations              # 47 to 107
+                                  + (opt.goal == Goal.option_final_win and -1)
+                                  + (0 if opt.mode == GameMode.option_courses else
+                                     (opt.trophies == CupTrophyLocations.option_five and 4 * 5) or
+                                     (opt.trophies == CupTrophyLocations.option_six and 4 * 6) or
+                                     (opt.trophies == CupTrophyLocations.option_nine and 4 * 9) or 4 * 3)
                                   + (opt.hazards and 13)
                                   + (opt.secrets and 10))
 
-        num_needed_extra_locs = max(num_unpaired_items - num_unpaired_locations, 0)  # 0 to 108
-        num_needed_extra_items = max(num_unpaired_locations - num_unpaired_items, 0)
-        self.num_filler_items = opt.min_filler + num_needed_extra_items  # 0 to 65
+        num_needed_extra_locs = max(num_unpaired_items - num_unpaired_locations, 0)   # 0 to 130
+        num_needed_extra_items = max(num_unpaired_locations - num_unpaired_items, 0)  # 0 to 83
+        self.num_filler_items = opt.min_filler + num_needed_extra_items               # 0 to 83
         self.shuffle_clusters = ([True] * opt.clusters + [False] * (72 - opt.clusters))
         self.filler_spots = ([True] * num_needed_extra_locs + [False] * (338 - num_needed_extra_locs - opt.clusters))
         # Uncomment to print at generation time extra locations/items
+        # print(f"num_unpaired_items: {num_unpaired_items}")
+        # print(f"num_unpaired_locations: {num_unpaired_locations}")
         # if num_needed_extra_locs:
         #     print(f"{num_needed_extra_locs} extra Mario Kart 64 locations will be made"
         #           f" for {self.multiworld.get_player_name(self.player)} to match their number of items.")
