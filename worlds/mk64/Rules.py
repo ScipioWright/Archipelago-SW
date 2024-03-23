@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, CollectionState
 from ..generic.Rules import add_rule, set_rule
 
 from . import Locations
-from .Options import Opt, GameMode
+from .Options import Opt, GameMode, Goal, CupTrophyLocations
 from .Items import item_name_groups
 
 if TYPE_CHECKING:
@@ -158,6 +158,13 @@ course_win_rules = [    # TODO: Refactor with coupling among score types after m
 ]
 
 
+def can_win_trophy(state: CollectionState, player: int, courses: list[int], trophy_class: int, ease: int) -> bool:
+    return trophy_class <= course_win_rules[courses[0]](state, player, ease)\
+                         + course_win_rules[courses[1]](state, player, ease)\
+                         + course_win_rules[courses[2]](state, player, ease)\
+                         + course_win_rules[courses[3]](state, player, ease)
+
+
 def set_star_access_rule(loc_name: str, multiworld: MultiWorld, player: int, opt: Opt) -> None:
     if opt.two_player:
         set_rule(multiworld.get_location(loc_name, player),
@@ -254,5 +261,13 @@ def create_rules(world: "MK64World") -> None:
                              # state.can_reach(course_regions[4*c+2].locations[2]) +
                              # state.can_reach(course_regions[4*c+3].locations[2]))
 
-    # Completion Condition (Victory Rule)
-    multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+        # Event & Victory Rules
+        if opt.goal == Goal.option_all_wins:
+            for c in range(4):
+                ease = opt.logic + (0 if opt.trophies == CupTrophyLocations.option_three else 3)
+                set_rule(world.get_location(world.event_names[c]),
+                         lambda state, e=ease: can_win_trophy(state, player, order[4*c:4*(c+1)], 3, e))
+            world.victory_location.access_rule = lambda state: state.has_all(world.event_names[:4], player)
+            multiworld.completion_condition[player] = lambda state: state.has(world.event_names[4], player)
+        else:
+            multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

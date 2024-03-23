@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING
 from BaseClasses import Region, Location
 
-from . import Locations, Courses
-from .Options import GameMode
+from . import Courses
+from .Locations import (MK64Location, Group, item_cluster_locations, course_locations, shared_hazard_locations,
+                        cup_locations, cup_events)
+from .Options import GameMode, Goal, CupTrophyLocations
 from .Rules import course_qualify_rules
 
 if TYPE_CHECKING:
@@ -13,13 +15,13 @@ def add_region(world: "MK64World", region_name: str, region_group: list[Region])
     region_group.append(Region(region_name, world.player, world.multiworld))
 
 
-def add_location(player: int, loc_name: str, code: int, region: Region) -> Locations.MK64Location:
-    location = Locations.MK64Location(player, loc_name, code, region)
+def add_location(player: int, loc_name: str, code: int | None, region: Region) -> MK64Location:
+    location = MK64Location(player, loc_name, code, region)
     region.locations.append(location)
     return location
 
 
-def create_regions_locations_connections(world: "MK64World") -> tuple[Location, list[int]]:
+def create_regions_locations_connections(world: "MK64World"):
     multiworld = world.multiworld
     player = world.player
     opt = world.opt
@@ -122,13 +124,23 @@ def create_regions_locations_connections(world: "MK64World") -> tuple[Location, 
         # print(entrance.name + " => " + entrance.connected_region.name)
 
     # Place Victory Event Location
-    if opt.mode == GameMode.option_cups:
-        cup_regions[-1].locations[-1].address = None
-        cup_regions[-1].locations[-1].event = True
-        victory_event_location = cup_regions[-1].locations[-1]
+    if opt.goal == Goal.option_final_win:
+        if opt.mode == GameMode.option_cups:
+            cup_regions[-1].locations[-1].address = None
+            cup_regions[-1].locations[-1].event = True
+            victory_location = cup_regions[-1].locations[-1]
+        else:
+            course_regions[15].locations[2].address = None
+            course_regions[15].locations[2].event = True
+            victory_location = course_regions[15].locations[2]
     else:
-        course_regions[15].locations[2].address = None
-        course_regions[15].locations[2].event = True
-        victory_event_location = course_regions[15].locations[2]
-
-    return victory_event_location, order
+        if opt.trophies != CupTrophyLocations.option_three:
+            event_names = [f" {opt.high_engine}cc ".join(e) for e in cup_events]
+        else:
+            event_names = [" ".join(e) for e in cup_events]
+        for c in range(4):
+            add_location(player, event_names[c], None, cup_regions[c])
+        victory_location = add_location(player, event_names[4], None, menu_region)
+        world.event_names = event_names
+    world.course_order = order
+    world.victory_location = victory_location

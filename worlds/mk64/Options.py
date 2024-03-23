@@ -32,6 +32,17 @@ class GameMode(Choice):
     default = 0
 
 
+class Goal(Choice):
+    """Determines the victory condition.
+
+    Final Win: Victory is placed at Special Cup 150cc Gold on Cups Mode, or 1st on the last course on Courses Mode
+    All Wins: Victory requires 150cc Gold on all cups on Cups Mode, or 1st on all courses on Courses Mode"""
+    display_name = "Goal"
+    option_final_win = 0
+    option_all_wins = 1
+    default = 0
+
+
 class LogicDifficulty(Choice):
     """Scales the logic threshhold where skill is involved. Specifically, how many good items are available before you
     are expected to be able to qualify and win on tough courses.
@@ -293,6 +304,7 @@ class MK64Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     two_player: TwoPlayer
     game_mode: GameMode
+    goal: Goal
     locked_courses: LockedCourses
     course_order: CourseOrder
     logic_difficulty: LogicDifficulty
@@ -327,6 +339,7 @@ class Opt:
         # Relevant Options
         self.two_player =      world.options.two_player.value
         self.mode =            world.options.game_mode.value
+        self.goal =            world.options.goal.value
         self.course_order =    world.options.course_order.value
         self.locked_courses =  world.options.locked_courses.value
         self.logic =           world.options.logic_difficulty.value

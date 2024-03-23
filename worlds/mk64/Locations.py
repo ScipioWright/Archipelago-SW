@@ -644,3 +644,11 @@ location_name_to_id = (
     {spot.name: spot.code for r in item_cluster_locations for c in r for spot in c} |
     {name: code for r in cup_locations.values() for name, code, _ in r}
 )
+
+cup_events = [
+    ("Mushroom Cup", "Victory"),
+    ("Flower Cup", "Victory"),
+    ("Star Cup", "Victory"),
+    ("Special Cup", "Victory"),
+    ("All", "Golds")
+]

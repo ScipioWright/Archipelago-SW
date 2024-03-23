@@ -3,7 +3,7 @@ from enum import IntFlag, auto
 
 from BaseClasses import Item, ItemClassification
 
-from .Options import GameMode, ShuffleDriftAbilities
+from .Options import GameMode, ShuffleDriftAbilities, Goal
 
 if TYPE_CHECKING:
     from . import MK64World
@@ -101,8 +101,15 @@ def create_items(world: "MK64World") -> list[str]:
         itempool.append(create_item(random.choice(trap_items), player))
 
     # Create and place Victory item event
-    victory_item = MK64Item("Victory", ItemClassification.progression_skip_balancing, None, player)
-    world.victory_location.place_locked_item(victory_item)
+    if opt.goal == Goal.option_all_wins:
+        for event_name in world.event_names[:4]:
+            world.get_location(event_name).place_locked_item(
+                MK64Item(event_name, ItemClassification.progression_skip_balancing, None, player))
+        victory_item_name = world.event_names[4]
+    else:
+        victory_item_name = "Victory"
+    world.victory_location.place_locked_item(
+        MK64Item(victory_item_name, ItemClassification.progression_skip_balancing, None, player))
 
     return starting_karts
 

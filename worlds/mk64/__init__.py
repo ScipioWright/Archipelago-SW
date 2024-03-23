@@ -61,6 +61,7 @@ class MK64World(World):
     shuffle_clusters: list[bool]
     filler_spots: list[bool]
     victory_location: MK64Location
+    event_names: list[str]
     course_order: list[int]
     starting_karts: list[str]
 
@@ -113,9 +114,17 @@ class MK64World(World):
         # elif num_needed_extra_items:
         #     print(f"{num_needed_extra_items} extra Mario Kart 64 filler items will be made"
         #           f" for {self.multiworld.get_player_name(self.player)} to match their number of locations.")
+        if opt.low_engine == 0:
+            opt.low_engine = self.random.randrange(35, opt.middle_engine - 24)
+        elif opt.low_engine > opt.middle_engine - 25:
+            opt.low_engine = opt.middle_engine - 25
+        if opt.high_engine == 0:
+            opt.high_engine = self.random.randrange(opt.middle_engine + 25, 201)
+        elif opt.high_engine < opt.middle_engine + 25:
+            opt.high_engine = opt.middle_engine + 25
 
     def create_regions(self) -> None:
-        self.victory_location, self.course_order = Regions.create_regions_locations_connections(self)
+        Regions.create_regions_locations_connections(self)
 
     def create_item(self, name: str) -> Item:
         return Items.create_item(name, self.player)

@@ -136,14 +136,6 @@ def generate_rom_patch(world: "MK64World", output_directory: str) -> None:
                 mirror_courses |= 1 << i
         two_lap_mapping = {0: 0, 1: 0x8000, 2: 0x0100, 3: 0x8100}
         two_lap_courses = two_lap_mapping[opt.two_lap_courses]
-        if opt.low_engine == 0:
-            opt.low_engine = random.randrange(35, opt.middle_engine - 24)
-        elif opt.low_engine > opt.middle_engine - 25:
-            opt.low_engine = opt.middle_engine - 25
-        if opt.high_engine == 0:
-            opt.high_engine = random.randrange(opt.middle_engine + 25, 201)
-        elif opt.high_engine < opt.middle_engine + 25:
-            opt.high_engine = opt.middle_engine + 25
         rom.write_byte(Addr.TWO_PLAYER_POWERS, opt.two_player)
         rom.write_byte(Addr.GAME_MODE, opt.mode)
         rom.write_byte(Addr.FREE_MINI_TURBO, opt.drift == ShuffleDriftAbilities.option_free_mini_turbo)
