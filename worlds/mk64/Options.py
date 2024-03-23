@@ -146,7 +146,7 @@ class SecretLocations(DefaultOnToggle):
 
 class ShuffleDriftAbilities(Choice):
     """Optionally shuffle into the item pool the ability to drift and the ability to use mini-turbos as progressive
-    unlocks per driver. "Plentiful" shuffles a 3rd progressive unlock into the pool. "Free Drift" means drivers start
+    unlocks per kart. "Plentiful" shuffles a 3rd progressive unlock into the pool. "Free Drift" means karts start
     with the ability to drift. "Free mini-turbo" means both abilities will be obtained together."""
     display_name = "Shuffle Drift Abilities"
     option_off = 0
@@ -165,13 +165,13 @@ class ShuffleDriftAbilities(Choice):
 
 class TractionTires(DefaultOnToggle):
     """Optionally shuffle into the item pool the ability to have traction on off-road and winter surface types,
-    per driver. "Off" means karts always have traction, as in the vanilla game."""
+    per kart. "Off" means karts always have traction, as in the vanilla game."""
     display_name = "Add Traction Tires"
 
 
 class StartingItems(DefaultOnToggle):
-    """Optionally shuffle into the item pool a random item power to start each race with, per driver. For example
-    Mario may be able to start each race with a blue shell. Which item is random per driver."""
+    """Optionally shuffle into the item pool a random item power to start each race with, per kart. For example
+    Mario may be able to start each race with a blue shell. Which item is random per kart."""
     display_name = "Add Starting Items"
 
 

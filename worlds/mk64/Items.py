@@ -19,7 +19,7 @@ class Group(IntFlag):
     feather = auto()
     two_player = auto()
     two_player_feather = auto()
-    driver = auto()
+    kart = auto()
     drift = auto()
     traction = auto()
     starting_items = auto()
@@ -39,7 +39,7 @@ def create_item(name: str, player: int, classification: ItemClassification = -1)
     return MK64Item(name, classification, item_data[0], player)
 
 
-def create_items(world: "MK64World") -> list[str]:
+def create_items(world: "MK64World"):
     player = world.player
     opt = world.opt
     num_filler = world.num_filler_items
@@ -67,7 +67,7 @@ def create_items(world: "MK64World") -> list[str]:
 
     # Create items based on player options
     cluster_id = 0
-    drivers = []
+    karts = []
     filler_items = []
     trap_items = []
     for name, (_, group, _) in item_table.items():
@@ -82,19 +82,18 @@ def create_items(world: "MK64World") -> list[str]:
             if world.shuffle_clusters[cluster_id]:
                 itempool.append(create_item(name, player))
             cluster_id += 1
-        elif group == Group.driver:
-            drivers.append(name)
+        elif group == Group.kart:
+            karts.append(name)
         elif group == Group.queueable:
             filler_items.append(name)
         elif group == Group.trap:
             trap_items.append(name)
-    starting_karts = []
     for _ in range(1 + opt.two_player):
-        driver_index = random.randrange(len(drivers))
-        starting_karts.append(drivers.pop(driver_index))
-        world.multiworld.push_precollected(create_item(starting_karts[-1], player, ItemClassification.progression))
-    for driver in drivers:
-        itempool.append(create_item(driver, player))
+        kart_index = random.randrange(len(karts))
+        world.multiworld.push_precollected(create_item(karts[kart_index], player, ItemClassification.progression))
+        world.starting_karts.append(karts.pop(kart_index))
+    for kart in karts:
+        itempool.append(create_item(kart, player))
     for _ in range(round(num_filler * (100 - opt.trap_percentage) * 0.01)):
         itempool.append(create_item(random.choice(filler_items), player))
     for _ in range(round(num_filler * opt.trap_percentage * 0.01)):
@@ -150,14 +149,14 @@ item_table = {
     "P2 Triple Mushroom Power":                 (46600_29, Group.two_player, ItemClassification.progression),
     "P2 Super Mushroom Power":                  (46600_30, Group.two_player, ItemClassification.progression),
     "P2 Feather Power":                         (46600_31, Group.two_player_feather, ItemClassification.progression),
-    "Mario":                                    (46600_32, Group.driver, ItemClassification.progression),
-    "Luigi":                                    (46600_33, Group.driver, ItemClassification.progression),
-    "Peach":                                    (46600_34, Group.driver, ItemClassification.progression),
-    "Toad":                                     (46600_35, Group.driver, ItemClassification.progression),
-    "Yoshi":                                    (46600_36, Group.driver, ItemClassification.progression),
-    "D.K.":                                     (46600_37, Group.driver, ItemClassification.progression),
-    "Wario":                                    (46600_38, Group.driver, ItemClassification.progression),
-    "Bowser":                                   (46600_39, Group.driver, ItemClassification.progression),
+    "Mario":                                    (46600_32, Group.kart, ItemClassification.progression),
+    "Luigi":                                    (46600_33, Group.kart, ItemClassification.progression),
+    "Peach":                                    (46600_34, Group.kart, ItemClassification.progression),
+    "Toad":                                     (46600_35, Group.kart, ItemClassification.progression),
+    "Yoshi":                                    (46600_36, Group.kart, ItemClassification.progression),
+    "D.K.":                                     (46600_37, Group.kart, ItemClassification.progression),
+    "Wario":                                    (46600_38, Group.kart, ItemClassification.progression),
+    "Bowser":                                   (46600_39, Group.kart, ItemClassification.progression),
     "Progressive Drift Mario":                  (46600_41, Group.drift, ItemClassification.progression),
     "Progressive Drift Luigi":                  (46600_42, Group.drift, ItemClassification.progression),
     "Progressive Drift Peach":                  (46600_43, Group.drift, ItemClassification.progression),

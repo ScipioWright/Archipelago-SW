@@ -179,7 +179,7 @@ def create_rules(world: "MK64World") -> None:
     opt = world.opt
     order = world.course_order
 
-    # Make starting driver(s) required, which has them show up in the spoiler log Playthrough.
+    # Make starting kart(s) required, which has them show up in the spoiler log Playthrough.
     if opt.mode == GameMode.option_cups:
         first_entrance = world.multiworld.get_region("Menu", player).get_exits()[0]
         if len(world.starting_karts) == 1:
