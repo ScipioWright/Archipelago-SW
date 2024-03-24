@@ -592,7 +592,7 @@ item_cluster_locations = [
 
 #   Region: (Location,             location id, option filter)
 cup_locations = {
-    "Mushroom Cup Trophy Ceremony": [
+    "Mushroom Cup": [
         ("Mushroom Cup Bronze",       46600_48, 0b0011),
         ("Mushroom Cup Silver",       46600_49, 0b0001),
         ("Mushroom Cup Gold",         46600_50, 0b0001),
@@ -603,7 +603,7 @@ cup_locations = {
         ("Mushroom Cup 150cc Silver", 46600_55, 0b1000),
         ("Mushroom Cup 150cc Gold",   46600_56, 0b0110),
     ],
-    "Flower Cup Trophy Ceremony": [
+    "Flower Cup": [
         ("Flower Cup Bronze",       46600_57, 0b0011),
         ("Flower Cup Silver",       46600_58, 0b0001),
         ("Flower Cup Gold",         46600_59, 0b0001),
@@ -614,7 +614,7 @@ cup_locations = {
         ("Flower Cup 150cc Silver", 46600_64, 0b1000),
         ("Flower Cup 150cc Gold",   46600_65, 0b0110),
     ],
-    "Star Cup Trophy Ceremony": [
+    "Star Cup": [
         ("Star Cup Bronze",       46600_66, 0b0011),
         ("Star Cup Silver",       46600_67, 0b0001),
         ("Star Cup Gold",         46600_68, 0b0001),
@@ -625,7 +625,7 @@ cup_locations = {
         ("Star Cup 150cc Silver", 46600_73, 0b1000),
         ("Star Cup 150cc Gold",   46600_74, 0b0110),
     ],
-    "Special Cup Trophy Ceremony": [
+    "Special Cup": [
         ("Special Cup Bronze",       46600_75, 0b0011),
         ("Special Cup Silver",       46600_76, 0b0001),
         ("Special Cup Gold",         46600_77, 0b0001),
@@ -645,10 +645,4 @@ location_name_to_id = (
     {name: code for r in cup_locations.values() for name, code, _ in r}
 )
 
-cup_events = [
-    ("Mushroom Cup", "Victory"),
-    ("Flower Cup", "Victory"),
-    ("Star Cup", "Victory"),
-    ("Special Cup", "Victory"),
-    ("All", "Golds")
-]
+cup_events = [cup + " Victory" for cup in cup_locations.keys()]

@@ -4,7 +4,7 @@ from BaseClasses import Region
 from . import Courses
 from .Locations import (MK64Location, Group, item_cluster_locations, course_locations, shared_hazard_locations,
                         cup_locations, cup_events)
-from .Options import GameMode, Goal, CupTrophyLocations
+from .Options import GameMode, Goal
 from .Rules import course_qualify_rules
 
 if TYPE_CHECKING:
@@ -82,7 +82,7 @@ def create_regions_locations_connections(world: "MK64World"):
     # Cup Regions & Locations
     if opt.mode == GameMode.option_cups:
         for cup, locations in cup_locations.items():
-            add_region(world, cup, cup_regions)
+            add_region(world, cup + " Trophy Ceremony", cup_regions)
             for name, code, option_filter in locations:
                 if option_filter & opt.trophies:
                     add_location(player, name, code, cup_regions[-1])
@@ -134,13 +134,8 @@ def create_regions_locations_connections(world: "MK64World"):
             course_regions[15].locations[2].event = True
             victory_location = course_regions[15].locations[2]
     else:
-        if opt.trophies != CupTrophyLocations.option_three:
-            event_names = [f" {opt.high_engine}cc ".join(e) for e in cup_events]
-        else:
-            event_names = [" ".join(e) for e in cup_events]
         for c in range(4):
-            add_location(player, event_names[c], None, cup_regions[c])
-        victory_location = add_location(player, event_names[4], None, menu_region)
-        world.event_names = event_names
+            add_location(player, cup_events[c], None, cup_regions[c])
+        victory_location = add_location(player, "All Golds", None, menu_region)
     world.course_order = order
     world.victory_location = victory_location

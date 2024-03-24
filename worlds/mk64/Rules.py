@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from ..generic.Rules import add_rule, set_rule
 
-from .Locations import course_locations, Group, shared_hazard_locations, cup_locations
+from .Locations import course_locations, Group, shared_hazard_locations, cup_locations, cup_events
 from .Options import Opt, GameMode, Goal, CupTrophyLocations
 from .Items import item_name_groups
 
@@ -158,11 +158,8 @@ course_win_rules = [    # TODO: Refactor with coupling among score types after m
 ]
 
 
-def can_win_trophy(state: CollectionState, player: int, courses: list[int], trophy_class: int, ease: int) -> bool:
-    return trophy_class <= course_win_rules[courses[0]](state, player, ease)\
-                         + course_win_rules[courses[1]](state, player, ease)\
-                         + course_win_rules[courses[2]](state, player, ease)\
-                         + course_win_rules[courses[3]](state, player, ease)
+def can_win_trophy(state: CollectionState, player: int, courses: frozenset[int], trophy_class: int, ease: int) -> bool:
+    return trophy_class <= sum(course_win_rules[course](state, player, ease) for course in courses)
 
 
 def set_star_access_rule(world: "MK64World", loc_name: str, player: int, opt: Opt) -> None:
@@ -264,9 +261,8 @@ def create_rules(world: "MK64World") -> None:
         if opt.goal == Goal.option_all_wins:
             for c in range(4):
                 ease = opt.logic + (0 if opt.trophies == CupTrophyLocations.option_three else 3)
-                set_rule(world.get_location(world.event_names[c]),
-                         lambda state, e=ease: can_win_trophy(state, player, order[4*c:4*(c+1)], 3, e))
-            world.victory_location.access_rule = lambda state: state.has_all(world.event_names[:4], player)
-            multiworld.completion_condition[player] = lambda state: state.has(world.event_names[4], player)
-        else:
-            multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+                cup_courses = frozenset(order[4 * c:4 * (c + 1)])
+                set_rule(world.get_location(cup_events[c]),
+                         lambda state, o=cup_courses, e=ease: can_win_trophy(state, player, o, 3, e))
+            world.victory_location.access_rule = lambda state: state.has_all(cup_events, player)
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
