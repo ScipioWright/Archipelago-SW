@@ -145,3 +145,27 @@ class MK64World(World):
         player_name = self.multiworld.player_name[self.player]
         slot_name = player_name + "_" + self.multiworld.seed_name
         multidata["connect_names"][slot_name] = multidata["connect_names"][player_name]
+
+    def fill_slot_data(self) -> dict[str, any]:
+        slot_data = self.options.as_dict(
+            "two_player",
+            "game_mode",
+            "goal",
+            "locked_courses",
+            "cup_trophy_locations",
+            "hazard_locations",
+            "secret_locations",
+            "shuffle_drift_abilities",
+            "add_traction_tires",
+            "add_starting_items",
+            "shuffle_railings",
+            "fences",
+            "feather_item",
+            "shuffle_item_box_respawning",
+            "shuffle_special_item_boxes",
+            "low_engine_class",
+            "middle_engine_class",
+            "high_engine_class"
+        )
+        slot_data["course_order"] = self.course_order
+        return slot_data
