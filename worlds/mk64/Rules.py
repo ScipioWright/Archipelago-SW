@@ -46,18 +46,18 @@ def item_win_score(state: CollectionState, player: int) -> int:  # 0 to 5
 
 
 def track_score(state: CollectionState, player: int) -> int:  # 0 to 2
-    ratings = [state.count("Progressive Drift " + kart, player) for kart in karts if state.has(kart, player)]
+    ratings = [min(state.count("Progressive Drift " + kart, player), 2) for kart in karts if state.has(kart, player)]
     return max(ratings, default=0)
 
 
 def off_road_score(state: CollectionState, player: int) -> int:  # 0 to 3
-    ratings = [state.count("Progressive Drift " + kart, player) + state.has("Off-Road Tires " + kart, player)
+    ratings = [min(state.count("Progressive Drift " + kart, player), 2) + state.has("Off-Road Tires " + kart, player)
                for kart in karts if state.has(kart, player)]
     return max(ratings, default=0)
 
 
 def winter_score(state: CollectionState, player: int) -> int:  # 0 to 4
-    ratings = [state.count("Progressive Drift " + kart, player)
+    ratings = [min(state.count("Progressive Drift " + kart, player), 2)
                + (state.has("Winter Tires " + kart, player) and 2) or (state.has("Off-Road Tires " + kart, player))
                for kart in karts if state.has(kart, player)]
     return max(ratings, default=0)
