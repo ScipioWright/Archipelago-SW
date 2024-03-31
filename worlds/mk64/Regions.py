@@ -75,9 +75,9 @@ def create_regions_locations_connections(world: "MK64World"):
         for name, (code, courses) in shared_hazard_locations.items():
             add_region(world, name, shared_hazard_regions)
             add_location(player, name, code, shared_hazard_regions[-1])
-            for region in course_regions:
-                if region.name in courses:
-                    region.connect(name, "Use Star")
+            for c, region in enumerate(course_regions):
+                if c in courses:
+                    region.connect(shared_hazard_regions[-1])
 
     # Cup Regions & Locations
     if opt.mode == GameMode.option_cups:
