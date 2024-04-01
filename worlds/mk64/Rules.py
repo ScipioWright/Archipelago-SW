@@ -237,32 +237,24 @@ def create_rules(world: "MK64World") -> None:
         add_rule(world.get_location("Destroy Mario Sign"), lambda state: state.has("Blue Switch", player))
 
     # Cup Trophy Rules
+    cup_courses = [frozenset(order[i:i + 4]) for i in range(0, len(order), 4)]
     if opt.mode == GameMode.option_cups:
         trophy_class_mapping = {"Bronze": 1, "Silver": 2, "Gold": 3}
         engine_class_mapping = {"100cc": 2, "150cc": 3}  # 50cc is 0
-        for c, locations in enumerate(cup_locations.values()):
+        for locations, courses in zip(cup_locations.values(), cup_courses):
             for loc_name, _, option_filter in locations:
                 if option_filter & opt.trophies:
-                    difficulty, trophy = loc_name.rsplit(" ", 1)[-2:]
+                    difficulty, trophy = loc_name.rsplit(" ", 2)[-2:]
                     trophy_class = trophy_class_mapping[trophy]
-                    engine_class = engine_class_mapping.get(difficulty, 0)
-                    set_rule(world.get_location(loc_name), lambda state: trophy_class <=
-                             course_win_rules[order[4*c]](state, player, opt.logic + engine_class) +
-                             course_win_rules[order[4*c+1]](state, player, opt.logic + engine_class) +
-                             course_win_rules[order[4*c+2]](state, player, opt.logic + engine_class) +
-                             course_win_rules[order[4*c+3]](state, player, opt.logic + engine_class))
-                             # TODO: Would these rules run faster? But we could only use them for the base tropies, not higher cc ones
-                             # state.can_reach(course_regions[4*c].locations[2]) +
-                             # state.can_reach(course_regions[4*c+1].locations[2]) +
-                             # state.can_reach(course_regions[4*c+2].locations[2]) +
-                             # state.can_reach(course_regions[4*c+3].locations[2]))
+                    ease = opt.logic + engine_class_mapping.get(difficulty, 0)
+                    set_rule(world.get_location(loc_name),
+                             lambda state, o=courses, t=trophy_class, e=ease: can_win_trophy(state, player, o, t, e))
 
         # Event & Victory Rules
         if opt.goal == Goal.option_all_wins:
-            for c in range(4):
+            for cup_event, courses in zip(cup_events, cup_courses):
                 ease = opt.logic + (0 if opt.trophies == CupTrophyLocations.option_three else 3)
-                cup_courses = frozenset(order[4 * c:4 * (c + 1)])
-                set_rule(world.get_location(cup_events[c]),
-                         lambda state, o=cup_courses, e=ease: can_win_trophy(state, player, o, 3, e))
+                set_rule(world.get_location(cup_event),
+                         lambda state, o=courses, e=ease: can_win_trophy(state, player, o, 3, e))
             world.victory_location.access_rule = lambda state: state.has_all(cup_events, player)
         multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
