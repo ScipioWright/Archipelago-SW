@@ -65,7 +65,7 @@ class TunicWorld(World):
     location_name_groups = location_name_groups
 
     item_name_to_id = item_name_to_id
-    location_name_to_id = standard_location_name_to_id
+    location_name_to_id = standard_location_name_to_id.copy()
     location_name_to_id.update(grass_location_name_to_id)
 
     player_location_table: Dict[str, int]
@@ -328,7 +328,7 @@ class TunicWorld(World):
                 region = self.multiworld.get_region(region_name, self.player)
                 region.add_exits(exits)
 
-            for location_name, location_id in self.location_name_to_id.items():
+            for location_name, location_id in self.player_location_table.items():
                 region = self.multiworld.get_region(location_table[location_name].region, self.player)
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
