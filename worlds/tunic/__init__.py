@@ -2,7 +2,7 @@ from typing import Dict, List, Any, Tuple, TypedDict
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
-from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
+from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
@@ -10,6 +10,7 @@ from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation)
+from .grass import grass_location_table, grass_location_name_to_id
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -64,8 +65,10 @@ class TunicWorld(World):
     location_name_groups = location_name_groups
 
     item_name_to_id = item_name_to_id
-    location_name_to_id = location_name_to_id
+    location_name_to_id = standard_location_name_to_id
+    location_name_to_id.update(grass_location_name_to_id)
 
+    player_location_table: Dict[str, int]
     ability_unlocks: Dict[str, int]
     slot_data_items: List[TunicItem]
     tunic_portal_pairs: Dict[str, str]
@@ -103,8 +106,14 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
+                self.options.grass_randomizer.value = passthrough["grass_randomizer"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+
+        self.player_location_table = standard_location_name_to_id
+
+        if self.options.grass_randomizer:
+            self.player_location_table.update(grass_location_name_to_id)
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -167,12 +176,12 @@ class TunicWorld(World):
                     if new_cxn:
                         cls.seed_groups[group]["plando"].value.append(cxn)
 
-    def create_item(self, name: str) -> TunicItem:
+    def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
         # if item_data.combat_ic is None, it'll take item_data.classification instead
         classification: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
                                               or item_data.classification)
-        return TunicItem(name, classification, self.item_name_to_id[name], self.player)
+        return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
         tunic_items: List[TunicItem] = []
@@ -201,8 +210,14 @@ class TunicWorld(World):
                 self.multiworld.get_location("Coins in the Well - 10 Coins", self.player).place_locked_item(laurels)
             elif self.options.laurels_location == "10_fairies":
                 self.multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", self.player).place_locked_item(laurels)
-            self.slot_data_items.append(laurels)
             items_to_create["Hero's Laurels"] = 0
+
+        if self.options.grass_randomizer:
+            items_to_create["Grass"] = len(grass_location_table)
+            tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression | ItemClassification.useful))
+            items_to_create["Glass Cannon"] = 0
+            tunic_items.append(self.create_item("Gun", ItemClassification.progression | ItemClassification.useful))
+            items_to_create["Gun"] = 0
 
         if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
@@ -254,15 +269,13 @@ class TunicWorld(World):
             remove_filler(items_to_create[gold_hexagon])
 
             for hero_relic in item_name_groups["Hero Relics"]:
-                relic_item = TunicItem(hero_relic, ItemClassification.useful, self.item_name_to_id[hero_relic], self.player)
-                tunic_items.append(relic_item)
+                tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
                 items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
             for page in item_name_groups["Abilities"]:
                 if items_to_create[page] > 0:
-                    page_item = TunicItem(page, ItemClassification.useful, self.item_name_to_id[page], self.player)
-                    tunic_items.append(page_item)
+                    tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
                     items_to_create[page] = 0
 
         if self.options.maskless:
@@ -271,16 +284,16 @@ class TunicWorld(World):
             items_to_create["Scavenger Mask"] = 0
 
         if self.options.lanternless:
-            lantern_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
-            tunic_items.append(lantern_item)
+            tunic_items.append(self.create_item("Lantern", ItemClassification.useful))
             items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
-                tunic_item: TunicItem = self.create_item(item)
-                if item in slot_data_item_names:
-                    self.slot_data_items.append(tunic_item)
-                tunic_items.append(tunic_item)
+                tunic_items.append(self.create_item(item))
+
+        for tunic_item in tunic_items:
+            if tunic_item.name in slot_data_item_names:
+                self.slot_data_items.append(tunic_item)
 
         self.multiworld.itempool += tunic_items
 
@@ -298,7 +311,8 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
 
         # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
-        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
+        if (self.options.entrance_rando or self.options.shuffle_ladders
+                or self.options.combat_logic or self.options.grass_randomizer):
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -326,7 +340,8 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
+        if (self.options.entrance_rando or self.options.shuffle_ladders
+                or self.options.combat_logic or self.options.grass_randomizer):
             set_er_location_rules(self)
         else:
             set_region_rules(self)
@@ -390,6 +405,7 @@ class TunicWorld(World):
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "shuffle_ladders": self.options.shuffle_ladders.value,
+            "grass_randomizer": self.options.grass_randomizer.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
