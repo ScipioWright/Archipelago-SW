@@ -6253,9 +6253,9 @@ def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
     if world.options.start_with_sword:
         return True
     else:
+        # no gun or wand because they're extremely tedious
         return (has_sword(state, player)
-                or (has_melee(state, player) and state.has("Glass Cannon", player))
-                or state.has_any({"Gun", "Magic Wand"}, player))
+                or (has_melee(state, player) and state.has("Glass Cannon", player)))
 
 
 def set_grass_location_rules(world: "TunicWorld") -> None:

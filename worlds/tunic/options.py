@@ -169,7 +169,7 @@ class LocalFill(Range):
     internal_name = "local_fill"
     display_name = "Local Fill"
     range_start = 0
-    range_end = 99
+    range_end = 100
     default = 0
 
 
