@@ -160,6 +160,19 @@ class GrassRandomizer(Toggle):
     display_name = "Grass Randomizer"
 
 
+class LocalFill(Range):
+    """
+    Choose what percentage of your filler/trap items are filled locally.
+    Vanilla TUNIC has 302 locations. Grass randomizer adds 6,227 locations. Therefore, grass makes up 95% of your items with Grass Randomizer on.
+    So, if you are playing with people who don't have ridiculous options like Grass Randomizer, we recommend you set this option to at least 92..
+    """
+    internal_name = "local_fill"
+    display_name = "Local Fill"
+    range_start = 0
+    range_end = 99
+    default = 0
+
+
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
@@ -279,6 +292,7 @@ class TunicOptions(PerGameCommonOptions):
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
     grass_randomizer: GrassRandomizer
+    local_fill: LocalFill
     combat_logic: CombatLogic
     test_combat_option: TempCombatOption
     lanternless: Lanternless

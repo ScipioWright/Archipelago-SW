@@ -1,6 +1,7 @@
-from typing import Dict, List, Any, Tuple, TypedDict
+from typing import Dict, List, Any, Tuple, TypedDict, cast
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
+from Fill import fast_fill
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
@@ -294,6 +295,19 @@ class TunicWorld(World):
         for tunic_item in tunic_items:
             if tunic_item.name in slot_data_item_names:
                 self.slot_data_items.append(tunic_item)
+
+        # grass rando has a lot of junk, so an option to local a lot of junk seems fair
+        if self.options.local_fill > 0:
+            all_filler = [item for item in tunic_items if item.classification in [ItemClassification.filler,
+                                                                                  ItemClassification.trap]]
+            non_filler = [item for item in tunic_items if item.classification not in [ItemClassification.filler,
+                                                                                      ItemClassification.trap]]
+            unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
+            amount_to_local_fill = int(self.options.local_fill.value / 100 * len(all_filler))
+            locations_to_local_fill = self.random.sample(unfilled_locations, amount_to_local_fill)
+            for _ in range(amount_to_local_fill):
+                self.multiworld.push_item(locations_to_local_fill.pop(), all_filler.pop())
+            tunic_items = all_filler + non_filler
 
         self.multiworld.itempool += tunic_items
 
