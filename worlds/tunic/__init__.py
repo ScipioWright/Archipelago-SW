@@ -1,7 +1,6 @@
-from typing import Dict, List, Any, Tuple, TypedDict, cast
+from typing import Dict, List, Any, Tuple, TypedDict
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
-from Fill import fast_fill
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
