@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, Tuple
+from typing import Dict, List, NamedTuple, Tuple, Optional
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
 
@@ -39,17 +39,20 @@ area_data: Dict[str, AreaStats] = {
     "Boss Scavenger": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic"], is_boss=True),
     "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
     "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
-    "Gauntlet": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
+    # marked as boss because the garden knights can't get hurt by stick
+    "Gauntlet": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"], is_boss=True),
     "The Heir": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic", "Laurels"], is_boss=True),
 }
 
 
-def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
-    data = area_data[area_name]
+def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
+    data = alt_data or area_data[area_name]
     extra_att_needed = 0
     extra_def_needed = 0
     extra_mp_needed = 0
     has_magic = state.has_any({"Magic Wand", "Gun"}, player)
+    stick_bool = False
+    sword_bool = False
     for item in data.equipment:
         if item == "Stick":
             if not has_melee(state, player):
@@ -59,6 +62,8 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
                     extra_att_needed -= 16
                 else:
                     return False
+            else:
+                stick_bool = True
 
         elif item == "Sword":
             if not has_sword(state, player):
@@ -76,6 +81,9 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
                     extra_def_needed += 2
                 else:
                     return False
+            else:
+                sword_bool = True
+
         elif item == "Shield":
             if not state.has("Shield", player):
                 extra_def_needed += 2
@@ -92,7 +100,35 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     modified_stats = AreaStats(data.att_level + extra_att_needed, data.def_level + extra_def_needed, data.potion_level,
                                data.hp_level, data.sp_level, data.mp_level + extra_mp_needed, data.potion_count)
     if not has_required_stats(modified_stats, state, player):
-        return False
+        # we may need to check if you would have the required stats if you were missing a weapon
+        # if someone has a better way of doing this, please tell me lmao
+        if sword_bool and "Sword" in data.equipment and "Magic" in data.equipment:
+            # we need to check if you would have the required stats if you didn't have melee
+            equip_list = [item for item in data.equipment if item != "Sword"]
+            more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
+                                            data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
+                                            equip_list)
+            if has_combat_reqs("none", state, player, more_modified_stats):
+                return True
+
+            # and we need to check if you would have the required stats if you didn't have magic
+            equip_list = [item for item in data.equipment if item != "Magic"]
+            more_modified_stats = AreaStats(data.att_level + 2, data.def_level + 2, data.potion_level,
+                                            data.hp_level, data.sp_level, data.mp_level - 16, data.potion_count,
+                                            equip_list)
+            if has_combat_reqs("none", state, player, more_modified_stats):
+                return True
+
+        elif stick_bool and "Stick" in data.equipment and "Magic" in data.equipment:
+            # we need to check if you would have the required stats if you didn't have the stick
+            equip_list = [item for item in data.equipment if item != "Stick"]
+            more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
+                                            data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
+                                            equip_list)
+            if has_combat_reqs("none", state, player, more_modified_stats):
+                return True
+        else:
+            return False
     return True
 
 
@@ -296,10 +332,9 @@ def get_money_count(state: CollectionState, player: int) -> int:
     money += state.count("Money x255", player) * 255  # 1 in pool
     money += state.count("Money x200", player) * 200  # 1 in pool
     money += state.count("Money x128", player) * 128  # 3 in pool
-    money += state.count("Money x100", player) * 100  # 5 in pool
-    # total from regular money: 1,339
+    # total from regular money: 839
     # first effigy is 8, doubles until it reaches 512 at number 7, after effigy 28 they stop dropping money
-    # with the vanilla count of 12, you get a total of 3,576 money
+    # with the vanilla count of 12, you get 3,576 money from effigies
     effigy_count = min(28, state.count("Effigy", player))  # 12 in pool
     money_per_break = 8
     for _ in range(effigy_count):

@@ -1191,7 +1191,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         for ls_info in non_ow_ls_list:
             # for places where the destination is a region (so you have to get knocked down)
             if ls_info.dest_is_region:
-                # todo: check if we need to make any changes here for combat logic
                 # none of the non-ow ones have multiple ladders that can be used, so don't need has_any
                 if options.shuffle_ladders and ls_info.ladders_req:
                     regions[ls_info.origin].connect(
@@ -1667,6 +1666,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         # garden knight is in the regions part above
         combat_logic_to_loc("Fortress Arena - Siege Engine/Vault Key Pickup", "Siege Engine", set_instead=True)
+        combat_logic_to_loc("Librarian - Hexagon Green", "The Librarian", set_instead=True)
         set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
                  rule=lambda state: has_combat_reqs("The Librarian", state, player)
                  and has_ladder("Ladders in Library", state, world))

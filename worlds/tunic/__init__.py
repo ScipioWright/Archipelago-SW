@@ -109,6 +109,7 @@ class TunicWorld(World):
                 self.options.grass_randomizer.value = passthrough["grass_randomizer"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+                self.options.combat_logic.value = passthrough["combat_logic"]
 
         self.player_location_table = standard_location_name_to_id.copy()
 
@@ -223,7 +224,6 @@ class TunicWorld(World):
             for rgb_hexagon, location in hexagon_locations.items():
                 hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
                 self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
-                self.slot_data_items.append(hex_item)
                 items_to_create[rgb_hexagon] = 0
             items_to_create[gold_hexagon] -= 3
 
@@ -275,12 +275,11 @@ class TunicWorld(World):
         if not self.options.ability_shuffling:
             for page in item_name_groups["Abilities"]:
                 if items_to_create[page] > 0:
-                    tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
+                    tunic_items.append(self.create_item(page, ItemClassification.useful))
                     items_to_create[page] = 0
 
         if self.options.maskless:
-            mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
-            tunic_items.append(mask_item)
+            tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
             items_to_create["Scavenger Mask"] = 0
 
         if self.options.lanternless:
@@ -419,6 +418,7 @@ class TunicWorld(World):
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "shuffle_ladders": self.options.shuffle_ladders.value,
             "grass_randomizer": self.options.grass_randomizer.value,
+            "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
