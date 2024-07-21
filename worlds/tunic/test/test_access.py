@@ -92,3 +92,8 @@ class TestERSpecial(TunicTestBase):
                    }
                ]}
     # with these plando connections, you need to ice grapple from the back of lower zig to the front to get laurels
+
+
+# just make sure it works I guess, can't think of anything specific to do here
+class TestGrassRando(TunicTestBase):
+    options = {options.GrassRandomizer.internal_name: options.GrassRandomizer.option_true}
