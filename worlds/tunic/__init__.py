@@ -322,20 +322,14 @@ class TunicWorld(World):
             grass_fill.extend(world.local_filler)
 
         grass_filler_count = len(grass_fill)
-
         # in case you plando or priority a bunch of locations
         if len(unfilled_locations) < grass_filler_count:
-            grass_filler_count = len(unfilled_locations)
+            raise Exception("Not enough locations for TUNIC grass randomizer players to place grass fill into TUNIC "
+                            "locations. This is likely due to excessive priority locations or plando.")
 
         locations_to_grass_fill = multiworld.random.sample(unfilled_locations, grass_filler_count)
         for loc in locations_to_grass_fill:
             multiworld.push_item(loc, grass_fill.pop(), collect=False)
-
-        # if you plando'd or priority'd too much and had to clamp down above, need to put the rest of the filler in
-        if len(grass_fill) > 0:
-            warning("Not enough valid locations for TUNIC grass randomizer players to place grass fill into TUNIC "
-                    f"locations. Placing {len(grass_fill)} extra filler in the main item pool.")
-            multiworld.itempool += grass_fill
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
