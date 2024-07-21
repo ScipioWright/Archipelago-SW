@@ -1,6 +1,6 @@
 from typing import Dict, List, Any, Tuple, TypedDict
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, LocationProgressType
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
@@ -10,7 +10,7 @@ from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation)
-from .grass import grass_location_table, grass_location_name_to_id
+from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -63,6 +63,7 @@ class TunicWorld(World):
     options_dataclass = TunicOptions
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
+    location_name_groups.update(grass_location_name_groups)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
@@ -75,6 +76,7 @@ class TunicWorld(World):
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
+    local_filler: List[TunicItem]
 
     def generate_early(self) -> None:
         if self.options.plando_connections:
@@ -294,20 +296,34 @@ class TunicWorld(World):
             if tunic_item.name in slot_data_item_names:
                 self.slot_data_items.append(tunic_item)
 
-        # grass rando has a lot of junk, so an option to local a lot of junk seems fair
+        # pull out the filler so we can place it manually during pre_fill
         if self.options.local_fill > 0:
+            self.local_filler = []
             all_filler = [item for item in tunic_items if item.classification in [ItemClassification.filler,
                                                                                   ItemClassification.trap]]
             non_filler = [item for item in tunic_items if item.classification not in [ItemClassification.filler,
                                                                                       ItemClassification.trap]]
-            unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
             amount_to_local_fill = int(self.options.local_fill.value / 100 * len(all_filler))
-            locations_to_local_fill = self.random.sample(unfilled_locations, amount_to_local_fill)
             for _ in range(amount_to_local_fill):
-                self.multiworld.push_item(locations_to_local_fill.pop(), all_filler.pop())
+                self.local_filler.append(all_filler.pop())
             tunic_items = all_filler + non_filler
 
         self.multiworld.itempool += tunic_items
+
+    def pre_fill(self) -> None:
+        if self.options.local_fill > 0:
+            unfilled_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
+                                  if loc.progress_type != LocationProgressType.PRIORITY]
+            local_filler_count = len(self.local_filler)
+            # in case you plando a bunch of locations
+            if len(unfilled_locations) < local_filler_count:
+                local_filler_count = len(unfilled_locations)
+            locations_to_local_fill = self.random.sample(unfilled_locations, local_filler_count)
+            for loc in locations_to_local_fill:
+                self.multiworld.push_item(loc, self.local_filler.pop(), collect=False)
+            # if you plando'd a lot of locations and had to clamp it down above, need to put the rest of the filler in
+            if len(self.local_filler) > 0:
+                self.multiworld.itempool += self.local_filler
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}

@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
+from typing import Dict, NamedTuple, Optional, Set, TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 from .rules import has_sword, has_melee
@@ -8315,6 +8315,11 @@ grass_location_table: Dict[str, TunicLocationData] = {
 
 grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + index for index, name in
                                              enumerate(grass_location_table)}
+
+grass_location_name_groups: Dict[str, Set[str]] = {}
+for loc_name, loc_data in grass_location_table.items():
+    loc_group_name = loc_name.split(" - ", 1)[0] + " Grass"
+    grass_location_name_groups.setdefault(loc_group_name, set()).add(loc_name)
 
 
 def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
