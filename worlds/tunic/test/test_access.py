@@ -96,4 +96,5 @@ class TestERSpecial(TunicTestBase):
 
 # just make sure it works I guess, can't think of anything specific to do here
 class TestGrassRando(TunicTestBase):
-    options = {options.GrassRandomizer.internal_name: options.GrassRandomizer.option_true}
+    options = {options.GrassRandomizer.internal_name: options.GrassRandomizer.option_true,
+               options.GrassFill.internal_name: 95}
