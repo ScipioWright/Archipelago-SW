@@ -296,14 +296,14 @@ class TunicWorld(World):
             if tunic_item.name in slot_data_item_names:
                 self.slot_data_items.append(tunic_item)
 
-        # pull out the filler so we can place it manually during pre_fill
-        if self.options.local_fill > 0:
+        # pull out the filler so that we can place it manually during pre_fill
+        if self.options.grass_randomizer and self.options.grass_fill > 0:
             self.local_filler = []
             all_filler = [item for item in tunic_items if item.classification in [ItemClassification.filler,
                                                                                   ItemClassification.trap]]
             non_filler = [item for item in tunic_items if item.classification not in [ItemClassification.filler,
                                                                                       ItemClassification.trap]]
-            amount_to_local_fill = int(self.options.local_fill.value / 100 * len(all_filler))
+            amount_to_local_fill = int(self.options.grass_fill.value / 100 * len(all_filler))
             for _ in range(amount_to_local_fill):
                 self.local_filler.append(all_filler.pop())
             tunic_items = all_filler + non_filler
@@ -311,18 +311,26 @@ class TunicWorld(World):
         self.multiworld.itempool += tunic_items
 
     def pre_fill(self) -> None:
-        if self.options.local_fill > 0:
-            unfilled_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
+        if self.options.grass_randomizer and self.options.grass_fill > 0:
+            tunic_worlds: List[TunicWorld] = self.multiworld.get_game_worlds("TUNIC")
+            tunic_players_with_grass: List[int] = [world.player for world in tunic_worlds
+                                                   if world.options.grass_randomizer]
+            unfilled_locations = [loc for loc in self.multiworld.get_unfilled_locations_for_players(
+                location_names=[], players=tunic_players_with_grass)
                                   if loc.progress_type != LocationProgressType.PRIORITY]
             local_filler_count = len(self.local_filler)
-            # in case you plando a bunch of locations
+            
+            # in case you plando or priority a bunch of locations
             if len(unfilled_locations) < local_filler_count:
                 local_filler_count = len(unfilled_locations)
-            locations_to_local_fill = self.random.sample(unfilled_locations, local_filler_count)
-            for loc in locations_to_local_fill:
+            
+            locations_to_grass_fill = self.random.sample(unfilled_locations, local_filler_count)
+            for loc in locations_to_grass_fill:
                 self.multiworld.push_item(loc, self.local_filler.pop(), collect=False)
-            # if you plando'd a lot of locations and had to clamp it down above, need to put the rest of the filler in
+            # if you plando'd or priority'd too much and had to clamp down above, need to put the rest of the filler in
             if len(self.local_filler) > 0:
+                warning(f"Not enough valid locations for TUNIC player {self.player_name} to place excess filler in "
+                        f"TUNIC locations. Placing {len(self.local_filler)} extra filler in the main item pool.")
                 self.multiworld.itempool += self.local_filler
 
     def create_regions(self) -> None:
