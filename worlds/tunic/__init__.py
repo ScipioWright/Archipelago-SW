@@ -315,6 +315,7 @@ class TunicWorld(World):
         tunic_grass_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                                 if world.options.grass_randomizer]
         tunic_players_with_grass: List[int] = [world.player for world in tunic_grass_worlds]
+        # todo: add something to also avoid locations marked non-local
         unfilled_locations = [loc for loc in multiworld.get_unfilled_locations_for_players(
             location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY]
         grass_fill: List[TunicItem] = []
