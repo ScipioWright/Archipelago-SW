@@ -313,9 +313,7 @@ class TunicWorld(World):
             all_filler = []
             non_filler = []
             for item in tunic_items:
-                if item.classification in [ItemClassification.filler, ItemClassification.trap] 
-                        and item.name not in self.options.local_items 
-                        and item.name not in self.options.non_local_items:
+                if item.classification in [ItemClassification.filler, ItemClassification.trap] and item.name not in self.options.local_items and item.name not in self.options.non_local_items:
                     all_filler.append(item)
                 else:
                     non_filler.append(item)
