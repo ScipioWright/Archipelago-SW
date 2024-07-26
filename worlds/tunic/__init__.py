@@ -310,11 +310,15 @@ class TunicWorld(World):
         self.local_filler = []
         if self.options.grass_randomizer and self.options.grass_fill > 0:
             # skip items marked local or non-local, let fill deal with them in its own way
-            all_filler = [item for item in tunic_items if item.classification in [ItemClassification.filler,
-                                                                                  ItemClassification.trap]
-                         and item.name not in self.options.local_items
-                         and item.name not in self.options.non_local_items]
-            non_filler = [item for item in tunic_items if item not in all_filler]
+            all_filler = []
+            non_filler = []
+            for item in tunic_items:
+                if item.classification in [ItemClassification.filler, ItemClassification.trap] 
+                        and item.name not in self.options.local_items 
+                        and item.name not in self.options.non_local_items:
+                    all_filler.append(item)
+                else:
+                    non_filler.append(item)
             amount_to_local_fill = int(self.options.grass_fill.value * len(all_filler) / 100)
             for _ in range(amount_to_local_fill):
                 self.local_filler.append(all_filler.pop())
