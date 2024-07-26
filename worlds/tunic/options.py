@@ -167,6 +167,7 @@ class GrassFill(Range):
     If you are playing with people who don't have ridiculous options like Grass Randomizer, we recommend you set this option to at least 95.
     Setting this to 95 gives you approximately 500 checks (actual amount depends on your other options) that can have progression or useful items.
     If there are other TUNIC players with Grass Randomizer enabled, this filler will be shuffled among their checks as well.
+    This option ignores items placed in your local_items or non_local_items.
     This option does nothing if Grass Randomizer is not enabled.
     """
     internal_name = "grass_fill"
