@@ -9,7 +9,7 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation)
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
 from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
@@ -88,6 +88,12 @@ class TunicWorld(World):
     local_filler: List[TunicItem]
 
     def generate_early(self) -> None:
+        if self.options.logic_rules >= LogicRules.option_no_major_glitches:
+            self.options.laurels_zips.value = LaurelsZips.option_true
+            self.options.ice_grappling.value = IceGrappling.option_medium
+            if self.options.logic_rules.value == LogicRules.option_unrestricted:
+                self.options.ladder_storage.value = LadderStorage.option_medium
+
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
                 # making shops second to simplify other things later
