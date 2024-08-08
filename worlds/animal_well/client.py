@@ -6,6 +6,7 @@ Based (read: copied almost wholesale and edited) off the Zelda1 Client.
 import asyncio
 import os
 import platform
+import random
 import traceback
 
 import pymem
@@ -18,6 +19,7 @@ from .items import item_name_to_id
 from .locations import location_name_to_id, location_table, ByteSect
 from .names import ItemNames as iname, LocationNames as lname
 from .options import FinalEggLocation, Goal
+from .bean_patcher import Bean_Patcher
 
 CONNECTION_ABORTED_STATUS = "Connection Refused. Some unrecoverable error occurred"
 CONNECTION_REFUSED_STATUS = "Connection Refused. Please make sure exactly one Animal Well instance is running"
@@ -40,6 +42,35 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, AnimalWellContext):
             logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
 
+    def _cmd_room_palette(self, val = ''):
+        if isinstance(self.ctx, AnimalWellContext):
+            if val == '':
+                self.ctx.bean_patcher.toggle_room_palette_override()
+            elif val == 'off':
+                logger.info(f'Disabling room palette...')
+                self.ctx.bean_patcher.disable_room_palette_override()
+            elif val == 'random':
+                random_value = random.randrange(0, 31)
+                logger.info(f'Randomizing room palette to {random_value}...')
+                self.ctx.bean_patcher.enable_room_palette_override(random_value)
+            elif val.isnumeric():
+                logger.info(f'Enabling room palette {val}...')
+                self.ctx.bean_patcher.enable_room_palette_override(int(val))
+            else:
+                logger.info(f'Enabling room palette 0x14...')
+                self.ctx.bean_patcher.enable_room_palette_override(0x14)
+
+    def _cmd_fullbright(self, val = ''):
+        if isinstance(self.ctx, AnimalWellContext):
+            if val == '':
+                self.ctx.bean_patcher.toggle_fullbright()
+            elif val == 'off':
+                logger.info(f'Disabling fullbright...')
+                self.ctx.bean_patcher.disable_fullbright()
+            else:
+                logger.info(f'Enabling fullbright...')
+                self.ctx.bean_patcher.enable_fullbright()
+
     def _cmd_ring(self):
         """Toggles the cheater's ring in your inventory to allow noclip and get unstuck"""
         try:
@@ -55,8 +86,10 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
 
                         if bool(flags >> 13 & 1):
                             logger.info("Removing C. Ring from inventory")
+                            self.ctx.display_text_in_client("Removing C. Ring from inventory")
                         else:
                             logger.info("Adding C. Ring to inventory. Press F to use")
+                            self.ctx.display_text_in_client("Adding C. Ring to inventory. Press F key (or R3 on gamepad) to use.")
 
                         bits = ((str(flags >> 0 & 1)) +  # House Opened
                                 (str(flags >> 1 & 1)) +  # Office Opened
@@ -133,11 +166,22 @@ class AnimalWellContext(CommonContext):
         self.connection_status = CONNECTION_INITIAL_STATUS
         self.slot_data = {}
         self.slot_number: int = -1
+        self.current_game_state = -1
+        self.last_game_state = -1
         # used to delay starting the loop until we can see the data storage values
         self.got_data_storage: bool = False
         self.first_m_disc = True
         self.used_firecrackers = 0
         self.used_berries = 0
+        self.bean_patcher = Bean_Patcher().set_logger(logger)
+
+    def display_dialog(self, text: str, title: str, action_text: str = ''):
+        if self.bean_patcher != None and self.bean_patcher.attached_to_process:
+            self.bean_patcher.display_dialog(text, title, action_text)
+
+    def display_text_in_client(self, text: str):
+        if self.bean_patcher != None and self.bean_patcher.attached_to_process:
+            self.bean_patcher.display_to_client(text)
 
     async def server_auth(self, password_requested: bool = False):
         """
@@ -169,6 +213,76 @@ class AnimalWellContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
+            self.display_text_in_client('Connected to the AP server!')
+
+        try:
+            if cmd == "PrintJSON":
+                msgType = args.get("type")
+
+                if msgType == "Chat" and not args.get('message').startswith('!'):
+                    # TODO: Move ignoring lines starting with ! into a setting of some sort
+                    text = args.get('data')[0]['text']
+                    self.display_text_in_client(f'{text}')
+                elif msgType == "Hint":
+                    if args.get('receiving') == self.slot:
+                        player_slot = args.get('item').player
+                        item_name = self.item_names.lookup_in_slot(args.get('item').item, player_slot)
+                        location_name = self.location_names.lookup_in_slot(args.get('item').location, player_slot)
+                        text = f'Hint: Your {item_name} is at {location_name}.'
+                        self.display_text_in_client(text)
+                elif msgType == "Join":
+                    self.display_text_in_client(args.get('data')[0]['text'])
+                elif msgType == "Part":
+                    self.display_text_in_client(args.get('data')[0]['text'])
+                elif msgType == "ItemCheat":
+                    if args.get('receiving') != self.slot:
+                        return
+                    item_name = self.item_names.lookup_in_game(args.get('item').item)
+                    text = f'You received your {item_name}.'
+                    self.display_text_in_client(text)
+                elif msgType == "ItemSend":
+                    destination_player_id = args["receiving"]
+                    source_player_id = args["item"][2]  # it's a tuple, so we can't index by name
+                    self_slot: int = self.slot
+                    # we don't want to display every item message, just ones relevant to us
+                    if self_slot not in [source_player_id, destination_player_id]:
+                        return
+                    item_id = args["item"][0]
+                    location_id = args["item"][1]
+                    # classification = args["item"][3]  # may use later if we can color-code them in-game
+                    item_name = self.item_names.lookup_in_slot(item_id, destination_player_id)
+                    location_name = self.location_names.lookup_in_slot(location_id, source_player_id)
+                    text = "Error occurred, report to ANIMAL WELL AP devs"
+                    if self_slot == source_player_id:
+                        destination_player_name = self.player_names[destination_player_id]
+                        text = f"You sent {item_name} to {destination_player_name} from {location_name}!"
+                    if self_slot == destination_player_id:
+                        source_player_name = self.player_names[source_player_id]
+                        text = f"{source_player_name} sent you your {item_name}!"
+                    if self_slot == source_player_id and self_slot == destination_player_id:
+                        text = f"You found your {item_name} at {location_name}!"
+                    self.display_text_in_client(text)
+                elif msgType == "Countdown":
+                    text = "".join(o['text'] for o in args.get('data'))
+                    self.display_text_in_client(text)
+                elif msgType == "CommandResult":
+                    pass
+                elif msgType == "Tutorial":
+                    pass
+            elif cmd == "ReceivedItems":
+                items = args.get("items")
+            elif cmd == "RoomUpdate":
+                checked_locations = args.get("checked_locations")
+            elif cmd == "RoomInfo":
+                pass
+            elif cmd == "SetReply":
+                pass
+            elif cmd == "None":
+                self.display_text_in_client(args.get("data")[0]["text"])
+
+        except Exception as e:
+            logger.error("Error while parsing Package from AP: %s", e)
+            logger.info('Package details: {}'.format(args))
 
     def get_active_game_slot(self) -> int:
         """
@@ -176,12 +290,29 @@ class AnimalWellContext(CommonContext):
         """
         if platform.uname()[0] == "Windows":
             slot = self.process_handle.read_bytes(self.start_address + 0xC, 1)[0]
-            if slot == 0:
-                raise ConnectionResetError("Slot 1 detected, please be in slot 2 or 3")
             return slot
         else:
             raise NotImplementedError("Only Windows is implemented right now")
+    def check_if_in_game(self) -> bool:
+        """
+        Checks if the game is currently running or is still in the main menu
+        """
+        current_game_state = self.process_handle.read_uchar(self.start_address + 0x750cc)
 
+        if current_game_state != self.last_game_state:
+            self.last_game_state = current_game_state
+            if current_game_state == 1:
+                logger.info(f'Game currently displaying the splash screens. Deferring until new game is started or saved game is loaded...')
+            elif current_game_state == 2:
+                logger.info(f'Game currently displaying the main menu. Deferring until new game is started or saved game is loaded...')
+            elif current_game_state == 3:
+                logger.info(f'Game currently displaying the new game intro scene. Deferring until new game is started or saved game is loaded...')
+            elif current_game_state == 4:
+                logger.info(f'Game is now loaded and running!')
+            else:
+                logger.info(f'Game currently in unknown game state {current_game_state}. Deferring until new game is started or saved game is loaded...')
+
+        return current_game_state == 4
 
 class AWLocations:
     """
@@ -200,6 +331,8 @@ class AWLocations:
         """
         try:
             if platform.uname()[0] == "Windows":
+                if not ctx.check_if_in_game(): return
+
                 active_slot = ctx.get_active_game_slot()
                 slot_address = ctx.start_address + HEADER_LENGTH + (SAVE_SLOT_LENGTH * active_slot)
 
@@ -224,6 +357,9 @@ class AWLocations:
 
                     self.loc_statuses[loc_name] = (
                         bool(self.byte_sect_dict[loc_data.byte_section] >> loc_data.byte_offset & 1))
+
+                if ctx.bean_patcher != None and ctx.bean_patcher.attached_to_process:
+                    ctx.bean_patcher.read_from_game()
             else:
                 raise NotImplementedError("Only Windows is implemented right now")
         except pymem.exception.ProcessError as e:
@@ -548,8 +684,12 @@ class AWItems:
         """
         try:
             if platform.uname()[0] == "Windows":
+                if not ctx.check_if_in_game(): return
+
                 active_slot = ctx.get_active_game_slot()
                 slot_address = ctx.start_address + HEADER_LENGTH + (SAVE_SLOT_LENGTH * active_slot)
+
+                ctx.process_handle.write_bytes(ctx.start_address + 0xE, b'\x00', 1) # no checksum manticores allowed!
 
                 # Read Quest State
                 flags = int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x1EC, 4), byteorder="little")
@@ -833,6 +973,8 @@ class AWItems:
                 buffer = 37
                 buffer = buffer.to_bytes(2, byteorder="little")
                 ctx.process_handle.write_bytes(slot_address + 0x1E4, buffer, 2)
+
+                if ctx.bean_patcher != None: ctx.bean_patcher.write_to_game()
             else:
                 raise NotImplementedError("Only Windows is implemented right now")
         except pymem.exception.ProcessError as e:
@@ -866,7 +1008,6 @@ class AWItems:
             traceback.print_exc()
             logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
-
 async def get_animal_well_process_handle(ctx: AnimalWellContext):
     """
     Get the process handle of Animal Well
@@ -878,20 +1019,11 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
             process_handle = pymem.Pymem("Animal Well.exe")
             logger.debug("Found PID %d", process_handle.process_id)
 
-            logger.info("Searching for 'Animal Well.exe' module in process memory...")
-            aw_module = next(f for f in list(process_handle.list_modules()) if f.name.startswith("Animal Well.exe"))
-            if aw_module:
-                logger.info("Found it: Name(%s), BaseOfDll(%s)", aw_module.name, hex(aw_module.lpBaseOfDll))
+            ctx.bean_patcher.attach_to_process(process_handle)
 
-                pointer_address = aw_module.lpBaseOfDll + 0x02BD5308
-                logger.info("Attempting to find start address via pointer at %s", hex(pointer_address))
+            address = ctx.bean_patcher.application_state_address + 0x400
 
-                pointer = process_handle.read_uint(pointer_address)
-                logger.info("start address of memory: %s + 0x400 = %s", hex(pointer), hex(pointer + 0x400))
-
-                address = pointer + 0x400
-
-            if not address:
+            if address is None:
                 savefile_location = \
                     rf"C:\Users\{os.getenv('USERNAME')}\AppData\LocalLow\Billy Basso\Animal Well\AnimalWell.sav"
                 logger.debug("Reading save file data from default location: %s", savefile_location)
@@ -954,6 +1086,10 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
 
             ctx.process_handle = process_handle
             ctx.start_address = address
+
+            ctx.bean_patcher.apply_patches()
+
+            ctx.display_dialog('Connected to client!', '')
         else:
             raise NotImplementedError("Only Windows is implemented right now")
     except pymem.exception.ProcessNotFound as e:
@@ -1030,6 +1166,10 @@ async def process_sync_task(ctx: AnimalWellContext):
             await locations.write_to_archipelago(ctx)
             await items.read_from_archipelago(ctx)
             items.write_to_game(ctx)
+
+            if ctx.bean_patcher is not None and ctx.bean_patcher.attached_to_process:
+                ctx.bean_patcher.tick()
+
         await asyncio.sleep(0.1)
 
 
@@ -1057,6 +1197,9 @@ def launch():
         await ctx.exit_event.wait()
         ctx.server_address = None
         await ctx.shutdown()
+
+        if ctx.bean_patcher != None and len(ctx.bean_patcher.revertable_patches) > 0:
+            ctx.bean_patcher.revert_patches()
 
         if ctx.process_sync_task:
             ctx.process_sync_task.cancel()
