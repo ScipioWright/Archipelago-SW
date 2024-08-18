@@ -759,7 +759,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_travel:
             AWData(AWType.location),
         rname.frog_ostrich_attack:
-            AWData(AWType.region, [[iname.yoyo], [iname.ball]]),
+            AWData(AWType.region, [[iname.yoyo], [iname.ball, iname.ball_trick_easy]]),
         rname.frog_near_wombat:
             AWData(AWType.region, [[iname.key_ring]]),  # assuming the key can open it from the left
     },
@@ -797,12 +797,12 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.yoyo_chest:
             AWData(AWType.location),
         rname.frog_bird_after_yoyo_1:  # can bypass the locked door with bubble jumps + lantern
-            AWData(AWType.region, [[iname.yoyo], [iname.bubble_long, iname.lantern], [iname.ball, iname.weird_tricks],
+            AWData(AWType.region, [[iname.yoyo], [iname.bubble_long, iname.lantern], [iname.ball, iname.ball_trick_hard],
                                    [iname.bubble_long, iname.weird_tricks]]),  # spam bubbles then jump up the left side
     },
     rname.frog_bird_after_yoyo_1: {
         rname.frog_bird_after_yoyo_2:  # pain in the ass, but you can get up with downwards bubbles
-            AWData(AWType.region, [[iname.yoyo], [iname.bubble_long], [iname.ball, iname.weird_tricks]]),
+            AWData(AWType.region, [[iname.yoyo], [iname.bubble_long], [iname.ball, iname.ball_trick_medium]]),
         rname.frog_worm_shaft_bottom:  # if you fall along the left side, the bird doesn't reach you in time
             AWData(AWType.region, [[iname.weird_tricks], [iname.lantern]]),
         lname.egg_sapphire:
@@ -819,7 +819,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         # 2 doors in the top right of this region
         lname.key_frog_guard_room_east:
             AWData(AWType.location, [[iname.yoyo], [iname.bubble, iname.flute], 
-                                     [iname.ball], [iname.flute, iname.weird_tricks]]),
+                                     [iname.ball], [iname.flute, iname.obscure_tricks]]),
         rname.frog_dark_room:  # yoyo to open the door, lantern to fall through the bird
             AWData(AWType.region, [[iname.yoyo], [iname.lantern], [iname.ball]]),
         rname.frog_ruby_egg_ledge:  # fall through a bird onto it
@@ -860,9 +860,9 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location),  # you need yoyo and bubble to get to this check logically
             # if you have yoyo, you can swap the mouse direction and lock yourself out of the check without bubbles
         lname.egg_obsidian:  # bounce disc between the moving walls, or do some cursed bubble jumps
-            AWData(AWType.location, [[iname.disc], [iname.bubble_short, iname.weird_tricks]]),
+            AWData(AWType.location, [[iname.disc], [iname.bubble_short, iname.precise_tricks]]),
         lname.egg_golden:  # simultaneous buttons. Need an item to hold it down. I don't think top is unintuitive enough to warrant weird, but disc definitely is.
-            AWData(AWType.location, [[iname.wheel, iname.slink], [iname.wheel, iname.top], [iname.wheel, iname.disc, iname.weird_tricks]]),
+            AWData(AWType.location, [[iname.wheel, iname.slink], [iname.wheel, iname.top], [iname.wheel, iname.disc, iname.obscure_tricks]]),
         lname.flame_green:
             AWData(AWType.location, [[iname.can_open_flame]], event=iname.green_flame),
         rname.bobcat_room:
@@ -884,19 +884,21 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, [[iname.flute]], event=iname.activated_hippo_fast_travel),
         lname.lantern_chest:
             AWData(AWType.location, [[iname.slink, iname.disc, iname.yoyo], [iname.lantern],
-                                     [iname.ball, iname.slink, iname.weird_tricks]]),
+                                     [iname.ball, iname.slink, iname.ball_trick_hard]]),
         rname.hippo_manticore_room:
             AWData(AWType.region, [[iname.lantern, iname.yoyo, iname.disc], 
                                    [iname.lantern, iname.yoyo, iname.wheel_hop, iname.tanking_damage],
                                    # running into the miasma with yoyo out can hit the rightmost button
                                    [iname.lantern, iname.yoyo, iname.bubble, iname.tanking_damage],
-                                   [iname.lantern, iname.ball, iname.wheel_hop, iname.weird_tricks], 
-                                   [iname.lantern, iname.ball, iname.bubble, iname.weird_tricks],
                                    # all buttons can be hit with ball with enough patience
-                                   [iname.lantern, iname.ball, iname.disc, iname.weird_tricks],
-                                   [iname.lantern, iname.ball, iname.wheel_hop, iname.yoyo],
-                                   # weird tricks for the yoyo loop button. ball can hit rightmost button easy
-                                   [iname.lantern, iname.ball, iname.bubble, iname.yoyo]]),
+                                   [iname.lantern, iname.ball, iname.wheel_hop, iname.ball_trick_medium], 
+                                   [iname.lantern, iname.ball, iname.bubble, iname.ball_trick_medium],
+                                   [iname.lantern, iname.ball, iname.disc, iname.ball_trick_medium],
+                                   [iname.lantern, iname.ball, iname.water_bounce, iname.ball_trick_medium],
+                                   # easy ball trick if you have yoyo to hit yoyo chute button, medium otherwise
+                                   [iname.lantern, iname.ball, iname.wheel_hop, iname.yoyo, iname.ball_trick_easy],
+                                   [iname.lantern, iname.ball, iname.water_bounce, iname.yoyo, iname.ball_trick_easy],
+                                   [iname.lantern, iname.ball, iname.bubble, iname.yoyo, iname.ball_trick_easy]]),
     },
     rname.hippo_manticore_room: {
         rname.hippo_fireworks:  # todo: verify you need disc
@@ -947,7 +949,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_match_chest_spot:
             AWData(AWType.region, [[iname.wheel_hard], [iname.bubble]]),
         rname.bear_truth_egg_spot:
-            AWData(AWType.region, [[iname.wheel_hard], [iname.bubble, iname.weird_tricks]]),
+            AWData(AWType.region, [[iname.wheel_hard], [iname.bubble, iname.precise_tricks]]),
     },
     rname.chocolate_egg_spot: {
         lname.egg_chocolate:  # across from center well match
@@ -959,7 +961,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.top_of_the_well:
             AWData(AWType.region, [[iname.bubble_long], [iname.wheel_hard]]),
         rname.bear_truth_egg_spot:
-            AWData(AWType.region, [[iname.wheel_hard], [iname.bubble, iname.weird_tricks]]),
+            AWData(AWType.region, [[iname.wheel_hard], [iname.bubble, iname.precise_tricks]]),
     },
     rname.match_center_well_spot: {
         lname.match_center_well:  # across from the chocolate egg
@@ -971,7 +973,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.top_of_the_well:
             AWData(AWType.region, [[iname.bubble_long], [iname.wheel_hard]]),
         rname.bear_truth_egg_spot:
-            AWData(AWType.region, [[iname.wheel_hard], [iname.bubble, iname.weird_tricks]]),
+            AWData(AWType.region, [[iname.wheel_hard], [iname.bubble, iname.precise_tricks]]),
     },
 
     rname.fast_travel: {
