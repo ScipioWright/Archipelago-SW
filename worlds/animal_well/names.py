@@ -261,6 +261,11 @@ class ItemNames(str, Enum):
     # rename tanking_damage's string when we have enough spots to make it viable as an option or something
     tanking_damage = "Tanking Damage"  # for spots you can get to by taking up to 3 hearts of damage
     weird_tricks = "Weird Tricks"  # skips that are questionably in logic and may constitute a difficulty setting later
+    ball_throwing = "Ball Throwing"  # logic for throwing the ball at anything other than a block or a spike
+    obscure_tricks = "Obscure Tricks"  # solutions that are weird but not necessarily difficult
+    precise_tricks = "Precise Tricks"  # solutions that are difficult but not necessarily weird
+    water_bounce = "Water Bounce"  # tricks that use Yoyo, B.Ball, or some other way to generate a splash effect to bounce off the water
+
 
     # songs, to potentially be randomized
     song_home = "Top of the Well Song"
