@@ -222,7 +222,7 @@ class AnimalWellOptions(PerGameCommonOptions):
     obscure_tricks: ObscureTricks
     precise_tricks: PreciseTricks
     tanking_damage: TankingDamage
-    wheel_tricks: WeirdTricks
+    weird_tricks: WeirdTricks
 
 
 aw_option_groups = [
