@@ -638,7 +638,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, [[iname.matchbox]], event=iname.event_candle_dog_many_switches),
         rname.dog_upside_down_egg_spot:  # throw a disc or top at a switch
             AWData(AWType.region, [[iname.remote], [iname.disc], [iname.top], 
-                                   [iname.ball, iname.weird_tricks]]),
+                                   [iname.ball, iname.ball_trick_easy]]),
         rname.dog_bat_room:
             AWData(AWType.region),
     },
@@ -747,7 +747,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             # I was getting this 90% of the time, not sure it's intuitive? make it logical and put it in the tricks FAQ.
         lname.egg_promise:  # under spikes in 3 bird room, solve puzzle then can break spikes without bird in the way
             # weird tricks: fall onto spikes while throwing disc to the left with good timing to break a path
-            AWData(AWType.location, [[iname.can_break_spikes_below], [iname.disc, iname.weird_tricks]]),
+            AWData(AWType.location, [[iname.can_break_spikes_below], [iname.disc, iname.tanking_damage]]),
         rname.frog_under_ostrich_statue:  # after hitting the switch, no items needed
             AWData(AWType.region),
         rname.frog_travel_egg_spot:
