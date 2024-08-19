@@ -131,6 +131,47 @@ class WheelTricks(Choice):
     option_advanced = 2
     default = 0
 
+class BallThrowing(Choice):
+    """
+    Include in logic using the ball to hit switches or buttons not ""designed"" for it.
+    Off means the ball will rarely be used for anything other than breaking blocks, spikes or guard shields.
+    Simple means the ball can be used to hit easy targets without any real rebound, setup or moving. Most ""yoyo chute"" buttons are included here.
+    Advanced means hitting your target may require bouncing off a wall, or moving while throwing to adjust momentum or get a good angle.
+    Expert includes any more complicated tricks, including those that require specific setups or getting lucky.
+    """									
+    internal_name = "ball_throwing"
+    display_name = "Ball Throwing"
+    option_off = 0
+    option_simple = 1
+    option_advanced = 2
+    option_expert = 3
+    default = 0
+
+class ObscureTricks(Toggle):
+    """
+    Include a number of solutions to puzzles that are obscure or hard to understand.
+    These tricks aren't necessarily difficult to perform once you know what they are. If they are difficult, you must also turn on the respective difficulty or trick setting to enable it.
+    """
+    internal_name = "obscure_tricks"
+    display_name = "Obscure Tricks"
+
+class PreciseTricks(Toggle):
+    """
+    Include a number of solutions to puzzles that are mechanically difficult to execute.
+    These tricks may require large amounts of attempts to get right, and there may be a higher than usual cost for failure.
+    Tricks which are already covered by other item-specific trick options are not included here.
+    """
+    internal_name = "precise_tricks"
+    display_name = "Precise Tricks"
+
+class TankingDamage(Toggle):
+    """
+    Include tricks which require you to voluntarily take damage in order to perform them.
+    You may be expected to take up to three points of damage from any source. "Overtanking" with blue hearts will never be in logic.
+    """
+    internal_name = "tanking_damage"
+    display_name = "Tanking Damage"
+
 class ExcludeSongChests(DefaultOnToggle):
     """
     Exclude the Wheel chest and Office Key chests, so that you don't have to play their songs.
@@ -168,8 +209,11 @@ class AnimalWellOptions(PerGameCommonOptions):
     disc_hopping: DiscHopping
     wheel_tricks: WheelTricks
     exclude_song_chests: ExcludeSongChests
-
+    ball_throwing: BallThrowing
     wheel_hopping: WheelHopping
+    obscure_tricks: ObscureTricks
+    precise_tricks: PreciseTricks
+    tanking_damage: TankingDamage
 
 
 aw_option_groups = [
@@ -177,6 +221,10 @@ aw_option_groups = [
         BubbleJumping,
         DiscHopping,
         WheelTricks,
+        BallThrowing,
+        ObscureTricks,
+        PreciseTricks,
+        TankingDamage
     ])
 ]
 
@@ -186,6 +234,10 @@ aw_option_presets: Dict[str, Dict[str, Any]] = {
         "bubble_jumping": BubbleJumping.option_on,
         "disc_hopping": DiscHopping.option_multiple,
         "wheel_tricks": WheelTricks.option_advanced,
-        "bunnies_as_checks": BunniesAsChecks.option_all_bunnies
+        "bunnies_as_checks": BunniesAsChecks.option_all_bunnies,
+        "ball_throwing": BallThrowing.option_expert,
+        "obscure_tricks": ObscureTricks.option_true,
+        "precise_tricks": PreciseTricks.option_true,
+        "tanking_damage": TankingDamage.option_true,
     },
 }
