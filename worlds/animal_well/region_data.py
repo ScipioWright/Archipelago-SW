@@ -188,8 +188,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.fish_tube_room:  # enter at the save room fish pipe, the rooms with all the fish pipes
             AWData(AWType.region, [[iname.bubble]]),
         lname.egg_sunset:  # break the spikes in the room to the right of the fish warp
-            AWData(AWType.location, [[iname.ball], [iname.yoyo], [iname.top], [iname.wheel, iname.disc],
-                                     [iname.disc, iname.weird_tricks],  # throw the disc while falling
+            AWData(AWType.location, [[iname.ball], [iname.yoyo], [iname.top], [iname.disc],
                                      [iname.wheel, iname.obscure_tricks]]),  # wheel while moving into the gap
         rname.water_spike_bunny_spot:
             AWData(AWType.region, [[iname.bubble_long]]),
@@ -204,7 +203,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     },
     rname.fish_west: {
         rname.fish_wand_pit: 
-            AWData(AWType.region, [[iname.bubble], [iname.disc], [iname.wheel, iname.weird_tricks]]),
+            AWData(AWType.region, [[iname.bubble], [iname.disc], [iname.wheel]]),
         lname.egg_ancient:  # one room up and left of save point, vines in top right
         # single bubble possible, but it's much tighter than doing bubble_short, so it's not logical
             AWData(AWType.location, [[iname.bubble_short], [iname.disc_hop_hard], 
@@ -805,13 +804,13 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location),
         rname.frog_bird_after_yoyo_1:  # can bypass the locked door with bubble jumps + lantern
             AWData(AWType.region, [[iname.yoyo], [iname.bubble_long, iname.lantern], [iname.ball, iname.ball_trick_hard],
-                                   [iname.bubble_long, iname.weird_tricks]]),  # spam bubbles then jump up the left side
+                                   [iname.bubble_long_real, iname.precise_tricks]]),  # spam bubbles then jump up the left side
     },
     rname.frog_bird_after_yoyo_1: {
         rname.frog_bird_after_yoyo_2:  # pain in the ass, but you can get up with downwards bubbles
             AWData(AWType.region, [[iname.yoyo], [iname.bubble_long], [iname.ball, iname.ball_trick_medium]]),
         rname.frog_worm_shaft_bottom:  # if you fall along the left side, the bird doesn't reach you in time
-            AWData(AWType.region, [[iname.weird_tricks], [iname.lantern]]),
+            AWData(AWType.region, [[iname.obscure_tricks], [iname.lantern]]),
         lname.egg_sapphire:
             AWData(AWType.location, [[iname.lantern]]),
     },
