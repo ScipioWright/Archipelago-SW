@@ -131,17 +131,6 @@ class WheelTricks(Choice):
     option_advanced = 2
     default = 0
 
-
-class WeirdTricks(Toggle):
-    """
-    Include performing "weird" tricks in the logic.
-    Some of these tricks are difficult, tedious, or inconsistent.
-    Use at your own risk.
-    """
-    internal_name = "weird_tricks"
-    display_name = "Weird Tricks"
-
-
 class ExcludeSongChests(DefaultOnToggle):
     """
     Exclude the Wheel chest and Office Key chests, so that you don't have to play their songs.
@@ -178,7 +167,6 @@ class AnimalWellOptions(PerGameCommonOptions):
     bubble_jumping: BubbleJumping
     disc_hopping: DiscHopping
     wheel_tricks: WheelTricks
-    weird_tricks: WeirdTricks
     exclude_song_chests: ExcludeSongChests
 
     wheel_hopping: WheelHopping
@@ -189,7 +177,6 @@ aw_option_groups = [
         BubbleJumping,
         DiscHopping,
         WheelTricks,
-        WeirdTricks,
     ])
 ]
 
@@ -199,7 +186,6 @@ aw_option_presets: Dict[str, Dict[str, Any]] = {
         "bubble_jumping": BubbleJumping.option_on,
         "disc_hopping": DiscHopping.option_multiple,
         "wheel_tricks": WheelTricks.option_advanced,
-        "weird_tricks": True,
         "bunnies_as_checks": BunniesAsChecks.option_all_bunnies
     },
 }

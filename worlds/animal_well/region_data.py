@@ -228,7 +228,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     rname.fish_lower: {
         rname.fish_west:
             AWData(AWType.region, [[iname.bubble]]),  # fish pipe left of the save point
-        rname.fish_boss_1:  # weird_trick: reflect water while standing on ladder to skip disc req. Other requirements are for passing whale room w/o disc
+        rname.fish_boss_1:  # reflect water while standing on ladder to skip disc req. Other requirements are for passing whale room w/o disc
             AWData(AWType.region, [[iname.disc], [iname.obscure_tricks, iname.bubble_long], 
                                    [iname.obscure_tricks, iname.wheel_hop, iname.ball, iname.ball_trick_medium], 
                                    [iname.obscure_tricks, iname.bubble, iname.ball, iname.ball_trick_medium]]),
@@ -752,7 +752,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             # bubble short or maybe just bubble? You have to shoot down at the apex of your jump, feels weird
             # I was getting this 90% of the time, not sure it's intuitive? make it logical and put it in the tricks FAQ.
         lname.egg_promise:  # under spikes in 3 bird room, solve puzzle then can break spikes without bird in the way
-            # weird tricks: fall onto spikes while throwing disc to the left with good timing to break a path
+            # fall onto spikes while throwing disc to the left with good timing to break a path
             AWData(AWType.location, [[iname.can_break_spikes_below], [iname.disc, iname.tanking_damage]]),
         rname.frog_under_ostrich_statue:  # after hitting the switch, no items needed
             AWData(AWType.region),
@@ -867,7 +867,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             # if you have yoyo, you can swap the mouse direction and lock yourself out of the check without bubbles
         lname.egg_obsidian:  # bounce disc between the moving walls, or do some cursed bubble jumps
             AWData(AWType.location, [[iname.disc], [iname.bubble_short, iname.precise_tricks]]),
-        lname.egg_golden:  # simultaneous buttons. Need an item to hold it down. I don't think top is unintuitive enough to warrant weird, but disc definitely is.
+        lname.egg_golden:  # simultaneous buttons. Need an item to hold it down. I don't think top is unintuitive enough to warrant obscure, but disc definitely is.
             AWData(AWType.location, [[iname.wheel, iname.slink], [iname.wheel, iname.top], [iname.wheel, iname.disc, iname.obscure_tricks]]),
         lname.flame_green:
             AWData(AWType.location, [[iname.can_open_flame]], event=iname.green_flame),
