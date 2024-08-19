@@ -51,7 +51,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.hippo_entry:
             AWData(AWType.region, [[iname.blue_flame, iname.green_flame, iname.pink_flame, iname.violet_flame]]),
         rname.bear_truth_egg_spot:
-            AWData(AWType.region, [[iname.disc_hop_hard], [iname.bubble_long_real, iname.weird_tricks]]),
+            AWData(AWType.region, [[iname.disc_hop_hard], [iname.bubble_long_real, iname.obscure_tricks]]),
         lname.stamp_chest:
             AWData(AWType.location),
         rname.bird_flute_chest:
@@ -74,8 +74,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_virtual:  # sneaky passage in the top left of the screen with the penguin hedges
             AWData(AWType.location),
         rname.match_above_egg_room:
-            AWData(AWType.region, [[iname.disc], [iname.bubble_short], [iname.ball, iname.weird_tricks],
-                                   [iname.yoyo], [iname.top, iname.weird_tricks]]),
+            AWData(AWType.region, [[iname.disc], [iname.bubble_short], [iname.ball, iname.ball_trick_easy],
+                                   [iname.yoyo], [iname.top, iname.obscure_tricks]]),
         lname.egg_holiday:  # in the wall to the right of the egg room entrance
             AWData(AWType.location, [[iname.bubble], [iname.disc_hop], [iname.wheel_hard]]),
         lname.egg_rain:
@@ -112,7 +112,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     rname.starting_area: {
         rname.starting_after_ghost:  # it would feel weird to call this the central area imo
             AWData(AWType.region, [[iname.firecrackers], [iname.lantern], [iname.event_candle_first],
-                                   [iname.weird_tricks]]),  # speedrunner trick
+                                   [iname.water_bounce]]),  # speedrunner trick
         rname.candle_area:
             AWData(AWType.region, [[iname.event_candle_first, iname.event_candle_dog_dark,
                                     iname.event_candle_dog_switch_box, iname.event_candle_dog_many_switches,
@@ -190,7 +190,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_sunset:  # break the spikes in the room to the right of the fish warp
             AWData(AWType.location, [[iname.ball], [iname.yoyo], [iname.top], [iname.wheel, iname.disc],
                                      [iname.disc, iname.weird_tricks],  # throw the disc while falling
-                                     [iname.wheel, iname.weird_tricks]]),  # wheel while moving into the gap
+                                     [iname.wheel, iname.obscure_tricks]]),  # wheel while moving into the gap
         rname.water_spike_bunny_spot:
             AWData(AWType.region, [[iname.bubble_long]]),
     },
@@ -211,7 +211,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
                                      [iname.wheel_hard], [iname.bubble, iname.disc]]),
         rname.fish_lower:  # bubble to go down, activate switches, breakspike to pass icicles in first penguin room
             AWData(AWType.region, [[iname.bubble, iname.remote, iname.can_break_spikes],
-                                   [iname.remote, iname.wheel_hard], [iname.disc, iname.wheel_hard, iname.weird_tricks],  # throwing disc to hit switch while wheel stalling is very tight
+                                   [iname.remote, iname.wheel_hard], [iname.disc, iname.wheel_hard, iname.precise_tricks],  # throwing disc to hit switch while wheel stalling is very tight
                                    [iname.bubble, iname.disc]]),
         lname.activate_fish_fast_travel:  # vertical implied by access
             AWData(AWType.location, [[iname.flute]], event=iname.activated_fish_fast_travel),
@@ -230,7 +230,9 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.fish_west:
             AWData(AWType.region, [[iname.bubble]]),  # fish pipe left of the save point
         rname.fish_boss_1:  # weird_trick: reflect water while standing on ladder to skip disc req. Other requirements are for passing whale room w/o disc
-            AWData(AWType.region, [[iname.disc], [iname.weird_tricks, iname.bubble_long], [iname.weird_tricks, iname.wheel_hop, iname.ball], [iname.weird_tricks, iname.bubble, iname.ball]]),
+            AWData(AWType.region, [[iname.disc], [iname.obscure_tricks, iname.bubble_long], 
+                                   [iname.obscure_tricks, iname.wheel_hop, iname.ball, iname.ball_trick_medium], 
+                                   [iname.obscure_tricks, iname.bubble, iname.ball, iname.ball_trick_medium]]),
         rname.bobcat_room:
             AWData(AWType.region, [[iname.top]]), 
         lname.candle_fish:  # spike breaking presumed by access
@@ -294,8 +296,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_transcendental:  # might be controversial? it's across a screen transition but only 4 bubbles
             AWData(AWType.region, [[iname.bubble_short], [iname.disc_hop_hard]]),
         rname.bear_kangaroo_waterfall:
-            AWData(AWType.region, [[iname.slink], [iname.top, iname.yoyo], [iname.top, iname.ball],
-                                   [iname.ball, iname.weird_tricks]]),  # stand on left button, throw ball neutral
+            AWData(AWType.region, [[iname.slink], [iname.top, iname.yoyo],
+                                   [iname.ball, iname.ball_trick_easy]]),  # stand on left button, throw ball neutral
         rname.bear_razzle_egg_spot:
             AWData(AWType.region, [[iname.defeated_chameleon, iname.bubble_short],
                                    [iname.defeated_chameleon, iname.disc_hop_hard],
