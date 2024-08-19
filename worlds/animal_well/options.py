@@ -193,6 +193,14 @@ class WheelHopping(Choice):
     default = 0
     visibility = Visibility.none
 
+class WeirdTricks(Toggle):
+    """
+    Included temporarily for backward compatibility.
+    Logically equivalent to ball_throwing: expert, tanking_damage: true, precise_tricks: true, obscure_tricks: true
+    """
+    internal_name = "weird_tricks"
+    display_name = "Weird Tricks"
+    visibility = Visibility.none
 
 @dataclass
 class AnimalWellOptions(PerGameCommonOptions):
@@ -214,6 +222,7 @@ class AnimalWellOptions(PerGameCommonOptions):
     obscure_tricks: ObscureTricks
     precise_tricks: PreciseTricks
     tanking_damage: TankingDamage
+    wheel_tricks: WeirdTricks
 
 
 aw_option_groups = [
@@ -224,7 +233,8 @@ aw_option_groups = [
         BallThrowing,
         ObscureTricks,
         PreciseTricks,
-        TankingDamage
+        TankingDamage,
+        WeirdTricks,
     ])
 ]
 
@@ -239,5 +249,6 @@ aw_option_presets: Dict[str, Dict[str, Any]] = {
         "obscure_tricks": ObscureTricks.option_true,
         "precise_tricks": PreciseTricks.option_true,
         "tanking_damage": TankingDamage.option_true,
+        "weird_tricks": WeirdTricks.option_true,
     },
 }
