@@ -896,12 +896,13 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
                                    [iname.lantern, iname.yoyo, iname.wheel_hop, iname.tanking_damage],
                                    # running into the miasma with yoyo out can hit the rightmost button
                                    [iname.lantern, iname.yoyo, iname.bubble, iname.tanking_damage],
+                                   [iname.lantern, iname.yoyo, iname.water_bounce, iname.tanking_damage],
                                    # all buttons can be hit with ball with enough patience
-                                   [iname.lantern, iname.ball, iname.wheel_hop, iname.ball_trick_medium], 
-                                   [iname.lantern, iname.ball, iname.bubble, iname.ball_trick_medium],
-                                   [iname.lantern, iname.ball, iname.disc, iname.ball_trick_medium],
-                                   [iname.lantern, iname.ball, iname.water_bounce, iname.ball_trick_medium],
-                                   # easy ball trick if you have yoyo to hit yoyo chute button, medium otherwise
+                                   [iname.lantern, iname.ball, iname.wheel_hop, iname.ball_trick_hard], 
+                                   [iname.lantern, iname.ball, iname.bubble, iname.ball_trick_hard],
+                                   [iname.lantern, iname.ball, iname.disc, iname.ball_trick_hard],
+                                   [iname.lantern, iname.ball, iname.water_bounce, iname.ball_trick_hard],
+                                   # easy ball trick if you have yoyo to hit yoyo chute button, hard otherwise
                                    [iname.lantern, iname.ball, iname.wheel_hop, iname.yoyo, iname.ball_trick_easy],
                                    [iname.lantern, iname.ball, iname.water_bounce, iname.yoyo, iname.ball_trick_easy],
                                    [iname.lantern, iname.ball, iname.bubble, iname.yoyo, iname.ball_trick_easy]]),
