@@ -87,6 +87,18 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                 logger.info(f"Enabling fullbright...")
                 self.ctx.bean_patcher.enable_fullbright()
 
+    def _cmd_play_sound(self, sound_id="63"):
+        """
+        Plays a sound.
+        """
+        if isinstance(self.ctx, AnimalWellContext):
+            if sound_id.isnumeric():
+                sound_id = int(sound_id)
+            else:
+                sound_id = 63
+
+            self.ctx.bean_patcher.play_sound(sound_id)
+
     def _cmd_deathlink(self, val=""):
         """
         Toggles deathlink.
@@ -306,6 +318,10 @@ class AnimalWellContext(CommonContext):
         if self.bean_patcher is not None and self.bean_patcher.attached_to_process:
             self.bean_patcher.display_to_client(text)
 
+    def play_sound(self, sound_id: int):
+        if self.bean_patcher is not None and self.bean_patcher.attached_to_process:
+            self.bean_patcher.play_sound(sound_id)
+
     async def on_bean_death(self):
         death_link_key = f"{self.get_active_game_slot()}|death_link"
         if self.stored_data.get(death_link_key, None) is None:
@@ -389,17 +405,21 @@ class AnimalWellContext(CommonContext):
                         item_name = self.item_names.lookup_in_slot(args.get("item").item, self.slot)
                         location_name = self.location_names.lookup_in_slot(args.get("item").location, player_slot)
                         text = f"Hint: Your {item_name} is at {location_name}."
+                        self.play_sound(68)
                         self.display_text_in_client(text)
                 elif msg_type == "Join":
                     self.display_text_in_client(args.get("data")[0]["text"])
+                    self.play_sound(68)
                 elif msg_type == "Part":
                     self.display_text_in_client(args.get("data")[0]["text"])
+                    self.play_sound(68)
                 elif msg_type == "ItemCheat":
                     if args.get("receiving") != self.slot:
                         return
                     item_name = self.item_names.lookup_in_game(args.get("item").item)
                     text = f"You received your {item_name}."
                     self.display_text_in_client(text)
+                    self.play_sound(68)
                 elif msg_type == "ItemSend":
                     destination_player_id = args["receiving"]
                     source_player_id = args["item"][2]  # it's a tuple, so we can't index by name
@@ -424,6 +444,10 @@ class AnimalWellContext(CommonContext):
                     self.display_text_in_client(text)
                 elif msg_type == "Countdown":
                     text = "".join(o["text"] for o in args.get("data"))
+                    if text.find("GO") > -1:
+                        self.play_sound(68)
+                    else:
+                        self.play_sound(56)
                     self.display_text_in_client(text)
                 elif msg_type == "CommandResult":
                     pass
@@ -475,13 +499,13 @@ class AnimalWellContext(CommonContext):
                 # since we're setting our tags properly, we don't need to check our deathlink setting
                 if "tags" in args:
                     if self.last_death_link != args["data"]["time"]:
-                        self.on_deathlink(args["data"])
+                        Utils.async_start(self.on_deathlink(args["data"]))
 
         except Exception as e:
             logger.error("Error while parsing Package from AP: %s", e)
             logger.info("Package details: {}".format(args))
 
-    def on_deathlink(self, data: Dict[str, Any]) -> None:
+    async def on_deathlink(self, data: Dict[str, Any]) -> None:
         self.last_death_link = max(data["time"], self.last_death_link)
         text = DEATHLINK_RECEIVED_MESSAGE.replace("{name}", data.get("source", "A Player"))
         cause = data.get("cause", None)
@@ -490,7 +514,17 @@ class AnimalWellContext(CommonContext):
             text = cause
 
         logger.info(text)
+        self.display_text_in_client("Deathlink incoming in 3...")
+        self.play_sound(56)
+        await asyncio.sleep(1)
+        self.display_text_in_client("Deathlink incoming in 2...")
+        self.play_sound(56)
+        await asyncio.sleep(1)
+        self.display_text_in_client("Deathlink incoming in 1...")
+        self.play_sound(56)
+        await asyncio.sleep(1)
         self.display_text_in_client(text)
+        self.play_sound(66)
         self.bean_patcher.set_player_state(5)
 
     def get_active_game_slot(self) -> int:
@@ -1257,6 +1291,8 @@ class AWItems:
                     total_hearts = int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x1B4, 1),
                                                   byteorder="little")
                     # berries_to_use multiplied by 3 to always give you +3 hearts
+                    if berries_to_use > 0:
+                        ctx.play_sound(39)
                     total_hearts = min(total_hearts + berries_to_use * 3, 255)
                     buffer = bytes([total_hearts])
                     ctx.process_handle.write_bytes(slot_address + 0x1B4, buffer, 1)
@@ -1283,6 +1319,8 @@ class AWItems:
                     total_firecrackers = int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x1B3, 1),
                                                         byteorder="little")
                     # multiply firecrackers to use by 6 so that it always fills up your inventory
+                    if firecrackers_to_use > 0:
+                        ctx.play_sound(42)
                     total_firecrackers = min(total_firecrackers + firecrackers_to_use * 6, 6 if self.fanny_pack else 3)
                     buffer = bytes([total_firecrackers])
                     ctx.process_handle.write_bytes(slot_address + 0x1B3, buffer, 1)
@@ -1408,7 +1446,9 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
 
             ctx.bean_patcher.apply_patches()
 
-            ctx.display_dialog("Connected to client!", "")
+            # ctx.display_text_in_client("Connected to client!")
+            # ctx.display_dialog("Connected to client!", "")
+            ctx.play_sound(68)
         else:
             raise NotImplementedError("Only Windows is implemented right now")
     except (pymem.exception.ProcessNotFound, pymem.exception.CouldNotOpenProcess, pymem.exception.ProcessError,

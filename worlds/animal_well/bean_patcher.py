@@ -220,6 +220,7 @@ get_gamepad_button_pressed: int = 0x140011EA0
 get_an_item: int = 0x1400C15C0
 warp: int = 0x140074DD0
 update_player_state: int = 0x1400662F0
+play_sound: int = 0x140064480
 # endregion
 
 # region OtherOffsets
@@ -326,6 +327,8 @@ class BeanPatcher:
         self.bean_has_died_address: int = 0
         self.on_bean_death_function: Optional[Callable[[Any], Awaitable[Any]]] = None
 
+        self.trigger_sound_id_address = None
+
         self.game_draw_routine_string_addr = None
         self.game_draw_routine_string_size = 256*MESSAGE_QUEUE_LENGTH
         self.game_draw_routine_default_string = "Connected to the Well"
@@ -411,6 +414,17 @@ class BeanPatcher:
         return self.application_state_address + 0x93670
 
     @property
+    def current_frame_address(self):
+        if not self.attached_to_process:
+            self.log_error("Can't get current frame address without being attached to a process.")
+            return None
+        if self.application_state_address is None or self.application_state_address == 0:
+            self.log_error("Can't get current frame address without knowing the application state's address.")
+            return None
+
+        return self.application_state_address + 0x9360c
+
+    @property
     def stamps_address(self):
         if not self.attached_to_process:
             self.log_error("Can't get stamps address without being attached to a process.")
@@ -481,7 +495,7 @@ class BeanPatcher:
 
         self.generate_room_palette_override_patch()
 
-        # self.apply_input_reader_patch()
+        self.apply_every_frame_patch()
 
         self.apply_pause_menu_patch()
 
@@ -748,11 +762,10 @@ class BeanPatcher:
         if pause_menu_patch_on_confirm_trampoline_patch.apply():
             self.revertable_patches.append(pause_menu_patch_on_confirm_trampoline_patch)
 
-    def apply_input_reader_patch(self):
+    def apply_every_frame_patch(self):
         """
-        This patch enables watching for additional input beyond just the default controls and triggers functions
-        when the expected button is pressed.
-        Originally used as a Warp To Hub command before the Pause Menu patch was implemented.
+        This patch provides a place to run additional every-frame code from within the loop that runs every frame.
+        Useful for reading input or triggering things when the patch sees a watched value change.
         """
         # input_reader_patch = (Patch("input_reader_patch", 0x140133c00, self.process)
         #                        .push_r15().push_r14().push_rsi().push_rdi().push_rbp().push_rbx()#.mov_to_rax(self.application_state_address + 0x93670)
@@ -783,34 +796,65 @@ class BeanPatcher:
         # Equipment: Top 0x27a, Ball 0x27d, Wheel 0x283, Remote 0x1d2, Slink 0x1a1, Yoyo 0x14e, UV 0x143, Bubble 0xa2, Flute 0xa9, Lantern 0x6d
         # Quest: Egg65 0x2c7, OfficeKey 0x269, QuestionKey 0x26a, MDisc 0x17e
         # Egg: 0x5a
-        input_reader_patch = (Patch("input_reader_patch", self.custom_memory_current_offset, self.process)
-                              .get_key_pressed(0x48)
-                              .cmp_al1_byte(0)
-                              .je_near(0x80)
-                              .push_rcx().push_rdx().push_r8().push_r9()
-                              .mov_from_absolute_address_to_eax(self.player_address + 0x5D)  # get player state
-                              .cmp_eax(5)  # only allow warp while idle, walking, jumping, falling, or climbing a ladder
-                              .jnl_short(56)
-                              .warp(self.player_address, self.unstuck_room_x, self.unstuck_room_y, self.unstuck_pos_x, self.unstuck_pos_y, self.unstuck_map)
+
+        self.trigger_sound_id_address = self.custom_memory_current_offset
+        self.custom_memory_current_offset += 0x4
+        self.process.write_bytes(self.trigger_sound_id_address, b'\x00\x00\x00\x00', 4)
+        frame_patch = (Patch("frame_patch", self.custom_memory_current_offset, self.process)
+                              # .get_key_pressed(0x48)
+                              # .cmp_al1_byte(0)
+                              # .je_near(0x80)
+                              # .push_rcx().push_rdx().push_r8().push_r9()
+                              # .mov_from_absolute_address_to_eax(self.player_address + 0x5D)  # get player state
+                              # .cmp_eax(5)  # only allow warp while idle, walking, jumping, falling, or climbing a ladder
+                              # .jnl_short(56)
+                              # .warp(self.player_address, self.unstuck_room_x, self.unstuck_room_y, self.unstuck_pos_x, self.unstuck_pos_y, self.unstuck_map)
                               # .get_an_item(slot_address, 0x14c, 0x00, 0xff)
-                              .pop_r9().pop_r8().pop_rdx().pop_rcx()
-                              .nop(0x80)
+                              # .pop_r9().pop_r8().pop_rdx().pop_rcx()
+                              # .nop(0x80)
+                              .mov_from_absolute_address_to_eax(self.trigger_sound_id_address)
+                              .cmp_al1_byte(0)
+                              .je_near(100)
+                              # .je_near(81)
+                              .mov_to_rax(self.trigger_sound_id_address)
+                              .mov_rax_pointer_contents_to_rcx() # sound_id
+                              .mov_rdx(1) # volume I think, but this particular sound function ignores this and always sends the same volume
+                              .mov_to_rax(self.player_address)
+                              .mov_rax_pointer_contents_to_r8() # position to play the sound at (we're playing it right on the bean)
+                              .mov_r9(0x0) # not sure what this arg is, can't tell any obvious difference from playing around with it
+                              .call_far(play_sound)
+
+                              .mov_rbx(self.trigger_sound_id_address)
+                              .mov_to_eax(0x00000000)
+                              .mov_eax_to_address_in_rbx()
+
+                              .nop(0x100)
+                              # .mov_ecx(0x41)
+                              # .mov_to_rax(self.player_address)
+                              # .mov_rax_pointer_contents_to_rdx()
+                              # .mov_r8(0x6)
+                              # .mov_r9(0x0)
+                              # .call_far(0x140064480)
+
                               .mov_edi(0x841c)
                               .mov_from_absolute_address_to_rax(0x1420949D0).movq_rax_to_xmm6()
                               .mov_from_absolute_address_to_rax(0x1420949F4).movq_rax_to_xmm7()
                               .jmp_far(0x14003B7FD)
                               )
-        self.custom_memory_current_offset += len(input_reader_patch)
+        self.custom_memory_current_offset += len(frame_patch)
         if self.log_debug_info:
-            self.log_info(f"Applying input_reader_patch...\n{input_reader_patch}")
-        if input_reader_patch.apply():
-            self.revertable_patches.append(input_reader_patch)
-        input_reader_trampoline = (Patch("input_reader_trampoline", 0x14003B7D1, self.process)
-                                   .jmp_far(input_reader_patch.base_address).nop(2))
+            self.log_info(f"Applying frame_patch...\n{frame_patch}")
+        if frame_patch.apply():
+            self.revertable_patches.append(frame_patch)
+        frame_trampoline = (Patch("frame_trampoline", 0x14003B7D1, self.process)
+                                   .jmp_far(frame_patch.base_address).nop(2))
         if self.log_debug_info:
-            self.log_info(f"Applying input_reader_trampoline...\n{input_reader_trampoline}")
-        if input_reader_trampoline.apply():
-            self.revertable_patches.append(input_reader_trampoline)
+            self.log_info(f"Applying frame_trampoline...\n{frame_trampoline}")
+        if frame_trampoline.apply():
+            self.revertable_patches.append(frame_trampoline)
+
+        if self.log_debug_info:
+            self.log_info(f"trigger_sound_id_address: {hex(self.trigger_sound_id_address)}")
 
     def apply_disable_anticheat_patch(self):
         """
@@ -1433,6 +1477,13 @@ class BeanPatcher:
         try:
             if self.attached_to_process and self.application_state_address:
                 self.process.write_uchar(self.player_address + 0x5d, state)
+        except Exception as e:
+            self.log_error(f"Error while attempting to set player state: {e}")
+
+    def play_sound(self, sound: int):
+        try:
+            if self.attached_to_process and self.trigger_sound_id_address:
+                self.process.write_uint(self.trigger_sound_id_address, sound)
         except Exception as e:
             self.log_error(f"Error while attempting to set player state: {e}")
 
