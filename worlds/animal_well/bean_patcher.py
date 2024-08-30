@@ -328,7 +328,6 @@ class BeanPatcher:
         self.on_bean_death_function: Optional[Callable[[Any], Awaitable[Any]]] = None
 
         self.trigger_sound_id_address = None
-        self.trigger_sound_volume_address = None
 
         self.game_draw_routine_string_addr = None
         self.game_draw_routine_string_size = 256*MESSAGE_QUEUE_LENGTH
@@ -800,10 +799,7 @@ class BeanPatcher:
 
         self.trigger_sound_id_address = self.custom_memory_current_offset
         self.custom_memory_current_offset += 0x4
-        self.trigger_sound_volume_address = self.custom_memory_current_offset
-        self.custom_memory_current_offset += 0x8
         self.process.write_bytes(self.trigger_sound_id_address, b'\x00\x00\x00\x00', 4)
-        self.process.write_bytes(self.trigger_sound_volume_address, b'\x06\x00\x00\x00\x00\x00\x00\x00', 8)
         frame_patch = (Patch("frame_patch", self.custom_memory_current_offset, self.process)
                               # .get_key_pressed(0x48)
                               # .cmp_al1_byte(0)
@@ -818,21 +814,21 @@ class BeanPatcher:
                               # .nop(0x80)
                               .mov_from_absolute_address_to_eax(self.trigger_sound_id_address)
                               .cmp_al1_byte(0)
-                              .je_near(0x100)
+                              .je_near(100)
+                              # .je_near(81)
                               .mov_to_rax(self.trigger_sound_id_address)
-                              .mov_rax_pointer_contents_to_rcx()
+                              .mov_rax_pointer_contents_to_rcx() # sound_id
+                              .mov_rdx(1) # volume I think, but this particular sound function ignores this and always sends the same volume
                               .mov_to_rax(self.player_address)
-                              .mov_rax_pointer_contents_to_rdx()
-                              .mov_to_rax(self.trigger_sound_volume_address)
-                              .mov_rax_pointer_contents_to_r8()
-                              .mov_r9(0x0)
+                              .mov_rax_pointer_contents_to_r8() # position to play the sound at (we're playing it right on the bean)
+                              .mov_r9(0x0) # not sure what this arg is, can't tell any obvious difference from playing around with it
                               .call_far(play_sound)
 
                               .mov_rbx(self.trigger_sound_id_address)
                               .mov_to_eax(0x00000000)
                               .mov_eax_to_address_in_rbx()
 
-                              .nop(0x200)
+                              .nop(0x100)
                               # .mov_ecx(0x41)
                               # .mov_to_rax(self.player_address)
                               # .mov_rax_pointer_contents_to_rdx()
@@ -859,9 +855,6 @@ class BeanPatcher:
 
         if self.log_debug_info:
             self.log_info(f"trigger_sound_id_address: {hex(self.trigger_sound_id_address)}")
-
-        if self.log_debug_info:
-            self.log_info(f"trigger_sound_volume_address: {hex(self.trigger_sound_volume_address)}")
 
     def apply_disable_anticheat_patch(self):
         """
@@ -1487,11 +1480,10 @@ class BeanPatcher:
         except Exception as e:
             self.log_error(f"Error while attempting to set player state: {e}")
 
-    def play_sound(self, sound: int, volume: int = 1):
+    def play_sound(self, sound: int):
         try:
-            if self.attached_to_process and self.trigger_sound_id_address and self.trigger_sound_volume_address:
+            if self.attached_to_process and self.trigger_sound_id_address:
                 self.process.write_uint(self.trigger_sound_id_address, sound)
-                self.process.write_ulonglong(self.trigger_sound_volume_address, volume)
         except Exception as e:
             self.log_error(f"Error while attempting to set player state: {e}")
 
