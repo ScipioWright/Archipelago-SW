@@ -485,17 +485,32 @@ class Patch:
 
     def mov_eax_pointer_contents_to_ecx(self):
         """
-        Moves a 32-bit value from the 32-bit address specified in EAX to ECX
+        Moves a 32-bit value from the 64-bit address specified in RAX to ECX
         2 bytes
         """
         return self.add_bytes(b'\x8b\x08')
 
     def mov_eax_pointer_contents_to_edx(self):
         """
-        Moves a 32-bit value from the 32-bit address specified in EAX to EDX
+        Moves a 32-bit value from the 64-bit address specified in RAX to EDX
         2 bytes
         """
         return self.add_bytes(b'\x8b\x10')
+
+    def mov_eax_pointer_contents_to_r8d(self):
+        """
+        Moves a 32-bit value from the 64-bit address specified in RAX to R8D
+        3 bytes
+        """
+        return self.add_bytes(b'\x44\x8b\x00')
+
+    def mov_eax_pointer_contents_to_r9d(self):
+        """
+        Moves a 32-bit value from the 64-bit address specified in RAX to R9D
+        3 bytes
+        """
+        return self.add_bytes(b'\x44\x8b\x08')
+
 
     def mov_rax_pointer_contents_to_rcx(self):
         """
@@ -507,6 +522,13 @@ class Patch:
     def mov_rax_pointer_contents_to_rdx(self):
         """
         Moves a 64-bit value from the 64-bit address specified in RAX to RDX
+        3 bytes
+        """
+        return self.add_bytes(b'\x48\x8b\x10')
+
+    def mov_rax_pointer_contents_to_r8(self):
+        """
+        Moves a 64-bit value from the 64-bit address specified in RAX to R8
         3 bytes
         """
         return self.add_bytes(b'\x48\x8b\x10')
