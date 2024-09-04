@@ -249,6 +249,5 @@ aw_option_presets: Dict[str, Dict[str, Any]] = {
         "obscure_tricks": ObscureTricks.option_true,
         "precise_tricks": PreciseTricks.option_true,
         "tanking_damage": TankingDamage.option_true,
-        "weird_tricks": WeirdTricks.option_true,
     },
 }
