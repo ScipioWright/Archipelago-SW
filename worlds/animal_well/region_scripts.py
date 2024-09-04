@@ -116,12 +116,12 @@ def convert_tech_reqs(reqs: List[List[str]], options: AnimalWellOptions) -> List
     reqs = [
         [iname.ball if item == iname.ball_trick_medium else item for item in sublist]
         for sublist in reqs
-        if not (iname.ball_trick_medium in sublist and options.ball_throwing not in (BallThrowing.option_off, BallThrowing.option_simple))
+        if not (iname.ball_trick_medium in sublist and options.ball_throwing not in (BallThrowing.option_advanced, BallThrowing.option_expert))
     ]
     reqs = [
         [iname.ball if item == iname.ball_trick_hard else item for item in sublist]
         for sublist in reqs
-        if not (iname.ball_trick_hard in sublist and options.ball_throwing not in (BallThrowing.option_off, BallThrowing.option_simple, BallThrowing.option_advanced))
+        if not (iname.ball_trick_hard in sublist and not options.ball_throwing == BallThrowing.option_expert)
     ]
     reqs = [
         [None if item == iname.precise_tricks else item for item in sublist]
