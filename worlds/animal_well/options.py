@@ -132,14 +132,49 @@ class WheelTricks(Choice):
     default = 0
 
 
-class WeirdTricks(Toggle):
+class BallThrowing(Choice):
     """
-    Include performing "weird" tricks in the logic.
-    Some of these tricks are difficult, tedious, or inconsistent.
-    Use at your own risk.
+    Include in logic using the ball to hit switches or buttons not ""designed"" for it.
+    Off means the ball will rarely be used for anything other than breaking blocks, spikes or guard shields.
+    Simple means the ball can be used to hit easy targets without any real rebound, setup or moving. Most ""yoyo chute"" buttons are included here.
+    Advanced means hitting your target may require bouncing off a wall, or moving while throwing to adjust momentum or get a good angle.
+    Expert includes any more complicated tricks, including those that require specific setups or getting lucky.
+    """									
+    internal_name = "ball_throwing"
+    display_name = "Ball Throwing"
+    option_off = 0
+    option_simple = 1
+    option_advanced = 2
+    option_expert = 3
+    default = 0
+
+
+class ObscureTricks(Toggle):
     """
-    internal_name = "weird_tricks"
-    display_name = "Weird Tricks"
+    Include a number of solutions to puzzles that are obscure or hard to understand.
+    These tricks aren't necessarily difficult to perform once you know what they are. If they are difficult, you must also turn on the respective difficulty or trick setting to enable it.
+    """
+    internal_name = "obscure_tricks"
+    display_name = "Obscure Tricks"
+
+
+class PreciseTricks(Toggle):
+    """
+    Include a number of solutions to puzzles that are mechanically difficult to execute.
+    These tricks may require large amounts of attempts to get right, and there may be a higher than usual cost for failure.
+    Tricks which are already covered by other item-specific trick options are not included here.
+    """
+    internal_name = "precise_tricks"
+    display_name = "Precise Tricks"
+
+
+class TankingDamage(Toggle):
+    """
+    Include tricks which require you to voluntarily take damage in order to perform them.
+    You may be expected to take up to three points of damage from any source. "Overtanking" with blue hearts will never be in logic.
+    """
+    internal_name = "tanking_damage"
+    display_name = "Tanking Damage"
 
 
 class ExcludeSongChests(DefaultOnToggle):
@@ -164,6 +199,16 @@ class WheelHopping(Choice):
     visibility = Visibility.none
 
 
+class WeirdTricks(Toggle):
+    """
+    Included temporarily for backward compatibility.
+    Logically equivalent to ball_throwing: expert, tanking_damage: true, precise_tricks: true, obscure_tricks: true
+    """
+    internal_name = "weird_tricks"
+    display_name = "Weird Tricks"
+    visibility = Visibility.none
+
+
 @dataclass
 class AnimalWellOptions(PerGameCommonOptions):
     goal: Goal
@@ -180,12 +225,16 @@ class AnimalWellOptions(PerGameCommonOptions):
     bubble_jumping: BubbleJumping
     disc_hopping: DiscHopping
     wheel_tricks: WheelTricks
-    weird_tricks: WeirdTricks
-    
+    ball_throwing: BallThrowing
+    obscure_tricks: ObscureTricks
+    precise_tricks: PreciseTricks
+    tanking_damage: TankingDamage
+
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool
 
     wheel_hopping: WheelHopping  # superseded by wheel_tricks, will be removed in a later update
+    weird_tricks: WeirdTricks  # superseded by splitting it out, will be removed in a later update
 
 
 aw_option_groups = [
@@ -193,9 +242,14 @@ aw_option_groups = [
         BubbleJumping,
         DiscHopping,
         WheelTricks,
+        BallThrowing,
+        ObscureTricks,
+        PreciseTricks,
+        TankingDamage,
         WeirdTricks,
     ])
 ]
+
 
 aw_option_presets: Dict[str, Dict[str, Any]] = {
     "Animal Hell": {
@@ -203,7 +257,10 @@ aw_option_presets: Dict[str, Dict[str, Any]] = {
         "bubble_jumping": BubbleJumping.option_on,
         "disc_hopping": DiscHopping.option_multiple,
         "wheel_tricks": WheelTricks.option_advanced,
-        "weird_tricks": True,
         "bunnies_as_checks": BunniesAsChecks.option_all_bunnies,
+        "ball_throwing": BallThrowing.option_expert,
+        "obscure_tricks": ObscureTricks.option_true,
+        "precise_tricks": PreciseTricks.option_true,
+        "tanking_damage": TankingDamage.option_true,
     },
 }

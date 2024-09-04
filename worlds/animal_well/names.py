@@ -260,7 +260,13 @@ class ItemNames(str, Enum):
     can_defeat_ghost = "Can Defeat Ghost"
     # rename tanking_damage's string when we have enough spots to make it viable as an option or something
     tanking_damage = "Tanking Damage"  # for spots you can get to by taking up to 3 hearts of damage
-    weird_tricks = "Weird Tricks"  # skips that are questionably in logic and may constitute a difficulty setting later
+    ball_trick_easy = "Ball Throwing - Easy"  # logic for throwing the ball at anything other than a block or a spike
+    ball_trick_medium = "Ball Throwing - Medium"  # at the moment, does NOT imply the existence of ball. Ball needs to be written separately in logic.
+    ball_trick_hard = "Ball Throwing - Hard"
+    obscure_tricks = "Obscure Tricks"  # solutions that are weird but not necessarily difficult
+    precise_tricks = "Precise Tricks"  # solutions that are difficult but not necessarily weird
+    water_bounce = "Water Bounce"  # tricks that use Yoyo, B.Ball, or some other way to generate a splash effect to bounce off the water
+
 
     # songs, to potentially be randomized
     song_home = "Top of the Well Song"
