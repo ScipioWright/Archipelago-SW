@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, PerGameCommonOptions, OptionGroup,
-                     Visibility)
+                     Visibility, DeathLink)
 
 
 class Goal(Choice):
@@ -131,6 +131,7 @@ class WheelTricks(Choice):
     option_advanced = 2
     default = 0
 
+
 class BallThrowing(Choice):
     """
     Include in logic using the ball to hit switches or buttons not ""designed"" for it.
@@ -147,6 +148,7 @@ class BallThrowing(Choice):
     option_expert = 3
     default = 0
 
+
 class ObscureTricks(Toggle):
     """
     Include a number of solutions to puzzles that are obscure or hard to understand.
@@ -154,6 +156,7 @@ class ObscureTricks(Toggle):
     """
     internal_name = "obscure_tricks"
     display_name = "Obscure Tricks"
+
 
 class PreciseTricks(Toggle):
     """
@@ -164,6 +167,7 @@ class PreciseTricks(Toggle):
     internal_name = "precise_tricks"
     display_name = "Precise Tricks"
 
+
 class TankingDamage(Toggle):
     """
     Include tricks which require you to voluntarily take damage in order to perform them.
@@ -171,6 +175,7 @@ class TankingDamage(Toggle):
     """
     internal_name = "tanking_damage"
     display_name = "Tanking Damage"
+
 
 class ExcludeSongChests(DefaultOnToggle):
     """
@@ -193,6 +198,7 @@ class WheelHopping(Choice):
     default = 0
     visibility = Visibility.none
 
+
 class WeirdTricks(Toggle):
     """
     Included temporarily for backward compatibility.
@@ -202,27 +208,33 @@ class WeirdTricks(Toggle):
     display_name = "Weird Tricks"
     visibility = Visibility.none
 
+
 @dataclass
 class AnimalWellOptions(PerGameCommonOptions):
-    start_inventory_from_pool: StartInventoryPool
     goal: Goal
     eggs_needed: EggsNeeded
     key_ring: KeyRing
     matchbox: Matchbox
-    random_final_egg_location: FinalEggLocation
+    
+    candle_checks: CandleChecks
     bunnies_as_checks: BunniesAsChecks
     bunny_warps_in_logic: BunnyWarpsInLogic
-    candle_checks: CandleChecks
+    exclude_song_chests: ExcludeSongChests
+    random_final_egg_location: FinalEggLocation
+    
     bubble_jumping: BubbleJumping
     disc_hopping: DiscHopping
     wheel_tricks: WheelTricks
-    exclude_song_chests: ExcludeSongChests
     ball_throwing: BallThrowing
-    wheel_hopping: WheelHopping
     obscure_tricks: ObscureTricks
     precise_tricks: PreciseTricks
     tanking_damage: TankingDamage
-    weird_tricks: WeirdTricks
+
+    death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool
+
+    wheel_hopping: WheelHopping  # superseded by wheel_tricks, will be removed in a later update
+    weird_tricks: WeirdTricks  # superseded by splitting it out, will be removed in a later update
 
 
 aw_option_groups = [
@@ -237,6 +249,7 @@ aw_option_groups = [
         WeirdTricks,
     ])
 ]
+
 
 aw_option_presets: Dict[str, Dict[str, Any]] = {
     "Animal Hell": {

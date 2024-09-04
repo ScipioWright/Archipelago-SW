@@ -1,16 +1,36 @@
-from typing import Dict, List, Any, Union
 from copy import deepcopy
+from enum import IntEnum
+from typing import Dict, List, Any, Union, ClassVar
+
 from BaseClasses import Tutorial, ItemClassification, LocationProgressType
+from settings import Group
+from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
+
 from .items import item_name_to_id, item_table, item_name_groups, filler_items, AWItem
 from .locations import location_name_groups, location_name_to_id
 from .region_data import AWData, traversal_requirements
 from .region_scripts import create_regions_and_set_rules
 from .options import AnimalWellOptions, aw_option_presets, Goal, FinalEggLocation, aw_option_groups
 from .names import ItemNames, LocationNames, RegionNames
-from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
-from Utils import local_path
 # todo: remove animal_well_map.pdn
+
+
+class AWSettings(Group):
+    class TrackerSetting(IntEnum):
+        """
+        Choose the mode for the in-game tracker.
+        0 -> Disable the in-game tracker.
+        1 -> Only show checked locations, hide all others.
+        2 -> Show the in-game tracker with no logic.
+        3 -> Full in-game tracker, including logic.
+        """
+        no_tracker = 0
+        checked_only = 1
+        no_logic = 2
+        full_tracker = 3
+
+    in_game_tracker: TrackerSetting = TrackerSetting.full_tracker
 
 
 def launch_client():
@@ -56,15 +76,19 @@ class AnimalWellWorld(World):
     """
     game = "ANIMAL WELL"
     web = AnimalWellWeb()
+    version_string: str = "v0.4.2 - dev"
 
     options: AnimalWellOptions
     options_dataclass = AnimalWellOptions
+    settings: ClassVar[AWSettings]
+    settings_key = "animal_well_settings"
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
+    # todo: remove later
     topology_present = True
 
     traversal_requirements: Dict[Union[LocationNames, RegionNames], Dict[Union[LocationNames, RegionNames], AWData]]
@@ -79,20 +103,20 @@ class AnimalWellWorld(World):
             self.options.bunny_warps_in_logic.value = True
 
         # Universal tracker stuff, shouldn't do anything in standard gen
-        if hasattr(self.multiworld, "re_gen_passthrough"):
-            if "ANIMAL WELL" in self.multiworld.re_gen_passthrough:
-                passthrough = self.multiworld.re_gen_passthrough["ANIMAL WELL"]
-                self.options.goal.value = passthrough["goal"]
-                self.options.eggs_needed.value = passthrough["eggs_needed"]
-                self.options.key_ring.value = passthrough["key_ring"]
-                self.options.matchbox.value = passthrough["matchbox"]
-                self.options.random_final_egg_location = FinalEggLocation.option_true
-                self.options.bunnies_as_checks.value = passthrough["bunnies_as_checks"]
-                self.options.candle_checks.value = passthrough["candle_checks"]
-                self.options.bubble_jumping.value = passthrough["bubble_jumping"]
-                self.options.disc_hopping.value = passthrough["disc_hopping"]
-                self.options.wheel_tricks.value = passthrough["wheel_tricks"]
-                self.options.weird_tricks.value = passthrough["weird_tricks"]
+        # if hasattr(self.multiworld, "re_gen_passthrough"):
+        #     if "ANIMAL WELL" in self.multiworld.re_gen_passthrough:
+        #         passthrough = self.multiworld.re_gen_passthrough["ANIMAL WELL"]
+        #         self.options.goal.value = passthrough["goal"]
+        #         self.options.eggs_needed.value = passthrough["eggs_needed"]
+        #         self.options.key_ring.value = passthrough["key_ring"]
+        #         self.options.matchbox.value = passthrough["matchbox"]
+        #         self.options.random_final_egg_location = FinalEggLocation.option_true
+        #         self.options.bunnies_as_checks.value = passthrough["bunnies_as_checks"]
+        #         self.options.candle_checks.value = passthrough["candle_checks"]
+        #         self.options.bubble_jumping.value = passthrough["bubble_jumping"]
+        #         self.options.disc_hopping.value = passthrough["disc_hopping"]
+        #         self.options.wheel_tricks.value = passthrough["wheel_tricks"]
+        #         self.options.weird_tricks.value = passthrough["weird_tricks"]
 
     def create_regions(self) -> None:
         self.traversal_requirements = deepcopy(traversal_requirements)
@@ -157,13 +181,6 @@ class AnimalWellWorld(World):
         return self.random.choice(filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        # todo: remove this, remove the changes done to Utils
-        # import Utils
-        # state = self.multiworld.get_all_state(False)
-        # state.update_reachable_regions(self.player)
-        # Utils.visualize_regions(self.multiworld.get_region("Menu", self.player), "awtest.puml",
-        #                         show_entrance_names=True,
-        #                         highlight_regions=state.reachable_regions[self.player])
         return self.options.as_dict(
             "goal",
             "eggs_needed",
@@ -176,6 +193,8 @@ class AnimalWellWorld(World):
             "disc_hopping",
             "wheel_tricks",
             "weird_tricks",
+            "exclude_song_chests",
+            "death_link",
         )
 
     # for the universal tracker, doesn't get called in standard gen

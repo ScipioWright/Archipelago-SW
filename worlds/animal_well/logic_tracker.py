@@ -1,12 +1,12 @@
 from typing import Dict, Set
 from enum import IntEnum
 
-from .locations import location_name_to_id
+from .locations import location_name_to_id, events_table
 from .region_data import AWType, LocType, traversal_requirements
 from .region_scripts import helper_reference
 from .names import ItemNames as iname, LocationNames as lname, RegionNames as rname
 from .options import (Goal, EggsNeeded, KeyRing, Matchbox, BunniesAsChecks, BunnyWarpsInLogic, CandleChecks,
-                      BubbleJumping, DiscHopping, WheelTricks, WeirdTricks)
+                      BubbleJumping, DiscHopping, WheelTricks, WeirdTricks, ExcludeSongChests)
 
 
 class CheckStatus(IntEnum):
@@ -14,6 +14,21 @@ class CheckStatus(IntEnum):
     out_of_logic = 1
     in_logic = 2
     checked = 3
+    dont_show = 4  # for locations that should be hidden outright
+
+
+# keys are location names, values are item names
+candle_event_to_item: Dict[str, str] = {
+    lname.candle_first_event.value: iname.event_candle_first.value,
+    lname.candle_dog_dark_event.value: iname.event_candle_dog_dark.value,
+    lname.candle_dog_switch_box_event.value: iname.event_candle_dog_switch_box.value,
+    lname.candle_dog_many_switches_event.value: iname.event_candle_dog_many_switches,
+    lname.candle_dog_disc_switches_event.value: iname.event_candle_dog_disc_switches,
+    lname.candle_dog_bat_event.value: iname.event_candle_dog_bat,
+    lname.candle_fish_event.value: iname.event_candle_penguin.value,
+    lname.candle_frog_event.value: iname.event_candle_frog,
+    lname.candle_bear_event.value: iname.event_candle_bear,
+}
 
 
 class AnimalWellTracker:
@@ -29,6 +44,7 @@ class AnimalWellTracker:
         DiscHopping.internal_name: 0,
         WheelTricks.internal_name: 0,
         WeirdTricks.internal_name: 0,
+        ExcludeSongChests.internal_name: 0,
     }
 
     # key is location name, value is its spot status. Can change the key later to something else if wanted
@@ -44,6 +60,7 @@ class AnimalWellTracker:
     upgraded_b_wand: bool = False
     key_count: int = 0
     match_count: int = 0
+    k_shard_count: int = 0
 
     regions_in_logic: Set[str] = {rname.menu}
     # includes regions accessible in logic
@@ -68,20 +85,11 @@ class AnimalWellTracker:
                             and not self.player_options[BunnyWarpsInLogic.internal_name]):
                         continue
                 if destination_data.type == AWType.location:
+                    # events aren't in location_name_to_id, so give them a key here
                     if destination_data.event:
                         self.check_logic_status.setdefault(str(destination_name), 0)
                     # bools are ints
                     if self.check_logic_status[destination_name] >= 1 + in_logic:
-                        continue
-                    # skip bunnies that aren't included in the location pool
-                    if (destination_data.loc_type == LocType.bunny
-                        and (self.player_options[BunniesAsChecks.internal_name] == BunniesAsChecks.option_off
-                             or (self.player_options[BunniesAsChecks.internal_name] == BunniesAsChecks.option_exclude_tedious
-                                 and destination_name in [lname.bunny_mural, lname.bunny_dream,
-                                                          lname.bunny_uv, lname.bunny_lava]))):
-                        self.check_logic_status[destination_name] = CheckStatus.checked
-                    # we ignore these and rely on the event version
-                    elif destination_data.loc_type == LocType.candle:
                         continue
 
                 met: bool = False
@@ -97,14 +105,22 @@ class AnimalWellTracker:
                 if len(self.egg_tracker) < destination_data.eggs_required:
                     met = False
 
+                if origin == rname.dog_bat_room and destination_name == rname.kangaroo_room:
+                    if self.k_shard_count < 3:
+                        met = False
+
                 if met:
                     if destination_data.type == AWType.region:
                         regions_set.add(destination_name)
                     elif destination_data.type == AWType.location:
                         self.check_logic_status[destination_name] = CheckStatus.out_of_logic + in_logic
-                        if destination_data.event and "Candle" not in destination_name:
+                        # candle and flame are added in client.py when they are found
+                        if destination_data.event:
                             inventory_set.add(destination_data.event)
-                            self.check_logic_status[destination_name] = CheckStatus.checked
+                            # add the event item immediately, but let the client handle the event location
+                            if ("Candle" not in destination_name and "Flame" not in destination_name
+                                    and destination_name != lname.victory_first.value):
+                                self.check_logic_status[destination_name] = CheckStatus.checked.value
         # if the length of the region set or inventory changed, loop through again
         if inventory_count != len(regions_set) + len(inventory_set):
             self.update_spots_status(in_logic)
@@ -177,5 +193,36 @@ class AnimalWellTracker:
     def clear_inventories(self) -> None:
         self.full_inventory.clear()
         self.out_of_logic_full_inventory.clear()
+        self.upgraded_b_wand = False
+        self.key_count = 0
+        self.match_count = 0
+        self.k_shard_count = 0
+        self.check_logic_status = {loc_name: CheckStatus.unreachable.value for loc_name in location_name_to_id.keys()}
+        for event in events_table.keys():
+            self.check_logic_status[event] = CheckStatus.unreachable.value
         self.regions_in_logic = {rname.starting_area}
         self.regions_out_of_logic = {rname.starting_area}
+
+    # mark all checks that should not show up as hidden
+    def mark_hidden_locations(self) -> None:
+        for origin, destinations in traversal_requirements.items():
+            for destination_name, destination_data in destinations.items():
+                if destination_data.type == AWType.location:
+                    # figures aren't checks right now, so just don't show them
+                    if destination_data.loc_type == LocType.figure:
+                        self.check_logic_status[destination_name] = CheckStatus.dont_show.value
+                    # skip bunnies that aren't included in the location pool
+                    elif destination_data.loc_type == LocType.bunny:
+                        if self.player_options[BunniesAsChecks.internal_name] == BunniesAsChecks.option_off:
+                            self.check_logic_status[destination_name] = CheckStatus.dont_show.value
+                        if (self.player_options[BunniesAsChecks.internal_name] == BunniesAsChecks.option_exclude_tedious
+                                and destination_name in [lname.bunny_mural.value, lname.bunny_dream.value,
+                                                         lname.bunny_uv.value, lname.bunny_lava.value]):
+                            self.check_logic_status[destination_name] = CheckStatus.dont_show.value
+                    # we ignore these and rely on the event version
+                    elif destination_data.loc_type == LocType.candle:
+                        self.check_logic_status[destination_name] = CheckStatus.dont_show.value
+                    # if it's excluded due to the option, don't show it
+                    elif (self.player_options[ExcludeSongChests.internal_name] == ExcludeSongChests.option_true 
+                              and destination_name in [lname.wheel_chest.value, lname.key_office.value]):
+                        self.check_logic_status[destination_name] = CheckStatus.dont_show.value

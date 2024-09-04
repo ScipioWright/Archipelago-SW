@@ -7,20 +7,24 @@ import asyncio
 import os
 import platform
 import random
+import time
 import traceback
-
+import struct
 import pymem
+from typing import Dict, Any
 
-import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from NetUtils import ClientStatus
-from typing import Dict
+import Utils
+from settings import get_settings
+
+from . import AWSettings
 from .items import item_name_to_id, item_name_groups
-from .locations import location_name_to_id, location_table, ByteSect
+from .locations import location_name_to_id, location_table, events_table, ByteSect
 from .names import ItemNames as iname, LocationNames as lname
 from .options import FinalEggLocation, Goal
 from .bean_patcher import BeanPatcher
-from .logic_tracker import AnimalWellTracker, CheckStatus
+from .logic_tracker import AnimalWellTracker, CheckStatus, candle_event_to_item
 
 CONNECTION_ABORTED_STATUS = "Connection Refused. Some unrecoverable error occurred"
 CONNECTION_REFUSED_STATUS = "Connection Refused. Please make sure exactly one Animal Well instance is running"
@@ -29,8 +33,12 @@ CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_TENTATIVE_STATUS = "Connection has been initiated"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
+DEATHLINK_MESSAGE = "The bean has died."
+DEATHLINK_RECEIVED_MESSAGE = "{name} died and took you with them."
+
 HEADER_LENGTH = 0x18
 SAVE_SLOT_LENGTH = 0x27010
+CUSTOM_STAMPS = 255
 
 
 class AnimalWellCommandProcessor(ClientCommandProcessor):
@@ -44,6 +52,10 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
             logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
 
     def _cmd_room_palette(self, val=""):
+        """
+        Sets an override for room palettes. Accepts a number between 0 and 31, "off" to disable,
+        or "random" to pick a room palette at random.
+        """
         if isinstance(self.ctx, AnimalWellContext):
             if val == "":
                 self.ctx.bean_patcher.toggle_room_palette_override()
@@ -62,6 +74,9 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                 self.ctx.bean_patcher.enable_room_palette_override(0x14)
 
     def _cmd_fullbright(self, val=""):
+        """
+        Toggles fullbright mode, which disabled darkness and lights all tiles equally.
+        """
         if isinstance(self.ctx, AnimalWellContext):
             if val == "":
                 self.ctx.bean_patcher.toggle_fullbright()
@@ -71,6 +86,87 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
             else:
                 logger.info(f"Enabling fullbright...")
                 self.ctx.bean_patcher.enable_fullbright()
+
+    def _cmd_deathlink(self, val=""):
+        """
+        Toggles deathlink.
+        """
+        if isinstance(self.ctx, AnimalWellContext):
+            death_link_key = f"{self.ctx.slot}|death_link"
+            death_link_val = self.ctx.stored_data.get(death_link_key, None)
+
+            if death_link_val is None:
+                death_link_val = bool(self.ctx.slot_data["death_link"])
+                self.ctx.set_notify(death_link_key)
+
+            if val == "":
+                death_link_val = not death_link_val
+            elif val == "off":
+                death_link_val = False
+            elif val == "on":
+                death_link_val = True
+
+            status_text = "Deathlink is now " + "ENABLED" if death_link_val else "DISABLED"
+            self.ctx.display_text_in_client(status_text)
+            logger.info(status_text)
+
+            Utils.async_start(self.ctx.update_death_link(death_link_val))
+            Utils.async_start(self.ctx.send_msgs([{
+                "cmd": "Set",
+                "key": death_link_key,
+                "default": None,
+                "want_reply": True,
+                "operations": [{"operation": "replace", "value": death_link_val}]
+            }]))
+
+    def _cmd_tracker(self, val=""):
+        """
+        Toggles In-game Tracker or sets specific tracker options.
+        """
+        if isinstance(self.ctx, AnimalWellContext):
+            # get the host.yaml settings for the tracker
+            host = get_settings()
+            aw_settings = host.animal_well_settings
+            tracker_enum = AWSettings.TrackerSetting
+
+            # set a default if the player does not have the animal well settings already
+            if host.animal_well_settings.get("in_game_tracker", None) is None:
+                aw_settings["in_game_tracker"] = tracker_enum.full_tracker
+
+            if val == "":
+                aw_settings["in_game_tracker"] = tracker_enum.no_tracker \
+                    if aw_settings["in_game_tracker"] == tracker_enum.full_tracker else tracker_enum.full_tracker
+            elif val == "off":
+                aw_settings["in_game_tracker"] = tracker_enum.no_tracker
+            elif "logic" in val:
+                aw_settings["in_game_tracker"] = tracker_enum.no_logic
+            elif "check" in val:
+                aw_settings["in_game_tracker"] = tracker_enum.checked_only
+            elif val == "on":
+                aw_settings["in_game_tracker"] = tracker_enum.full_tracker
+
+            try:
+                host.save()
+            except:
+                logger.error("Failed to save Tracker setting."
+                             "This is usually caused by having an apworld in your custom_worlds folder and your "
+                             "lib/worlds folder for the same game at the same time.")
+
+            status_text = "Tracker is now " + ("ENABLED"
+                                               if host.animal_well_settings["in_game_tracker"] > tracker_enum.no_tracker
+                                               else "DISABLED")
+
+            if host.animal_well_settings["in_game_tracker"] == tracker_enum.no_logic:
+                status_text += " with no logic"
+            if host.animal_well_settings["in_game_tracker"] == tracker_enum.checked_only:
+                status_text += " with checked locations only"
+            self.ctx.display_text_in_client(status_text)
+            logger.info(status_text)
+
+            if host.animal_well_settings["in_game_tracker"] > tracker_enum.no_tracker:
+                self.ctx.bean_patcher.apply_tracker_patches()
+            else:
+                self.ctx.bean_patcher.revert_tracker_patches()
 
     def _cmd_ring(self):
         """Toggles the cheater's ring in your inventory to allow noclip and get unstuck"""
@@ -86,11 +182,13 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                                                byteorder="little")
 
                         if bool(flags >> 13 & 1):
-                            logger.info("Removing C. Ring from inventory")
-                            self.ctx.display_text_in_client("Removing C. Ring from inventory")
+                            log_text = "Removing C. Ring from inventory"
+                            logger.info(log_text)
+                            self.ctx.display_text_in_client(log_text)
                         else:
-                            logger.info("Adding C. Ring to inventory. Press F to use")
-                            self.ctx.display_text_in_client("Adding C. Ring to inventory. Press F key (or R3 on gamepad) to use.")
+                            log_text = "Adding C. Ring to inventory. Press F key (or R3 on gamepad) to use."
+                            logger.info(log_text)
+                            self.ctx.display_text_in_client(log_text)
 
                         bits = ((str(flags >> 0 & 1)) +  # House Opened
                                 (str(flags >> 1 & 1)) +  # Office Opened
@@ -128,17 +226,7 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                         self.ctx.process_handle.write_bytes(slot_address + 0x1EC, buffer, 4)
                     else:
                         raise NotImplementedError("Only Windows is implemented right now")
-        except pymem.exception.ProcessError as e:
-            logger.error("%s", e)
-            self.ctx.connection_status = CONNECTION_RESET_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
-        except pymem.exception.MemoryReadError as e:
-            logger.error("%s", e)
-            self.ctx.connection_status = CONNECTION_RESET_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
-        except pymem.exception.MemoryWriteError as e:
+        except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, pymem.exception.MemoryWriteError) as e:
             logger.error("%s", e)
             self.ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
@@ -148,6 +236,30 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
             self.ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
             logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
+
+
+class Stamp:
+    def __init__(self, x, y, stamp_type=0):
+        self.x = x
+        self.y = y
+        self.type = stamp_type
+
+    def data(self):
+        return struct.pack("<hhh", self.x, self.y, self.type)
+
+
+class Tile:
+    def __init__(self, map_id, room_x, room_y, x, y, layer=0, param=0):
+        self.map = map_id
+        self.room_x = room_x
+        self.room_y = room_y
+        self.x = x
+        self.y = y
+        self.layer = layer
+        self.param = param
+
+    def stamp(self, stamp_type=0):
+        return Stamp(self.room_x*40 + self.x - 3, self.room_y*22 + self.y - 4, stamp_type)
 
 
 class AnimalWellContext(CommonContext):
@@ -169,14 +281,22 @@ class AnimalWellContext(CommonContext):
         self.slot_number: int = -1
         self.current_game_state = -1
         self.last_game_state = -1
+        self.last_death_link: float = time.time()
         # used to delay starting the loop until we can see the data storage values
         self.got_data_storage: bool = False
         self.first_m_disc = True
-        self.used_firecrackers = 0
-        self.used_berries = 0
-        self.bean_patcher = BeanPatcher().set_logger(logger)
+        self.used_firecrackers: int
+        self.used_berries: int
+
+        from . import AnimalWellWorld
+        self.bean_patcher = BeanPatcher().set_logger(logger).set_version_string(AnimalWellWorld.version_string)
+        self.bean_patcher.set_logger(logger)
+        self.bean_patcher.set_bean_death_function(self.on_bean_death)
         self.bean_patcher.game_draw_routine_default_string = "Connected to the well..."
+        self.stamps = []
+        self.tiles = {}
         self.logic_tracker = AnimalWellTracker()
+        self.console_task = None
 
     def display_dialog(self, text: str, title: str, action_text: str = ""):
         if self.bean_patcher is not None and self.bean_patcher.attached_to_process:
@@ -186,14 +306,29 @@ class AnimalWellContext(CommonContext):
         if self.bean_patcher is not None and self.bean_patcher.attached_to_process:
             self.bean_patcher.display_to_client(text)
 
+    async def on_bean_death(self):
+        death_link_key = f"{self.get_active_game_slot()}|death_link"
+        if self.stored_data.get(death_link_key, None) is None:
+            if self.slot_data.get("death_link", None) == 1:
+                await self.send_death(DEATHLINK_MESSAGE)
+        else:
+            if self.stored_data[death_link_key]:
+                await self.send_death(DEATHLINK_MESSAGE)
+
     async def server_auth(self, password_requested: bool = False):
         """
         Authenticate with the Archipelago server
         """
         if password_requested and not self.password:
             await super(AnimalWellContext, self).server_auth(password_requested)
+        self.tags = set()
         await self.get_username()
         await self.send_connect()
+
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        # this is to fix resending firecrackers/big blue fruit when disconnecting and reconnecting
+        self.got_data_storage = False
+        await super().disconnect(allow_autoreconnect)
 
     def run_gui(self):
         """
@@ -217,13 +352,35 @@ class AnimalWellContext(CommonContext):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
             self.display_text_in_client("Connected to the AP server!")
+
+            self.logic_tracker.clear_inventories()
             for option_name, option_value in self.slot_data.items():
                 self.logic_tracker.player_options[option_name] = option_value
-            self.logic_tracker.clear_inventories()
+            self.logic_tracker.mark_hidden_locations()
             for location_id in args.get("checked_locations"):
                 location_name = self.location_names.lookup_in_slot(location_id)
                 self.logic_tracker.check_logic_status[location_name] = CheckStatus.checked.value
+            if self.slot_data["goal"] == Goal.option_fireworks:
+                self.bean_patcher.tracker_goal = "Fireworks"
+            elif self.slot_data["goal"] == Goal.option_egg_hunt:
+                self.bean_patcher.tracker_goal = "Egg Hunt to " + str(self.slot_data["eggs_needed"])
+            self.bean_patcher.update_tracker_text()
+            aw_settings = get_settings().animal_well_settings
+            if aw_settings.get("in_game_tracker", AWSettings.TrackerSetting.full_tracker) > AWSettings.TrackerSetting.no_tracker:
+                self.bean_patcher.apply_tracker_patches()
+            else:
+                self.bean_patcher.revert_tracker_patches()
 
+            death_link_key = f"{self.slot}|death_link"
+            Utils.async_start(self.update_death_link(self.slot_data.get("death_link", None) == 1))
+            self.set_notify(death_link_key)
+            Utils.async_start(self.send_msgs([{
+                "cmd": "Get",
+                "keys": [death_link_key]
+            }]))
+            self.bean_patcher.save_team = args["team"]
+            self.bean_patcher.save_slot = args["slot"]
+            self.bean_patcher.apply_seeded_save_patch()
         try:
             if cmd == "PrintJSON":
                 msg_type = args.get("type")
@@ -235,7 +392,7 @@ class AnimalWellContext(CommonContext):
                 elif msg_type == "Hint":
                     if args.get("receiving") == self.slot:
                         player_slot = args.get("item").player
-                        item_name = self.item_names.lookup_in_slot(args.get("item").item, player_slot)
+                        item_name = self.item_names.lookup_in_slot(args.get("item").item, self.slot)
                         location_name = self.location_names.lookup_in_slot(args.get("item").location, player_slot)
                         text = f"Hint: Your {item_name} is at {location_name}."
                         self.display_text_in_client(text)
@@ -278,6 +435,7 @@ class AnimalWellContext(CommonContext):
                     pass
                 elif msg_type == "Tutorial":
                     pass
+
             elif cmd == "ReceivedItems":
                 # items = args.get("items")
                 for item in args.get("items"):
@@ -298,25 +456,48 @@ class AnimalWellContext(CommonContext):
                             self.logic_tracker.out_of_logic_full_inventory.add(item_name)
                         else:
                             self.logic_tracker.egg_tracker.add(item_name)
+                    elif item_name == iname.k_shard.value:
+                        self.logic_tracker.k_shard_count += 1
                     else:
                         self.logic_tracker.full_inventory.add(item_name)
                         self.logic_tracker.out_of_logic_full_inventory.add(item_name)
                 self.logic_tracker.update_checks_and_regions()
 
             elif cmd == "RoomUpdate":
-                for location_id in args.get("checked_locations"):
-                    location_name = self.location_names.lookup_in_slot(location_id)
-                    self.logic_tracker.check_logic_status[location_name] = CheckStatus.checked
+                if "checked_locations" in args:
+                    for location_id in args.get("checked_locations"):
+                        location_name = self.location_names.lookup_in_slot(location_id)
+                        self.logic_tracker.check_logic_status[location_name] = CheckStatus.checked
             elif cmd == "RoomInfo":
-                pass
+                self.bean_patcher.save_seed = args["seed_name"]
             elif cmd == "SetReply":
                 pass
+            elif cmd == "Retrieved":
+                if args["keys"].get(f"{self.slot}|death_link", None) is not None:
+                    Utils.async_start(self.update_death_link(args["keys"].get(f"{self.slot}|death_link")))
             elif cmd == "None":
                 self.display_text_in_client(args.get("data")[0]["text"])
+            elif cmd == "Bounced":
+                # since we're setting our tags properly, we don't need to check our deathlink setting
+                if "tags" in args:
+                    if self.last_death_link != args["data"]["time"]:
+                        self.on_deathlink(args["data"])
 
         except Exception as e:
             logger.error("Error while parsing Package from AP: %s", e)
             logger.info("Package details: {}".format(args))
+
+    def on_deathlink(self, data: Dict[str, Any]) -> None:
+        self.last_death_link = max(data["time"], self.last_death_link)
+        text = DEATHLINK_RECEIVED_MESSAGE.replace("{name}", data.get("source", "A Player"))
+        cause = data.get("cause", None)
+
+        if cause is not None:
+            text = cause
+
+        logger.info(text)
+        self.display_text_in_client(text)
+        self.bean_patcher.set_player_state(5)
 
     def get_active_game_slot(self) -> int:
         """
@@ -327,6 +508,107 @@ class AnimalWellContext(CommonContext):
             return slot
         else:
             raise NotImplementedError("Only Windows is implemented right now")
+
+    # Fetches all required tile positions for AWTracker to place stamps by
+    def get_tiles(self, tile_types, map_id=0):
+        if self.start_address is None:
+            return
+        map_addr = int.from_bytes(self.process_handle.read_bytes(self.bean_patcher.module_base + 0x2BD8E30, 8), byteorder="little") + 0x2d0 + map_id * 0x1b8f84
+        room_count = int.from_bytes(self.process_handle.read_bytes(map_addr, 2), byteorder="little")
+        map_data = self.process_handle.read_bytes(map_addr + 4, 0x1b8f84)
+        for room_idx in range(room_count):
+            room_offset = room_idx*(8+2*22*40*4)
+            room_x = map_data[room_offset]
+            room_y = map_data[room_offset+1]
+            for layer in range(2):
+                for y in range(22):
+                    for x in range(40):
+                        tile_offset = room_offset + 8 + y*40*4 + x*4 + layer*22*40*4
+                        room_tile = int.from_bytes(map_data[tile_offset:tile_offset+2], byteorder="little")
+                        param = map_data[tile_offset+2]
+                        if room_tile in tile_types:
+                            if room_tile not in self.tiles:
+                                self.tiles[room_tile] = []
+                            self.tiles[room_tile].append(Tile(map_id, room_x, room_y, x, y, layer, param))
+
+    def get_tiles_for_locations(self):
+        tile_ids = []
+        loc_tables = [loc for loc in location_table.values()]
+        loc_tables.extend([loc for loc in events_table.values()])
+        for loc in loc_tables:
+            if not loc.tracker:
+                continue
+            if not loc.tracker.tile in tile_ids and loc.tracker.tile > 0:
+                tile_ids.append(loc.tracker.tile)
+        self.get_tiles(tile_ids)
+        for tiles in self.tiles.values():
+            tiles.sort(key=lambda item: (item.room_y, item.room_x, item.y, item.x))
+        # logger.info(f"Found {len(self.tiles)} tile types to track")
+
+    def get_stamps_for_locations(self, ctx):
+        if not self.tiles:
+            self.get_tiles_for_locations()
+        self.stamps.clear()
+        loc_table = location_table.copy()
+        for k, v in events_table.items():
+            loc_table[k] = v
+        for name, loc in loc_table.items():
+            if (not loc.tracker
+                    or name not in self.logic_tracker.check_logic_status
+                    or self.logic_tracker.check_logic_status[name] == CheckStatus.dont_show
+                    or ((loc.tracker.tile not in self.tiles
+                         or len(self.tiles[loc.tracker.tile]) < loc.tracker.index+1)
+                        and loc.tracker.tile > 0)):
+                continue
+            # bake logic status into the stamp type for colored stamps patch to read
+            stamp = loc.tracker.stamp | (self.logic_tracker.check_logic_status[name] << 4)
+
+            aw_settings = get_settings().animal_well_settings
+            tracker_enum = AWSettings.TrackerSetting
+            aw_settings.get("in_game_tracker", tracker_enum.full_tracker)
+            if aw_settings["in_game_tracker"] == tracker_enum.no_logic:
+                stamp = loc.tracker.stamp | (0x30 if self.logic_tracker.check_logic_status[name] == CheckStatus.checked.value else 0x20)
+            elif aw_settings["in_game_tracker"] == tracker_enum.checked_only and self.logic_tracker.check_logic_status[name] != CheckStatus.checked.value:
+                continue
+
+            if name == lname.bunny_uv.value:
+                pos = struct.unpack("<ff", self.process_handle.read_bytes(self.bean_patcher.application_state_address + 0x754a8 + 0x30ec8, 8))
+                bunny_x = int(pos[0]/8)
+                bunny_y = int(pos[1]/8)
+                self.stamps.append(Stamp(bunny_x, bunny_y, stamp))
+                self.stamps[-1].x += loc.tracker.stamp_x
+                self.stamps[-1].y += loc.tracker.stamp_y
+            # TODO: Dream Bunny is banished to the wake up room pending options to enable bean tracking
+            # elif name == lname.bunny_dream.value:
+            #    if self.logic_tracker.check_logic_status[name] != CheckStatus.in_logic:
+            #        continue
+            #    pos = struct.unpack("<ff", self.process_handle.read_bytes(self.bean_patcher.application_state_address + 0x93670, 8))
+            #    room = struct.unpack("<ii", self.process_handle.read_bytes(self.bean_patcher.application_state_address + 0x93670 + 0x20, 8))
+            #    bean_x = int(pos[0]/8) + int(room[0])*40
+            #    bean_y = int(pos[1]/8) + int(room[1])*22
+            #    self.stamps.append(Stamp(bean_x-3, bean_y-13, stamp))"""
+            elif loc.tracker.tile in self.tiles and len(self.tiles[loc.tracker.tile]) > loc.tracker.index:
+                self.stamps.append(self.tiles[loc.tracker.tile][loc.tracker.index].stamp(stamp))
+                self.stamps[-1].x += loc.tracker.stamp_x
+                self.stamps[-1].y += loc.tracker.stamp_y
+            else:
+                self.stamps.append(Stamp(loc.tracker.stamp_x, loc.tracker.stamp_y, stamp))
+
+        self.bean_patcher.tracker_total = len(self.server_locations)
+        self.bean_patcher.tracker_checked = len(self.checked_locations)
+        self.bean_patcher.tracker_missing = len(self.missing_locations)
+        # self.bean_patcher.tracker_in_logic = countOf(self.logic_tracker.check_logic_status.values(), CheckStatus.in_logic.value)
+        self.bean_patcher.tracker_in_logic = len({k: v for (k, v) in self.logic_tracker.check_logic_status.items()
+                                                  if v == CheckStatus.in_logic
+                                                  and k in location_name_to_id
+                                                  and location_name_to_id[k] in self.missing_locations})
+        if self.slot_data.get("candle_checks", None):
+            self.bean_patcher.tracker_candles = len({k: v for (k, v) in self.logic_tracker.check_logic_status.items()
+                                                     if "Candle" in k and "Event" not in k and v == CheckStatus.checked})
+        else:
+            self.bean_patcher.tracker_candles = len({k: v for (k, v) in self.logic_tracker.check_logic_status.items()
+                                                     if "Candle" in k and "Event" in k and v == CheckStatus.checked})
+        self.bean_patcher.update_tracker_text()
 
     def check_if_in_game(self) -> bool:
         """
@@ -380,6 +662,8 @@ class AWLocations:
                 self.byte_sect_dict: Dict[int, int] = {
                     ByteSect.items.value:
                         int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x120, 16), byteorder="little"),
+                    ByteSect.flames.value:
+                        int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x21e, 16), byteorder="little"),
                     ByteSect.bunnies.value:
                         int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x198, 4), byteorder="little"),
                     ByteSect.candles.value:
@@ -394,6 +678,10 @@ class AWLocations:
                     if loc_data.byte_section == ByteSect.flames:
                         self.loc_statuses[loc_name] = (
                                 ctx.process_handle.read_bytes(slot_address + loc_data.byte_offset, 1)[0] >= 4)
+                        if self.loc_statuses[loc_name]:
+                            ctx.logic_tracker.check_logic_status[loc_name] = CheckStatus.checked.value
+                            ctx.logic_tracker.full_inventory.add(loc_name)
+                            ctx.logic_tracker.out_of_logic_full_inventory.add(loc_name)
                         continue
 
                     self.loc_statuses[loc_name] = (
@@ -403,27 +691,12 @@ class AWLocations:
                     ctx.bean_patcher.read_from_game()
             else:
                 raise NotImplementedError("Only Windows is implemented right now")
-        except pymem.exception.ProcessError as e:
+        except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, ConnectionResetError) as e:
             logger.error("%s", e)
             ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
             logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except pymem.exception.MemoryReadError as e:
-            logger.error("%s", e)
-            ctx.connection_status = CONNECTION_RESET_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except ConnectionResetError as e:
-            logger.error("%s", e)
-            ctx.connection_status = CONNECTION_RESET_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except NotImplementedError as e:
-            logger.fatal("%s", e)
-            ctx.connection_status = CONNECTION_ABORTED_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except Exception as e:
+        except (NotImplementedError, Exception) as e:
             logger.fatal("An unknown error has occurred: %s", e)
             ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
@@ -438,8 +711,9 @@ class AWLocations:
                 if status:
                     ctx.locations_checked.add(location_name_to_id[loc_name])
                     if location_table[loc_name].byte_section == ByteSect.candles:
-                        ctx.logic_tracker.full_inventory.add(loc_name)
-                        ctx.logic_tracker.out_of_logic_full_inventory.add(loc_name)
+                        ctx.logic_tracker.check_logic_status[loc_name + " Event"] = CheckStatus.checked.value
+                        ctx.logic_tracker.full_inventory.add(candle_event_to_item[loc_name + " Event"])
+                        ctx.logic_tracker.out_of_logic_full_inventory.add(candle_event_to_item[loc_name + " Event"])
 
             if ctx.slot_data.get("goal", None) == Goal.option_fireworks:
                 if not ctx.finished_game and self.loc_statuses[lname.key_house]:
@@ -690,7 +964,7 @@ class AWItems:
             self.egg_crystal = item_name_to_id[iname.egg_crystal.value] in items
             self.egg_golden = item_name_to_id[iname.egg_golden.value] in items
 
-            # todo: fix this
+            # todo: make this less terrible
             if "goal" in ctx.slot_data and ctx.slot_data["goal"] == Goal.option_egg_hunt:
                 if (not ctx.finished_game and
                         self.egg_reference and self.egg_brown and self.egg_raw and self.egg_pickled and
@@ -708,7 +982,7 @@ class AWItems:
                         self.egg_ice and self.egg_fire and self.egg_bubble and self.egg_desert and
                         self.egg_clover and self.egg_brick and self.egg_neon and self.egg_iridescent and
                         self.egg_rust and self.egg_scarlet and self.egg_sapphire and self.egg_ruby and
-                        self.egg_jade and self.egg_obsidian and self.egg_crystal and self.egg_golden):
+                        self.egg_jade and self.egg_obsidian and self.egg_crystal and self.egg_golden and self.egg_65):
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.finished_game = True
 
@@ -730,6 +1004,9 @@ class AWItems:
             if platform.uname()[0] == "Windows":
                 if not ctx.check_if_in_game():
                     return
+
+                aw_settings = get_settings().animal_well_settings
+                tracker_enum = AWSettings.TrackerSetting
 
                 active_slot = ctx.get_active_game_slot()
                 slot_address = ctx.start_address + HEADER_LENGTH + (SAVE_SLOT_LENGTH * active_slot)
@@ -757,7 +1034,7 @@ class AWItems:
                         (str(flags >> 7 & 1)) +  # Unknown
                         (str(flags >> 8 & 1)) +  # Switch State
                         "1" +  # Map Collected
-                        "1" +  # Stamps Collected
+                        ("1" if aw_settings["in_game_tracker"] == tracker_enum.no_tracker else "0") +  # Stamps Collected
                         "1" +  # Pencil Collected
                         (str(flags >> 12 & 1)) +  # Chameleon Defeated
                         (str(flags >> 13 & 1)) +  # C Ring Collected
@@ -862,7 +1139,8 @@ class AWItems:
 
                 # Write Keys
                 if self.key_ring:
-                    buffer = bytes([1])
+                    # always show real amount of key doors left unopened for a quick way to check how many you have left
+                    buffer = bytes([max(0, 6 - keys_used)])
                 else:
                     buffer = bytes([max(0, self.key - keys_used)])
                 ctx.process_handle.write_bytes(slot_address + 0x1B1, buffer, 1)
@@ -882,7 +1160,8 @@ class AWItems:
 
                 # Write Matches
                 if self.matchbox:
-                    buffer = bytes([1])
+                    # always show real amount of candles left unlit for a quick way to check how many you have left
+                    buffer = bytes([max(0, 9 - candles_lit)])
                 else:
                     buffer = bytes([max(0, self.match - candles_lit)])
                 ctx.process_handle.write_bytes(slot_address + 0x1B2, buffer, 1)
@@ -911,6 +1190,12 @@ class AWItems:
                         (str(flags >> 15 & 1)))[::-1]  # Pad
                 buffer = int(bits, 2).to_bytes((len(bits) + 7) // 8, byteorder="little")
                 ctx.process_handle.write_bytes(slot_address + 0x1DC, buffer, 2)
+
+                # select firecrackers if firecrackers is unlocked and no other equipment is selected,
+                # since picking up other equipment before firecrackers doesn't set the selected equipment,
+                # and firecrackers is given by default anyway
+                if ctx.process_handle.read_bytes(slot_address + 0x1EA, 1)[0] == 0 and self.firecrackers:
+                    ctx.process_handle.write_bytes(slot_address + 0x1EA, b"\x01", 1)
 
                 # Read Other Items
                 flags = int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x1DE, 1), byteorder="little")
@@ -968,9 +1253,9 @@ class AWItems:
                 else:
                     # Berries
                     # null checking since it caused issues before
-                    if not self.big_blue_fruit:
+                    if self.big_blue_fruit is None:
                         self.big_blue_fruit = 0
-                    if not ctx.used_berries:
+                    if ctx.used_berries is None:
                         ctx.used_berries = 0
 
                     # sometimes used_berries ends up bigger than big_blue_fruit, same with firecrackers
@@ -995,9 +1280,9 @@ class AWItems:
 
                     # Firecrackers
                     # null checking since it caused issues before
-                    if not self.firecracker_refill:
+                    if self.firecracker_refill is None:
                         self.firecracker_refill = 0
-                    if not ctx.used_firecrackers:
+                    if ctx.used_firecrackers is None:
                         ctx.used_firecrackers = 0
 
                     firecrackers_to_use = max(self.firecracker_refill - ctx.used_firecrackers, 0)
@@ -1025,36 +1310,25 @@ class AWItems:
                 ctx.process_handle.write_bytes(slot_address + 0x1E4, buffer, 2)
 
                 if ctx.bean_patcher is not None:
+                    # set in-game tracker map stamps to check locations
+                    if (aw_settings["in_game_tracker"] > tracker_enum.no_tracker
+                            and ctx.bean_patcher.stamps_address is not None):
+                        ctx.get_stamps_for_locations(ctx)
+                        buffer = len(ctx.stamps).to_bytes(1, byteorder="little")
+                        ctx.process_handle.write_bytes(slot_address + 0x225, buffer, 1)
+                        for idx, stamp in enumerate(ctx.stamps):
+                            ctx.process_handle.write_bytes(ctx.bean_patcher.stamps_address + idx*6, stamp.data(), 6)
                     ctx.bean_patcher.write_to_game()
             else:
                 raise NotImplementedError("Only Windows is implemented right now")
-        except pymem.exception.ProcessError as e:
+        except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, pymem.exception.MemoryWriteError,
+                ConnectionResetError) as e:
             logger.error("%s", e)
             ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
             logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except pymem.exception.MemoryReadError as e:
-            logger.error("%s", e)
-            ctx.connection_status = CONNECTION_RESET_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except pymem.exception.MemoryWriteError as e:
-            logger.error("%s", e)
-            ctx.connection_status = CONNECTION_RESET_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except ConnectionResetError as e:
-            logger.error("%s", e)
-            ctx.connection_status = CONNECTION_RESET_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except NotImplementedError as e:
+        except (NotImplementedError, Exception) as e:
             logger.fatal("%s", e)
-            ctx.connection_status = CONNECTION_ABORTED_STATUS
-            traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-        except Exception as e:
-            logger.fatal("An unknown error has occurred: %s", e)
             ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
             logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
@@ -1140,41 +1414,24 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
 
             ctx.bean_patcher.apply_patches()
 
+            host = get_settings()
+            tracker_enum = AWSettings.TrackerSetting
+            if host.animal_well_settings["in_game_tracker"] > tracker_enum.no_tracker:
+                ctx.bean_patcher.apply_tracker_patches()
+            else:
+                ctx.bean_patcher.revert_tracker_patches()
+
             ctx.display_dialog("Connected to client!", "")
         else:
             raise NotImplementedError("Only Windows is implemented right now")
-    except pymem.exception.ProcessNotFound as e:
+    except (pymem.exception.ProcessNotFound, pymem.exception.CouldNotOpenProcess, pymem.exception.ProcessError,
+            pymem.exception.MemoryReadError) as e:
         logger.error("%s", e)
         ctx.connection_status = CONNECTION_REFUSED_STATUS
         traceback.print_exc()
         logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-    except pymem.exception.CouldNotOpenProcess as e:
-        logger.error("%s", e)
-        ctx.connection_status = CONNECTION_REFUSED_STATUS
-        traceback.print_exc()
-        logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-    except pymem.exception.ProcessError as e:
-        logger.error("%s", e)
-        ctx.connection_status = CONNECTION_REFUSED_STATUS
-        traceback.print_exc()
-        logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-    except pymem.exception.MemoryReadError as e:
-        logger.error("%s", e)
-        ctx.connection_status = CONNECTION_REFUSED_STATUS
-        traceback.print_exc()
-        logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-    except FileNotFoundError as e:
+    except (FileNotFoundError, NotImplementedError, Exception) as e:
         logger.fatal("%s", e)
-        ctx.connection_status = CONNECTION_ABORTED_STATUS
-        traceback.print_exc()
-        logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-    except NotImplementedError as e:
-        logger.fatal("%s", e)
-        ctx.connection_status = CONNECTION_ABORTED_STATUS
-        traceback.print_exc()
-        logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
-    except Exception as e:
-        logger.fatal("An unknown error has occurred: %s", e)
         ctx.connection_status = CONNECTION_ABORTED_STATUS
         traceback.print_exc()
         logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
@@ -1207,7 +1464,8 @@ async def process_sync_task(ctx: AnimalWellContext):
             ctx.connection_status = CONNECTION_TENTATIVE_STATUS
             logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
-        elif ctx.process_handle and ctx.start_address and ctx.get_animal_well_process_handle_task.done():
+        elif (ctx.process_handle and ctx.start_address and ctx.get_animal_well_process_handle_task.done()
+              and ctx.bean_patcher.save_file and ctx.current_game_state != 1):
             if ctx.connection_status == CONNECTION_TENTATIVE_STATUS:
                 logger.info("Successfully Connected to Animal Well")
                 ctx.connection_status = CONNECTION_CONNECTED_STATUS
@@ -1219,9 +1477,21 @@ async def process_sync_task(ctx: AnimalWellContext):
             items.write_to_game(ctx)
 
             if ctx.bean_patcher is not None and ctx.bean_patcher.attached_to_process:
-                ctx.bean_patcher.tick()
+                await ctx.bean_patcher.tick()
 
         await asyncio.sleep(0.1)
+
+
+async def console_task(ctx: AnimalWellContext):
+    while not ctx.exit_event.is_set():
+        if ctx.bean_patcher is not None and ctx.bean_patcher.attached_to_process:
+            ctx.bean_patcher.run_cmd_prompt()
+            if cmd := ctx.bean_patcher.get_cmd():
+                if cmd[0] == '/':
+                    ctx.command_processor(ctx)(cmd)
+                else:
+                    ctx.command_processor(ctx).default(cmd)
+        await asyncio.sleep(1/120)
 
 
 def launch():
@@ -1248,6 +1518,7 @@ def launch():
         ctx.run_cli()
 
         ctx.process_sync_task = asyncio.create_task(process_sync_task(ctx), name="Animal Well Process Sync")
+        ctx.console_task = asyncio.create_task(console_task(ctx), name="Animal Well Console")
 
         await ctx.exit_event.wait()
         ctx.server_address = None
@@ -1256,12 +1527,21 @@ def launch():
         if ctx.bean_patcher is not None and len(ctx.bean_patcher.revertable_patches) > 0:
             ctx.bean_patcher.revert_patches()
 
+        if ctx.bean_patcher is not None and len(ctx.bean_patcher.revertable_tracker_patches) > 0:
+            ctx.bean_patcher.revert_tracker_patches()
+
+        if ctx.bean_patcher is not None:
+            ctx.bean_patcher.revert_seeded_save_patch()
+
         if ctx.process_sync_task:
             ctx.process_sync_task.cancel()
             ctx.process_sync_task = None
         if ctx.get_animal_well_process_handle_task:
             ctx.get_animal_well_process_handle_task.cancel()
             ctx.get_animal_well_process_handle_task = None
+        if ctx.console_task:
+            ctx.console_task.cancel()
+            ctx.console_task = None
 
     Utils.init_logging("AnimalWellClient")
 
