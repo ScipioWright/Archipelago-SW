@@ -180,11 +180,11 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_mystic:  # avoid the fireball thrower, hit some buttons
             AWData(AWType.location),
         lname.egg_great:  # east end of the crane room
-            AWData(AWType.location, [[iname.bubble], [iname.disc_hop], [iname.wheel_hop]]),
+            AWData(AWType.location, [[iname.bubble], [iname.disc_hop], [iname.wheel_hop], [iname.water_bounce, iname.yoyo], [iname.water_bounce, iname.ball]]),
         lname.egg_normal:  # hidden wall in lower left of first bubble room
             AWData(AWType.location),
         lname.egg_dazzle:  # little obstacle course, feels like the bubble jump tutorial?
-            AWData(AWType.location, [[iname.bubble], [iname.disc, iname.wheel], [iname.disc_hop_hard]]),
+            AWData(AWType.location, [[iname.bubble], [iname.disc, iname.wheel], [iname.disc_hop_hard], [iname.wheel_hard]]),
         rname.fish_tube_room:  # enter at the save room fish pipe, the rooms with all the fish pipes
             AWData(AWType.region, [[iname.bubble]]),
         lname.egg_sunset:  # break the spikes in the room to the right of the fish warp
@@ -209,8 +209,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, [[iname.bubble_short], [iname.disc_hop_hard], 
                                      [iname.wheel_hard], [iname.bubble, iname.disc]]),
         rname.fish_lower:  # bubble to go down, activate switches, breakspike to pass icicles in first penguin room
-            AWData(AWType.region, [[iname.bubble, iname.remote, iname.can_break_spikes],
-                                   [iname.remote, iname.wheel_hard], [iname.disc, iname.wheel_hard, iname.precise_tricks],  # throwing disc to hit switch while wheel stalling is very tight
+            AWData(AWType.region, [[iname.bubble, iname.remote, iname.can_break_spikes], [iname.bubble, iname.remote, iname.tanking_damage]
+                                   [iname.remote, iname.wheel_hop], [iname.disc, iname.wheel_hop, iname.precise_tricks],  # throwing disc to hit switch while wheel stalling is very tight
                                    [iname.bubble, iname.disc]]),
         lname.activate_fish_fast_travel:  # vertical implied by access
             AWData(AWType.location, [[iname.flute]], event=iname.activated_fish_fast_travel),
@@ -381,7 +381,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_ladder_after_chameleon:
             AWData(AWType.region),  # just press a button
         rname.bear_middle_phone_room:
-            AWData(AWType.region, [[iname.slink]]),
+            AWData(AWType.region, [[iname.slink], [iname.ball_trick_easy]]),
         lname.egg_post_modern:
             AWData(AWType.location, [[iname.top, iname.switch_for_post_modern_egg]]),
         rname.bear_truth_egg_spot:  # throw disc to the right after jumping down the waterfall
@@ -633,7 +633,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_middle_phone_room:
             AWData(AWType.region),  # activate dynamite
         lname.egg_plant:
-            AWData(AWType.location, [[iname.disc, iname.slink]]),
+            AWData(AWType.location, [[iname.disc, iname.slink], [iname.bubble_short, iname.obscure_tricks]]),
         rname.kangaroo_blocks:
             AWData(AWType.region, [[iname.ball]]),
     },
@@ -836,8 +836,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.region, [[iname.key_ring]]),
     },
     rname.frog_dark_room: {
-        rname.frog_bird_after_yoyo_2:  # jump up at the rust egg with lantern, or use yoyo to open the door
-            AWData(AWType.region, [[iname.lantern], [iname.yoyo]]),
+        rname.frog_bird_after_yoyo_2:  # jump up at the rust egg with lantern, or use yoyo to open the door, or cheek past the bird with well timed bubble jumps
+            AWData(AWType.region, [[iname.lantern], [iname.yoyo], [iname.bubble_short, iname.precise_tricks]]),
         lname.egg_rust:  # top left of the dark room
             AWData(AWType.location),
         lname.egg_jade:  # do the puzzle
@@ -845,7 +845,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bird_capybara_waterfall:  # fish pipe to the sweet egg room
             AWData(AWType.region, [[iname.bubble]]),
         rname.frog_ruby_egg_ledge:
-            AWData(AWType.region, [[iname.bubble_short], [iname.disc], [iname.top, iname.flute]]),
+            AWData(AWType.region, [[iname.bubble_short], [iname.disc], [iname.top, iname.flute], [iname.top, iname.firecrackers]]),
         rname.frog_elevator_and_ostrich_wheel:  # you need these two items to avoid locking checks
             AWData(AWType.region, [[iname.yoyo, iname.bubble]]),
         rname.fast_travel:
@@ -866,7 +866,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location),  # you need yoyo and bubble to get to this check logically
             # if you have yoyo, you can swap the mouse direction and lock yourself out of the check without bubbles
         lname.egg_obsidian:  # bounce disc between the moving walls, or do some cursed bubble jumps
-            AWData(AWType.location, [[iname.disc], [iname.bubble_short, iname.precise_tricks]]),
+            AWData(AWType.location, [[iname.disc], [iname.bubble_short, iname.precise_tricks], [iname.water_bounce, iname.yoyo], [iname.water_bounce, iname.ball]]),
         lname.egg_golden:  # simultaneous buttons. Need an item to hold it down. I don't think top is unintuitive enough to warrant obscure, but disc definitely is.
             AWData(AWType.location, [[iname.wheel, iname.slink], [iname.wheel, iname.top], [iname.wheel, iname.disc, iname.obscure_tricks]]),
         lname.flame_green:
