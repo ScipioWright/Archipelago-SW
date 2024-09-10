@@ -11,7 +11,7 @@ from .items import item_name_to_id, item_table, item_name_groups, filler_items, 
 from .locations import location_name_groups, location_name_to_id
 from .region_data import AWData, traversal_requirements
 from .region_scripts import create_regions_and_set_rules
-from .options import AnimalWellOptions, aw_option_presets, Goal, FinalEggLocation, aw_option_groups
+from .options import AnimalWellOptions, aw_option_presets, Goal, FinalEggLocation, aw_option_groups, Firecrackers
 from .names import ItemNames, LocationNames, RegionNames
 # todo: remove animal_well_map.pdn
 
@@ -154,6 +154,10 @@ class AnimalWellWorld(World):
             items_to_create[ItemNames.uv.value] = 0
             aw_items.append(self.create_item_alt(ItemNames.uv.value, ItemClassification.useful))
 
+        if self.options.firecracker_refills == Firecrackers.option_infinite:
+            items_to_create[ItemNames.fanny_pack.value] = 0
+            self.multiworld.push_precollected(self.create_item(ItemNames.fanny_pack.value))
+
         for item_name, quantity in items_to_create.items():
             for _ in range(quantity):
                 aw_item: AWItem = self.create_item(item_name)
@@ -167,7 +171,10 @@ class AnimalWellWorld(World):
         self.multiworld.itempool += aw_items
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(filler_items)
+        filler = filler_items.copy()
+        if self.options.firecracker_refills == Firecrackers.option_infinite:
+            filler.remove("Firecracker Refill")
+        return self.random.choice(filler)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.options.as_dict(
@@ -183,5 +190,6 @@ class AnimalWellWorld(World):
             "wheel_tricks",
             "weird_tricks",
             "exclude_song_chests",
+            "firecracker_refills",
             "death_link",
         )

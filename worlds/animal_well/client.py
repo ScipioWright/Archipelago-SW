@@ -22,7 +22,7 @@ from . import AWSettings
 from .items import item_name_to_id, item_name_groups
 from .locations import location_name_to_id, location_table, events_table, ByteSect
 from .names import ItemNames as iname, LocationNames as lname
-from .options import FinalEggLocation, Goal
+from .options import FinalEggLocation, Goal, Firecrackers
 from .bean_patcher import BeanPatcher
 from .logic_tracker import AnimalWellTracker, CheckStatus, candle_event_to_item
 
@@ -853,6 +853,9 @@ class AWItems:
         self.firecracker_refill = 0
         self.big_blue_fruit = 0
 
+        # for refreshing firecrackers in infinite mode
+        self.firecracker_timer = 0
+
     async def read_from_archipelago(self, ctx):
         """
         Read inventory state from archipelago
@@ -1285,8 +1288,12 @@ class AWItems:
                         self.firecracker_refill = 0
                     if ctx.used_firecrackers is None:
                         ctx.used_firecrackers = 0
-
+                    self.firecracker_timer += 1
                     firecrackers_to_use = max(self.firecracker_refill - ctx.used_firecrackers, 0)
+                    if self.firecracker_timer >= 100:
+                        self.firecracker_timer = 0
+                        if ctx.slot_data.get("firecracker_refills", 0) == Firecrackers.option_infinite:
+                            firecrackers_to_use = 1
                     total_firecrackers = int.from_bytes(ctx.process_handle.read_bytes(slot_address + 0x1B3, 1),
                                                         byteorder="little")
                     # multiply firecrackers to use by 6 so that it always fills up your inventory
