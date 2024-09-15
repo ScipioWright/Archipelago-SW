@@ -76,7 +76,7 @@ class AnimalWellWorld(World):
     """
     game = "ANIMAL WELL"
     web = AnimalWellWeb()
-    version_string: str = "v0.4.2 - dev"
+    version_string: str = "v0.4.3 - dev"
 
     options: AnimalWellOptions
     options_dataclass = AnimalWellOptions
@@ -182,14 +182,21 @@ class AnimalWellWorld(World):
             "eggs_needed",
             "key_ring",
             "matchbox",
+
+            "candle_checks",
             "bunnies_as_checks",
             "bunny_warps_in_logic",
-            "candle_checks",
+            "exclude_song_chests",
+            "firecracker_refills",
+
             "bubble_jumping",
             "disc_hopping",
             "wheel_tricks",
-            "weird_tricks",
-            "exclude_song_chests",
-            "firecracker_refills",
+
+            "ball_throwing",
+            "obscure_tricks",
+            "precise_tricks",
+            "tanking_damage",
+
             "death_link",
         )

@@ -37,3 +37,9 @@ Yes! To find what they are, type `/item_groups` or `/location_groups` into the A
 ## What are the current known issues?
 The client rarely fails for no discernable reason when opening a chest. We do not know why yet. If it fails, please let us know in the discord and send us your log file (in your `Archipelago/logs` folder). We may ask you to troubleshoot a few things as well.
 Some yaml options are missing. This is intentional. They don't work yet.
+
+## Who contributed to this?
+ScipioWright and RoobyRoo wrote a majority of the logic and apworld.
+Franklesby wrote the client. Dicene and Dregu contributed major features to the client.
+Various others helped with some bug fixes and minor additions.
+Special thanks to SporyTike for making the poptracker, GameWyrm for their help early on, and Kevin for convincing Scipio to get the game.
