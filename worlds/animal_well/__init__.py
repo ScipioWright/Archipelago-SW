@@ -33,20 +33,21 @@ class AWSettings(Group):
     in_game_tracker: TrackerSetting = TrackerSetting.full_tracker
 
 
-def launch_client():
+def launch_client(*args):
     """
     Launch the Animal Well Client
     """
     from .client import launch
     from CommonClient import gui_enabled
     if gui_enabled:
-        launch_subprocess(launch, name="AnimalWellClient")
+        launch_subprocess(launch, name="AnimalWellClient", args=args)
     else:
-        launch()
+        launch(args)
 
 
 components.append(Component("ANIMAL WELL Client", func=launch_client,
-                            component_type=Type.CLIENT, icon="Potate"))
+                            component_type=Type.CLIENT, icon="Potate",
+                            supports_uri=True, game_name="ANIMAL WELL"))
 
 icon_paths["Potate"] = f"ap:{__name__}/Potate.png"
 

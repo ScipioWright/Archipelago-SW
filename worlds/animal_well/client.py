@@ -1497,21 +1497,31 @@ async def console_task(ctx: AnimalWellContext):
         await asyncio.sleep(1/120)
 
 
-def launch():
+def launch(args):
     """
     Launch the client
     """
 
-    async def main():
+    async def main(*args):
         """
         main function
         """
-        import sys
-        args = sys.argv[1:]
-        if "ANIMAL WELL Client" in args:
-            args.remove("ANIMAL WELL Client")
+        import urllib
         parser = get_base_parser()
+        parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
         args = parser.parse_args(args)
+
+        # handle if text client is launched using the "archipelago://name:pass@host:port" url from webhost
+        if args.url:
+            url = urllib.parse.urlparse(args.url)
+            if url.scheme == "archipelago":
+                args.connect = url.netloc
+                if url.username:
+                    args.name = urllib.parse.unquote(url.username)
+                if url.password:
+                    args.password = urllib.parse.unquote(url.password)
+            else:
+                parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
 
         ctx = AnimalWellContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
@@ -1550,5 +1560,5 @@ def launch():
 
     import colorama
     colorama.init()
-    asyncio.run(main())
+    asyncio.run(main(args))
     colorama.deinit()
