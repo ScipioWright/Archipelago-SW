@@ -256,6 +256,12 @@ class TunicWorld(World):
         return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
+        barbuta_region_string = ""
+        for letter in ["A", "B", "C", "D", "E", "F", "G", "H"]:
+            for number in range(1, 9):
+                barbuta_region_string += f"\"{letter}{number}\": RegionInfo(),\n"
+        print(barbuta_region_string)
+
         tunic_items: List[TunicItem] = []
         self.slot_data_items = []
 
