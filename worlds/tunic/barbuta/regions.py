@@ -24,6 +24,10 @@ barbuta_region_info: Dict[str, RegionInfo] = {
     "Bat Altar": RegionInfo(),  # the altar at D1 and the room next to it at D2
     "Above Entrance": RegionInfo(),  # in the sign
     "Wand Trade Room": RegionInfo(),  # where you trade your sword for a wand
+    "G7 and Nearby": RegionInfo(),  # down where the shield guys are, need pin to get to wand
+    "Mimic Room": RegionInfo(),  # H1, where the mimic is
+    "Boss Area": RegionInfo(),  # B6, point of no return unless you paid $500 to break a wall
+    "C7 above Ladders": RegionInfo(), # C7, up by the little guy who breaks the wall
 }
 
 
