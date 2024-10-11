@@ -13,13 +13,17 @@ class RegionInfo(NamedTuple):
 
 
 # keys are region names, values are the region object
+# for room names, the letter is the row (top to bottom), the number is the column (left to right)
 barbuta_region_info: Dict[str, RegionInfo] = {
     "Starting Area": RegionInfo(),
     "Key Room": RegionInfo(),  # the room with the key, where you can access the key
     "Platforms above D4": RegionInfo(),  # the "first" moving platforms
-    "Blood Sword Room": RegionInfo(),  # probably unnecessary unless we randomize switches
+    "Blood Sword Room": RegionInfo(),  # E3, probably unnecessary unless we randomize switches
     "G3 and Nearby": RegionInfo(),  # idk what to call this, it's up the poison ladder and right of some balls
     "F7 and Nearby": RegionInfo(),  # lots of purple blocks here
+    "Bat Altar": RegionInfo(),  # the altar at D1 and the room next to it at D2
+    "Above Entrance": RegionInfo(),  # in the sign
+    "Wand Trade Room": RegionInfo(),  # where you trade your sword for a wand
 }
 
 

@@ -15,3 +15,8 @@ def create_barbuta_rules(world: "TunicWorld", regions: Dict[str, Region]) -> Non
                                      rule=lambda state: state.has_any(("Pin", "Umbrella"), player))
     regions["Starting Area"].connect(regions["F7 and Nearby"],
                                      rule=lambda state: state.has("Pin", player)),
+
+    regions["Platforms above D4"].connect(regions["Bat Altar"])  # drop down off the left side
+    regions["Platforms above D4"].connect(regions["Above Entrance"])  # drop down off right side, need to break blocks
+
+    regions["Above Entrance"].connect(regions["Wand Trade Room"])  # walk through the fake wall after using the door
