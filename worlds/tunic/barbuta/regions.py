@@ -1,10 +1,11 @@
 from typing import Dict, NamedTuple, TYPE_CHECKING
 from BaseClasses import Region
 
+from .locations import create_barbuta_locations
 from .rules import create_barbuta_rules
 
 if TYPE_CHECKING:
-    from .. import TunicWorld
+    from .. import TunicWorld as UFO50World
 
 
 # not sure if we really need this yet, but making it in case we need it later since it's easy to remove
@@ -27,12 +28,17 @@ barbuta_region_info: Dict[str, RegionInfo] = {
     "G7 and Nearby": RegionInfo(),  # down where the shield guys are, need pin to get to wand
     "Mimic Room": RegionInfo(),  # H1, where the mimic is
     "Boss Area": RegionInfo(),  # B6, point of no return unless you paid $500 to break a wall
-    "C7 above Ladders": RegionInfo(), # C7, up by the little guy who breaks the wall
+    "C7 above Ladders": RegionInfo(),  # C7, up by the little guy who breaks the wall
 }
 
 
-def create_barbuta_regions(world: "TunicWorld") -> None:
+def create_barbuta_regions_and_rules(world: "UFO50World") -> None:
     barbuta_regions: Dict[str, Region] = {}
     for region_name, region_data in barbuta_region_info.items():
         barbuta_regions[region_name] = Region(f"Barbuta - {region_name}", world.player, world.multiworld)
+
+    create_barbuta_locations(world, barbuta_regions)
     create_barbuta_rules(world, barbuta_regions)
+
+    for region in barbuta_regions.values():
+        world.multiworld.regions.append(region)
