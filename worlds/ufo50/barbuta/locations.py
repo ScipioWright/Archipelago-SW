@@ -23,7 +23,7 @@ barbuta_location_table: Dict[str, LocationInfo] = {
     "Green Skull - A1": LocationInfo(0, "Platforms above D4"),  # $100
     "Egg Shop - B6": LocationInfo(1, "Boss Area"),  # $100 each
     "Upper Shop Candy - C1": LocationInfo(2, "Platforms above D4"),  # costs $100
-    "Upper Shop Umbrella - C1": LocationInfo(3, "Platforms above D4"),  # idk the price, probably $100
+    "Upper Shop Umbrella - C1": LocationInfo(3, "Platforms above D4"),  # costs $50
     "Chest - C2": LocationInfo(4, "Platforms above D4"),  # Pin chest
     "Bat Altar - D1": LocationInfo(5, "Bat Altar"),  # bat noises
     "Coin - D4": LocationInfo(6, "Starting Area"),  # $50, breakable block

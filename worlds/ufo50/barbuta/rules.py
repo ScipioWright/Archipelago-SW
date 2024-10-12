@@ -25,7 +25,7 @@ key = "Barbuta - Key"
 blood_sword = "Barbuta - Blood Sword"
 broken_wall = "Barbuta - A Broken Wall"
 wand = "Barbuta - Wand"
-bat_soul = "Barbuta - Bat Soul"
+bat_orb = "Barbuta - Bat Orb"
 
 
 def create_barbuta_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
@@ -69,7 +69,7 @@ def create_barbuta_rules(world: "UFO50World", regions: Dict[str, Region]) -> Non
     set_rule(world.get_location("Barbuta - Upper Shop Candy - C1"),
              rule=lambda state: has_money(100, state, player))
     set_rule(world.get_location("Barbuta - Upper Shop Umbrella - C1"),
-             rule=lambda state: has_money(100, state, player))  # todo: verify price
+             rule=lambda state: has_money(50, state, player))
     set_rule(world.get_location("Barbuta - Lower Shop Umbrella - F2"),
              rule=lambda state: has_money(100, state, player))
     set_rule(world.get_location("Barbuta - Lower Shop Trash - F2"),
@@ -78,9 +78,7 @@ def create_barbuta_rules(world: "UFO50World", regions: Dict[str, Region]) -> Non
              rule=lambda state: has_money(200, state, player))
     set_rule(world.get_location("Barbuta - Little Guy Breaks a Wall"),
              rule=lambda state: has_money(500, state, player))
-    set_rule(world.get_location("Barbuta - Bat Altar"),  # todo: should we do the wand version too?
-             rule=lambda state: state.has(blood_sword, player))
 
     # todo: finalize this
     set_rule(world.get_location("Barbuta - Beat the Boss"),
-             rule=lambda state: state.has_any((blood_sword, wand, bat_soul), player))
+             rule=lambda state: state.has_any((blood_sword, wand, bat_orb), player))
