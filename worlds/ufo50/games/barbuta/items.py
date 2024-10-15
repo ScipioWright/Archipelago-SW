@@ -1,13 +1,9 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, List
-from BaseClasses import Item, ItemClassification as IC
-from .locations import barbuta_base_id
+from BaseClasses import ItemClassification as IC
+from ..game_manager import UFO50Item
 
 if TYPE_CHECKING:
-    from .. import UFO50World
-
-
-class BarbutaItem(Item):
-    game: str = "UFO 50"
+    from ... import UFO50World
 
 
 class ItemInfo(NamedTuple):
@@ -16,7 +12,7 @@ class ItemInfo(NamedTuple):
     quantity: int
 
 
-barbuta_item_table: Dict[str, ItemInfo] = {
+item_table: Dict[str, ItemInfo] = {
     "$50": ItemInfo(0, IC.progression, 5),
     "$100": ItemInfo(1, IC.progression, 5),
     "Umbrella": ItemInfo(2, IC.progression, 1),
@@ -33,14 +29,22 @@ barbuta_item_table: Dict[str, ItemInfo] = {
 }
 
 
-def create_barbuta_item(item_name: str, world: "UFO50World") -> BarbutaItem:
-    item_data = barbuta_item_table[item_name]
-    return BarbutaItem(item_name, item_data.classification, item_data.id_offset + barbuta_base_id, world.player)
+def get_items(base_id: int) -> Dict[str, int]:
+    return {name: data.id_offset + base_id for name, data in item_table.items()}
 
 
-def create_barbuta_items(world: "UFO50World") -> List[BarbutaItem]:
-    items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in barbuta_item_table.items()}
-    barbuta_items: List[BarbutaItem] = []
+def create_item(item_name: str, world: "UFO50World", base_id: int) -> UFO50Item:
+    item_data = item_table[item_name]
+    return UFO50Item(item_name, item_data.classification, item_data.id_offset + base_id, world.player)
+
+
+def create_items(world: "UFO50World", base_id: int) -> List[UFO50Item]:
+    items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in item_table.items()}
+    barbuta_items: List[UFO50Item] = []
     for item_name, quantity in items_to_create.items():
-        barbuta_items.append(create_barbuta_item(item_name, world))
+        barbuta_items.append(create_item(item_name, world, base_id))
     return barbuta_items
+
+
+def get_filler_item_name() -> str:
+    return "Egg"

@@ -3,7 +3,7 @@ from BaseClasses import Region, CollectionState
 from worlds.generic.Rules import set_rule
 
 if TYPE_CHECKING:
-    from .. import UFO50World
+    from ... import UFO50World
 
 
 # count the value of the money items
@@ -28,7 +28,7 @@ wand = "Barbuta - Wand"
 bat_orb = "Barbuta - Bat Orb"
 
 
-def create_barbuta_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
+def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
     regions["Starting Area"].connect(regions["Key Room"])
     regions["Starting Area"].connect(regions["Platforms above D4"],

@@ -1,11 +1,11 @@
 from typing import Dict, NamedTuple, TYPE_CHECKING
 from BaseClasses import Region
 
-from .locations import create_barbuta_locations
-from .rules import create_barbuta_rules
+from .locations import create_locations
+from .rules import create_rules
 
 if TYPE_CHECKING:
-    from .. import UFO50World
+    from ... import UFO50World
 
 
 # not sure if we really need this yet, but making it in case we need it later since it's easy to remove
@@ -15,7 +15,7 @@ class RegionInfo(NamedTuple):
 
 # keys are region names, values are the region object
 # for room names, the letter is the row (top to bottom), the number is the column (left to right)
-barbuta_region_info: Dict[str, RegionInfo] = {
+region_info: Dict[str, RegionInfo] = {
     "Starting Area": RegionInfo(),
     "Key Room": RegionInfo(),  # the room with the key, where you can access the key
     "Platforms above D4": RegionInfo(),  # the "first" moving platforms
@@ -32,13 +32,12 @@ barbuta_region_info: Dict[str, RegionInfo] = {
 }
 
 
-def create_barbuta_regions_and_rules(world: "UFO50World") -> None:
+def create_regions_and_rules(world: "UFO50World", base_id: int) -> Dict[str, Region]:
     barbuta_regions: Dict[str, Region] = {}
-    for region_name, region_data in barbuta_region_info.items():
+    for region_name, region_data in region_info.items():
         barbuta_regions[region_name] = Region(f"Barbuta - {region_name}", world.player, world.multiworld)
 
-    create_barbuta_locations(world, barbuta_regions)
-    create_barbuta_rules(world, barbuta_regions)
+    create_locations(world, barbuta_regions, base_id)
+    create_rules(world, barbuta_regions)
 
-    for region in barbuta_regions.values():
-        world.multiworld.regions.append(region)
+    return barbuta_regions

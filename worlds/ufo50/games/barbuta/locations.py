@@ -1,13 +1,9 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple
-from BaseClasses import Location, Region, ItemClassification
-from .items import BarbutaItem
+from BaseClasses import Region, ItemClassification
+from ..base_game import UFO50Item, UFO50Location
 
 if TYPE_CHECKING:
-    from .. import UFO50World
-
-
-class BarbutaLocation(Location):
-    game: str = "UFO 50"
+    from ... import UFO50World
 
 
 class LocationInfo(NamedTuple):
@@ -15,11 +11,7 @@ class LocationInfo(NamedTuple):
     region_name: str
 
 
-ufo_50_base_id = 21061550_00_000  # reference it from wherever it is when there's an actual world class
-barbuta_base_id = 1_000 + ufo_50_base_id
-
-
-barbuta_location_table: Dict[str, LocationInfo] = {
+location_table: Dict[str, LocationInfo] = {
     "Green Skull - A1": LocationInfo(0, "Platforms above D4"),  # $100
     "Egg Shop - B6": LocationInfo(1, "Boss Area"),  # $100 each
     "Upper Shop Candy - C1": LocationInfo(2, "Platforms above D4"),  # costs $100
@@ -47,12 +39,16 @@ barbuta_location_table: Dict[str, LocationInfo] = {
 }
 
 
-def create_barbuta_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
-    for loc_name, loc_data in barbuta_location_table.items():
-        loc = BarbutaLocation(world.player, f"Barbuta - {loc_name}", barbuta_base_id + loc_data.id_offset,
-                              regions[loc_data.region_name])
+def get_locations(base_id: int) -> Dict[str, int]:
+    return {name: data.id_offset + base_id for name, data in location_table.items()}
+
+
+def create_locations(world: "UFO50World", regions: Dict[str, Region], base_id: int) -> None:
+    for loc_name, loc_data in location_table.items():
+        loc = UFO50Location(world.player, f"Barbuta - {loc_name}", base_id + loc_data.id_offset,
+                            regions[loc_data.region_name])
         regions[loc_data.region_name].locations.add(loc)
-    victory_location = BarbutaLocation(world.player, "Beat the Boss", None, regions["Boss Area"])
-    victory_location.place_locked_item(BarbutaItem("Barbuta - Victory", ItemClassification.progression, None,
-                                                   world.player))
+    victory_location = UFO50Location(world.player, "Beat the Boss", None, regions["Boss Area"])
+    victory_location.place_locked_item(UFO50Item("Barbuta - Victory", ItemClassification.progression, None,
+                                                 world.player))
     regions["Boss Area"].locations.append(victory_location)
