@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple, List
+from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set
 from BaseClasses import Item, ItemClassification as IC
 from .locations import night_manor_base_id
 
@@ -91,8 +91,8 @@ night_manor_item_table: Dict[str, ItemInfo] = {
 
 }
 
-night_manor_item_groups; Dict[Dict[str]] = {
-    "journal_entries": {"Night Manor - Journal Entry 1", 
+night_manor_item_groups; Dict[str, Set[str]] = {
+    "Journal Entries": {"Night Manor - Journal Entry 1", 
                         "Night Manor - Journal Entry 2",
                         "Night Manor - Journal Entry 3",
                         "Night Manor - Journal Entry 4", 
@@ -109,11 +109,11 @@ night_manor_item_groups; Dict[Dict[str]] = {
                         "Night Manor - Journal Entry 15",
                         "Night Manor - Journal Entry 16",
                         "Night Manor - Journal Entry 17"},
-    "gems": {"Night Manor - Red Gemstone",
+    "Gems": {"Night Manor - Red Gemstone",
              "Night Manor - Green Gemstone",
              "Night Manor - Yellow Gemstone",
              "Night Manor - White Gemstone"},
-    "keys": {"Night Manor - Copper Key",
+    "Keys": {"Night Manor - Copper Key",
              "Night Manor - Bronze Key",
              "Night Manor - Gold Key",
              "Night Manor - Steel Key",
