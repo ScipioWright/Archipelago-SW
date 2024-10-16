@@ -16,13 +16,17 @@ class RegionInfo(NamedTuple):
 # keys are region names, values are the region object
 # for room names, the letter is the row (top to bottom), the number is the column (left to right)
 night_manor_region_info: Dict[str, RegionInfo] = {
-    "Manor - Starting Room": RegionInfo(), # the initial room the game starts in
-    "Manor - First Floor": RegionInfo(), # the floor accessible immediately after you exit the starting area
-    "Manor - Second Floor": RegionInfo(),
+    "Starting Room": RegionInfo(), # the initial room the game starts in
+    "First Floor & Exterior": RegionInfo(), # the floor accessible immediately after you exit the starting area
+    "Second Floor": RegionInfo(), # second floor accessible after you get powered flashlight
+    "Shed": RegionInfo(), #shed accessible after you get copper key
+    "Master Bedroom": RegionInfo(), #master bedroom accessible after you get gold key
+    "Maze": RegionInfo(), #maze accessible after you get 4 gems
+    "Basement": RegionInfo() #accessible after you get the iron key
 }
 
 
-def create_night_manor_regions_an_rules(world: "UFO50World") -> None:
+def create_night_manor_regions_and_rules(world: "UFO50World") -> None:
     night_manor_regions: Dict[str, Region] = {}
     for region_name, region_data in night_manor_region_info.items():
         night_manor_regions[region_name] = Region(f"Night Manor - {region_name}", world.player, world.multiworld)
