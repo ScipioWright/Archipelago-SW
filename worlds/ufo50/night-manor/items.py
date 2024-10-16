@@ -22,7 +22,7 @@ night_manor_item_table: Dict[str, ItemInfo] = {
     "Bowl": ItemInfo(1, IC.progression),
     "Yellow Note": ItemInfo(2, IC.filler),
     "Hairpin": ItemInfo(3, IC.progression),
-    "Tweezers": ItemInfo(4, IC.progression)
+    "Tweezers": ItemInfo(4, IC.progression),
     "Journal Entry 2": ItemInfo(5, IC.filler, "journal_entries"),
     "Journal Entry 5": ItemInfo(6, IC.filler, "journal_entries"),
     "Hook": ItemInfo(7, IC.progression),
@@ -37,7 +37,7 @@ night_manor_item_table: Dict[str, ItemInfo] = {
     "Oil Can": ItemInfo(16, IC.progression),
     "Flashlight": ItemInfo(17, IC.progression),
     "Duct Tape": ItemInfo(18, IC.progression),
-    "Journal Entry 8": ItemInfo(19, IC.filler, "journal_entries")
+    "Journal Entry 8": ItemInfo(19, IC.filler, "journal_entries"),
     "Gas Can": ItemInfo(20, IC.progression),
     "Crowbar": ItemInfo(21, IC.progression),
     "Ornamental Egg": ItemInfo(22, IC.progression),
@@ -60,18 +60,18 @@ night_manor_item_table: Dict[str, ItemInfo] = {
     "Silver Key": ItemInfo(39, IC.progression, "keys"),
     "Ring": ItemInfo(40, IC.progression),
     "Brass Key": ItemInfo(41, IC.progression, "keys"),
-    "Gear": ItemInfo(42, IC.progression)
+    "Gear": ItemInfo(42, IC.progression),
     "Green Gemstone": ItemInfo(43, IC.progression, "gems"),
     "Journal Entry 12": ItemInfo(44, IC.filler, "journal_entries"),
     "Journal Entry 15": ItemInfo(45, IC.filler, "journal_entries"),
     "Journal Entry 6": ItemInfo(46, IC.filler, "journal_entries"),
-    "Magnifying Glass": ItemInfo(47, IC.progression)
-    "Tea Tree Oil": ItemInfo(48, IC.progression)
+    "Magnifying Glass": ItemInfo(47, IC.progression),
+    "Tea Tree Oil": ItemInfo(48, IC.progression),
     "Hydrogen Peroxide": ItemInfo(49, IC.progression),
     "Safe Combination": ItemInfo(50, IC.progression),
     "Journal Entry 16": ItemInfo(51, IC.filler, "journal_entries"),
     "Cigar Butt": ItemInfo(52, IC.progression),
-    "Yellow Gemstone": ItemInfo(53, IC.progression, "gems")
+    "Yellow Gemstone": ItemInfo(53, IC.progression, "gems"),
     "Journal Entry 13": ItemInfo(54, IC.filler, "journal_entries"),
     "Computer Password": ItemInfo(55, IC.progression),
     "Journal Entry 3": ItemInfo(56, IC.filler, "journal_entries"),
@@ -88,7 +88,6 @@ night_manor_item_table: Dict[str, ItemInfo] = {
     "Crossbow Bolt": ItemInfo(67, IC.progression),
     "Iron Key": ItemInfo(68, IC.progression, "keys"),
     "Journal Entry 17": ItemInfo(69, IC.filler, "journal_entries")
-    #Basement
 
 }
 

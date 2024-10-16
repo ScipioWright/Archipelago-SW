@@ -23,7 +23,7 @@ night_manor_location_table: Dict[str, LocationInfo] = {
     "Starting Room - Spoon": LocationInfo(0, "Starting Room"),
     "Starting Room - Bowl": LocationInfo(1, "Starting Room"),
     "Starting Room - Yellow Note": LocationInfo(2, "Starting Room"), # in vent after you open with spoon
-    "Starting Room - Hairpin": LocationInfo(3, "Starting Room") # in vent after you open with spoon
+    "Starting Room - Hairpin": LocationInfo(3, "Starting Room"), # in vent after you open with spoon
     "First Floor Bathroom - Tweezers": LocationInfo(4, "First Floor & Exterior"), #in medicine cabinet
     "Guest Bedroom - Journal Entry 2": LocationInfo(5, "First Floor & Exterior"),
     "Guest Bedroom - Journal Entry 5": LocationInfo(6, "First Floor & Exterior"),
