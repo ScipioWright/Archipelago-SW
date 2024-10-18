@@ -26,10 +26,10 @@ location_table: Dict[str, LocationInfo] = {
     "LatomD5 - Key Code": LocationInfo(6, "LatomD5 Genepod", False),
     "LatomD6 - Security Clearance": LocationInfo(7, "LatomD6 Area", False), 
     "LatomE4 - Shield Upgrade": LocationInfo(8, "LatomF5 Genepod", False),
-    "LatomG8 - Multi Mod": LocationInfo(9, "Latom F7 Genepod", False), 
+    "LatomG8 - Multi Mod": LocationInfo(9, "LatomF7 Genepod", False), 
     "LatomI4 - Pulse Mod": LocationInfo(10, "LatomI4 Genepod", False), 
-    "LatomJ1 - Stabilizer": LocationInfo(11, "LatomF5 Genepod", False),        # does this need to be I4 instead due to the miniboss?
-    "LatomJ3 - Shield Upgrade": LocationInfo(12, "LatomI4 Genepod", False), 
+    "LatomJ1 - Stabilizer": LocationInfo(11, "LatomF5 Genepod", False),        #TODO: does this need to be I4 instead due to the miniboss?
+    "LatomJ3 - Shield Upgrade": LocationInfo(12, "LatomF5 Genepod", False),    # do it from F5 to avoid the issues with I4
     "LatomJ10 - Shield Upgrade": LocationInfo(13, "LatomC9 Genepod", False), 
 
     "LatomD5 - Boss Defeated": LocationInfo(50, "LatomC6 Genepod", True),      # alien?   
@@ -58,14 +58,14 @@ location_table: Dict[str, LocationInfo] = {
     "VerdeE1 - Key Code": LocationInfo(204, "VerdeE1 Genepod", False),
     "VerdeE5 - Security Clearance": LocationInfo(205, "VerdeSW Area", False),
     "VerdeF8 - Shield Upgrade": LocationInfo(206, "VerdeSW Area", False),
-    "VerdeG5 - Shield Upgrade": LocationInfo(207, "ThetaI9 Genepod", False),
+    "VerdeG5 - Shield Upgrade": LocationInfo(207, "VerdeI7 Genepod", False),
     "VerdeG10 - Security Clearance": LocationInfo(208, "VerdeI7 Genepod", False),
     # need a separate region to account for the fact that the heat armor damage boost is only possible coming from the right
     "VerdeH7 - Shield Upgrade": LocationInfo(209, "VerdeH7 Location", False),
     "VerdeI4 - Shield Upgrade": LocationInfo(210, "VerdeI7 Genepod", False),
     "VerdeI9 - Key Code": LocationInfo(211, "VerdeI9 Genepod", False),
-    "VerdeJ2 - Stabilizer": LocationInfo(212, "VerdeI9 Genepod", False),
-    "VerdeJ9 - Shield Upgrade": LocationInfo(213, "VerdeI9 Genepod", False),
+    "VerdeJ2 - Stabilizer": LocationInfo(212, "VerdeI7 Genepod", False),
+    "VerdeJ9 - Shield Upgrade": LocationInfo(213, "VerdeI7 Genepod", False),
 
     "VerdeE1 - Ramses Defeated": LocationInfo(250, "VerdeA1 Genepod", True), 
     "VerdeI9 - Sura Defeated": LocationInfo(251, "VerdeSW Area", True),     # This might be Jorgensen, not Sura
@@ -74,6 +74,8 @@ location_table: Dict[str, LocationInfo] = {
 
     "Control - Hooper Defeated": LocationInfo(350, "Control Genepod", True),   # victory location
     "Control - Hooper Defeated (100%)": LocationInfo(351, "Control Genepod", True), # cherry location
+
+    #TODO: gift location. Should this be when one mod is received, or when one vanilla mod location is checked?
 }
 
 
