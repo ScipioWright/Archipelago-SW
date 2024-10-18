@@ -23,9 +23,8 @@ security_clearance = "Vainger - Progressive Security Clearance"
 
 # can the player do a given hell run?
 # TODO: option for this
-def hell_run(shield_upgrades_required: int, is_vanilla: bool, state: CollectionState, world: UFO50World) -> bool:
-    player = world.player
-    return (state.count(shield_upgrade, player) >= shield_upgrades_required)
+def hell_run(shield_upgrades_required: int, is_vanilla: bool, state: CollectionState, world: "UFO50World") -> bool:
+    return state.count(shield_upgrade, world.player) >= shield_upgrades_required
 
 # can the player beat a given boss? currently checks how many mods the player has,
 # whether they have a stabilizer, and if they hit a vibes-based shield threshold.
