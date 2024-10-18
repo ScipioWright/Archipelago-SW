@@ -231,8 +231,8 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     sr("VerdeE1 - Ramses Defeated", rule = lambda state: boss_logic(1, state, world)) #TODO: check difficulty
     sr("VerdeE1 - Key Code", rule = itemless) # relative to boss genepod
     # Sura fight, or maybe Jorgensen. From either E6 or I7 genepod
-    sr("VerdeI9 - Sura Defeated", rule = state.count(security_clearance, player) >= 2
-                                         and boss_logic(3, state, world)) # absolute monster
+    sr("VerdeI9 - Sura Defeated", rule = lambda state: state.count(security_clearance, player) >= 2
+                                                       and boss_logic(3, state, world)) # absolute monster
     sr("VerdeI9 - Key Code", rule = itemless) # relative to boss genepod
 
     # Control
