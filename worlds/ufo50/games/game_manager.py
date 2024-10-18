@@ -6,9 +6,11 @@ from .. import UFO50World
 from BaseClasses import Region
 
 from .barbuta.game import Barbuta
+from .vainger.game import Vainger
 
 games: List[UFO50Game] = [
-    Barbuta("Barbuta", 1)
+    Barbuta("Barbuta", 1),
+    Vainger("Vainger", 29)
 ]
 
 
