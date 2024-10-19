@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple
 from BaseClasses import Region, ItemClassification
-from ..base_game import UFO50Item, UFO50Location
+from ..base_game import UFO50Location
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -36,6 +36,10 @@ location_table: Dict[str, LocationInfo] = {
     "Chest - H5": LocationInfo(21, "Starting Area"),  # $100, be fast before the ledge breaks
     "Chest - H7": LocationInfo(22, "G7 and Nearby"),  # $50
     "Wand Trade - H7": LocationInfo(23, "Wand Trade Room"),  # probably should just have it give you the check
+
+    "Garden": LocationInfo(100, "Boss Area"),
+    "Gold": LocationInfo(101, "Menu"),
+    "Cherry": LocationInfo(102, "Boss Area")
 }
 
 
@@ -47,8 +51,4 @@ def create_locations(world: "UFO50World", regions: Dict[str, Region], base_id: i
     for loc_name, loc_data in location_table.items():
         loc = UFO50Location(world.player, f"Barbuta - {loc_name}", base_id + loc_data.id_offset,
                             regions[loc_data.region_name])
-        regions[loc_data.region_name].locations.add(loc)
-    victory_location = UFO50Location(world.player, "Beat the Boss", None, regions["Boss Area"])
-    victory_location.place_locked_item(UFO50Item("Barbuta - Victory", ItemClassification.progression, None,
-                                                 world.player))
-    regions["Boss Area"].locations.append(victory_location)
+        regions[loc_data.region_name].locations.append(loc)

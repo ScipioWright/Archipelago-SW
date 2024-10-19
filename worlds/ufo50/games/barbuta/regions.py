@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, TYPE_CHECKING
+from typing import Dict, NamedTuple, TYPE_CHECKING, List
 from BaseClasses import Region
 
 from .locations import create_locations
@@ -10,12 +10,13 @@ if TYPE_CHECKING:
 
 # not sure if we really need this yet, but making it in case we need it later since it's easy to remove
 class RegionInfo(NamedTuple):
-    pass
+    rooms: List[str] = []  # rooms this region contains, for the purpose of the garden prize access rule
 
 
 # keys are region names, values are the region object
 # for room names, the letter is the row (top to bottom), the number is the column (left to right)
 region_info: Dict[str, RegionInfo] = {
+    "Menu": RegionInfo(),  # the non-existent start menu
     "Starting Area": RegionInfo(),
     "Key Room": RegionInfo(),  # the room with the key, where you can access the key
     "Platforms above D4": RegionInfo(),  # the "first" moving platforms

@@ -1,13 +1,14 @@
-from typing import ClassVar, Dict, Any, Type, Union
+from typing import ClassVar, Dict, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial
-from Options import PerGameCommonOptions, OptionError
+from BaseClasses import Tutorial, Item, Location
+from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
+
 from .constants import *
 from . import options
-from .games.game_manager import get_items, get_locations, get_options, GameManager
+from .games.game_manager import get_items, get_locations, GameManager
 
 
 class UFO50Settings(Group):
@@ -51,6 +52,14 @@ class UFO50Web(WebWorld):
     tutorials = [setup_en]
 
 
+class UFO50Item(Item):
+    game: str = "UFO 50"
+
+
+class UFO50Location(Location):
+    game: str = "UFO 50"
+
+
 class UFO50World(World):
     """ 
     UFO 50 is a collection of 50 single and multiplayer games from the creators of Spelunky, Downwell, Air Land & Sea,
@@ -67,17 +76,32 @@ class UFO50World(World):
     item_name_to_id = {k: v for k, v in get_items().items()}
     location_name_to_id = {k: v for k, v in get_locations().items()}
 
-    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = options.UFO50Options
+    options_dataclass = options.UFO50Options
     options: options.UFO50Options
     settings_key = "ufo_50_settings"
     settings: ClassVar[UFO50Settings]
 
     manager: GameManager
 
+    included_games: List[str]
+
     def generate_early(self) -> None:
-        self.manager = GameManager(self)
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
+
+        self.included_games = sorted(self.options.always_on_games.value)
+        # exclude always on games from random choice games
+        maybe_games = sorted(self.options.random_choice_games.value - self.options.always_on_games.value)
+        # if the number of games you want is higher than the number of games you chose, enable all chosen
+        if self.options.random_choice_game_count >= len(maybe_games):
+            self.included_games += maybe_games
+        elif self.options.random_choice_game_count and maybe_games:
+            self.included_games += self.random.sample(maybe_games, self.options.random_choice_game_count.value)
+
+        if not self.included_games:
+            raise OptionError(f"UFO 50: {self.player_name} has not selected any games.")
+
+        self.manager = GameManager(self)
 
     def create_regions(self) -> None:
         self.manager.create_regions()
@@ -89,5 +113,5 @@ class UFO50World(World):
         return self.manager.get_filler_item_name()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data = self.options.as_dict()
-        return slot_data
+        # slot_data = self.options.as_dict()
+        return {}

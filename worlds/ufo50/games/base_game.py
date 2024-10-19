@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List
+from typing import Dict, List, TYPE_CHECKING
 
-from BaseClasses import Item, Location
-from Options import Option
-from worlds.ufo50.games.game_manager import Region
+from BaseClasses import Item, Location, Region
 from ..constants import GAME_NAME
-from .. import UFO50World
+
+if TYPE_CHECKING:
+    from .. import UFO50World
 
 
 class UFO50Item(Item):
@@ -17,7 +17,7 @@ class UFO50Location(Location):
 
 
 class UFO50Game(ABC):
-    world: UFO50World  # must be set after init
+    world: "UFO50World"  # must be set after init
 
     def __init__(self, game_name: str, game_id: int):
         self.game_name = game_name
@@ -29,10 +29,6 @@ class UFO50Game(ABC):
 
     @abstractmethod
     def get_locations(self) -> Dict[str, int]:
-        pass
-
-    @abstractmethod
-    def get_options(self) -> List[Option]:
         pass
 
     @abstractmethod
