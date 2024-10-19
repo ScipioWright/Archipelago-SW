@@ -87,11 +87,21 @@ class UFO50World(World):
     settings_key = "ufo_50_settings"
     settings: ClassVar[UFO50Settings]
 
+    using_ut: bool
+    ut_passthrough: Dict[str, Any]
+
     included_games: List  # list of modules for the games that are going to be played by this player
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
+
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "UFO 50" in self.multiworld.re_gen_passthrough:
+                self.ut_passthrough = self.multiworld.re_gen_passthrough["UFO 50"]
+                self.options.always_on_games.value = self.ut_passthrough["included_games"]
+                self.options.random_choice_games.value.clear()
+                self.options.random_choice_game_count.value = 0
 
         included_game_names = sorted(self.options.always_on_games.value)
         # exclude always on games from random choice games
@@ -127,6 +137,14 @@ class UFO50World(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
-            "game_names": [game.game_name for game in self.included_games]
+            "included_games": [game.game_name for game in self.included_games]
         }
+        return slot_data
+
+    # for the universal tracker, doesn't get called in standard gen
+    # docs: https://github.com/FarisTheAncient/Archipelago/blob/tracker/worlds/tracker/docs/re-gen-passthrough.md
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+        # we are using re_gen_passthrough over modifying the world here due to complexities with ER
         return slot_data
