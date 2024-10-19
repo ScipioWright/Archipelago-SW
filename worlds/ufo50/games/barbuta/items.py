@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, List
 from BaseClasses import ItemClassification as IC, Item
 
-from ...constants import game_ids
+from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -31,12 +31,11 @@ item_table: Dict[str, ItemInfo] = {
 
 
 def get_items() -> Dict[str, int]:
-    base_id = game_ids["Barbuta"]
-    return {f"Barbuta - {name}": data.id_offset + base_id for name, data in item_table.items()}
+    return {f"Barbuta - {name}": data.id_offset + get_game_base_id("Barbuta") for name, data in item_table.items()}
 
 
 def create_item(item_name: str, world: "UFO50World") -> Item:
-    base_id = game_ids["Barbuta"]
+    base_id = get_game_base_id("Barbuta")
     item_data = item_table[item_name]
     return Item(f"Barbuta - {item_name}", item_data.classification, item_data.id_offset + base_id, world.player)
 

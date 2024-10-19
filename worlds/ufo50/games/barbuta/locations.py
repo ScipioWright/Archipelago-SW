@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple
 from BaseClasses import Region, Location
 
-from ...constants import game_ids
+from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -45,13 +45,11 @@ location_table: Dict[str, LocationInfo] = {
 
 
 def get_locations() -> Dict[str, int]:
-    base_id = game_ids["Barbuta"]
-    return {name: data.id_offset + base_id for name, data in location_table.items()}
+    return {name: data.id_offset + get_game_base_id("Barbuta") for name, data in location_table.items()}
 
 
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
-    base_id = game_ids["Barbuta"]
     for loc_name, loc_data in location_table.items():
-        loc = Location(world.player, f"Barbuta - {loc_name}", base_id + loc_data.id_offset,
+        loc = Location(world.player, f"Barbuta - {loc_name}", get_game_base_id("Barbuta") + loc_data.id_offset,
                        regions[loc_data.region_name])
         regions[loc_data.region_name].locations.append(loc)

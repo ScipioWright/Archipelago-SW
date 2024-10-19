@@ -1,7 +1,7 @@
 from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Item, Location, Region
+from BaseClasses import Tutorial, Region
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
@@ -53,14 +53,6 @@ class UFO50Web(WebWorld):
     tutorials = [setup_en]
 
 
-class UFO50Item(Item):
-    game: str = "UFO 50"
-
-
-class UFO50Location(Location):
-    game: str = "UFO 50"
-
-
 ufo50_games: Dict = {
     "Barbuta": barbuta,
 }
@@ -99,7 +91,9 @@ class UFO50World(World):
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "UFO 50" in self.multiworld.re_gen_passthrough:
                 self.ut_passthrough = self.multiworld.re_gen_passthrough["UFO 50"]
-                self.options.always_on_games.value = self.ut_passthrough["included_games"]
+                included_game_ids = self.ut_passthrough["included_games"]
+                id_to_game = {v: k for k, v in game_ids.items()}
+                self.options.always_on_games.value = {id_to_game[game_id] for game_id in included_game_ids}
                 self.options.random_choice_games.value.clear()
                 self.options.random_choice_game_count.value = 0
 
@@ -125,7 +119,7 @@ class UFO50World(World):
             for region in game_regions.values():
                 self.multiworld.regions.append(region)
             # !!! get menu region method
-            game_menu = self.multiworld.get_region(f"{game.game_name} - Menu", self.player)
+            game_menu = self.get_region(f"{game.game_name} - Menu")
             menu.connect(game_menu, f"Boot {game.game_name}")
 
     def create_items(self) -> None:
@@ -137,7 +131,7 @@ class UFO50World(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
-            "included_games": [game.game_name for game in self.included_games]
+            "included_games": [game_ids[game.game_name] for game in self.included_games]
         }
         return slot_data
 
