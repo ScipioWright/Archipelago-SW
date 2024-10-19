@@ -1,14 +1,15 @@
-from typing import ClassVar, Dict, Any, Union, List
+from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Item, Location
+from BaseClasses import Tutorial, Item, Location, Region
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
 
 from .constants import *
 from . import options
-from .games.game_manager import get_items, get_locations, GameManager
+from .games import barbuta
+from .games.barbuta import items, locations, regions
 
 
 class UFO50Settings(Group):
@@ -60,6 +61,11 @@ class UFO50Location(Location):
     game: str = "UFO 50"
 
 
+ufo50_games: Dict = {
+    "Barbuta": barbuta,
+}
+
+
 class UFO50World(World):
     """ 
     UFO 50 is a collection of 50 single and multiplayer games from the creators of Spelunky, Downwell, Air Land & Sea,
@@ -73,45 +79,54 @@ class UFO50World(World):
 
     topology_present = False
 
-    item_name_to_id = {k: v for k, v in get_items().items()}
-    location_name_to_id = {k: v for k, v in get_locations().items()}
+    item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
+    location_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.locations.get_locations().items()}
 
     options_dataclass = options.UFO50Options
     options: options.UFO50Options
     settings_key = "ufo_50_settings"
     settings: ClassVar[UFO50Settings]
 
-    manager: GameManager
-
-    included_games: List[str]
+    included_games: List  # list of modules for the games that are going to be played by this player
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
 
-        self.included_games = sorted(self.options.always_on_games.value)
+        included_game_names = sorted(self.options.always_on_games.value)
         # exclude always on games from random choice games
         maybe_games = sorted(self.options.random_choice_games.value - self.options.always_on_games.value)
         # if the number of games you want is higher than the number of games you chose, enable all chosen
         if self.options.random_choice_game_count >= len(maybe_games):
-            self.included_games += maybe_games
+            included_game_names += maybe_games
         elif self.options.random_choice_game_count and maybe_games:
-            self.included_games += self.random.sample(maybe_games, self.options.random_choice_game_count.value)
+            included_game_names += self.random.sample(maybe_games, self.options.random_choice_game_count.value)
 
-        if not self.included_games:
+        if not included_game_names:
             raise OptionError(f"UFO 50: {self.player_name} has not selected any games.")
 
-        self.manager = GameManager(self)
+        self.included_games = [game for name, game in ufo50_games.items() if name in included_game_names]
 
     def create_regions(self) -> None:
-        self.manager.create_regions()
+        menu = Region("Menu", self.player, self.multiworld)
+        self.multiworld.regions.append(menu)
+        for game in self.included_games:
+            game_regions = game.regions.create_regions_and_rules(self)
+            for region in game_regions.values():
+                self.multiworld.regions.append(region)
+            # !!! get menu region method
+            game_menu = self.multiworld.get_region(f"{game.game_name} - Menu", self.player)
+            menu.connect(game_menu, f"Boot {game.game_name}")
 
     def create_items(self) -> None:
-        self.manager.create_items()
+        for game in self.included_games:
+            self.multiworld.itempool += game.items.create_items(self)
 
     def get_filler_item_name(self) -> str:
-        return self.manager.get_filler_item_name()
+        return self.random.choice(self.included_games).items.get_filler_item_name()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        # slot_data = self.options.as_dict()
-        return {}
+        slot_data = {
+            "game_names": [game.game_name for game in self.included_games]
+        }
+        return slot_data

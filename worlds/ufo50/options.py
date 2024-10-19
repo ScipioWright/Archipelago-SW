@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, OptionSet, PerGameCommonOptions,
                      OptionGroup)
-from .games.game_manager import ufo50_games
+from .constants import game_ids
 
 
 class AlwaysOnGames(OptionSet):
@@ -11,7 +10,7 @@ class AlwaysOnGames(OptionSet):
     """
     internal_name = "always_on_games"
     display_name = "Always On Games"
-    valid_keys = [game.game_name for game in ufo50_games]
+    valid_keys = {game_name for game_name in game_ids.keys()}
 
 
 class RandomChoiceGames(OptionSet):
@@ -21,7 +20,7 @@ class RandomChoiceGames(OptionSet):
     """
     internal_name = "random_choice_games"
     display_name = "Random Choice Games"
-    valid_keys = [game.game_name for game in ufo50_games]
+    valid_keys = {game_name for game_name in game_ids.keys()}
 
 
 class RandomChoiceGameCount(Range):

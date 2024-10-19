@@ -33,12 +33,12 @@ region_info: Dict[str, RegionInfo] = {
 }
 
 
-def create_regions_and_rules(world: "UFO50World", base_id: int) -> Dict[str, Region]:
+def create_regions_and_rules(world: "UFO50World") -> Dict[str, Region]:
     barbuta_regions: Dict[str, Region] = {}
     for region_name, region_data in region_info.items():
         barbuta_regions[region_name] = Region(f"Barbuta - {region_name}", world.player, world.multiworld)
 
-    create_locations(world, barbuta_regions, base_id)
+    create_locations(world, barbuta_regions)
     create_rules(world, barbuta_regions)
 
     return barbuta_regions
