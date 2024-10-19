@@ -26,7 +26,7 @@ class RandomChoiceGames(OptionSet):
 class RandomChoiceGameCount(Range):
     """
     Choose how many Random Choice Games will be included alongside your Always On Games.
-    If you do not have enough Random Choice Games selected, it will enable all of them.
+    If you do not have enough Random Choice Games selected, it will enable all your selected games.
     """
     internal_name = "random_choice_game_count"
     display_name = "Random Choice Game Count"
