@@ -22,6 +22,8 @@ class RegionInfo(NamedTuple):
 # based on a map at https://steamcommunity.com/sharedfiles/filedetails/?id=3341323146
 # except numbering each sector from 1 to 10.
 region_info: Dict[str, RegionInfo] = {
+    "Menu": RegionInfo(),
+
     "LatomC6 Genepod": RegionInfo(),
     "LatomC9 Genepod": RegionInfo(),
     "LatomD3 Genepod": RegionInfo(),

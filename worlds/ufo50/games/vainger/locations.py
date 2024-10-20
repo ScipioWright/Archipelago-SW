@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple
-from BaseClasses import Region, ItemClassification
-from ..base_game import UFO50Item, UFO50Location
+from BaseClasses import Region, ItemClassification, Item, Location
+from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -72,23 +72,24 @@ location_table: Dict[str, LocationInfo] = {
     
     "Control - Shield Upgrade": LocationInfo(300, "Control Genepod", False),
 
-    "Control - Hooper Defeated": LocationInfo(350, "Control Genepod", True),   # victory location
-    "Control - Hooper Defeated (100%)": LocationInfo(351, "Control Genepod", True), # cherry location
+    "Control - Hooper Defeated": LocationInfo(350, "Control Genepod", True),
 
-    #TODO: gift location. Should this be when one mod is received, or when one vanilla mod location is checked?
+    "Garden": LocationInfo(400, "ThetaI7 Genepod", False), # garden gift location. for now it's a clone of the heat mod location.
+    "Gold": LocationInfo(401, "Menu", False), 
+    "Cherry": LocationInfo(402, "Menu", False)
 }
 
 
-def get_locations(base_id: int) -> Dict[str, int]:
-    return {name: data.id_offset + base_id for name, data in location_table.items()}
+def get_locations() -> Dict[str, int]:
+    return {name: data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items()}
 
 
-def create_locations(world: "UFO50World", regions: Dict[str, Region], base_id: int) -> None:
+def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
-        loc = UFO50Location(world.player, f"Vainger - {loc_name}", base_id + loc_data.id_offset,
+        loc = Location(world.player, f"Vainger - {loc_name}", loc_data.id_offset + get_game_base_id("Vainger"),
                             regions[loc_data.region_name])
         if loc_data.is_event:
-            loc.place_locked_item(UFO50Item(f"Vainger - {loc_name}", ItemClassification.progression, None, 
+            loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None, 
                                             world.player))
         regions[f"Vainger - {loc_data.region_name}"].locations.add(loc)
 

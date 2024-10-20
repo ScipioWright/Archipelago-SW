@@ -52,7 +52,7 @@ def spike_tank(state: CollectionState, world: UFO50World) -> bool:
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
 
-    # name genepod regions for convenience
+    # name regions for convenience
     latomc6 = regions["Vainger - LatomC6 Genepod"]
     latomc9 = regions["Vainger - LatomC9 Genepod"]
     latomd3 = regions["Vainger - LatomD3 Genepod"]
@@ -81,8 +81,9 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     
     control = regions["Vainger - Control Genepod"] 
 
-    # I want each of the region connections to be based on bidirection connectivity, so you can't get stuck.
-    # I don't know if that's possible, but it's what I have in mind here.
+    # ThetaF5 is the starting genepod
+    regions["Vainger - Menu"].connect(thetaf5)
+
     thetaf5.connect(thetai7)
     # whether this hell run should be in logic itemless is a big question. it's possible, and it'll expand the possibilities
     # for heat mod placement a lot, but it's tricky and doing it every single time in sphere 1 could get old fast.
@@ -160,40 +161,37 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     latomf5.connect(latomd6area,
                     rule = lambda state: state.count(security_clearance, player) >= 2)
     
-    # convenience function
-    def sr(loc: str, rule: CollectionRule):
+    def sr(loc: str, rule: CollectionRule = lambda state: True):
         set_rule(world.get_location(f"Vainger - {loc}"), rule)
 
-    itemless = lambda state: True
-
     # LatomD3
-    sr("LatomA4 - Shield Upgrade", rule = itemless)
-    sr("LatomA7 - Shield Upgrade", rule = itemless) #TODO: double-check this, I'm not exactly sure where the upgrade was
+    sr("LatomA4 - Shield Upgrade")
+    sr("LatomA7 - Shield Upgrade") #TODO: double-check this, I'm not exactly sure where the upgrade was
     # LatomC9
     sr("LatomA9 - Shield Upgrade", rule = lambda state: state.has(heat_mod, player) and hell_run(10, True, state, world)) # mandatory hell run; TODO: check difficulty
     sr("LatomB9 - Shield Upgrade", rule = lambda state: state.has(multi_mod, player)) # shadow
     sr("LatomJ10 - Shield Upgrade", rule = lambda state: state.has(heat_mod, player)) # hot-shot
     # LatomC6
     sr("LatomC4 - Shield Upgrade", rule = lambda state: state.count(security_clearance, player) >= 3)
-    sr("LatomC6 - Clone Material", rule = itemless)
+    sr("LatomC6 - Clone Material")
     # LatomD6 Area
-    sr("LatomD6 - Security Clearance", rule = itemless) # accounted for by region logic
+    sr("LatomD6 - Security Clearance") # accounted for by region logic
     # LatomF7
-    sr("LatomG8 - Multi Mod", rule = itemless) # the fight here will be a pain itemless but it should be possible
+    sr("LatomG8 - Multi Mod") # the fight here will be a pain itemless but it should be possible
     # LatomI4
-    sr("LatomI4 - Pulse Mod", rule = itemless) 
+    sr("LatomI4 - Pulse Mod") 
     # LatomF5
     #TODO: does this need to be I4 instead due to the miniboss?
     sr("LatomJ1 - Stabilizer", rule = lambda state: boss_logic(1, state, world) #TODO: check miniboss difficulty
                                                     and state.has_all([pulse_mod, heat_mod], player) and hell_run(0, True, state, world))  
-    sr("LatomE4 - Shield Upgrade", rule = itemless)
+    sr("LatomE4 - Shield Upgrade")
     sr("LatomJ3 - Shield Upgrade", rule = lambda state: state.has(pulse_mod, player) # including pulse mod to avoid softlocking near I4
                                           and (state.has(force_mod, player) or spike_tank(state, world)))   # meteor or spike-ng or spike tank
     #
     # Alien boss, from LatomC6
     sr("LatomD5 - Boss Defeated", rule = lambda state: state.count(security_clearance, player) >= 3
                                                        and boss_logic(2, state, world)) #TODO: check boss difficulty
-    sr("LatomD5 - Key Code", rule = itemless) # relative to boss genepod
+    sr("LatomD5 - Key Code") # relative to boss genepod
     #
     # ThetaA4
     sr("ThetaA2 - Clone Material", rule = lambda state: state.has(force_mod, player) or spike_tank(state, world)) # spike-ng or spike tank
@@ -201,47 +199,51 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     sr("ThetaC5 - Clone Material", rule = lambda state: state.has(pulse_mod, player)) # zap-shot
     sr("ThetaD7 - Shield Upgrade", rule = lambda state: state.has(pulse_mod, player)) # thunder
     # ThetaI7
-    sr("ThetaH1 - Shield Upgrade", rule = itemless)
-    sr("ThetaH4 - Heat Mod", rule = itemless)
+    sr("ThetaH1 - Shield Upgrade")
+    sr("ThetaH4 - Heat Mod")
     sr("ThetaI4 - Shield Upgrade", rule = lambda state: state.has(heat_mod, player)) # hot-shot
     sr("ThetaJ7 - Shield Upgrade", rule = lambda state: state.has(pulse_mod, player)) # thunder? check this
     #
     # Boss from ThetaF6
     sr("ThetaE9 - Boss Defeated", rule = lambda state: boss_logic(2, state, world)) #TODO: check boss difficulty
-    sr("ThetaE9 - Key Code", rule = itemless) # relative to boss genepod
+    sr("ThetaE9 - Key Code") # relative to boss genepod
     
     # VerdeA1
-    sr("ThetaA9 - Shield Upgrade", rule = itemless) # might be a little tough?
-    sr("VerdeA1 - Shield Upgrade", rule = itemless)
-    sr("VerdeC4 - Shield Upgrade", rule = itemless)
+    sr("ThetaA9 - Shield Upgrade") # might be a little tough itemless?
+    sr("VerdeA1 - Shield Upgrade")
+    sr("VerdeC4 - Shield Upgrade")
     # VerdeI7
-    sr("VerdeG10 - Security Clearance", rule = itemless)
+    sr("VerdeG10 - Security Clearance")
     sr("VerdeI4 - Shield Upgrade", rule = lambda state: state.has(pulse_mod, player)) # thunder
     sr("VerdeJ2 - Stabilizer", rule = lambda state: state.has(pulse_mod, player)) # zap-shot
     sr("VerdeJ9 - Shield Upgrade", rule = lambda state: state.has(force_mod, player)) # meteor
     sr("VerdeG5 - Shield Upgrade", rule = lambda state: state.has_all(pulse_mod, player)) # thunder
     # VerdeSW Area - note that depending on entrance, the player *may* be required to have hot-shot equipped here
     sr("VerdeB5 - Force Mod", rule = lambda state: boss_logic(2, state, world)) # I found this surprisingly difficult casually, I'm giving it boss logic for now
-    sr("VerdeC5 - Shield Upgrade", rule = itemless)
-    sr("VerdeE5 - Security Clearance", rule = itemless)
+    sr("VerdeC5 - Shield Upgrade")
+    sr("VerdeE5 - Security Clearance")
     sr("VerdeF8 - Shield Upgrade", rule = lambda state: state.has(pulse_mod, player)) # thunder
     
     # Ramses fight, from VerdeA1
     sr("VerdeE1 - Ramses Defeated", rule = lambda state: boss_logic(1, state, world)) #TODO: check difficulty
-    sr("VerdeE1 - Key Code", rule = itemless) # relative to boss genepod
+    sr("VerdeE1 - Key Code") # relative to boss genepod
     # Sura fight, or maybe Jorgensen. From either E6 or I7 genepod
     sr("VerdeI9 - Sura Defeated", rule = lambda state: state.count(security_clearance, player) >= 2
                                                        and boss_logic(3, state, world)) # absolute monster
-    sr("VerdeI9 - Key Code", rule = itemless) # relative to boss genepod
+    sr("VerdeI9 - Key Code") # relative to boss genepod
 
     # Control
-    sr("Control - Shield Upgrade", rule = itemless) # yeah I was surprised at this one
+    sr("Control - Shield Upgrade") # yeah I was surprised this was itemless
     sr("Control - Hooper Defeated", rule = lambda state: boss_logic(4, state, world)) # boss logic has everything you could want, but be careful if that changes
-    # we could check every location's accessibility, but the only thing not in boss logic and region accessibility requirements is security clearance
-    sr("Control - Hooper Defeated (100%)", rule = lambda state: boss_logic(4, state, world)
-                                                                and state.count(security_clearance, player) >= 3) 
     
     # special locations; these are gated by unique regions
-    sr("ThetaC8 - Shield Upgrade", rule = itemless)
-    sr("ThetaC10 - Shield Upgrade", rule = itemless)
-    sr("VerdeH7 - Shield Upgrade", rule = itemless)
+    sr("ThetaC8 - Shield Upgrade")
+    sr("ThetaC10 - Shield Upgrade")
+    sr("VerdeH7 - Shield Upgrade")
+
+    # garden: same logic as heat mod
+    sr("Garden")
+    # gold: check the boss defeat state
+    sr("Gold", rule = lambda state: state.has("Vainger - Hooper Defeated"))
+    # cherry: beating Hooper takes everything but the security clearances, so check those
+    sr("Cherry", rule = lambda state: state.has("Vainger - Hooper Defeated") and state.count(security_clearance, player) >= 3)

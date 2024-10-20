@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, List
-from BaseClasses import ItemClassification as IC
-from ..game_manager import UFO50Item
+from BaseClasses import ItemClassification as IC, Item
+from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -18,7 +18,7 @@ item_table: Dict[str, ItemInfo] = {
     "Multi Mod": ItemInfo(1, IC.progression | IC.useful, 1),
     "Pulse Mod": ItemInfo(2, IC.progression | IC.useful, 1),
     "Force Mod": ItemInfo(3, IC.progression | IC.useful, 1),
-    "Stabilizer": ItemInfo(10, IC.progression | IC.useful, 2),
+    "Stabilizer": ItemInfo(10, IC.progression, 2),
     "Clone Material": ItemInfo(11, IC.useful, 3),
     "Shield Upgrade": ItemInfo(12, IC.progression_skip_balancing, 25),
     "Shield Upgrade": ItemInfo(13, IC.filler, 0), # filler version of shield 
@@ -31,21 +31,22 @@ item_table: Dict[str, ItemInfo] = {
 
 
 def get_items(base_id: int) -> Dict[str, int]:
-    return {name: data.id_offset + base_id for name, data in item_table.items()}
+    return {f"Vainger - name": data.id_offset + get_game_base_id("Vainger") for name, data in item_table.items()}
 
 
-def create_item(item_name: str, world: "UFO50World", base_id: int) -> UFO50Item:
+def create_item(item_name: str, world: "UFO50World", base_id: int) -> Item:
     item_data = item_table[item_name]
-    return UFO50Item(item_name, item_data.classification, item_data.id_offset + base_id, world.player)
+    return Item(f"Vainger - {item_name}", item_data.classification, item_data.id_offset + get_game_base_id("Vainger"), world.player)
 
 
-def create_items(world: "UFO50World", base_id: int) -> List[UFO50Item]:
+def create_items(world: "UFO50World", base_id: int) -> List[Item]:
     items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in item_table.items()}
-    vainger_items: List[UFO50Item] = []
+    vainger_items: List[Item] = []
     for item_name, quantity in items_to_create.items():
-        vainger_items.append(create_item(item_name, world, base_id))
+        for _ in range(quantity):
+            vainger_items.append(create_item(item_name, world, base_id))
     return vainger_items
 
 
 def get_filler_item_name() -> str:
-    return "Shield Upgrade" # is it a problem that this conflicts with the progression version?
+    return "Vainger - Shield Upgrade" # is it a problem that this conflicts with the progression version?
