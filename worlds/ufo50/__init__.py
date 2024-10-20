@@ -88,6 +88,9 @@ class UFO50World(World):
     item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
     location_name_to_id = temp_ufo50_location_name_to_id
 
+    item_name_groups = {k: v for game in ufo50_games.values() for k, v in game.items.get_item_groups().items()}
+    location_name_groups = {k: v for game in ufo50_games.values() for k, v in game.locations.get_location_groups().items()}
+
     options_dataclass = options.UFO50Options
     options: options.UFO50Options
     settings_key = "ufo_50_settings"
