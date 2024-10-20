@@ -154,7 +154,7 @@ class UFO50World(World):
     def create_item(self, name: str, item_class: ItemClassification = None) -> Item:
         game_name = name.split(" - ", 1)[0]
         if game_name in ufo50_games:
-            return ufo50_games[game_name].items.create_item(name, self, item_class)
+            return ufo50_games[game_name].items.create_item(name, self, *item_class)
         return Item(name, item_class or ItemClassification.filler, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
