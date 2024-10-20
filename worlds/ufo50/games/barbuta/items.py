@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple, List
+from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set
 from BaseClasses import ItemClassification as IC, Item
 
 from ...constants import get_game_base_id
@@ -33,6 +33,13 @@ item_table: Dict[str, ItemInfo] = {
 # this is for filling out item_name_to_id, it should be static regardless of yaml options
 def get_items() -> Dict[str, int]:
     return {f"Barbuta - {name}": data.id_offset + get_game_base_id("Barbuta") for name, data in item_table.items()}
+
+
+# this should return the item groups for this game, independent of yaml options
+# you should include a group that contains all items for this game that is called the same thing as the game
+def get_item_groups() -> Dict[str, Set[str]]:
+    item_groups: Dict[str, Set[str]] = {"Barbuta": {f"Barbuta - {item_name}" for item_name in item_table.keys()}}
+    return item_groups
 
 
 # for when the world needs to create an item at random (like with random filler items)
