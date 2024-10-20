@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set, Optional
+from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set
 from BaseClasses import ItemClassification as IC, Item
 
 from ...constants import get_game_base_id
@@ -11,7 +11,6 @@ class ItemInfo(NamedTuple):
     id_offset: int
     classification: IC
     quantity: int
-    item_group: Optional[str] = None
 
 
 item_table: Dict[str, ItemInfo] = {
