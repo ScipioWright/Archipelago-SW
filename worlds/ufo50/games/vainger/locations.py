@@ -81,7 +81,7 @@ location_table: Dict[str, LocationInfo] = {
 
 
 def get_locations() -> Dict[str, int]:
-    return {name: data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items()}
+    return {f"Vainger - {name}": data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items()}
 
 
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:

@@ -29,7 +29,7 @@ item_table: Dict[str, ItemInfo] = {
     # adding some placeholders for the garden, gold and cherry locations
     "Garden Gift": ItemInfo(30, IC.filler, 1),
     "Gold Disk": ItemInfo(31, IC.filler, 1),
-    "Cherry Disk": ItemInfo(32, IC.filler, 1),
+    "Cherry Disk": ItemInfo(32, IC.filler, 1)
 }
 
 
