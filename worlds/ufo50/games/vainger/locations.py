@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple
+from typing import TYPE_CHECKING, Dict, NamedTuple, Set
 from BaseClasses import Region, ItemClassification, Item, Location
 from ...constants import get_game_base_id
 
@@ -83,6 +83,9 @@ location_table: Dict[str, LocationInfo] = {
 def get_locations() -> Dict[str, int]:
     return {f"Vainger - {name}": data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items()}
 
+def get_location_groups() -> Dict[str, Set[str]]:
+    location_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {loc_name}" for loc_name in location_table.keys()}}
+    return location_groups
 
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
@@ -92,4 +95,3 @@ def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
             loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None, 
                                             world.player))
         regions[f"Vainger - {loc_data.region_name}"].locations.append(loc)
-
