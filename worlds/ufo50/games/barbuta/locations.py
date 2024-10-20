@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple
+from typing import TYPE_CHECKING, Dict, NamedTuple, Set
 from BaseClasses import Region, Location
 
 from ...constants import get_game_base_id
@@ -47,6 +47,13 @@ location_table: Dict[str, LocationInfo] = {
 # this is for filling out location_name_to_id, it should be static regardless of yaml options
 def get_locations() -> Dict[str, int]:
     return {name: data.id_offset + get_game_base_id("Barbuta") for name, data in location_table.items()}
+
+
+# this should return the location groups for this game, independent of yaml options
+# you should include a group that contains all location for this game that is called the same thing as the game
+def get_location_groups() -> Dict[str, Set[str]]:
+    location_groups: Dict[str, Set[str]] = {"Barbuta": {f"Barbuta - {loc_name}" for loc_name in location_table.keys()}}
+    return location_groups
 
 
 # this is not a required function, but a recommended one -- the world class does not call this function
