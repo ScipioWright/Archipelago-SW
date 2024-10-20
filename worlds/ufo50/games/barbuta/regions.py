@@ -16,7 +16,7 @@ class RegionInfo(NamedTuple):
 # keys are region names, values are the region object
 # for room names, the letter is the row (top to bottom), the number is the column (left to right)
 region_info: Dict[str, RegionInfo] = {
-    "Menu": RegionInfo(),  # the non-existent start menu
+    "Menu": RegionInfo(),  # the non-existent start menu, every game needs a region named "Game Name - Menu"
     "Starting Area": RegionInfo(),
     "Key Room": RegionInfo(),  # the room with the key, where you can access the key
     "Platforms above D4": RegionInfo(),  # the "first" moving platforms
@@ -33,6 +33,9 @@ region_info: Dict[str, RegionInfo] = {
 }
 
 
+# this function is required, and its only argument can be the world class
+# it must return the regions that it created
+# it is recommended that you prepend each region name with the game it is from to avoid overlap
 def create_regions_and_rules(world: "UFO50World") -> Dict[str, Region]:
     barbuta_regions: Dict[str, Region] = {}
     for region_name, region_data in region_info.items():

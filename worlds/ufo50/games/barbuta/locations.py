@@ -44,10 +44,12 @@ location_table: Dict[str, LocationInfo] = {
 }
 
 
+# this is for filling out location_name_to_id, it should be static regardless of yaml options
 def get_locations() -> Dict[str, int]:
     return {name: data.id_offset + get_game_base_id("Barbuta") for name, data in location_table.items()}
 
 
+# this is not a required function, but a recommended one -- the world class does not call this function
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
         loc = Location(world.player, f"Barbuta - {loc_name}", get_game_base_id("Barbuta") + loc_data.id_offset,

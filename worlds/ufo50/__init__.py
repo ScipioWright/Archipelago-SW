@@ -54,6 +54,8 @@ class UFO50Web(WebWorld):
 
 
 # games with an actual implementation
+# add to this list as part of your PR
+# try to keep them in the same order as on the main menu
 ufo50_games: Dict = {
     "Barbuta": barbuta,
 }
@@ -62,14 +64,12 @@ ufo50_games: Dict = {
 # for the purpose of generically making the gift, gold, and cherry locations
 unimplemented_ufo50_games: List[str] = [name for name in game_ids.keys() if name not in ufo50_games.keys()]
 
-temp_item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
-temp_location_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.locations.get_locations().items()}
+temp_ufo50_location_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.locations.get_locations().items()}
 for game in unimplemented_ufo50_games:
     base_id = get_game_base_id(game)
-    temp_item_name_to_id[f"{game} - A Generic Reward"] = base_id + 999
-    temp_location_name_to_id[f"{game} - Garden"] = base_id + 997
-    temp_location_name_to_id[f"{game} - Gold"] = base_id + 998
-    temp_location_name_to_id[f"{game} - Cherry"] = base_id + 999
+    temp_ufo50_location_name_to_id[f"{game} - Garden"] = base_id + 997
+    temp_ufo50_location_name_to_id[f"{game} - Gold"] = base_id + 998
+    temp_ufo50_location_name_to_id[f"{game} - Cherry"] = base_id + 999
 
 
 class UFO50World(World):
@@ -85,8 +85,8 @@ class UFO50World(World):
 
     topology_present = False
 
-    item_name_to_id = temp_item_name_to_id
-    location_name_to_id = temp_location_name_to_id
+    item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
+    location_name_to_id = temp_ufo50_location_name_to_id
 
     options_dataclass = options.UFO50Options
     options: options.UFO50Options
@@ -132,6 +132,11 @@ class UFO50World(World):
             else:
                 self.included_unimplemented_games.append(game_name)
 
+        if not self.included_games:
+            raise OptionError(f"UFO 50: {self.player_name} has not selected any games that have implementations. "
+                              f"Please select at least one game that has an actual implementation. "
+                              f"The following games have actual implementations: {[name for name in ufo50_games]}")
+
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
@@ -139,7 +144,6 @@ class UFO50World(World):
             game_regions = game.regions.create_regions_and_rules(self)
             for region in game_regions.values():
                 self.multiworld.regions.append(region)
-            # !!! get menu region method
             game_menu = self.get_region(f"{game.game_name} - Menu")
             menu.connect(game_menu, f"Boot {game.game_name}")
         for game_name in self.included_unimplemented_games:
@@ -152,24 +156,27 @@ class UFO50World(World):
             menu.add_locations(locs)
 
     def create_item(self, name: str, item_class: ItemClassification = None) -> Item:
+        # figure out which game it's from and call its create_item
         game_name = name.split(" - ", 1)[0]
         if game_name in ufo50_games:
             return ufo50_games[game_name].items.create_item(name, self, *item_class)
         return Item(name, item_class or ItemClassification.filler, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
+        created_items: List[Item] = []
         for game in self.included_games:
-            self.multiworld.itempool += game.items.create_items(self)
-        generic_items = []
-        for game_name in self.included_unimplemented_games:
-            # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
-            for _ in range(3):
-                generic_items.append(self.create_item(f"{game_name} - A Generic Reward", ItemClassification.filler))
-        self.multiworld.itempool += generic_items
+            created_items += game.items.create_items(self)
+
+        unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
+        extra_items_needed = len(unfilled_locations) - len(created_items)
+
+        for _ in range(extra_items_needed):
+            created_items.append(self.create_item(self.get_filler_item_name(), ItemClassification.filler))
+
+        self.multiworld.itempool += created_items
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(self.included_games).items.get_filler_item_name() \
-            if self.included_games else "A Generic Reward"
+        return self.random.choice(self.included_games).items.get_filler_item_name()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         included_games = [game_ids[game.game_name] for game in self.included_games]
