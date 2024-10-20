@@ -30,6 +30,8 @@ bat_orb = "Barbuta - Bat Orb"
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
+    regions["Menu"].connect(regions["Starting Area"])
+
     regions["Starting Area"].connect(regions["Key Room"])
     regions["Starting Area"].connect(regions["Platforms above D4"],
                                      rule=lambda state: state.has(necklace, player))
@@ -76,9 +78,13 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: has_money(50, state, player))
     set_rule(world.get_location("Barbuta - Lower Shop Pin - F2"),
              rule=lambda state: has_money(200, state, player))
-    set_rule(world.get_location("Barbuta - Little Guy Breaks a Wall"),
+    set_rule(world.get_location("Barbuta - Little Guy Breaks a Wall - D7"),
              rule=lambda state: has_money(500, state, player))
 
-    # todo: finalize this
-    set_rule(world.get_location("Barbuta - Beat the Boss"),
+    # based on vibes for now
+    set_rule(world.get_location("Barbuta - Garden"),
+             rule=lambda state: state.has_any((pin, necklace), player))
+    set_rule(world.get_location("Barbuta - Gold"),
              rule=lambda state: state.has_any((blood_sword, wand, bat_orb), player))
+    set_rule(world.get_location("Barbuta - Cherry"),
+             rule=lambda state: state.has_any((blood_sword, wand), player) and state.has(bat_orb, player))

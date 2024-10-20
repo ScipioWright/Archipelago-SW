@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, TYPE_CHECKING
+from typing import Dict, NamedTuple, TYPE_CHECKING, List
 from BaseClasses import Region
 
 from .locations import create_locations
@@ -10,12 +10,13 @@ if TYPE_CHECKING:
 
 # not sure if we really need this yet, but making it in case we need it later since it's easy to remove
 class RegionInfo(NamedTuple):
-    pass
+    rooms: List[str] = []  # rooms this region contains, for the purpose of the garden prize access rule
 
 
 # keys are region names, values are the region object
 # for room names, the letter is the row (top to bottom), the number is the column (left to right)
 region_info: Dict[str, RegionInfo] = {
+    "Menu": RegionInfo(),  # the non-existent start menu
     "Starting Area": RegionInfo(),
     "Key Room": RegionInfo(),  # the room with the key, where you can access the key
     "Platforms above D4": RegionInfo(),  # the "first" moving platforms
@@ -32,12 +33,12 @@ region_info: Dict[str, RegionInfo] = {
 }
 
 
-def create_regions_and_rules(world: "UFO50World", base_id: int) -> Dict[str, Region]:
+def create_regions_and_rules(world: "UFO50World") -> Dict[str, Region]:
     barbuta_regions: Dict[str, Region] = {}
     for region_name, region_data in region_info.items():
         barbuta_regions[region_name] = Region(f"Barbuta - {region_name}", world.player, world.multiworld)
 
-    create_locations(world, barbuta_regions, base_id)
+    create_locations(world, barbuta_regions)
     create_rules(world, barbuta_regions)
 
     return barbuta_regions

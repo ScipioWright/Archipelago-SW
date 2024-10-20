@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, List
-from BaseClasses import ItemClassification as IC
-from ..game_manager import UFO50Item
+from BaseClasses import ItemClassification as IC, Item
+
+from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -24,27 +25,29 @@ item_table: Dict[str, ItemInfo] = {
     "Key": ItemInfo(8, IC.progression, 1),
     "Bat Orb": ItemInfo(9, IC.progression, 1),
     "Trash": ItemInfo(10, IC.filler, 1),
-    "Egg": ItemInfo(11, IC.filler, 4),  # todo: maybe something different?
+    "Egg": ItemInfo(11, IC.filler, 7),  # todo: change this number when we have filler items figured out
     "A Broken Wall": ItemInfo(12, IC.progression, 1),
 }
 
 
-def get_items(base_id: int) -> Dict[str, int]:
-    return {name: data.id_offset + base_id for name, data in item_table.items()}
+def get_items() -> Dict[str, int]:
+    return {f"Barbuta - {name}": data.id_offset + get_game_base_id("Barbuta") for name, data in item_table.items()}
 
 
-def create_item(item_name: str, world: "UFO50World", base_id: int) -> UFO50Item:
+def create_item(item_name: str, world: "UFO50World") -> Item:
+    base_id = get_game_base_id("Barbuta")
     item_data = item_table[item_name]
-    return UFO50Item(item_name, item_data.classification, item_data.id_offset + base_id, world.player)
+    return Item(f"Barbuta - {item_name}", item_data.classification, item_data.id_offset + base_id, world.player)
 
 
-def create_items(world: "UFO50World", base_id: int) -> List[UFO50Item]:
+def create_items(world: "UFO50World") -> List[Item]:
     items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in item_table.items()}
-    barbuta_items: List[UFO50Item] = []
+    barbuta_items: List[Item] = []
     for item_name, quantity in items_to_create.items():
-        barbuta_items.append(create_item(item_name, world, base_id))
+        for _ in range(quantity):
+            barbuta_items.append(create_item(item_name, world))
     return barbuta_items
 
 
 def get_filler_item_name() -> str:
-    return "Egg"
+    return "Barbuta - Egg"
