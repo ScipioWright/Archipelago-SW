@@ -1,7 +1,7 @@
 from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Region
+from BaseClasses import Tutorial, Region, Item, ItemClassification
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
@@ -53,9 +53,23 @@ class UFO50Web(WebWorld):
     tutorials = [setup_en]
 
 
+# games with an actual implementation
 ufo50_games: Dict = {
     "Barbuta": barbuta,
 }
+
+
+# for the purpose of generically making the gift, gold, and cherry locations
+unimplemented_ufo50_games: List[str] = [name for name in game_ids.keys() if name not in ufo50_games.keys()]
+
+temp_item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
+temp_location_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.locations.get_locations().items()}
+for game in unimplemented_ufo50_games:
+    base_id = get_game_base_id(game)
+    temp_item_name_to_id[f"{game} - A Generic Reward"] = base_id + 999
+    temp_location_name_to_id[f"{game} - Garden"] = base_id + 997
+    temp_location_name_to_id[f"{game} - Gold"] = base_id + 998
+    temp_location_name_to_id[f"{game} - Cherry"] = base_id + 999
 
 
 class UFO50World(World):
@@ -71,8 +85,8 @@ class UFO50World(World):
 
     topology_present = False
 
-    item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
-    location_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.locations.get_locations().items()}
+    item_name_to_id = temp_item_name_to_id
+    location_name_to_id = temp_location_name_to_id
 
     options_dataclass = options.UFO50Options
     options: options.UFO50Options
@@ -83,6 +97,7 @@ class UFO50World(World):
     ut_passthrough: Dict[str, Any]
 
     included_games: List  # list of modules for the games that are going to be played by this player
+    included_unimplemented_games: List[str]  # list of included unimplemented games being played by this player
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
@@ -109,7 +124,13 @@ class UFO50World(World):
         if not included_game_names:
             raise OptionError(f"UFO 50: {self.player_name} has not selected any games.")
 
-        self.included_games = [game for name, game in ufo50_games.items() if name in included_game_names]
+        self.included_games = []
+        self.included_unimplemented_games = []
+        for game_name in included_game_names:
+            if game_name in ufo50_games.keys():
+                self.included_games.append(ufo50_games[game_name])
+            else:
+                self.included_unimplemented_games.append(game_name)
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
@@ -121,17 +142,40 @@ class UFO50World(World):
             # !!! get menu region method
             game_menu = self.get_region(f"{game.game_name} - Menu")
             menu.connect(game_menu, f"Boot {game.game_name}")
+        for game_name in self.included_unimplemented_games:
+            # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
+            locs = {
+                f"{game_name} - Garden": self.location_name_to_id[f"{game_name} - Garden"],
+                f"{game_name} - Gold": self.location_name_to_id[f"{game_name} - Gold"],
+                f"{game_name} - Cherry": self.location_name_to_id[f"{game_name} - Cherry"],
+            }
+            menu.add_locations(locs)
+
+    def create_item(self, name: str, item_class: ItemClassification = None) -> Item:
+        game_name = name.split(" - ", 1)[0]
+        if game_name in ufo50_games:
+            return ufo50_games[game_name].items.create_item(name, self, item_class)
+        return Item(name, item_class or ItemClassification.filler, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
         for game in self.included_games:
             self.multiworld.itempool += game.items.create_items(self)
+        generic_items = []
+        for game_name in self.included_unimplemented_games:
+            # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
+            for _ in range(3):
+                generic_items.append(self.create_item(f"{game_name} - A Generic Reward", ItemClassification.filler))
+        self.multiworld.itempool += generic_items
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(self.included_games).items.get_filler_item_name()
+        return self.random.choice(self.included_games).items.get_filler_item_name() \
+            if self.included_games else "A Generic Reward"
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        included_games = [game_ids[game.game_name] for game in self.included_games]
+        included_games += [game_name for game_name in self.included_unimplemented_games]
         slot_data = {
-            "included_games": [game_ids[game.game_name] for game in self.included_games]
+            "included_games": included_games,
         }
         return slot_data
 

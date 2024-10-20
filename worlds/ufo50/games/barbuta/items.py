@@ -34,10 +34,11 @@ def get_items() -> Dict[str, int]:
     return {f"Barbuta - {name}": data.id_offset + get_game_base_id("Barbuta") for name, data in item_table.items()}
 
 
-def create_item(item_name: str, world: "UFO50World") -> Item:
+def create_item(item_name: str, world: "UFO50World", item_class: IC = None) -> Item:
     base_id = get_game_base_id("Barbuta")
     item_data = item_table[item_name]
-    return Item(f"Barbuta - {item_name}", item_data.classification, item_data.id_offset + base_id, world.player)
+    return Item(f"Barbuta - {item_name}", item_class or item_data.classification,
+                item_data.id_offset + base_id, world.player)
 
 
 def create_items(world: "UFO50World") -> List[Item]:
