@@ -25,21 +25,30 @@ item_table: Dict[str, ItemInfo] = {
     "Key": ItemInfo(8, IC.progression, 1),
     "Bat Orb": ItemInfo(9, IC.progression, 1),
     "Trash": ItemInfo(10, IC.filler, 1),
-    "Egg": ItemInfo(11, IC.filler, 7),  # todo: change this number when we have filler items figured out
+    "Egg": ItemInfo(11, IC.filler, 4),
     "A Broken Wall": ItemInfo(12, IC.progression, 1),
 }
 
 
+# this is for filling out item_name_to_id, it should be static regardless of yaml options
 def get_items() -> Dict[str, int]:
     return {f"Barbuta - {name}": data.id_offset + get_game_base_id("Barbuta") for name, data in item_table.items()}
 
 
+# for when the world needs to create an item at random (like with random filler items)
+# the first argument must be the item name. It must be able to handle the world giving it an actual item name
+# the second argument must be the world class
+# the third argument can optionally be an item classification, `item_class: ItemClassification = None`
 def create_item(item_name: str, world: "UFO50World") -> Item:
     base_id = get_game_base_id("Barbuta")
+    if item_name.startswith("Barbuta - "):
+        item_name = item_name.split(" - ", 1)[1]
     item_data = item_table[item_name]
-    return Item(f"Barbuta - {item_name}", item_data.classification, item_data.id_offset + base_id, world.player)
+    return Item(f"Barbuta - {item_name}", item_data.classification, base_id + item_data.id_offset, world.player)
 
 
+# for when the world is getting the items to place into the multiworld's item pool
+# you must pass in the world class as the argument
 def create_items(world: "UFO50World") -> List[Item]:
     items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in item_table.items()}
     barbuta_items: List[Item] = []
