@@ -87,9 +87,9 @@ def get_locations() -> Dict[str, int]:
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
         loc = Location(world.player, f"Vainger - {loc_name}", loc_data.id_offset + get_game_base_id("Vainger"),
-                            regions[loc_data.region_name])
+                            regions[f"Vainger - {loc_data.region_name}"])
         if loc_data.is_event:
             loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None, 
                                             world.player))
-        regions[f"Vainger - {loc_data.region_name}"].locations.add(loc)
+        regions[f"Vainger - {loc_data.region_name}"].locations.append(loc)
 

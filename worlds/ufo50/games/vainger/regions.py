@@ -52,12 +52,12 @@ region_info: Dict[str, RegionInfo] = {
 }
 
 
-def create_regions_and_rules(world: "UFO50World", base_id: int) -> Dict[str, Region]:
+def create_regions_and_rules(world: "UFO50World") -> Dict[str, Region]:
     vainger_regions: Dict[str, Region] = {}
     for region_name, region_data in region_info.items():
-        vainger_regions[region_name] = Region(f"Vainger - {region_name}", world.player, world.multiworld)
+        vainger_regions[f"Vainger - {region_name}"] = Region(f"Vainger - {region_name}", world.player, world.multiworld)
 
-    create_locations(world, vainger_regions, base_id)
+    create_locations(world, vainger_regions)
     create_rules(world, vainger_regions)
 
     return vainger_regions

@@ -30,18 +30,18 @@ def hell_run(shield_upgrades_required: int, is_vanilla: bool, state: CollectionS
 # whether they have a stabilizer, and if they hit a vibes-based shield threshold.
 # TODO: option for this
 # difficulty must be between 0 and 4 inclusive
-def boss_logic(difficulty: int, state: CollectionState, world: UFO50World) -> bool:
+def boss_logic(difficulty: int, state: CollectionState, world:"UFO50World") -> bool:
     player = world.player
     if not state.has_from_list_unique([heat_mod, multi_mod, pulse_mod, force_mod], player, difficulty):
         return False
-    if (difficulty == 4) and not state.has(stabilizer):
+    if (difficulty == 4) and not state.has(stabilizer, player):
         return False
     shield_upgrades_required = [0, 0, 5, 10, 15][difficulty]
     return (state.count(shield_upgrade, player) >= shield_upgrades_required)
 
 # can the player tank two hits from spikes without spike-ng? (either there and back through one layer, or two hits in and zero out)
 # TODO: option for this
-def spike_tank(state: CollectionState, world: UFO50World) -> bool:
+def spike_tank(state: CollectionState, world: "UFO50World") -> bool:
     player = world.player
     # without magmatek, there's no way to have enough shield to cross the spikes in both directions, so this isn't logical.
     if not state.has(heat_mod, player):
@@ -244,6 +244,6 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     # garden: same logic as heat mod
     sr("Garden")
     # gold: check the boss defeat state
-    sr("Gold", rule = lambda state: state.has("Vainger - Hooper Defeated"))
-    # cherry: beating Hooper takes everything but the security clearances, so check those
-    sr("Cherry", rule = lambda state: state.has("Vainger - Hooper Defeated") and state.count(security_clearance, player) >= 3)
+    sr("Gold", rule = lambda state: state.has("Vainger - Hooper Defeated", player))
+    # cherry: beating Hooper requires everything but the security clearance, so checking those two things should be enough
+    sr("Cherry", rule = lambda state: state.has("Vainger - Hooper Defeated", player) and state.count(security_clearance, player) >= 3)
