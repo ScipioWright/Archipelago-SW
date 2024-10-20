@@ -54,18 +54,19 @@ piano_wire = "Night Manor - Piano Wire"
 iron_key = "Night Manor - Iron Key"
 fungicide = "Night Manor - Fungicide"
 
+
 def create_night_manor_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
     regions["Manor - Starting Room"].connect(regions["First Floor & Exterior"],
                                              rule=lambda state: state.has(hairpin, player))
-    regions["First Floor & Exterior"].connect(regions["Second Floor"], 
+    regions["First Floor & Exterior"].connect(regions["Second Floor"],
                                              rule=lambda state: state.has_all((flashlight, batteries), player))
     regions["First Floor & Exterior"].connect(regions["Shed"],
                                              rule=lambda state: state.has(copper_key, player))
     regions["First Floor & Exterior"].connect(regions["Maze"],
-                                              rule=lambda state: state.has_all((red_gemstone, green_gemstone, yellow_gemstone, white_gemstone), player)])
+                                              rule=lambda state: state.has_all((red_gemstone, green_gemstone, yellow_gemstone, white_gemstone), player))
     regions["First Floor & Exterior"].connect(regions["Basement"],
-                                              rule=lambda state: state.has(iron_key, player))
+                                              rule = lambda state: state.has(iron_key, player))
     regions["Second Floor"].connect(regions["Master Bedroom"],
                                              rule=lambda state: state.has(gold_key, player))
     
@@ -95,7 +96,7 @@ def create_night_manor_rules(world: "UFO50World", regions: Dict[str, Region]) ->
     set_rule(world.get_location("Night Manor - Sunroom - Hacksaw"),
             rule=lambda state: state.has(hedge_shears, player))
     set_rule(world.get_location("Night Manor - First Floor Bathroom - Silver Key"),
-            rule=lambda state: state.has_all(tweezers, drain_cleaner), player)
+            rule=lambda state: state.has_all((tweezers, drain_cleaner), player))
     set_rule(world.get_location("Night Manor - First Floor Bathroom - Ring"),
             rule=lambda state: state.has(hacksaw, player))
     set_rule(world.get_location("Night Manor - Guest Bedroom - Brass Key"),
@@ -129,7 +130,4 @@ def create_night_manor_rules(world: "UFO50World", regions: Dict[str, Region]) ->
             rule=lambda state: state.has_all((wrench, motor, steel_key), player))
 
     set_rule(world.get_location("Night Manor - End the Nightmare"),
-            rule=lambda state: state.has_all((screwdriver, gear, oil_can, piano_wire, fungidice), player))
-
-                                
-    
+            rule=lambda state: state.has_all((screwdriver, gear, oil_can, piano_wire, fungicide), player))
