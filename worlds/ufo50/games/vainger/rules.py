@@ -94,8 +94,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                     rule = lambda state: (state.has(heat_mod, player) or hell_run(0, False, state, world)) #itemless hell run
                                          and state.has_all([keycode_A, keycode_B, keycode_C, keycode_D], player))
     thetai7.connect(thetai9)
-    thetaa4.connect(latomc9,
-                    rule = lambda state: state.has("Vainger - ThetaB2 - Miniboss Defeated", player))
+    thetaa4.connect(latomc9) #TODO: do we need logic for the miniboss in ThetaB2?
     thetaa4.connect(verdea1)
     thetaa4.connect(thetaf6,
                     rule = lambda state: state.has_any([multi_mod, force_mod], player) or spike_tank(state, world)) # shadow or spike-ng or spike tank
@@ -217,7 +216,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     sr("VerdeI4 - Shield Upgrade", rule = lambda state: state.has(pulse_mod, player)) # thunder
     sr("VerdeJ2 - Stabilizer", rule = lambda state: state.has(pulse_mod, player)) # zap-shot
     sr("VerdeJ9 - Shield Upgrade", rule = lambda state: state.has(force_mod, player)) # meteor
-    sr("VerdeG5 - Shield Upgrade", rule = lambda state: state.has_all(pulse_mod, player)) # thunder
+    sr("VerdeG5 - Shield Upgrade", rule = lambda state: state.has(pulse_mod, player)) # thunder
     # VerdeSW Area - note that depending on entrance, the player *may* be required to have hot-shot equipped here
     sr("VerdeB5 - Force Mod", rule = lambda state: boss_logic(2, state, world)) # I found this surprisingly difficult casually, I'm giving it boss logic for now
     sr("VerdeC5 - Shield Upgrade")
@@ -244,6 +243,6 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     # garden: same logic as heat mod
     sr("Garden")
     # gold: check the boss defeat state
-    sr("Gold", rule = lambda state: state.has("Vainger - Hooper Defeated", player))
+    sr("Gold", rule = lambda state: state.has("Vainger - Control - Hooper Defeated", player))
     # cherry: beating Hooper requires everything but the security clearance, so checking those two things should be enough
-    sr("Cherry", rule = lambda state: state.has("Vainger - Hooper Defeated", player) and state.count(security_clearance, player) >= 3)
+    sr("Cherry", rule = lambda state: state.has("Vainger - Control - Hooper Defeated", player) and state.count(security_clearance, player) >= 3)
