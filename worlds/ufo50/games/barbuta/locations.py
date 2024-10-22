@@ -1,13 +1,10 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple
-from BaseClasses import Location, Region, ItemClassification
-from .items import BarbutaItem
+from typing import TYPE_CHECKING, Dict, NamedTuple, Set
+from BaseClasses import Region, Location
+
+from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
-    from .. import UFO50World
-
-
-class BarbutaLocation(Location):
-    game: str = "UFO 50"
+    from ... import UFO50World
 
 
 class LocationInfo(NamedTuple):
@@ -15,11 +12,7 @@ class LocationInfo(NamedTuple):
     region_name: str
 
 
-ufo_50_base_id = 21061550_00_000  # reference it from wherever it is when there's an actual world class
-barbuta_base_id = 1_000 + ufo_50_base_id
-
-
-barbuta_location_table: Dict[str, LocationInfo] = {
+location_table: Dict[str, LocationInfo] = {
     "Green Skull - A1": LocationInfo(0, "Platforms above D4"),  # $100
     "Egg Shop - B6": LocationInfo(1, "Boss Area"),  # $100 each
     "Upper Shop Candy - C1": LocationInfo(2, "Platforms above D4"),  # costs $100
@@ -44,15 +37,28 @@ barbuta_location_table: Dict[str, LocationInfo] = {
     "Chest - H5": LocationInfo(21, "Starting Area"),  # $100, be fast before the ledge breaks
     "Chest - H7": LocationInfo(22, "G7 and Nearby"),  # $50
     "Wand Trade - H7": LocationInfo(23, "Wand Trade Room"),  # probably should just have it give you the check
+
+    "Garden": LocationInfo(100, "Boss Area"),
+    "Gold": LocationInfo(101, "Menu"),
+    "Cherry": LocationInfo(102, "Boss Area")
 }
 
 
-def create_barbuta_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
-    for loc_name, loc_data in barbuta_location_table.items():
-        loc = BarbutaLocation(world.player, f"Barbuta - {loc_name}", barbuta_base_id + loc_data.id_offset,
-                              regions[loc_data.region_name])
-        regions[loc_data.region_name].locations.add(loc)
-    victory_location = BarbutaLocation(world.player, "Beat the Boss", None, regions["Boss Area"])
-    victory_location.place_locked_item(BarbutaItem("Barbuta - Victory", ItemClassification.progression, None,
-                                                   world.player))
-    regions["Boss Area"].locations.append(victory_location)
+# this is for filling out location_name_to_id, it should be static regardless of yaml options
+def get_locations() -> Dict[str, int]:
+    return {name: data.id_offset + get_game_base_id("Barbuta") for name, data in location_table.items()}
+
+
+# this should return the location groups for this game, independent of yaml options
+# you should include a group that contains all location for this game that is called the same thing as the game
+def get_location_groups() -> Dict[str, Set[str]]:
+    location_groups: Dict[str, Set[str]] = {"Barbuta": {f"Barbuta - {loc_name}" for loc_name in location_table.keys()}}
+    return location_groups
+
+
+# this is not a required function, but a recommended one -- the world class does not call this function
+def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
+    for loc_name, loc_data in location_table.items():
+        loc = Location(world.player, f"Barbuta - {loc_name}", get_game_base_id("Barbuta") + loc_data.id_offset,
+                       regions[loc_data.region_name])
+        regions[loc_data.region_name].locations.append(loc)
