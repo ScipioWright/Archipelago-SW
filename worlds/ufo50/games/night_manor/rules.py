@@ -57,7 +57,8 @@ fungicide = "Night Manor - Fungicide"
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
-    regions["Manor - Starting Room"].connect(regions["First Floor & Exterior"],
+    regions["Menu"].connect(regions["Starting Room"])
+    regions["Starting Room"].connect(regions["First Floor & Exterior"],
                                              rule=lambda state: state.has(hairpin, player))
     regions["First Floor & Exterior"].connect(regions["Second Floor"],
                                               rule=lambda state: state.has_all((flashlight, batteries), player))

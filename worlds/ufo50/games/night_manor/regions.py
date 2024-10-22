@@ -16,6 +16,7 @@ class RegionInfo(NamedTuple):
 # keys are region names, values are the region object
 # for room names, the letter is the row (top to bottom), the number is the column (left to right)
 region_info: Dict[str, RegionInfo] = {
+    "Menu": RegionInfo(),  # the non-existent start menu, every game needs a region named "Game Name - Menu"
     "Starting Room": RegionInfo(), # the initial room the game starts in
     "First Floor & Exterior": RegionInfo(), # the floor accessible immediately after you exit the starting area
     "Second Floor": RegionInfo(), # second floor accessible after you get powered flashlight
