@@ -29,7 +29,8 @@ night_manor_region_info: Dict[str, RegionInfo] = {
 def create_night_manor_regions_and_rules(world: "UFO50World") -> None:
     night_manor_regions: Dict[str, Region] = {}
     for region_name, region_data in night_manor_region_info.items():
-        night_manor_regions[region_name] = Region(f"Night Manor - {region_name}", world.player, world.multiworld)
+        night_manor_regions[region_name] = Region(
+            f"Night Manor - {region_name}", world.player, world.multiworld)
 
     create_night_manor_locations(world, night_manor_regions)
     create_night_manor_rules(world, night_manor_regions)
