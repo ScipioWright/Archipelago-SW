@@ -8,9 +8,11 @@ from worlds.AutoWorld import World, WebWorld
 
 from .constants import *
 from . import options
-from .games import barbuta, vainger
+
+from .games import barbuta, vainger, night_manor
 from .games.barbuta import items, locations, regions
 from .games.vainger import items, locations, regions
+from .games.night_manor import items, locations, regions
 
 
 class UFO50Settings(Group):
@@ -60,6 +62,7 @@ class UFO50Web(WebWorld):
 ufo50_games: Dict = {
     "Barbuta": barbuta,
     "Vainger": vainger
+    "Night Manor": night_manor
 }
 
 
