@@ -1,25 +1,16 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple
-from BaseClasses import Location, Region, ItemClassification
-from .items import NightManorItem
+from typing import TYPE_CHECKING, Dict, NamedTuple, Set
+from BaseClasses import Region, Location
+
+from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
     from .. import UFO50World
-
-
-class NightManorLocation(Location):
-    game: str = "UFO 50"
-
 
 class LocationInfo(NamedTuple):
     id_offset: int
     region_name: str
 
-
-ufo_50_base_id = 21061550_00_000  # reference it from wherever it is when there's an actual world class
-night_manor_base_id = 42_000 + ufo_50_base_id
-
-
-night_manor_location_table: Dict[str, LocationInfo] = {
+location_table: Dict[str, LocationInfo] = {
     "Starting Room - Spoon": LocationInfo(0, "Starting Room"),
     "Starting Room - Bowl": LocationInfo(1, "Starting Room"),
     "Starting Room - Yellow Note": LocationInfo(2, "Starting Room"), # in vent after you open with spoon
@@ -114,23 +105,27 @@ night_manor_location_table: Dict[str, LocationInfo] = {
 
     "Manor - Iron Key": LocationInfo(68, "Maze"), #combine crossbow and bolt, lure killer or wait, shoot him and get the key
 
-    "Basement - Journal Entry 17": LocationInfo(69, "Maze") #on floor
+    "Basement - Journal Entry 17": LocationInfo(69, "Maze"), #on floor
+
+    "Garden": LocationInfo(70, "First Floor & Exterior"),
+    "Gold": LocationInfo(71, "First Floor & Exterior"),
+    "Cherry": LocationInfo(72, "Basement")
  
 }
 
+# this is for filling out location_name_to_id, it should be static regardless of yaml options
+def get_locations() -> Dict[str, int]:
+    return {name: data.id_offset + get_game_base_id("Night Manor") for name, data in location_table.items()}
 
-def create_night_manor_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
-    for loc_name, loc_data in night_manor_location_table.items():
-        loc = NightManorLocation(world.player, f"Night Manor - {loc_name}", night_manor_base_id + loc_data.id_offset,
-                                 regions[loc_data.region_name])
-        regions[loc_data.region_name].locations.add(loc)
-    gold_victory_location = NightManorLocation(
-        world.player, "Escape by Car", None, regions["First Floor & Exterior"])
-    cherry_victory_location = NightManorLocation(
-        world.player, "End the Nightmare", None, regions["Basement"])
-    gold_victory_location.place_locked_item(NightManorItem("Night Manor - Gold Victory", ItemClassification.progression, None,
-                                                           world.player))
-    cherry_victory_location.place_locked_item(NightManorItem("Night Manor - Cherry Victory", ItemClassification.progression, None,
-                                                             world.player))
-    regions["First Floor & Exterior"].locations.append(gold_victory_location)
-    regions["Basement"].locations.append(cherry_victory_location)
+# this should return the location groups for this game, independent of yaml options
+# you should include a group that contains all location for this game that is called the same thing as the game
+def get_location_groups() -> Dict[str, Set[str]]:
+    location_groups: Dict[str, Set[str]] = {"Night Manor": {f"Night Manor - {loc_name}" for loc_name in location_table.keys()}}
+    return location_groups
+
+# this is not a required function, but a recommended one -- the world class does not call this function
+def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
+    for loc_name, loc_data in location_table.items():
+        loc = Location(world.player, f"Night Manor - {loc_name}", get_game_base_id("Night Manor") + loc_data.id_offset,
+                       regions[loc_data.region_name])
+        regions[loc_data.region_name].locations.append(loc)

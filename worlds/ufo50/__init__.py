@@ -8,8 +8,9 @@ from worlds.AutoWorld import World, WebWorld
 
 from .constants import *
 from . import options
-from .games import barbuta
+from .games import barbuta, night_manor
 from .games.barbuta import items, locations, regions
+from .games.night_manor import items, locations, regions
 
 
 class UFO50Settings(Group):
@@ -58,6 +59,7 @@ class UFO50Web(WebWorld):
 # try to keep them in the same order as on the main menu
 ufo50_games: Dict = {
     "Barbuta": barbuta,
+    "Night Manor": night_manor
 }
 
 
