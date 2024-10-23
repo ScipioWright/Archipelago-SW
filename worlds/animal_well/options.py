@@ -194,6 +194,19 @@ class ExcludeSongChests(DefaultOnToggle):
     display_name = "Exclude Song Chests"
 
 
+class Firecrackers(Choice):
+    """
+    Decide whether firecrackers replenish themselves.
+    Infinite will give you the Fanny Pack from the start and remove Firecracker Refill from the item pool.
+    """
+    internal_name = "firecrackers_refill"
+    display_name = "Firecracker Behavior"
+    option_vanilla = 0
+    # option_refill_on_spawn = 1
+    option_infinite = 2
+    default = 0
+
+
 class WheelHopping(Choice):
     """
     Included temporarily for backwards compatibility.
@@ -223,6 +236,7 @@ class AnimalWellOptions(PerGameCommonOptions):
     eggs_needed: EggsNeeded
     key_ring: KeyRing
     matchbox: Matchbox
+    firecracker_refills: Firecrackers
     
     candle_checks: CandleChecks
     bunnies_as_checks: BunniesAsChecks
