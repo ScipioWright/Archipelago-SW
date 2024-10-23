@@ -61,7 +61,7 @@ class UFO50Web(WebWorld):
 # try to keep them in the same order as on the main menu
 ufo50_games: Dict = {
     "Barbuta": barbuta,
-    "Vainger": vainger
+    "Vainger": vainger,
     "Night Manor": night_manor
 }
 
