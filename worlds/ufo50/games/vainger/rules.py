@@ -34,10 +34,10 @@ def boss_logic(difficulty: int, state: CollectionState, world:"UFO50World") -> b
     player = world.player
     if not state.has_from_list_unique([heat_mod, multi_mod, pulse_mod, force_mod], player, difficulty):
         return False
-    if (difficulty == 4) and not state.has(stabilizer, player):
+    if difficulty == 4 and not state.has(stabilizer, player):
         return False
     shield_upgrades_required = [0, 0, 5, 10, 15][difficulty]
-    return (state.count(shield_upgrade, player) >= shield_upgrades_required)
+    return state.has(shield_upgrade, player, shield_upgrades_required)
 
 # can the player tank two hits from spikes without spike-ng? (either there and back through one layer, or two hits in and zero out)
 # TODO: option for this
@@ -47,7 +47,7 @@ def spike_tank(state: CollectionState, world: "UFO50World") -> bool:
     if not state.has(heat_mod, player):
         return False
     shield_upgrades_required = 6 # 105 shield, enough to take two hits with magmatek
-    return (state.count(shield_upgrade, player) >= shield_upgrades_required)
+    return state.has(shield_upgrade, player, shield_upgrades_required)
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
@@ -92,7 +92,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                     rule=lambda state: state.has(heat_mod, player) or hell_run(0, False, state, world)) #itemless hell run
     thetaf5.connect(control,
                     rule=lambda state: (state.has(heat_mod, player) or hell_run(0, False, state, world)) #itemless hell run
-                                         and state.has_all([keycode_A, keycode_B, keycode_C, keycode_D], player))
+                                       and state.has_all([keycode_A, keycode_B, keycode_C, keycode_D], player))
     thetai7.connect(thetai9)
     thetaa4.connect(latomc9) #TODO: do we need logic for the miniboss in ThetaB2?
     thetaa4.connect(verdea1)
@@ -118,12 +118,12 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     verdee1.connect(verdee6)
     verdee1.connect(verdei7)
     verdee6.connect(verdeswarea,
-                    rule=lambda state: state.count(security_clearance, player) >= 2
+                    rule=lambda state: state.has(security_clearance, player, 2)
                                        or state.has(heat_mod, player)) # hot-shot for the shortcut F5 -> E5
     verdei7.connect(verdeswarea,
-                    rule=lambda state: state.count(security_clearance, player) >= 1) 
+                    rule=lambda state: state.has(security_clearance, player, 1))
     verdeswarea.connect(verdei9,
-                        rule=lambda state: state.count(security_clearance, player) >= 2 
+                        rule=lambda state: state.has(security_clearance, player, 2)
                                            and state.has("Vainger - VerdeI9 - Sura Defeated", player)) # genepod only exists after boss kill
     # the spike tank strat is unreasonable coming from the left, so the fact that a player coming from the left *might* have used hot-shot
     # to get here is irrelevant.
@@ -138,7 +138,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     latomc9.connect(latomf5,
                     rule=lambda state: state.has_all([heat_mod, pulse_mod], player)) # hot-shot and thunder
     latomf7.connect(latomc6,
-                    rule=lambda state: state.count(security_clearance, player) >= 3
+                    rule=lambda state: state.has(security_clearance, player, 3)
                                        and state.has_any([pulse_mod, multi_mod], player)) # thunder or tri-shot
     latomf7.connect(latomd3,
                     rule=lambda state: state.has_any([pulse_mod, multi_mod], player)) # thunder or tri-shot
@@ -146,19 +146,19 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                     rule=lambda state: state.has(pulse_mod, player)) # thunder or possibly tanking an electrical arc later
     latomd3.connect(latomf5)
     latomd3.connect(latomc6,
-                    rule=lambda state: state.count(security_clearance, player) >= 3)
+                    rule=lambda state: state.has(security_clearance, player, 3))
     latomf5.connect(latomd3)
     latomf5.connect(latomc6,
-                    rule=lambda state: state.count(security_clearance, player) >= 2 and state.has(heat_mod, player)) # hot-shot
+                    rule=lambda state: state.has(security_clearance, player, 2) and state.has(heat_mod, player)) # hot-shot
     latomc6.connect(latomd5,
-                    rule=lambda state: state.count(security_clearance, player) >= 3 and state.has("Vainger - LatosD5 - Boss Defeated", player))
+                    rule=lambda state: state.has(security_clearance, player, 3) and state.has("Vainger - LatosD5 - Boss Defeated", player))
     # TODO: the normal route is one-way; does the miniboss block you from doing the upper route in reverse?
     latomf5.connect(latomi4,
                     rule=lambda state: state.has(pulse_mod, player)) # NOTE: thunder required to prevent a softlock; this means vanilla pulse mod will be impossible.
     latomc6.connect(latomd6area,
                     rule=lambda state: state.has(heat_mod, player)) # hot-shot for the shortcut C6 -> D6
     latomf5.connect(latomd6area,
-                    rule=lambda state: state.count(security_clearance, player) >= 2)
+                    rule=lambda state: state.has(security_clearance, player, 2))
     
     def sr(loc: str, rule: CollectionRule = lambda state: True):
         set_rule(world.get_location(f"Vainger - {loc}"), rule)
@@ -171,7 +171,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     sr("LatomB9 - Shield Upgrade", rule=lambda state: state.has(multi_mod, player)) # shadow
     sr("LatomJ10 - Shield Upgrade", rule=lambda state: state.has(heat_mod, player)) # hot-shot
     # LatomC6
-    sr("LatomC4 - Shield Upgrade", rule=lambda state: state.count(security_clearance, player) >= 3)
+    sr("LatomC4 - Shield Upgrade", rule=lambda state: state.has(security_clearance, player, 3))
     # sr("LatomC6 - Clone Material")
     # LatomD6 Area
     # sr("LatomD6 - Security Clearance") # accounted for by region logic
@@ -188,7 +188,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                                         and (state.has(force_mod, player) or spike_tank(state, world)))   # meteor or spike-ng or spike tank
     #
     # Alien boss, from LatomC6
-    sr("LatomD5 - Boss Defeated", rule=lambda state: state.count(security_clearance, player) >= 3
+    sr("LatomD5 - Boss Defeated", rule=lambda state: state.has(security_clearance, player, 3)
                                                      and boss_logic(2, state, world)) #TODO: check boss difficulty
     # sr("LatomD5 - Key Code") # relative to boss genepod
     #
@@ -227,8 +227,8 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     sr("VerdeE1 - Ramses Defeated", rule=lambda state: boss_logic(1, state, world)) #TODO: check difficulty
     # sr("VerdeE1 - Key Code") # relative to boss genepod
     # Sura fight, or maybe Jorgensen. From either E6 or I7 genepod
-    sr("VerdeI9 - Sura Defeated", rule=lambda state: state.count(security_clearance, player) >= 2
-                                                    and boss_logic(3, state, world)) # absolute monster
+    sr("VerdeI9 - Sura Defeated", rule=lambda state: state.has(security_clearance, player, 2)
+                                                     and boss_logic(3, state, world)) # absolute monster
     # sr("VerdeI9 - Key Code") # relative to boss genepod
 
     # Control
@@ -245,4 +245,4 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     # gold: check the boss defeat state
     sr("Gold", rule=lambda state: state.has("Vainger - Control - Hooper Defeated", player))
     # cherry: beating Hooper requires everything but the security clearance, so checking those two things should be enough
-    sr("Cherry", rule=lambda state: state.has("Vainger - Control - Hooper Defeated", player) and state.count(security_clearance, player) >= 3)
+    sr("Cherry", rule=lambda state: state.has("Vainger - Control - Hooper Defeated", player) and state.has(security_clearance, player, 3))
