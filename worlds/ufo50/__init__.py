@@ -62,13 +62,14 @@ class UFO50Web(WebWorld):
 ufo50_games: Dict = {
     "Barbuta": barbuta,
     "Vainger": vainger,
-    "Night Manor": night_manor
+    "Night Manor": night_manor,
 }
 
 
 # for the purpose of generically making the gift, gold, and cherry locations
 unimplemented_ufo50_games: List[str] = [name for name in game_ids.keys() if name not in ufo50_games.keys()]
 
+# doing something like this in the world class itself led to weird errors
 temp_ufo50_location_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.locations.get_locations().items()}
 for game in unimplemented_ufo50_games:
     base_id = get_game_base_id(game)
@@ -87,7 +88,6 @@ class UFO50World(World):
     game = GAME_NAME
     web = UFO50Web()
     required_client_version = (0, 5, 0)
-
     topology_present = False
 
     item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
@@ -101,6 +101,7 @@ class UFO50World(World):
     settings_key = "ufo_50_settings"
     settings: ClassVar[UFO50Settings]
 
+    # for universal tracker support
     using_ut: bool
     ut_passthrough: Dict[str, Any]
 
@@ -111,9 +112,11 @@ class UFO50World(World):
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
 
+        # for universal tracker support
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "UFO 50" in self.multiworld.re_gen_passthrough:
                 self.ut_passthrough = self.multiworld.re_gen_passthrough["UFO 50"]
+                # sets the games that ended up on as the always_on_games, turns off random_choice_games
                 included_game_ids = self.ut_passthrough["included_games"]
                 id_to_game = {v: k for k, v in game_ids.items()}
                 self.options.always_on_games.value = {id_to_game[game_id] for game_id in included_game_ids}
@@ -199,5 +202,4 @@ class UFO50World(World):
     @staticmethod
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
-        # we are using re_gen_passthrough over modifying the world here due to complexities with ER
         return slot_data
