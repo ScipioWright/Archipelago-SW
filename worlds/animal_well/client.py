@@ -11,6 +11,7 @@ import time
 import traceback
 import struct
 import pymem
+import logging
 from typing import Dict, Any
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, get_base_parser
@@ -39,6 +40,8 @@ DEATHLINK_RECEIVED_MESSAGE = "{name} died and took you with them."
 HEADER_LENGTH = 0x18
 SAVE_SLOT_LENGTH = 0x27010
 CUSTOM_STAMPS = 255
+
+bean_logger = logging.getLogger("BeanLogger")
 
 
 class AnimalWellCommandProcessor(ClientCommandProcessor):
@@ -227,15 +230,15 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                     else:
                         raise NotImplementedError("Only Windows is implemented right now")
         except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, pymem.exception.MemoryWriteError) as e:
-            logger.error("%s", e)
+            bean_logger.error("%s", e)
             self.ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
         except Exception as e:
-            logger.fatal("An unknown error has occurred: %s", e)
+            bean_logger.fatal("An unknown error has occurred: %s", e)
             self.ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
 
 
 class Stamp:
@@ -289,8 +292,8 @@ class AnimalWellContext(CommonContext):
         self.used_berries: int
 
         from . import AnimalWellWorld
-        self.bean_patcher = BeanPatcher().set_logger(logger).set_version_string(AnimalWellWorld.version_string)
-        self.bean_patcher.set_logger(logger)
+        self.bean_patcher = BeanPatcher().set_logger(bean_logger).set_version_string(AnimalWellWorld.version_string)
+        self.bean_patcher.set_logger(bean_logger)
         self.bean_patcher.set_bean_death_function(self.on_bean_death)
         self.bean_patcher.game_draw_routine_default_string = "Connected to the well..."
         self.stamps = []
@@ -342,7 +345,8 @@ class AnimalWellContext(CommonContext):
             Animal Well Manager
             """
             logging_pairs = [
-                ("Client", "Archipelago")
+                ("Client", "Archipelago"),
+                ("BeanLogger", "Animal Well Log")
             ]
             base_title = "Archipelago Animal Well Client"
 
@@ -485,8 +489,8 @@ class AnimalWellContext(CommonContext):
                         self.on_deathlink(args["data"])
 
         except Exception as e:
-            logger.error("Error while parsing Package from AP: %s", e)
-            logger.info("Package details: {}".format(args))
+            bean_logger.error("Error while parsing Package from AP: %s", e)
+            bean_logger.info("Package details: {}".format(args))
 
     def on_deathlink(self, data: Dict[str, Any]) -> None:
         self.last_death_link = max(data["time"], self.last_death_link)
@@ -620,19 +624,19 @@ class AnimalWellContext(CommonContext):
         if current_game_state != self.last_game_state:
             self.last_game_state = current_game_state
             if current_game_state == 1:
-                logger.info(f"Game currently displaying the splash screens. "
-                            f"Deferring until new game is started or saved game is loaded...")
+                bean_logger.info(f"Game currently displaying the splash screens. "
+                                 f"Deferring until new game is started or saved game is loaded...")
             elif current_game_state == 2:
-                logger.info(f"Game currently displaying the main menu. "
-                            f"Deferring until new game is started or saved game is loaded...")
+                bean_logger.info(f"Game currently displaying the main menu. "
+                                 f"Deferring until new game is started or saved game is loaded...")
             elif current_game_state == 3:
-                logger.info(f"Game currently displaying the new game intro scene. "
-                            f"Deferring until new game is started or saved game is loaded...")
+                bean_logger.info(f"Game currently displaying the new game intro scene. "
+                                 f"Deferring until new game is started or saved game is loaded...")
             elif current_game_state == 4:
-                logger.info(f"Game is now loaded and running!")
+                bean_logger.info(f"Game is now loaded and running!")
             else:
-                logger.info(f"Game currently in unknown game state {current_game_state}. "
-                            f"Deferring until new game is started or saved game is loaded...")
+                bean_logger.info(f"Game currently in unknown game state {current_game_state}. "
+                                 f"Deferring until new game is started or saved game is loaded...")
 
         return current_game_state == 4
 
@@ -695,15 +699,15 @@ class AWLocations:
             else:
                 raise NotImplementedError("Only Windows is implemented right now")
         except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, ConnectionResetError) as e:
-            logger.error("%s", e)
+            bean_logger.error("%s", e)
             ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
         except (NotImplementedError, Exception) as e:
-            logger.fatal("An unknown error has occurred: %s", e)
+            bean_logger.fatal("An unknown error has occurred: %s", e)
             ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
     async def write_to_archipelago(self, ctx):
         """
@@ -733,10 +737,10 @@ class AWLocations:
                      "locations": locations_checked}
                 ])
         except Exception as e:
-            logger.fatal("An unknown error has occurred: %s", e)
+            bean_logger.fatal("An unknown error has occurred: %s", e)
             ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
 
 class AWItems:
@@ -994,10 +998,10 @@ class AWItems:
             self.firecracker_refill = len([item for item in items if item == item_name_to_id["Firecracker Refill"]])
             self.big_blue_fruit = len([item for item in items if item == item_name_to_id["Big Blue Fruit"]])
         except Exception as e:
-            logger.fatal("An unknown error has occurred: %s", e)
+            bean_logger.fatal("An unknown error has occurred: %s", e)
             ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
     def write_to_game(self, ctx):
         """
@@ -1326,15 +1330,15 @@ class AWItems:
                 raise NotImplementedError("Only Windows is implemented right now")
         except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, pymem.exception.MemoryWriteError,
                 ConnectionResetError) as e:
-            logger.error("%s", e)
+            bean_logger.error("%s", e)
             ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
         except (NotImplementedError, Exception) as e:
-            logger.fatal("%s", e)
+            bean_logger.fatal("%s", e)
             ctx.connection_status = CONNECTION_ABORTED_STATUS
             traceback.print_exc()
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
 
 async def get_animal_well_process_handle(ctx: AnimalWellContext):
@@ -1343,9 +1347,9 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
     """
     try:
         if platform.uname()[0] == "Windows":
-            logger.debug("Getting process handle on Windows")
+            bean_logger.debug("Getting process handle on Windows")
             process_handle = pymem.Pymem("Animal Well.exe")
-            logger.debug("Found PID %d", process_handle.process_id)
+            bean_logger.debug("Found PID %d", process_handle.process_id)
 
             ctx.bean_patcher.attach_to_process(process_handle)
 
@@ -1354,7 +1358,7 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
             if address is None:
                 savefile_location = \
                     rf"C:\Users\{os.getenv('USERNAME')}\AppData\LocalLow\Billy Basso\Animal Well\AnimalWell.sav"
-                logger.debug("Reading save file data from default location: %s", savefile_location)
+                bean_logger.debug("Reading save file data from default location: %s", savefile_location)
                 with open(savefile_location, "rb") as savefile:
                     slot_1 = bytearray(savefile.read(HEADER_LENGTH + SAVE_SLOT_LENGTH))[HEADER_LENGTH:]
 
@@ -1370,8 +1374,8 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
                         max_length = current_length
                         consecutive_start = i - current_length + 1
                 pattern = slot_1[consecutive_start: consecutive_start + max_length]
-                logger.debug("Found the longest nonzero consecutive memory at %s of length %s", hex(consecutive_start),
-                             hex(max_length))
+                bean_logger.debug("Found the longest nonzero consecutive memory at %s of length %s",
+                                  hex(consecutive_start), hex(max_length))
 
                 # Preprocess
                 pattern_length = len(pattern)
@@ -1388,7 +1392,7 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
                         if iterations % 0x10000 == 0:
                             await asyncio.sleep(0.05)
                         if iterations % 0x80000 == 0:
-                            logger.info("Looking for start address of memory, %s", hex(address))
+                            bean_logger.info("Looking for start address of memory, %s", hex(address))
 
                         i = pattern_length - 1
 
@@ -1403,11 +1407,11 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
                     except pymem.exception.MemoryReadError:
                         address += max_length
 
-            logger.info("Found start address of memory, %s", hex(address))
+            bean_logger.info("Found start address of memory, %s", hex(address))
 
             # Verify
             version = process_handle.read_uint(address)
-            logger.debug("Found version number %d", version)
+            bean_logger.debug("Found version number %d", version)
 
             if version != 9:
                 raise NotImplementedError("Animal Well version %d detected, only version 9 supported", version)
@@ -1429,22 +1433,22 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
             raise NotImplementedError("Only Windows is implemented right now")
     except (pymem.exception.ProcessNotFound, pymem.exception.CouldNotOpenProcess, pymem.exception.ProcessError,
             pymem.exception.MemoryReadError) as e:
-        logger.error("%s", e)
+        bean_logger.error("%s", e)
         ctx.connection_status = CONNECTION_REFUSED_STATUS
         traceback.print_exc()
-        logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+        bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
     except (FileNotFoundError, NotImplementedError, Exception) as e:
-        logger.fatal("%s", e)
+        bean_logger.fatal("%s", e)
         ctx.connection_status = CONNECTION_ABORTED_STATUS
         traceback.print_exc()
-        logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+        bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
 
 async def process_sync_task(ctx: AnimalWellContext):
     """
     Connect to the Animal Well process
     """
-    logger.info("Starting Animal Well connector. Use /connection for status information")
+    bean_logger.info("Starting Animal Well connector. Use /connection for status information")
     locations = AWLocations()
     items = AWItems()
 
@@ -1454,25 +1458,25 @@ async def process_sync_task(ctx: AnimalWellContext):
 
         elif ctx.connection_status in [CONNECTION_REFUSED_STATUS, CONNECTION_RESET_STATUS]:
             await asyncio.sleep(5)
-            logger.info("Attempting to reconnect to Animal Well")
+            bean_logger.info("Attempting to reconnect to Animal Well")
             if ctx.get_animal_well_process_handle_task:
                 ctx.get_animal_well_process_handle_task.cancel()
             ctx.get_animal_well_process_handle_task = asyncio.create_task(get_animal_well_process_handle(ctx))
             ctx.connection_status = CONNECTION_TENTATIVE_STATUS
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
         elif ctx.get_animal_well_process_handle_task is None and ctx.connection_status == CONNECTION_INITIAL_STATUS:
-            logger.info("Attempting to connect to Animal Well")
+            bean_logger.info("Attempting to connect to Animal Well")
             ctx.get_animal_well_process_handle_task = asyncio.create_task(get_animal_well_process_handle(ctx))
             ctx.connection_status = CONNECTION_TENTATIVE_STATUS
-            logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+            bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
         elif (ctx.process_handle and ctx.start_address and ctx.get_animal_well_process_handle_task.done()
               and ctx.bean_patcher.save_file and ctx.current_game_state != 1):
             if ctx.connection_status == CONNECTION_TENTATIVE_STATUS:
-                logger.info("Successfully Connected to Animal Well")
+                bean_logger.info("Successfully Connected to Animal Well")
                 ctx.connection_status = CONNECTION_CONNECTED_STATUS
-                logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
+                bean_logger.info(f"Animal Well Connection Status: {ctx.connection_status}")
 
             locations.read_from_game(ctx)
             await locations.write_to_archipelago(ctx)
