@@ -87,70 +87,61 @@ item_table: Dict[str, ItemInfo] = {
     "Journal Entry 14": ItemInfo(61, IC.filler),
     "Journal Entry 15": ItemInfo(45, IC.filler),
     "Journal Entry 16": ItemInfo(51, IC.filler),
-    "Journal Entry 17": ItemInfo(69, IC.filler)
-
+    "Journal Entry 17": ItemInfo(69, IC.filler),
 }
 
 
-# this is for filling out item_name_to_id, it should be static regardless of yaml options
 def get_items() -> Dict[str, int]:
     return {f"Night Manor - {name}": data.id_offset + get_game_base_id("Night Manor") for name, data in item_table.items()}
-
-# this should return the item groups for this game, independent of yaml options
-# you should include a group that contains all items for this game that is called the same thing as the game
 
 
 def get_item_groups() -> Dict[str, Set[str]]:
     item_groups: Dict[str, Set[str]] = {"Night Manor": {
         f"Night Manor - {item_name}" for item_name in item_table.keys()}}
     item_groups.update({
-        "Night Manor - Journal Entries": {"Night Manor - Journal Entry 1",
-                            "Night Manor - Journal Entry 2",
-                            "Night Manor - Journal Entry 3",
-                            "Night Manor - Journal Entry 4",
-                            "Night Manor - Journal Entry 5",
-                            "Night Manor - Journal Entry 6",
-                            "Night Manor - Journal Entry 7",
-                            "Night Manor - Journal Entry 8",
-                            "Night Manor - Journal Entry 9",
-                            "Night Manor - Journal Entry 10",
-                            "Night Manor - Journal Entry 11",
-                            "Night Manor - Journal Entry 12",
-                            "Night Manor - Journal Entry 13",
-                            "Night Manor - Journal Entry 14",
-                            "Night Manor - Journal Entry 15",
-                            "Night Manor - Journal Entry 16",
-                            "Night Manor - Journal Entry 17"},
-        "Night Manor - Gems": {"Night Manor - Red Gemstone",
-                 "Night Manor - Green Gemstone",
-                 "Night Manor - Yellow Gemstone",
-                 "Night Manor - White Gemstone"},
-        "Night Manor - Keys": {"Night Manor - Copper Key",
-                 "Night Manor - Bronze Key",
-                 "Night Manor - Gold Key",
-                 "Night Manor - Steel Key",
-                 "Night Manor - Silver Key",
-                 "Night Manor - Brass Key",
-                 "Night Manor - Aluminum Key",
-                 "Night Manor - Iron Key"}
+        "Night Manor - Journal Entries": {
+            "Night Manor - Journal Entry 1",
+            "Night Manor - Journal Entry 2",
+            "Night Manor - Journal Entry 3",
+            "Night Manor - Journal Entry 4",
+            "Night Manor - Journal Entry 5",
+            "Night Manor - Journal Entry 6",
+            "Night Manor - Journal Entry 7",
+            "Night Manor - Journal Entry 8",
+            "Night Manor - Journal Entry 9",
+            "Night Manor - Journal Entry 10",
+            "Night Manor - Journal Entry 11",
+            "Night Manor - Journal Entry 12",
+            "Night Manor - Journal Entry 13",
+            "Night Manor - Journal Entry 14",
+            "Night Manor - Journal Entry 15",
+            "Night Manor - Journal Entry 16",
+            "Night Manor - Journal Entry 17"},
+        "Night Manor - Gems": {
+            "Night Manor - Red Gemstone",
+            "Night Manor - Green Gemstone",
+            "Night Manor - Yellow Gemstone",
+            "Night Manor - White Gemstone"},
+        "Night Manor - Keys": {
+            "Night Manor - Copper Key",
+            "Night Manor - Bronze Key",
+            "Night Manor - Gold Key",
+            "Night Manor - Steel Key",
+            "Night Manor - Silver Key",
+            "Night Manor - Brass Key",
+            "Night Manor - Aluminum Key",
+            "Night Manor - Iron Key"},
     })
     return item_groups
 
-# for when the world needs to create an item at random (like with random filler items)
-# the first argument must be the item name. It must be able to handle the world giving it an actual item name
-# the second argument must be the world class
-# the third argument can optionally be an item classification, `item_class: ItemClassification = None`
 
-
-def create_item(item_name: str, world: "UFO50World") -> Item:
+def create_item(item_name: str, world: "UFO50World", item_class: IC = None) -> Item:
     base_id = get_game_base_id("Night Manor")
     if item_name.startswith("Night Manor - "):
         item_name = item_name.split(" - ", 1)[1]
     item_data = item_table[item_name]
-    return Item(f"Night Manor - {item_name}", item_data.classification, base_id + item_data.id_offset, world.player)
-
-# for when the world is getting the items to place into the multiworld's item pool
-# you must pass in the world class as the argument
+    return Item(f"Night Manor - {item_name}", item_class or item_data.classification,
+                base_id + item_data.id_offset, world.player)
 
 
 def create_items(world: "UFO50World") -> List[Item]:

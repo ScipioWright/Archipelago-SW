@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 # adapted from Barbuta, thanks Scipio! <3
 
+
 class LocationInfo(NamedTuple):
     id_offset: Optional[int]
     region_name: str
@@ -27,18 +28,19 @@ location_table: Dict[str, LocationInfo] = {
     "LatomE4 - Shield Upgrade": LocationInfo(8, "LatomF5 Genepod"),
     "LatomG8 - Multi Mod": LocationInfo(9, "LatomF7 Genepod"), 
     "LatomI4 - Pulse Mod": LocationInfo(10, "LatomI4 Genepod"), 
-    "LatomJ1 - Stabilizer": LocationInfo(11, "LatomF5 Genepod"),        #TODO: does this need to be I4 instead due to the miniboss?
-    "LatomJ3 - Shield Upgrade": LocationInfo(12, "LatomF5 Genepod"),    # do it from F5 to avoid the issues with I4
+    "LatomJ1 - Stabilizer": LocationInfo(11, "LatomF5 Genepod"),  # TODO: does this need to be I4 instead due to the miniboss?
+    "LatomJ3 - Shield Upgrade": LocationInfo(12, "LatomF5 Genepod"),  # do it from F5 to avoid the issues with I4
     "LatomJ10 - Shield Upgrade": LocationInfo(13, "LatomC9 Genepod"), 
 
-    "LatomD5 - Boss Defeated": LocationInfo(None, "LatomC6 Genepod"),      # alien?   
+    "LatomD5 - Boss Defeated": LocationInfo(None, "LatomC6 Genepod"),  # alien?
 
     "ThetaA2 - Clone Material": LocationInfo(100, "ThetaA4 Genepod"), 
     "ThetaA3 - Shield Upgrade": LocationInfo(101, "ThetaA4 Genepod"), 
     "ThetaA9 - Shield Upgrade": LocationInfo(102, "VerdeA1 Genepod"), 
     "ThetaC5 - Clone Material": LocationInfo(103, "ThetaA4 Genepod"), 
-    # the logic is different approaching these two from the left or the right. I don't think it matters because both sides
-    # require hot-shot and heat mod is the only barrier to circling around? but I'm going to express the difference anyway.
+    # the logic is different approaching these two from the left or the right.
+    # I don't think it matters because both sides require hot-shot and heat mod is the only barrier to circling around?
+    # but I'm going to express the difference anyway.
     "ThetaC8 - Shield Upgrade": LocationInfo(104, "ThetaC8 Location"), 
     "ThetaC10 - Shield Upgrade": LocationInfo(105, "ThetaC10 Location"), 
     "ThetaD7 - Shield Upgrade": LocationInfo(106, "ThetaA4 Genepod"), 
@@ -48,7 +50,7 @@ location_table: Dict[str, LocationInfo] = {
     "ThetaI4 - Shield Upgrade": LocationInfo(110, "ThetaI7 Genepod"), 
     "ThetaJ7 - Shield Upgrade": LocationInfo(111, "ThetaI7 Genepod"), 
 
-    "ThetaE9 - Boss Defeated": LocationInfo(None, "ThetaF6 Genepod"),      # I have no memory of this one lol
+    "ThetaE9 - Boss Defeated": LocationInfo(None, "ThetaF6 Genepod"),  # I have no memory of this one lol
 
     "VerdeA1 - Shield Upgrade": LocationInfo(200, "VerdeA1 Genepod"), 
     "VerdeB5 - Force Mod": LocationInfo(201, "VerdeSW Area"), 
@@ -59,7 +61,7 @@ location_table: Dict[str, LocationInfo] = {
     "VerdeF8 - Shield Upgrade": LocationInfo(206, "VerdeSW Area"),
     "VerdeG5 - Shield Upgrade": LocationInfo(207, "VerdeI7 Genepod"),
     "VerdeG10 - Security Clearance": LocationInfo(208, "VerdeI7 Genepod"),
-    # need a separate region to account for the fact that the heat armor damage boost is only possible coming from the right
+    # need a separate region to account for the fact that the heat armor damage boost is only possible from the right
     "VerdeH7 - Shield Upgrade": LocationInfo(209, "VerdeH7 Location"),
     "VerdeI4 - Shield Upgrade": LocationInfo(210, "VerdeI7 Genepod"),
     "VerdeI9 - Key Code": LocationInfo(211, "VerdeI9 Genepod"),
@@ -67,24 +69,27 @@ location_table: Dict[str, LocationInfo] = {
     "VerdeJ9 - Shield Upgrade": LocationInfo(213, "VerdeI7 Genepod"),
 
     "VerdeE1 - Ramses Defeated": LocationInfo(None, "VerdeA1 Genepod"), 
-    "VerdeI9 - Sura Defeated": LocationInfo(None, "VerdeSW Area"),     # This might be Jorgensen, not Sura
+    "VerdeI9 - Sura Defeated": LocationInfo(None, "VerdeSW Area"),  # This might be Jorgensen, not Sura
     
     "Control - Shield Upgrade": LocationInfo(300, "Control Genepod"),
 
     "Control - Hooper Defeated": LocationInfo(None, "Control Genepod"),
 
-    "Garden": LocationInfo(400, "ThetaI7 Genepod"), # garden gift location. for now it's a clone of the heat mod location.
+    "Garden": LocationInfo(400, "ThetaI7 Genepod"),  # for now it's a clone of the heat mod location.
     "Gold": LocationInfo(401, "Control Genepod"), 
     "Cherry": LocationInfo(402, "Control Genepod")
 }
 
 
 def get_locations() -> Dict[str, int]:
-    return {f"Vainger - {name}": data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items() if data.id_offset}
+    return {f"Vainger - {name}": data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items()
+            if data.id_offset}
+
 
 def get_location_groups() -> Dict[str, Set[str]]:
     location_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {loc_name}" for loc_name in location_table.keys()}}
     return location_groups
+
 
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
@@ -92,6 +97,6 @@ def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
                        loc_data.id_offset + get_game_base_id("Vainger") if loc_data.id_offset else None,
                        regions[f"Vainger - {loc_data.region_name}"])
         if not loc_data.id_offset:      # this is an event location
-            loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None, 
-                                            world.player))
+            loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None,
+                                       world.player))
         regions[f"Vainger - {loc_data.region_name}"].locations.append(loc)

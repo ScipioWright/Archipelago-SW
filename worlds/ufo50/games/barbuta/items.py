@@ -45,13 +45,15 @@ def get_item_groups() -> Dict[str, Set[str]]:
 # for when the world needs to create an item at random (like with random filler items)
 # the first argument must be the item name. It must be able to handle the world giving it an actual item name
 # the second argument must be the world class
-# the third argument can optionally be an item classification, `item_class: ItemClassification = None`
-def create_item(item_name: str, world: "UFO50World") -> Item:
+# the third argument is an item classification, `item_class: ItemClassification = None`
+# you must put the third argument in, but you are not required to use it
+def create_item(item_name: str, world: "UFO50World", item_class: IC = None) -> Item:
     base_id = get_game_base_id("Barbuta")
     if item_name.startswith("Barbuta - "):
         item_name = item_name.split(" - ", 1)[1]
     item_data = item_table[item_name]
-    return Item(f"Barbuta - {item_name}", item_data.classification, base_id + item_data.id_offset, world.player)
+    return Item(f"Barbuta - {item_name}", item_class or item_data.classification,
+                base_id + item_data.id_offset, world.player)
 
 
 # for when the world is getting the items to place into the multiworld's item pool

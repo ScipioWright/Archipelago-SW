@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 
 # adapted from Barbuta, thanks Scipio! <3
 
+
 class RegionInfo(NamedTuple):
     pass
 
@@ -33,7 +34,7 @@ region_info: Dict[str, RegionInfo] = {
     "LatomI4 Genepod": RegionInfo(),
     "ThetaA4 Genepod": RegionInfo(),
     "ThetaE9 Genepod": RegionInfo(),
-    "ThetaF5 Genepod": RegionInfo(), # starting room genepod
+    "ThetaF5 Genepod": RegionInfo(),  # starting room genepod
     "ThetaF6 Genepod": RegionInfo(),
     "ThetaI7 Genepod": RegionInfo(),
     "ThetaI9 Genepod": RegionInfo(),
