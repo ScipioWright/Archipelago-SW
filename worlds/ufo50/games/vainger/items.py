@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 # adapted from Barbuta, thanks Scipio! <3
 
+
 class ItemInfo(NamedTuple):
     id_offset: int
     classification: IC
@@ -36,17 +37,20 @@ item_table: Dict[str, ItemInfo] = {
 def get_items() -> Dict[str, int]:
     return {f"Vainger - {name}": data.id_offset + get_game_base_id("Vainger") for name, data in item_table.items()}
 
+
 def get_item_groups() -> Dict[str, Set[str]]:
     item_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {item_name}" for item_name in item_table.keys()},
                                         "Vainger - Mods": {f"Vainger - {item_name}" for item_name in ["Heat Mod, Multi Mod, Pulse Mod, Force Mod"]},
                                         "Vainger - Key Codes": {f"Vainger - Key Code {letter}" for letter in ["A", "B", "C", "D"]}}
     return item_groups
 
-def create_item(item_name: str, world: "UFO50World") -> Item:
+
+def create_item(item_name: str, world: "UFO50World", item_class: IC = None) -> Item:
     if item_name.startswith("Vainger - "):
         item_name = item_name.split(" - ", 1)[1]
     item_data = item_table[item_name]
-    return Item(f"Vainger - {item_name}", item_data.classification, item_data.id_offset + get_game_base_id("Vainger"), world.player)
+    return Item(f"Vainger - {item_name}", item_data.classification,
+                item_data.id_offset + get_game_base_id("Vainger"), world.player)
 
 
 def create_items(world: "UFO50World") -> List[Item]:
