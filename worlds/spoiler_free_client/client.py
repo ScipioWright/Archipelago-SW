@@ -2,7 +2,6 @@ import asyncio
 import logging
 import copy
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, get_base_parser
-from kivy.app import App
 
 
 class SpoilerFreeCommandProcessor(ClientCommandProcessor):
@@ -44,7 +43,7 @@ class SpoilerFreeContext(CommonContext):
                     if hint["entrance"] and hint["finding_player"] != self.slot:
                         hint["entrance"] = ""
         if has_hints:
-            App.get_running_app().update_hints()
+            self.ui.get_running_app().update_hints()
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
