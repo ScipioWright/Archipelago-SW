@@ -122,7 +122,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     verdea1.connect(thetac8loc,
                     rule=lambda state: state.has(heat_mod, player))  # hot-shot
     verdea1.connect(verdee1,
-                    rule=lambda state: state.has("Vainger - VerdeE5 - Ramses Defeated", player))  # genepod only exists after boss kill
+                    rule=lambda state: state.has("Vainger - VerdeE1 - Ramses Defeated", player))  # genepod only exists after boss kill
     verdee1.connect(verdee6)
     verdee1.connect(verdei7)
     verdee6.connect(verdeswarea,
@@ -160,7 +160,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     latomf5.connect(latomc6,
                     rule=lambda state: state.has(security_clearance, player, 2) and state.has(heat_mod, player))  # hot-shot
     latomc6.connect(latomd5,
-                    rule=lambda state: state.has(security_clearance, player, 3) and state.has("Vainger - LatosD5 - Boss Defeated", player))
+                    rule=lambda state: state.has(security_clearance, player, 3) and state.has("Vainger - LatomD5 - Boss Defeated", player))
     # TODO: the normal route is one-way; does the miniboss block you from doing the upper route in reverse?
     latomf5.connect(latomi4,
                     rule=lambda state: state.has(pulse_mod, player))  # NOTE: thunder required to prevent a softlock; this means vanilla pulse mod will be impossible.
@@ -236,7 +236,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     # sr("VerdeC5 - Shield Upgrade")
     # sr("VerdeE5 - Security Clearance")
     sr("VerdeF8 - Shield Upgrade", rule=lambda state: state.has(pulse_mod, player))  # thunder
-    
+
     # Ramses fight, from VerdeA1
     sr("VerdeE1 - Ramses Defeated", rule=lambda state: boss_logic(1, state, world))  # TODO: check difficulty
     # sr("VerdeE1 - Key Code") # relative to boss genepod
