@@ -9,6 +9,8 @@ from worlds.AutoWorld import World, WebWorld
 from .constants import *
 from . import options
 
+from .general_items import cartridge_items, cartridge_item_group
+
 from .games import barbuta, vainger, night_manor
 from .games.barbuta import items, locations, regions
 from .games.vainger import items, locations, regions
@@ -91,9 +93,11 @@ class UFO50World(World):
     topology_present = False
 
     item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
+    item_name_to_id.update(cartridge_items)
     location_name_to_id = temp_ufo50_location_name_to_id
 
     item_name_groups = {k: v for game in ufo50_games.values() for k, v in game.items.get_item_groups().items()}
+    item_name_groups.update(cartridge_item_group)
     location_name_groups = {k: v for game in ufo50_games.values() for k, v in game.locations.get_location_groups().items()}
 
     options_dataclass = options.UFO50Options
@@ -107,6 +111,8 @@ class UFO50World(World):
 
     included_games: List  # list of modules for the games that are going to be played by this player
     included_unimplemented_games: List[str]  # list of included unimplemented games being played by this player
+
+    starting_games: List[str]  # the games you start with unlocked
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
@@ -148,6 +154,19 @@ class UFO50World(World):
                               f"Please select at least one game that has an actual implementation. "
                               f"The following games have actual implementations: {[name for name in ufo50_games]}")
 
+        if self.options.starting_game_amount >= len(included_game_names):
+            self.starting_games = included_game_names
+        else:
+            # need at least one game to be a fully implemented game
+            self.starting_games = self.random.choices(included_game_names, k=self.options.starting_game_amount.value)
+            for game_name in self.starting_games:
+                if game_name in ufo50_games.keys():
+                    break
+            else:
+                # remove a game, add an implemented game
+                self.starting_games.pop()
+                self.starting_games.append(self.random.choice(self.included_games).game_name)
+
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
@@ -156,7 +175,9 @@ class UFO50World(World):
             for region in game_regions.values():
                 self.multiworld.regions.append(region)
             game_menu = self.get_region(f"{game.game_name} - Menu")
-            menu.connect(game_menu, f"Boot {game.game_name}")
+            menu.connect(game_menu, f"Boot {game.game_name}",
+                         rule=lambda state: state.has(f"{game.game_name} Cartridge", self.player))
+
         for game_name in self.included_unimplemented_games:
             # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
             locs = {
@@ -177,9 +198,18 @@ class UFO50World(World):
         created_items: List[Item] = []
         for game in self.included_games:
             created_items += game.items.create_items(self)
+            cartridge = self.create_item(f"{game.game_name} Cartridge", ItemClassification.progression)
+            if game in self.starting_games:
+                self.multiworld.push_precollected(cartridge)
+            else:
+                created_items.append(cartridge)
 
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
         extra_items_needed = len(unfilled_locations) - len(created_items)
+
+        # debug, delete this later once it all works nicely
+        if extra_items_needed < 0:
+            raise Exception("Too many items for the number of games, need to fix this somehow.")
 
         for _ in range(extra_items_needed):
             created_items.append(self.create_item(self.get_filler_item_name(), ItemClassification.filler))
