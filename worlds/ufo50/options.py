@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, OptionSet, PerGameCommonOptions,
-                     OptionGroup)
+from Options import StartInventoryPool, Range, OptionSet, PerGameCommonOptions, OptionGroup
 from .constants import game_ids
 
 
@@ -35,12 +34,30 @@ class RandomChoiceGameCount(Range):
     default = 0
 
 
+class StartingGameAmount(Range):
+    """
+    Choose how many games to have unlocked at the start.
+    At least on of the starting games will always be one of the implemented games.
+    If this value is higher than the number of games you selected, you will start with all of them unlocked.
+    If you put a game in your start inventory from pool, it will count towards the amount from this option.
+    """
+    internal_name = "starting_game_amount"
+    display_name = "Starting Game Amount"
+    range_start = 1
+    range_end = 50
+    default = 1
+
+
+# todo: specific option for choosing the games you want on
+
+
 @dataclass
 class UFO50Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     always_on_games: AlwaysOnGames
     random_choice_games: RandomChoiceGames
     random_choice_game_count: RandomChoiceGameCount
+    starting_game_amount: StartingGameAmount
 
 
 ufo50_option_groups = [
@@ -48,5 +65,6 @@ ufo50_option_groups = [
         AlwaysOnGames,
         RandomChoiceGames,
         RandomChoiceGameCount,
+        StartingGameAmount,
     ])
 ]

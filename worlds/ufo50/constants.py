@@ -14,6 +14,7 @@ PATCH_URL = "https://api.github.com/repos/UFO-50-Archipelago/basepatch/releases"
 
 # the ids here are the internal ids, the order is the in-game order
 game_ids: Dict[str, int] = {
+    "Main Menu": 0,
     "Barbuta": 40,
     "Bug Hunter": 20,
     "Ninpek": 34,

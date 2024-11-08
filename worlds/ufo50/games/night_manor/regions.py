@@ -17,14 +17,15 @@ class RegionInfo(NamedTuple):
 # for room names, the letter is the row (top to bottom), the number is the column (left to right)
 region_info: Dict[str, RegionInfo] = {
     "Menu": RegionInfo(),  # the non-existent start menu, every game needs a region named "Game Name - Menu"
-    "Starting Room": RegionInfo(), # the initial room the game starts in
-    "First Floor & Exterior": RegionInfo(), # the floor accessible immediately after you exit the starting area
-    "Second Floor": RegionInfo(), # second floor accessible after you get powered flashlight
-    "Shed": RegionInfo(), #shed accessible after you get copper key
-    "Master Bedroom": RegionInfo(), #master bedroom accessible after you get gold key
-    "Maze": RegionInfo(), #maze accessible after you get 4 gems
-    "Basement": RegionInfo() #accessible after you get the iron key
+    "Starting Room": RegionInfo(),  # the initial room the game starts in
+    "First Floor & Exterior": RegionInfo(),  # the floor accessible immediately after you exit the starting area
+    "Second Floor": RegionInfo(),  # second floor accessible after you get powered flashlight
+    "Shed": RegionInfo(),  # shed accessible after you get copper key
+    "Master Bedroom": RegionInfo(),  # master bedroom accessible after you get gold key
+    "Maze": RegionInfo(),  # maze accessible after you get 4 gems
+    "Basement": RegionInfo(),  # accessible after you get the iron key
 }
+
 
 # this function is required, and its only argument can be the world class
 # it must return the regions that it created
