@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Dict
-from BaseClasses import Region, CollectionState
+from BaseClasses import Region
 from worlds.generic.Rules import set_rule
 
 if TYPE_CHECKING:
@@ -78,8 +78,9 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(oil_can, player))
     set_rule(world.get_location("Night Manor - Garage - Crowbar"),
              rule=lambda state: state.has(oil_can, player))
+    # TODO: check if you can do this with items other than crowbar and wrench
     set_rule(world.get_location("Night Manor - Dining Room - Ornamental Egg"),
-             rule=lambda state: state.has(crowbar, player)),  # TODO: check if you can do this with items other than crowbar
+             rule=lambda state: state.has_any((crowbar, wrench), player)),
     set_rule(world.get_location("Night Manor - Living Room - Red Gemstone"),
              rule=lambda state: state.has_all((gas_can, matches), player))
     set_rule(world.get_location("Night Manor - Pool - Copper Key"),
@@ -102,8 +103,9 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(silver_key, player))
     set_rule(world.get_location("Night Manor - Exterior Front - Green Gemstone"),
              rule=lambda state: state.has(ring, player))
+    # TODO: check if you can do this with items other than crowbar, wrench probably works
     set_rule(world.get_location("Night Manor - Master Bathroom - Safe Combination"),
-             rule=lambda state: state.has(crowbar, player))  # TODO: check if you can do this with items other than crowbar
+             rule=lambda state: state.has(crowbar, player))
     set_rule(world.get_location("Night Manor - Garden - Yellow Gemstone"),
              rule=lambda state: state.has_all((hacksaw, kitchen_knife), player)),
     set_rule(world.get_location("Night Manor - Kids Bedroom - Computer Password"),
