@@ -38,9 +38,9 @@ location_table: Dict[str, LocationInfo] = {
     "Chest - H7": LocationInfo(22, "G7 and Nearby"),  # $50
     "Wand Trade - H7": LocationInfo(23, "Wand Trade Room"),  # probably should just have it give you the check
 
-    "Garden": LocationInfo(100, "Boss Area"),
-    "Gold": LocationInfo(101, "Menu"),
-    "Cherry": LocationInfo(102, "Boss Area")
+    "Garden": LocationInfo(997, "Boss Area"),
+    "Gold": LocationInfo(998, "Menu"),
+    "Cherry": LocationInfo(999, "Boss Area")
 }
 
 
