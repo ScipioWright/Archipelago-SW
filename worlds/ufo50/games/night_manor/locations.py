@@ -119,9 +119,9 @@ location_table: Dict[str, LocationInfo] = {
 
     "Basement - Journal Entry 17": LocationInfo(69, "Maze"),  # on floor
 
-    "Garden": LocationInfo(70, "First Floor & Exterior"),
-    "Gold": LocationInfo(71, "First Floor & Exterior"),
-    "Cherry": LocationInfo(72, "Basement")
+    "Garden": LocationInfo(997, "First Floor & Exterior"),
+    "Gold": LocationInfo(998, "First Floor & Exterior"),
+    "Cherry": LocationInfo(999, "Basement")
  
 }
 

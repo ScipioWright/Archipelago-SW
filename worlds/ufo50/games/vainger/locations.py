@@ -75,9 +75,9 @@ location_table: Dict[str, LocationInfo] = {
 
     "Control - Hooper Defeated": LocationInfo(None, "Control Genepod"),
 
-    "Garden": LocationInfo(400, "ThetaI7 Genepod"),  # for now it's a clone of the heat mod location.
-    "Gold": LocationInfo(401, "Control Genepod"), 
-    "Cherry": LocationInfo(402, "Control Genepod")
+    "Garden": LocationInfo(997, "ThetaI7 Genepod"),  # for now it's a clone of the heat mod location.
+    "Gold": LocationInfo(998, "Control Genepod"),
+    "Cherry": LocationInfo(999, "Control Genepod")
 }
 
 
