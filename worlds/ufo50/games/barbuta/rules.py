@@ -33,52 +33,52 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     regions["Menu"].connect(regions["Starting Area"])
 
     regions["Starting Area"].connect(regions["Key Room"])
-    regions["Starting Area"].connect(regions["Platforms above D4"],
+    regions["Starting Area"].connect(regions["Platforms above R4C4"],
                                      rule=lambda state: state.has(necklace, player))
     regions["Starting Area"].connect(regions["Blood Sword Room"])
     # pin via G2, umbrella via H3
-    regions["Starting Area"].connect(regions["G3 and Nearby"],
+    regions["Starting Area"].connect(regions["R7C3 and Nearby"],
                                      rule=lambda state: state.has_any((pin, umbrella), player))
-    regions["Starting Area"].connect(regions["F7 and Nearby"],
+    regions["Starting Area"].connect(regions["R6C7 and Nearby"],
                                      rule=lambda state: state.has(pin, player))
     regions["Starting Area"].connect(regions["Mimic Room"],
                                      rule=lambda state: state.has(wand, player))
-    regions["Starting Area"].connect(regions["C7 above Ladders"],
+    regions["Starting Area"].connect(regions["R3C7 above Ladders"],
                                      rule=lambda state: state.has(candy, player))
 
-    regions["Platforms above D4"].connect(regions["Bat Altar"])  # drop down off the left side
-    regions["Platforms above D4"].connect(regions["Above Entrance"])  # drop down off right side, need to break blocks
-    regions["Platforms above D4"].connect(regions["Boss Area"],
-                                          rule=lambda state: state.has(key, player))
+    regions["Platforms above R4C4"].connect(regions["Bat Altar"])  # drop down off the left side
+    regions["Platforms above R4C4"].connect(regions["Above Entrance"])  # drop down off right side, need to break blocks
+    regions["Platforms above R4C4"].connect(regions["Boss Area"],
+                                            rule=lambda state: state.has(key, player))
 
     regions["Above Entrance"].connect(regions["Wand Trade Room"])  # walk through the fake wall after using the door
 
-    regions["G7 and Nearby"].connect(regions["Wand Trade Room"],
-                                     rule=lambda state: state.has(pin, player))
-
-    regions["Wand Trade Room"].connect(regions["G7 and Nearby"],
+    regions["R7C7 and Nearby"].connect(regions["Wand Trade Room"],
                                        rule=lambda state: state.has(pin, player))
 
-    regions["C7 above Ladders"].connect(regions["Boss Area"],
-                                        rule=lambda state: state.has(broken_wall, player))
+    regions["Wand Trade Room"].connect(regions["R7C7 and Nearby"],
+                                       rule=lambda state: state.has(pin, player))
+
+    regions["R3C7 above Ladders"].connect(regions["Boss Area"],
+                                          rule=lambda state: state.has(broken_wall, player))
 
     regions["Mimic Room"].connect(regions["Boss Area"])
 
-    set_rule(world.get_location("Barbuta - Chest - G2"),
+    set_rule(world.get_location("Barbuta - Chest - R7C2"),
              rule=lambda state: state.has(pin, player))
-    set_rule(world.get_location("Barbuta - Egg Shop - B6"),
+    set_rule(world.get_location("Barbuta - Egg Shop - R2C6"),
              rule=lambda state: has_money(100, state, player))
-    set_rule(world.get_location("Barbuta - Upper Shop Candy - C1"),
+    set_rule(world.get_location("Barbuta - Upper Shop Candy - R3C1"),
              rule=lambda state: has_money(100, state, player))
-    set_rule(world.get_location("Barbuta - Upper Shop Umbrella - C1"),
+    set_rule(world.get_location("Barbuta - Upper Shop Umbrella - R3C1"),
              rule=lambda state: has_money(50, state, player))
-    set_rule(world.get_location("Barbuta - Lower Shop Umbrella - F2"),
+    set_rule(world.get_location("Barbuta - Lower Shop Umbrella - R6C2"),
              rule=lambda state: has_money(100, state, player))
-    set_rule(world.get_location("Barbuta - Lower Shop Trash - F2"),
+    set_rule(world.get_location("Barbuta - Lower Shop Trash - R6C2"),
              rule=lambda state: has_money(50, state, player))
-    set_rule(world.get_location("Barbuta - Lower Shop Pin - F2"),
+    set_rule(world.get_location("Barbuta - Lower Shop Pin - R6C2"),
              rule=lambda state: has_money(200, state, player))
-    set_rule(world.get_location("Barbuta - Little Guy Breaks a Wall - D7"),
+    set_rule(world.get_location("Barbuta - Little Guy Breaks a Wall - R4C7"),
              rule=lambda state: has_money(500, state, player))
 
     # based on vibes for now
