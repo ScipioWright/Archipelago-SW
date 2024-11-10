@@ -17,65 +17,66 @@ class LocationInfo(NamedTuple):
 # based on a map at https://steamcommunity.com/sharedfiles/filedetails/?id=3341323146
 # except numbering each sector from 1 to 10.
 location_table: Dict[str, LocationInfo] = {
-    "LatomA4 - Shield Upgrade": LocationInfo(0, "LatomD3 Genepod"), 
-    "LatomA7 - Shield Upgrade": LocationInfo(1, "LatomD3 Genepod"), 
-    "LatomA9 - Shield Upgrade": LocationInfo(2, "LatomC9 Genepod"), 
-    "LatomB9 - Shield Upgrade": LocationInfo(3, "LatomC9 Genepod"), 
-    "LatomC4 - Shield Upgrade": LocationInfo(4, "LatomC6 Genepod"), 
-    "LatomC6 - Clone Material": LocationInfo(5, "LatomC6 Genepod"), 
-    "LatomD5 - Key Code": LocationInfo(6, "LatomD5 Genepod"),
-    "LatomD6 - Security Clearance": LocationInfo(7, "LatomD6 Area"), 
-    "LatomE4 - Shield Upgrade": LocationInfo(8, "LatomF5 Genepod"),
-    "LatomG8 - Multi Mod": LocationInfo(9, "LatomF7 Genepod"), 
-    "LatomI4 - Pulse Mod": LocationInfo(10, "LatomI4 Genepod"), 
-    "LatomJ1 - Stabilizer": LocationInfo(11, "LatomF5 Genepod"),  # TODO: does this need to be I4 instead due to the miniboss?
-    "LatomJ3 - Shield Upgrade": LocationInfo(12, "LatomF5 Genepod"),  # do it from F5 to avoid the issues with I4
-    "LatomJ10 - Shield Upgrade": LocationInfo(13, "LatomC9 Genepod"), 
+    "LatomR4C1 - Shield Upgrade": LocationInfo(0, "LatomR3C4 Genepod"),
+    "LatomR7C1 - Shield Upgrade": LocationInfo(1, "LatomR3C4 Genepod"),
+    "LatomR9C1 - Shield Upgrade": LocationInfo(2, "LatomR9C3 Genepod"),
+    "LatomR9C2 - Shield Upgrade": LocationInfo(3, "LatomR9C3 Genepod"),
+    "LatomR4C3 - Shield Upgrade": LocationInfo(4, "LatomR6C3 Genepod"),
+    "LatomR6C3 - Clone Material": LocationInfo(5, "LatomR6C3 Genepod"),
+    "LatomR5C4 - Key Code": LocationInfo(6, "LatomR5C4 Genepod"),
+    "LatomR6C4 - Security Clearance": LocationInfo(7, "LatomR6C4 Area"),
+    "LatomR4C5 - Shield Upgrade": LocationInfo(8, "LatomR5C6 Genepod"),
+    "LatomR8C7 - Multi Mod": LocationInfo(9, "LatomR7C6 Genepod"),
+    "LatomR4C9 - Pulse Mod": LocationInfo(10, "LatomR4C9 Genepod"),
+    # TODO: does this need to be R4C9 instead due to the miniboss?
+    "LatomR1C10 - Stabilizer": LocationInfo(11, "LatomR5C6 Genepod"),
+    "LatomR3C10 - Shield Upgrade": LocationInfo(12, "LatomR5C6 Genepod"),  # do it from R5C6 to avoid the issues with R4C9
+    "LatomR10C10 - Shield Upgrade": LocationInfo(13, "LatomR9C3 Genepod"),
 
-    "LatomD5 - Boss Defeated": LocationInfo(None, "LatomC6 Genepod"),  # alien?
+    "LatomR5C4 - Boss Defeated": LocationInfo(None, "LatomR6C3 Genepod"),  # alien?
 
-    "ThetaA2 - Clone Material": LocationInfo(100, "ThetaA4 Genepod"), 
-    "ThetaA3 - Shield Upgrade": LocationInfo(101, "ThetaA4 Genepod"), 
-    "ThetaA9 - Shield Upgrade": LocationInfo(102, "VerdeA1 Genepod"), 
-    "ThetaC5 - Clone Material": LocationInfo(103, "ThetaA4 Genepod"), 
+    "ThetaR2C1 - Clone Material": LocationInfo(100, "ThetaR4C1 Genepod"),
+    "ThetaR3C1 - Shield Upgrade": LocationInfo(101, "ThetaR4C1 Genepod"),
+    "ThetaR9C1 - Shield Upgrade": LocationInfo(102, "VerdeR1C1 Genepod"),
+    "ThetaR5C3 - Clone Material": LocationInfo(103, "ThetaR4C1 Genepod"),
     # the logic is different approaching these two from the left or the right.
     # I don't think it matters because both sides require hot-shot and heat mod is the only barrier to circling around?
     # but I'm going to express the difference anyway.
-    "ThetaC8 - Shield Upgrade": LocationInfo(104, "ThetaC8 Location"), 
-    "ThetaC10 - Shield Upgrade": LocationInfo(105, "ThetaC10 Location"), 
-    "ThetaD7 - Shield Upgrade": LocationInfo(106, "ThetaA4 Genepod"), 
-    "ThetaE9 - Key Code": LocationInfo(107, "ThetaE9 Genepod"),
-    "ThetaH1 - Shield Upgrade": LocationInfo(108, "ThetaI7 Genepod"), 
-    "ThetaH4 - Heat Mod": LocationInfo(109, "ThetaI7 Genepod"), 
-    "ThetaI4 - Shield Upgrade": LocationInfo(110, "ThetaI7 Genepod"), 
-    "ThetaJ7 - Shield Upgrade": LocationInfo(111, "ThetaI7 Genepod"), 
+    "ThetaR8C3 - Shield Upgrade": LocationInfo(104, "ThetaR8C3 Location"),
+    "ThetaR10C3 - Shield Upgrade": LocationInfo(105, "ThetaR10C3 Location"),
+    "ThetaR7C4 - Shield Upgrade": LocationInfo(106, "ThetaR4C1 Genepod"),
+    "ThetaR9C5 - Key Code": LocationInfo(107, "ThetaR9C5 Genepod"),
+    "ThetaR1C8 - Shield Upgrade": LocationInfo(108, "ThetaR7C9 Genepod"),
+    "ThetaR4C8 - Heat Mod": LocationInfo(109, "ThetaR7C9 Genepod"),
+    "ThetaR4C9 - Shield Upgrade": LocationInfo(110, "ThetaR7C9 Genepod"),
+    "ThetaR7C10 - Shield Upgrade": LocationInfo(111, "ThetaR7C9 Genepod"),
 
-    "ThetaE9 - Boss Defeated": LocationInfo(None, "ThetaF6 Genepod"),  # I have no memory of this one lol
+    "ThetaR9C5 - Boss Defeated": LocationInfo(None, "ThetaR6C6 Genepod"),  # I have no memory of this one lol
 
-    "VerdeA1 - Shield Upgrade": LocationInfo(200, "VerdeA1 Genepod"), 
-    "VerdeB5 - Force Mod": LocationInfo(201, "VerdeSW Area"), 
-    "VerdeC4 - Shield Upgrade": LocationInfo(202, "VerdeA1 Genepod"), 
-    "VerdeC5 - Shield Upgrade": LocationInfo(203, "VerdeSW Area"), 
-    "VerdeE1 - Key Code": LocationInfo(204, "VerdeE1 Genepod"),
-    "VerdeE5 - Security Clearance": LocationInfo(205, "VerdeSW Area"),
-    "VerdeF8 - Shield Upgrade": LocationInfo(206, "VerdeSW Area"),
-    "VerdeG5 - Shield Upgrade": LocationInfo(207, "VerdeI7 Genepod"),
-    "VerdeG10 - Security Clearance": LocationInfo(208, "VerdeI7 Genepod"),
+    "VerdeR1C1 - Shield Upgrade": LocationInfo(200, "VerdeR1C1 Genepod"),
+    "VerdeR5C2 - Force Mod": LocationInfo(201, "VerdeSW Area"),
+    "VerdeR4C3 - Shield Upgrade": LocationInfo(202, "VerdeR1C1 Genepod"),
+    "VerdeR5C3 - Shield Upgrade": LocationInfo(203, "VerdeSW Area"),
+    "VerdeR1C5 - Key Code": LocationInfo(204, "VerdeR1C5 Genepod"),
+    "VerdeR5C5 - Security Clearance": LocationInfo(205, "VerdeSW Area"),
+    "VerdeR8C6 - Shield Upgrade": LocationInfo(206, "VerdeSW Area"),
+    "VerdeR5C7 - Shield Upgrade": LocationInfo(207, "VerdeR7C9 Genepod"),
+    "VerdeR10C7 - Security Clearance": LocationInfo(208, "VerdeR7C9 Genepod"),
     # need a separate region to account for the fact that the heat armor damage boost is only possible from the right
-    "VerdeH7 - Shield Upgrade": LocationInfo(209, "VerdeH7 Location"),
-    "VerdeI4 - Shield Upgrade": LocationInfo(210, "VerdeI7 Genepod"),
-    "VerdeI9 - Key Code": LocationInfo(211, "VerdeI9 Genepod"),
-    "VerdeJ2 - Stabilizer": LocationInfo(212, "VerdeI7 Genepod"),
-    "VerdeJ9 - Shield Upgrade": LocationInfo(213, "VerdeI7 Genepod"),
+    "VerdeR7C8 - Shield Upgrade": LocationInfo(209, "VerdeR7C8 Location"),
+    "VerdeR4C9 - Shield Upgrade": LocationInfo(210, "VerdeR7C9 Genepod"),
+    "VerdeR9C9 - Key Code": LocationInfo(211, "VerdeR9C9 Genepod"),
+    "VerdeR2C10 - Stabilizer": LocationInfo(212, "VerdeR7C9 Genepod"),
+    "VerdeR9C10 - Shield Upgrade": LocationInfo(213, "VerdeR7C9 Genepod"),
 
-    "VerdeE1 - Ramses Defeated": LocationInfo(None, "VerdeA1 Genepod"), 
-    "VerdeI9 - Sura Defeated": LocationInfo(None, "VerdeSW Area"),  # This might be Jorgensen, not Sura
+    "VerdeR1C5 - Ramses Defeated": LocationInfo(None, "VerdeR1C1 Genepod"),
+    "VerdeR9C9 - Sura Defeated": LocationInfo(None, "VerdeSW Area"),  # This might be Jorgensen, not Sura
     
     "Control - Shield Upgrade": LocationInfo(300, "Control Genepod"),
 
     "Control - Hooper Defeated": LocationInfo(None, "Control Genepod"),
 
-    "Garden": LocationInfo(997, "ThetaI7 Genepod"),  # for now it's a clone of the heat mod location.
+    "Garden": LocationInfo(997, "ThetaR7C9 Genepod"),  # for now it's a clone of the heat mod location.
     "Gold": LocationInfo(998, "Control Genepod"),
     "Cherry": LocationInfo(999, "Control Genepod")
 }

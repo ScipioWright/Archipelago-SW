@@ -19,17 +19,17 @@ region_info: Dict[str, RegionInfo] = {
     "Menu": RegionInfo(),  # the non-existent start menu, every game needs a region named "Game Name - Menu"
     "Starting Area": RegionInfo(),
     "Key Room": RegionInfo(),  # the room with the key, where you can access the key
-    "Platforms above D4": RegionInfo(),  # the "first" moving platforms
+    "Platforms above R4C4": RegionInfo(),  # the "first" moving platforms
     "Blood Sword Room": RegionInfo(),  # E3, probably unnecessary unless we randomize switches
-    "G3 and Nearby": RegionInfo(),  # idk what to call this, it's up the poison ladder and right of some balls
-    "F7 and Nearby": RegionInfo(),  # lots of purple blocks here
+    "R7C3 and Nearby": RegionInfo(),  # idk what to call this, it's up the poison ladder and right of some balls
+    "R6C7 and Nearby": RegionInfo(),  # lots of purple blocks here
     "Bat Altar": RegionInfo(),  # the altar at D1 and the room next to it at D2
     "Above Entrance": RegionInfo(),  # in the sign
     "Wand Trade Room": RegionInfo(),  # where you trade your sword for a wand
-    "G7 and Nearby": RegionInfo(),  # down where the shield guys are, need pin to get to wand
+    "R7C7 and Nearby": RegionInfo(),  # down where the shield guys are, need pin to get to wand
     "Mimic Room": RegionInfo(),  # H1, where the mimic is
     "Boss Area": RegionInfo(),  # B6, point of no return unless you paid $500 to break a wall
-    "C7 above Ladders": RegionInfo(),  # C7, up by the little guy who breaks the wall
+    "R3C7 above Ladders": RegionInfo(),  # C7, up by the little guy who breaks the wall
 }
 
 
