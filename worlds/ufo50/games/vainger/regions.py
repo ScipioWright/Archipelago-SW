@@ -25,31 +25,31 @@ class RegionInfo(NamedTuple):
 region_info: Dict[str, RegionInfo] = {
     "Menu": RegionInfo(),
 
-    "LatomC6 Genepod": RegionInfo(),
-    "LatomC9 Genepod": RegionInfo(),
-    "LatomD3 Genepod": RegionInfo(),
-    "LatomD5 Genepod": RegionInfo(),
-    "LatomF5 Genepod": RegionInfo(),
-    "LatomF7 Genepod": RegionInfo(),
-    "LatomI4 Genepod": RegionInfo(),
-    "ThetaA4 Genepod": RegionInfo(),
-    "ThetaE9 Genepod": RegionInfo(),
-    "ThetaF5 Genepod": RegionInfo(),  # starting room genepod
-    "ThetaF6 Genepod": RegionInfo(),
-    "ThetaI7 Genepod": RegionInfo(),
-    "ThetaI9 Genepod": RegionInfo(),
-    "VerdeA1 Genepod": RegionInfo(),
-    "VerdeE1 Genepod": RegionInfo(),
-    "VerdeE6 Genepod": RegionInfo(),
-    "VerdeI7 Genepod": RegionInfo(),
-    "VerdeI9 Genepod": RegionInfo(),
+    "LatomR6C3 Genepod": RegionInfo(),
+    "LatomR9C3 Genepod": RegionInfo(),
+    "LatomR3C4 Genepod": RegionInfo(),
+    "LatomR5C4 Genepod": RegionInfo(),
+    "LatomR5C6 Genepod": RegionInfo(),
+    "LatomR7C6 Genepod": RegionInfo(),
+    "LatomR4C9 Genepod": RegionInfo(),
+    "ThetaR4C1 Genepod": RegionInfo(),
+    "ThetaR9C5 Genepod": RegionInfo(),
+    "ThetaR5C6 Genepod": RegionInfo(),  # starting room genepod
+    "ThetaR6C6 Genepod": RegionInfo(),
+    "ThetaR7C9 Genepod": RegionInfo(),
+    "ThetaR9C9 Genepod": RegionInfo(),
+    "VerdeR1C1 Genepod": RegionInfo(),
+    "VerdeR1C5 Genepod": RegionInfo(),
+    "VerdeR6C5 Genepod": RegionInfo(),
+    "VerdeR7C9 Genepod": RegionInfo(),
+    "VerdeR9C9 Genepod": RegionInfo(),
     "Control Genepod": RegionInfo(),
     
-    "LatomD6 Area": RegionInfo(),
+    "LatomR6C4 Area": RegionInfo(),
     "VerdeSW Area": RegionInfo(),
-    "VerdeH7 Location": RegionInfo(),
-    "ThetaC8 Location": RegionInfo(),
-    "ThetaC10 Location": RegionInfo()
+    "VerdeR7C8 Location": RegionInfo(),
+    "ThetaR8C3 Location": RegionInfo(),
+    "ThetaR10C3 Location": RegionInfo()
 }
 
 
