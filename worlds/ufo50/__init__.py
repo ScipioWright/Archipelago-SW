@@ -6,8 +6,6 @@ from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
 
-from worlds.generic.Rules import add_rule
-
 from .constants import *
 from . import options
 
