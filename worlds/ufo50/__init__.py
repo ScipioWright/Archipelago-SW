@@ -176,7 +176,11 @@ class UFO50World(World):
                 self.multiworld.regions.append(region)
             game_menu = self.get_region(f"{game.game_name} - Menu")
             menu.connect(game_menu, f"Boot {game.game_name}",
-                         rule=lambda state: state.has(f"{game.game_name} Cartridge", self.player))
+                         rule=lambda state, name=game.game_name: state.has(f"{name} Cartridge", self.player))
+
+            # temp, until we get a goal actually made, just checks cherry for the last game
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
+                self.get_location(f"{game.game_name} - Cherry"))
 
         for game_name in self.included_unimplemented_games:
             # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
@@ -191,7 +195,7 @@ class UFO50World(World):
         # figure out which game it's from and call its create_item
         game_name = name.split(" - ", 1)[0]
         if game_name in ufo50_games:
-            return ufo50_games[game_name].items.create_item(name, self, *item_class)
+            return ufo50_games[game_name].items.create_item(name, self, item_class)
         return Item(name, item_class or ItemClassification.filler, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
@@ -199,7 +203,7 @@ class UFO50World(World):
         for game in self.included_games:
             created_items += game.items.create_items(self)
             cartridge = self.create_item(f"{game.game_name} Cartridge", ItemClassification.progression)
-            if game in self.starting_games:
+            if game.game_name in self.starting_games:
                 self.multiworld.push_precollected(cartridge)
             else:
                 created_items.append(cartridge)
