@@ -48,7 +48,40 @@ class StartingGameAmount(Range):
     default = 1
 
 
-# todo: specific option for choosing the games you want on
+class GoalGames(OptionSet):
+    """
+    Choose which games you may have to complete to achieve your goal.
+    """
+    internal_name = "goal_games"
+    display_name = "Goal Games"
+    valid_keys = {game_name for game_name in game_ids.keys()}
+    default = {game_name for game_name in game_ids.keys()}
+
+
+class GoalGameAmount(Range):
+    """
+    Choose how many games you need to goal to achieve your goal among your Goal Games.
+    If this number is less than the number of Goal Games you have selected, it will choose some of them at random to be your Goal Games.
+    If this number is greater than or equal to your number of Goal Games, then all of your games will be your Goal Games.
+    """
+    internal_name = "goal_game_amount"
+    display_name = "Goal Game Amount"
+    range_start = 1
+    range_end = 50
+    default = 50
+
+
+class CherryAllowed(OptionSet):
+    """
+    Choose which games you want to include the Cherry goal in.
+    If the game is set as your Goal Game, then you will need to Cherry that game to complete that goal.
+    If the game is not set as a Goal Game, then Cherrying that game will be a check.
+    """
+    internal_name = "cherry_allowed_games"
+    display_name = "Cherry-Allowed Games"
+    valid_keys = {game_name for game_name in game_ids.keys()}
+    # include the games where it makes sense to be Cherry by default
+    default = {"Barbuta", "Night Manor"}
 
 
 @dataclass
@@ -58,6 +91,9 @@ class UFO50Options(PerGameCommonOptions):
     random_choice_games: RandomChoiceGames
     random_choice_game_count: RandomChoiceGameCount
     starting_game_amount: StartingGameAmount
+    goal_games: GoalGames
+    goal_game_amount: GoalGameAmount
+    cherry_allowed_games: CherryAllowed
 
 
 ufo50_option_groups = [
@@ -66,5 +102,8 @@ ufo50_option_groups = [
         RandomChoiceGames,
         RandomChoiceGameCount,
         StartingGameAmount,
+        GoalGames,
+        GoalGameAmount,
+        CherryAllowed,
     ])
 ]

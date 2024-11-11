@@ -1,10 +1,11 @@
 from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Region, Item, ItemClassification
+from BaseClasses import Tutorial, Region, Item, ItemClassification, Location
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
+from worlds.generic.Rules import add_rule
 
 from .constants import *
 from . import options
@@ -170,6 +171,12 @@ class UFO50World(World):
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
+
+        victory_location = Location(self.player, "Completed All Games", None, menu)
+        victory_location.place_locked_item(Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        menu.locations.append(victory_location)
+
         for game in self.included_games:
             game_regions = game.regions.create_regions_and_rules(self)
             for region in game_regions.values():
@@ -177,10 +184,6 @@ class UFO50World(World):
             game_menu = self.get_region(f"{game.game_name} - Menu")
             menu.connect(game_menu, f"Boot {game.game_name}",
                          rule=lambda state, name=game.game_name: state.has(f"{name} Cartridge", self.player))
-
-            # temp, until we get a goal actually made, just checks cherry for the last game
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-                self.get_location(f"{game.game_name} - Cherry"))
 
         for game_name in self.included_unimplemented_games:
             # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
