@@ -1,7 +1,7 @@
 from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Region, Item, ItemClassification
+from BaseClasses import Tutorial, Region, Item, ItemClassification, Location
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
@@ -109,10 +109,11 @@ class UFO50World(World):
     using_ut: bool
     ut_passthrough: Dict[str, Any]
 
-    included_games: List  # list of modules for the games that are going to be played by this player
+    included_games: List[str]  # list of games that are going to be played by this player
     included_unimplemented_games: List[str]  # list of included unimplemented games being played by this player
 
     starting_games: List[str]  # the games you start with unlocked
+    goal_games: List[str]  # the games that are your goals
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
@@ -145,7 +146,7 @@ class UFO50World(World):
         self.included_unimplemented_games = []
         for game_name in included_game_names:
             if game_name in ufo50_games.keys():
-                self.included_games.append(ufo50_games[game_name])
+                self.included_games.append(game_name)
             else:
                 self.included_unimplemented_games.append(game_name)
 
@@ -165,22 +166,31 @@ class UFO50World(World):
             else:
                 # remove a game, add an implemented game
                 self.starting_games.pop()
-                self.starting_games.append(self.random.choice(self.included_games).game_name)
+                self.starting_games.append(self.random.choice(self.included_games))
+
+        potential_goal_games = [game_name for game_name in included_game_names if game_name in self.options.goal_games]
+        if self.options.goal_game_amount >= len(potential_goal_games):
+            self.goal_games = potential_goal_games
+        else:
+            self.goal_games = self.random.choices(potential_goal_games, k=self.options.goal_game_amount.value)
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
-        for game in self.included_games:
+
+        victory_location = Location(self.player, "Completed All Games", None, menu)
+        victory_location.place_locked_item(Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        menu.locations.append(victory_location)
+
+        for game_name in self.included_games:
+            game = ufo50_games[game_name]
             game_regions = game.regions.create_regions_and_rules(self)
             for region in game_regions.values():
                 self.multiworld.regions.append(region)
             game_menu = self.get_region(f"{game.game_name} - Menu")
             menu.connect(game_menu, f"Boot {game.game_name}",
                          rule=lambda state, name=game.game_name: state.has(f"{name} Cartridge", self.player))
-
-            # temp, until we get a goal actually made, just checks cherry for the last game
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-                self.get_location(f"{game.game_name} - Cherry"))
 
         for game_name in self.included_unimplemented_games:
             # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
@@ -200,9 +210,10 @@ class UFO50World(World):
 
     def create_items(self) -> None:
         created_items: List[Item] = []
-        for game in self.included_games:
+        for game_name in self.included_games:
+            game = ufo50_games[game_name]
             created_items += game.items.create_items(self)
-            cartridge = self.create_item(f"{game.game_name} Cartridge", ItemClassification.progression)
+            cartridge = self.create_item(f"{game_name} Cartridge", ItemClassification.progression)
             if game.game_name in self.starting_games:
                 self.multiworld.push_precollected(cartridge)
             else:
@@ -221,10 +232,10 @@ class UFO50World(World):
         self.multiworld.itempool += created_items
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(self.included_games).items.get_filler_item_name()
+        return ufo50_games[self.random.choice(self.included_games)].items.get_filler_item_name()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        included_games = [game_ids[game.game_name] for game in self.included_games]
+        included_games = self.included_games
         included_games += [game_name for game_name in self.included_unimplemented_games]
         slot_data = {
             "included_games": included_games,

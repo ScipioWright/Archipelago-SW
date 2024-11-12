@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, Set, Optional
 from BaseClasses import Region, ItemClassification, Item, Location
+from worlds.generic.Rules import add_rule
+
 from ...constants import get_game_base_id
 
 if TYPE_CHECKING:
@@ -94,10 +96,18 @@ def get_location_groups() -> Dict[str, Set[str]]:
 
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
-        loc = Location(world.player, f"Vainger - {loc_name}", 
-                       loc_data.id_offset + get_game_base_id("Vainger") if loc_data.id_offset else None,
-                       regions[f"Vainger - {loc_data.region_name}"])
+        region = regions[f"Vainger - {loc_data.region_name}"]
+        if loc_name in ["Gold", "Cherry"] and "Vainger" in world.goal_games:
+            if (loc_name == "Gold" and "Vainger" not in world.options.cherry_allowed_games) or loc_name == "Cherry":
+                loc = Location(world.player, f"Vainger - {loc_name}", None, region)
+                loc.place_locked_item(Item("Completed Vainger", ItemClassification.progression, None, world.player))
+                add_rule(world.get_location("Completed All Games"), lambda state: state.has("Completed Vainger", world.player))
+                region.locations.append(loc)
+                break
+
+        loc = Location(world.player, f"Vainger - {loc_name}",
+                       loc_data.id_offset + get_game_base_id("Vainger") if loc_data.id_offset else None, region)
         if not loc_data.id_offset:      # this is an event location
             loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None,
                                        world.player))
-        regions[f"Vainger - {loc_data.region_name}"].locations.append(loc)
+        region.locations.append(loc)

@@ -130,5 +130,6 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     set_rule(world.get_location("Night Manor - Gold"),
              rule=lambda state: state.has_all((wrench, motor, steel_key), player))
 
-    set_rule(world.get_location("Night Manor - Cherry"),
-             rule=lambda state: state.has_all((screwdriver, gear, oil_can, piano_wire, fungicide), player))
+    if "Night Manor" in world.options.cherry_allowed_games:
+        set_rule(world.get_location("Night Manor - Cherry"),
+                 rule=lambda state: state.has_all((screwdriver, gear, oil_can, piano_wire, fungicide), player))

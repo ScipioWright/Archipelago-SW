@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, Set
-from BaseClasses import Region, Location
+from BaseClasses import Region, Location, Item, ItemClassification
+from worlds.generic.Rules import add_rule
 
 from ...constants import get_game_base_id
 
@@ -38,8 +39,8 @@ location_table: Dict[str, LocationInfo] = {
     "Chest - R8C7": LocationInfo(22, "R7C7 and Nearby"),  # $50
     "Wand Trade - R8C7": LocationInfo(23, "Wand Trade Room"),  # probably should just have it give you the check
 
-    "Garden": LocationInfo(997, "Boss Area"),
-    "Gold": LocationInfo(998, "Menu"),
+    "Garden": LocationInfo(997, "Menu"),
+    "Gold": LocationInfo(998, "Boss Area"),
     "Cherry": LocationInfo(999, "Boss Area")
 }
 
@@ -59,6 +60,14 @@ def get_location_groups() -> Dict[str, Set[str]]:
 # this is not a required function, but a recommended one -- the world class does not call this function
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
+        if loc_name in ["Gold", "Cherry"] and "Barbuta" in world.goal_games:
+            if (loc_name == "Gold" and "Barbuta" not in world.options.cherry_allowed_games) or loc_name == "Cherry":
+                loc = Location(world.player, f"Barbuta - {loc_name}", None, regions[loc_data.region_name])
+                loc.place_locked_item(Item("Completed Barbuta", ItemClassification.progression, None, world.player))
+                add_rule(world.get_location("Completed All Games"), lambda state: state.has("Completed Barbuta", world.player))
+                regions[loc_data.region_name].locations.append(loc)
+                break
+
         loc = Location(world.player, f"Barbuta - {loc_name}", get_game_base_id("Barbuta") + loc_data.id_offset,
                        regions[loc_data.region_name])
         regions[loc_data.region_name].locations.append(loc)
