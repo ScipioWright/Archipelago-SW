@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, Set
-from BaseClasses import Region, Location
+from BaseClasses import Region, Location, Item, ItemClassification
+from worlds.generic.Rules import add_rule
 
 from ...constants import get_game_base_id
 
@@ -142,6 +143,14 @@ def get_location_groups() -> Dict[str, Set[str]]:
 # this is not a required function, but a recommended one -- the world class does not call this function
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
+        if loc_name in ["Gold", "Cherry"] and "Night Manor" in world.goal_games:
+            if (loc_name == "Gold" and "Night Manor" not in world.options.cherry_allowed_games) or loc_name == "Cherry":
+                loc = Location(world.player, f"Night Manor - {loc_name}", None, regions[loc_data.region_name])
+                loc.place_locked_item(Item("Completed Night Manor", ItemClassification.progression, None, world.player))
+                add_rule(world.get_location("Completed All Games"), lambda state: state.has("Completed Night Manor", world.player))
+                regions[loc_data.region_name].locations.append(loc)
+                break
+
         loc = Location(world.player, f"Night Manor - {loc_name}", get_game_base_id("Night Manor") + loc_data.id_offset,
                        regions[loc_data.region_name])
         regions[loc_data.region_name].locations.append(loc)
