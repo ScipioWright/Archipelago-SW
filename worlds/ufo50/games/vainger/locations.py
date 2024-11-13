@@ -86,7 +86,7 @@ location_table: Dict[str, LocationInfo] = {
 
 def get_locations() -> Dict[str, int]:
     return {f"Vainger - {name}": data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items()
-            if data.id_offset}
+            if data.id_offset is not None}
 
 
 def get_location_groups() -> Dict[str, Set[str]]:
