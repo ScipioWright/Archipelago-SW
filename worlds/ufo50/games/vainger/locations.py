@@ -107,7 +107,7 @@ def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
 
         loc = Location(world.player, f"Vainger - {loc_name}",
                        loc_data.id_offset + get_game_base_id("Vainger") if loc_data.id_offset else None, region)
-        if not loc_data.id_offset:      # this is an event location
+        if loc_data.id_offset is None:      # this is an event location
             loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None,
                                        world.player))
         region.locations.append(loc)
