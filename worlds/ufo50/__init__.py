@@ -237,8 +237,10 @@ class UFO50World(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         included_games = [game_ids[game_name] for game_name in self.included_games]
         included_games += [game_ids[game_name] for game_name in self.included_unimplemented_games]
+        goal_games = [game_ids[game_name] for game_name in self.goal_games]
         slot_data = {
             "included_games": included_games,
+            "goal_games": goal_games,
         }
         return slot_data
 
