@@ -52,7 +52,6 @@ item_table: Dict[str, ItemInfo] = {
     "Crossbow": ItemInfo(58, IC.progression),
     "Doll": ItemInfo(59, IC.progression),
     "Fungicide Recipe": ItemInfo(62, IC.progression),
-    "Fungicide": ItemInfo(63, IC.progression),
     "Glasses": ItemInfo(65, IC.progression),
     "Maze Directions": ItemInfo(66, IC.progression),
     "Crossbow Bolt": ItemInfo(67, IC.progression),
