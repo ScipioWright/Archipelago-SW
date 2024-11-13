@@ -235,8 +235,8 @@ class UFO50World(World):
         return ufo50_games[self.random.choice(self.included_games)].items.get_filler_item_name()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        included_games = self.included_games
-        included_games += [game_name for game_name in self.included_unimplemented_games]
+        included_games = [game_ids[game_name] for game_name in self.included_games]
+        included_games += [game_ids[game_name] for game_name in self.included_unimplemented_games]
         slot_data = {
             "included_games": included_games,
         }
