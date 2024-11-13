@@ -126,7 +126,7 @@ location_table: Dict[str, LocationInfo] = {
 
 # this is for filling out location_name_to_id, it should be static regardless of yaml options
 def get_locations() -> Dict[str, int]:
-    return {name: data.id_offset + get_game_base_id("Night Manor") for name, data in location_table.items()}
+    return {f"Night Manor - {name}": data.id_offset + get_game_base_id("Night Manor") for name, data in location_table.items()}
 
 
 # this should return the location groups for this game, independent of yaml options
