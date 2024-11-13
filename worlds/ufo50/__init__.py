@@ -124,11 +124,14 @@ class UFO50World(World):
             if "UFO 50" in self.multiworld.re_gen_passthrough:
                 self.ut_passthrough = self.multiworld.re_gen_passthrough["UFO 50"]
                 # sets the games that ended up on as the always_on_games, turns off random_choice_games
-                included_game_ids = self.ut_passthrough["included_games"]
                 id_to_game = {v: k for k, v in game_ids.items()}
-                self.options.always_on_games.value = {id_to_game[game_id] for game_id in included_game_ids}
+                self.options.always_on_games.value = {id_to_game[game_id] for game_id in self.ut_passthrough["included_games"]}
                 self.options.random_choice_games.value.clear()
                 self.options.random_choice_game_count.value = 0
+                self.options.goal_games.value = {id_to_game[game_id] for game_id in self.ut_passthrough["goal_games"]}
+                self.options.goal_game_amount.value = 50
+                # UT doesn't show locations that aren't actually in your slot, so this is fine
+                self.options.cherry_allowed_games.value = {game_name for game_name in game_ids.keys()}
 
         included_game_names = sorted(self.options.always_on_games.value)
         # exclude always on games from random choice games
