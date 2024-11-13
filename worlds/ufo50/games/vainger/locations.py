@@ -90,7 +90,8 @@ def get_locations() -> Dict[str, int]:
 
 
 def get_location_groups() -> Dict[str, Set[str]]:
-    location_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {loc_name}" for loc_name in location_table.keys()}}
+    location_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {loc_name}" for loc_name, loc_data in location_table.items()
+                                                        if loc_data.id_offset is not None}}
     return location_groups
 
 
