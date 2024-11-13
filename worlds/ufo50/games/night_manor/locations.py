@@ -110,9 +110,7 @@ location_table: Dict[str, LocationInfo] = {
     "Play Room - Aluminum Key": LocationInfo(60, "Second Floor"),  # get by cutting doll with knife
     "Play Room - Journal Entry 14": LocationInfo(61, "Second Floor"),  # in bottom left corner
     "Play Room - Maze Directions": LocationInfo(66, "Second Floor"),  # use red glasses on scribbles on wall
-    # craft in inventory after getting recipe
-    "Crafting - Fungicide": LocationInfo(63, "Master Bedroom"),
-    
+
     # open gate with gems, use directions on maze, get bolt from statue
     "Maze - Crossbow Bolt": LocationInfo(67, "Maze"),
     # combine crossbow and bolt, lure killer or wait, shoot him and get the key
@@ -123,7 +121,6 @@ location_table: Dict[str, LocationInfo] = {
     "Garden": LocationInfo(997, "First Floor & Exterior"),
     "Gold": LocationInfo(998, "First Floor & Exterior"),
     "Cherry": LocationInfo(999, "Basement")
- 
 }
 
 
