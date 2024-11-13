@@ -10,6 +10,8 @@ class AlwaysOnGames(OptionSet):
     internal_name = "always_on_games"
     display_name = "Always On Games"
     valid_keys = {game_name for game_name in game_ids.keys()}
+    # default is here so the unit tests don't fail
+    default = ["Barbuta", "Vainger", "Night Manor"]
 
 
 class RandomChoiceGames(OptionSet):
