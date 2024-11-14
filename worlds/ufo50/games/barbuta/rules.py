@@ -6,6 +6,17 @@ if TYPE_CHECKING:
     from ... import UFO50World
 
 
+pin = "Barbuta - Pin"
+umbrella = "Barbuta - Umbrella"
+necklace = "Barbuta - Necklace"
+candy = "Barbuta - Candy"
+key = "Barbuta - Key"
+blood_sword = "Barbuta - Blood Sword"
+broken_wall = "Barbuta - A Broken Wall"
+wand = "Barbuta - Wand"
+bat_orb = "Barbuta - Bat Orb"
+
+
 # count the value of the money items
 def has_money(amount: int, state: CollectionState, player: int) -> bool:
     current_money = state.count("Barbuta - $100", player) * 100
@@ -17,15 +28,8 @@ def has_money(amount: int, state: CollectionState, player: int) -> bool:
     return False
 
 
-pin = "Barbuta - Pin"
-umbrella = "Barbuta - Umbrella"
-necklace = "Barbuta - Necklace"
-candy = "Barbuta - Candy"
-key = "Barbuta - Key"
-blood_sword = "Barbuta - Blood Sword"
-broken_wall = "Barbuta - A Broken Wall"
-wand = "Barbuta - Wand"
-bat_orb = "Barbuta - Bat Orb"
+def has_wand(state: CollectionState, player: int) -> bool:
+    return state.has(wand, player) and state.can_reach("Wand Trade Room", player)
 
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
@@ -42,7 +46,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     regions["Starting Area"].connect(regions["R6C7 and Nearby"],
                                      rule=lambda state: state.has(pin, player))
     regions["Starting Area"].connect(regions["Mimic Room"],
-                                     rule=lambda state: state.has(wand, player))
+                                     rule=lambda state: has_wand(state, player))
     regions["Starting Area"].connect(regions["R3C7 above Ladders"],
                                      rule=lambda state: state.has(candy, player))
 
@@ -85,7 +89,8 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     set_rule(world.get_location("Barbuta - Garden"),
              rule=lambda state: state.has_any((pin, necklace), player))
     set_rule(world.get_location("Barbuta - Gold"),
-             rule=lambda state: state.has_any((blood_sword, wand, bat_orb), player))
+             rule=lambda state: state.has_any((blood_sword, bat_orb), player) or has_wand(state, player))
     if "Barbuta" in world.options.cherry_allowed_games:
         set_rule(world.get_location("Barbuta - Cherry"),
-                 rule=lambda state: state.has_any((blood_sword, wand), player) and state.has(bat_orb, player))
+                 rule=lambda state: state.has(bat_orb, player)
+                 and (state.has(blood_sword, player) or has_wand(state, player)))
