@@ -18,7 +18,7 @@ location_table: Dict[str, LocationInfo] = {
     # Shallows
     "Shallows Upper Left - Ceiling Missile Upgrade": LocationInfo(0, "Shallows"),
     "Shallows Lower Left - Fuel Tank between some Coral": LocationInfo(1, "Shallows"),
-    "Shallows Upper Left - Fuel Tank on a Green Thing": LocationInfo(2, "Shallows"),
+    "Shallows Upper Left - Fuel Tank next to Coral": LocationInfo(2, "Shallows"),
     "Shallows Lower Left - Fuel Tank above Breakable Rocks": LocationInfo(3, "Shallows"),
     "Shallows Upper Mid - Missile Upgrade at Surface": LocationInfo(4, "Shallows"),
     "Shallows Upper Mid - Fuel Tank on Coral": LocationInfo(5, "Shallows"),
@@ -46,6 +46,7 @@ location_table: Dict[str, LocationInfo] = {
     "Shallows Lower Right - Egg behind ! Blocks": LocationInfo(27, "Shallows"),
     "Shallows Lower Right - Egg in Coral": LocationInfo(28, "Shallows"),
     "Shallows Lower Right - Drill Module": LocationInfo(29, "Shallows"),
+    # todo: bosses
 
     # Deeper
     "Deeper Upper Left - Missile Upgrade in Wall": LocationInfo(30, "Deeper"),
@@ -71,20 +72,20 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper"),
 
     # Abyss
-    "Abyss Upper Left - Egg on Plants near Urchins": LocationInfo(47, "Abyss"),
-    "Abyss Upper Left - Fuel Tank on Plants": LocationInfo(48, "Abyss"),
-    "Abyss Upper Left - Egg on Plants above Missile Upgrade": LocationInfo(49, "Abyss"),
-    "Abyss Upper Left - Missile Upgrade in Plants": LocationInfo(50, "Abyss"),
+    "Abyss Upper Left - Egg on Seaweed near Urchins": LocationInfo(47, "Abyss"),
+    "Abyss Upper Left - Fuel Tank on Seaweed": LocationInfo(48, "Abyss"),
+    "Abyss Upper Left - Egg on Seaweed above Missile Upgrade": LocationInfo(49, "Abyss"),
+    "Abyss Upper Left - Missile Upgrade in Seaweed": LocationInfo(50, "Abyss"),
     "Abyss Lower Left - Egg in Facility": LocationInfo(51, "Abyss"),
     "Abyss Lower Left - Missile Upgrade in Facility": LocationInfo(52, "Abyss"),
     "Abyss Lower Left - Fuel Tank in Facility Floor": LocationInfo(53, "Abyss"),
     "Abyss Upper Mid - Missile Upgrade in Wall": LocationInfo(54, "Abyss"),
     "Abyss Upper Mid - Missile Upgrade in Cave": LocationInfo(55, "Abyss"),
-    "Abyss Upper Mid - Egg on Plants": LocationInfo(56, "Abyss"),
+    "Abyss Upper Mid - Egg on Seaweed": LocationInfo(56, "Abyss"),
     "Abyss Upper Mid - Efficient Fuel Module": LocationInfo(57, "Abyss"),
-    "Abyss Upper Mid - Egg in Plants": LocationInfo(58, "Abyss"),
-    "Abyss Upper Mid - Missile Upgrade behind Plants": LocationInfo(59, "Abyss"),
-    "Abyss Upper Right - Egg by Plants": LocationInfo(60, "Abyss"),
+    "Abyss Upper Mid - Egg in Seaweed": LocationInfo(58, "Abyss"),
+    "Abyss Upper Mid - Missile Upgrade behind Seaweed": LocationInfo(59, "Abyss"),
+    "Abyss Upper Right - Egg by Seaweed": LocationInfo(60, "Abyss"),
     "Abyss Upper Right - Missile Upgrade in Wall": LocationInfo(61, "Abyss"),
     "Abyss Lower Right - Fuel Tank in Floor": LocationInfo(62, "Abyss"),
     "Abyss Lower Right - Egg": LocationInfo(63, "Abyss"),
