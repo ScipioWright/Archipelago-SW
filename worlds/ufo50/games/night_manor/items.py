@@ -153,5 +153,5 @@ def create_items(world: "UFO50World") -> List[Item]:
     return night_manor_items
 
 
-def get_filler_item_name() -> str:
+def get_filler_item_name(world: "UFO50World") -> str:
     return "Night Manor - Yellow Note"
