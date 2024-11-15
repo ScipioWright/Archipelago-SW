@@ -100,27 +100,27 @@ location_table: Dict[str, LocationInfo] = {
 
 # this is for filling out location_name_to_id, it should be static regardless of yaml options
 def get_locations() -> Dict[str, int]:
-    return {f"Barbuta - {name}": data.id_offset + get_game_base_id("Barbuta") for name, data in location_table.items()}
+    return {f"Porgy - {name}": data.id_offset + get_game_base_id("Porgy") for name, data in location_table.items()}
 
 
 # this should return the location groups for this game, independent of yaml options
 # you should include a group that contains all location for this game that is called the same thing as the game
 def get_location_groups() -> Dict[str, Set[str]]:
-    location_groups: Dict[str, Set[str]] = {"Barbuta": {f"Barbuta - {loc_name}" for loc_name in location_table.keys()}}
+    location_groups: Dict[str, Set[str]] = {"Porgy": {f"Porgy - {loc_name}" for loc_name in location_table.keys()}}
     return location_groups
 
 
 # this is not a required function, but a recommended one -- the world class does not call this function
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
-        if loc_name in ["Gold", "Cherry"] and "Barbuta" in world.goal_games:
-            if (loc_name == "Gold" and "Barbuta" not in world.options.cherry_allowed_games) or loc_name == "Cherry":
-                loc = Location(world.player, f"Barbuta - {loc_name}", None, regions[loc_data.region_name])
-                loc.place_locked_item(Item("Completed Barbuta", ItemClassification.progression, None, world.player))
-                add_rule(world.get_location("Completed All Games"), lambda state: state.has("Completed Barbuta", world.player))
+        if loc_name in ["Gold", "Cherry"] and "Porgy" in world.goal_games:
+            if (loc_name == "Gold" and "Porgy" not in world.options.cherry_allowed_games) or loc_name == "Cherry":
+                loc = Location(world.player, f"Porgy - {loc_name}", None, regions[loc_data.region_name])
+                loc.place_locked_item(Item("Completed Porgy", ItemClassification.progression, None, world.player))
+                add_rule(world.get_location("Completed All Games"), lambda state: state.has("Completed Porgy", world.player))
                 regions[loc_data.region_name].locations.append(loc)
                 break
 
-        loc = Location(world.player, f"Barbuta - {loc_name}", get_game_base_id("Barbuta") + loc_data.id_offset,
+        loc = Location(world.player, f"Porgy - {loc_name}", get_game_base_id("Porgy") + loc_data.id_offset,
                        regions[loc_data.region_name])
         regions[loc_data.region_name].locations.append(loc)
