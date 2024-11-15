@@ -237,7 +237,7 @@ class UFO50World(World):
         self.multiworld.itempool += created_items
 
     def get_filler_item_name(self) -> str:
-        return ufo50_games[self.random.choice(self.included_games)].items.get_filler_item_name()
+        return ufo50_games[self.random.choice(self.included_games)].items.get_filler_item_name(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         included_games = [game_ids[game_name] for game_name in self.included_games]
