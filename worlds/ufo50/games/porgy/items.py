@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set
+from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set, Optional
 from BaseClasses import ItemClassification as IC, Item
 
 from ...constants import get_game_base_id
@@ -11,14 +11,27 @@ class ItemInfo(NamedTuple):
     id_offset: int
     classification: IC
     quantity: int
+    group: Optional[str] = None
 
 
 item_table: Dict[str, ItemInfo] = {
     "Torpedo Upgrade": ItemInfo(0, IC.progression, 20),
     "Fuel Tank": ItemInfo(1, IC.progression, 20),
-    "Egg": ItemInfo(2, IC.progression, 20),
+    "Fish Gratitude": ItemInfo(2, IC.progression, 20),
     # modules
-    # the glowy things
+    "Missile System Module": ItemInfo(3, IC.progression, 1, "Modules"),
+    "Radar System Module": ItemInfo(4, IC.progression, 1, "Modules"),
+    "Buster Torpedoes Module": ItemInfo(5, IC.progression, 1, "Modules"),
+    "Depth Charge Module": ItemInfo(6, IC.progression, 1, "Modules"),
+    "Efficient Fuel Module": ItemInfo(7, IC.useful, 1, "Modules"),
+    "Armor Plating Module": ItemInfo(8, IC.useful, 1, "Modules"),
+    "Super Booster Module": ItemInfo(9, IC.useful, 1, "Modules"),
+    "Spotlight Module": ItemInfo(10, IC.progression, 1, "Modules"),
+    "Drill Module": ItemInfo(11, IC.progression, 1, "Modules"),
+    "Targeting System Module": ItemInfo(12, IC.useful, 1, "Modules"),
+
+    # the mcguffins
+    "Strange Light": ItemInfo(13, IC.progression_skip_balancing, 5),
 }
 
 

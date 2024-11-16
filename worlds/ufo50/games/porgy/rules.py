@@ -6,15 +6,9 @@ if TYPE_CHECKING:
     from ... import UFO50World
 
 
-pin = "Barbuta - Pin"
-umbrella = "Barbuta - Umbrella"
-necklace = "Barbuta - Necklace"
-candy = "Barbuta - Candy"
-key = "Barbuta - Key"
-blood_sword = "Barbuta - Blood Sword"
-broken_wall = "Barbuta - A Broken Wall"
-wand = "Barbuta - Wand"
-bat_orb = "Barbuta - Bat Orb"
+fuel = "Porgy - Fuel Tank"
+egg = "Barbuta - Egg"
+torpedo = "Barbuta - Torpedo Upgrade"
 
 
 # count the value of the money items

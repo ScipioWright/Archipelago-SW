@@ -16,59 +16,67 @@ class LocationInfo(NamedTuple):
 
 location_table: Dict[str, LocationInfo] = {
     # Shallows
-    "Shallows Upper Left - Ceiling Torpedo Upgrade": LocationInfo(0, "Shallows"),
-    "Shallows Lower Left - Fuel Tank between some Coral": LocationInfo(1, "Shallows"),
-    "Shallows Upper Left - Fuel Tank next to Coral": LocationInfo(2, "Shallows"),
-    "Shallows Lower Left - Fuel Tank above Breakable Rocks": LocationInfo(3, "Shallows"),
-    "Shallows Upper Mid - Torpedo Upgrade at Surface": LocationInfo(4, "Shallows"),
-    "Shallows Upper Mid - Fuel Tank on Coral": LocationInfo(5, "Shallows"),
-    "Shallows Uppper Mid - Fuel Tank behind ! Blocks": LocationInfo(6, "Shallows"),
-    "Shallows Upper Mid - Egg on Coral": LocationInfo(7, "Shallows"),
-    "Shallows Upper Mid - Fuel Tank in Floor": LocationInfo(8, "Shallows"),
-    "Shallows Mid - Torpedo Upgrade above Breakable Rocks": LocationInfo(9, "Shallows"),
-    "Shallows Sunken Ship - Cargo Hold Egg": LocationInfo(10, "Shallows"),
+    "Shallows Upper Left - Ceiling Torpedo Upgrade": LocationInfo(0, "Shallows", 2),  # sphere 1
+    "Shallows Lower Left - Fuel Tank between some Coral": LocationInfo(1, "Shallows", 2),  # sphere 1
+    "Shallows Upper Left - Fuel Tank next to Coral": LocationInfo(2, "Shallows", 3),  # sphere 1
+    "Shallows Lower Left - Fuel Tank above Breakable Rocks": LocationInfo(3, "Shallows"),  # up or down bomb
+    "Shallows Upper Mid - Torpedo Upgrade at Surface": LocationInfo(4, "Shallows", 4),  # buster, dash after hitting !
+    "Shallows Upper Mid - Fuel Tank on Coral": LocationInfo(5, "Shallows", 1),  # sphere 1
+    "Shallows Uppper Mid - Fuel Tank behind ! Blocks": LocationInfo(6, "Shallows", 3),  # buster
+    "Shallows Upper Mid - Egg at Surface": LocationInfo(7, "Shallows", 2),  # buster
+    "Shallows Upper Mid - Fuel Tank in Floor at Surface": LocationInfo(8, "Shallows", 2),  # buster, depth
+    "Shallows Mid - Torpedo Upgrade above Breakable Rocks": LocationInfo(9, "Shallows", 5),  # up or down bomb, 3 to touch
+    # ship requires explosives to enter
+    # using missiles, it requires 6 fuel tanks to open it and get back to base
+    "Shallows Sunken Ship - Cargo Hold Egg": LocationInfo(10, "Shallows", 4),  # 2 to touch
     "Shallows Sunken Ship - Bow Egg": LocationInfo(11, "Shallows"),
-    "Shallows Sunken Ship - Bow Hidden Torpedo Upgrade": LocationInfo(12, "Shallows"),
-    "Shallows Sunken Ship - Depth Charge Module": LocationInfo(13, "Shallows"),
-    "Shallows Lower Mid - Super Booster Module": LocationInfo(14, "Shallows"),
-    "Shallows Lower Mid - Fuel Tank on Coral": LocationInfo(15, "Shallows"),
-    "Shallows Lower Mid - Egg on Coral": LocationInfo(16, "Shallows"),
-    "Shallows Lower Mid - Lower Ceiling Torpedo Upgrade": LocationInfo(17, "Shallows"),
-    "Shallows Lower Mid - Upper Ceiling Torpedo Upgrade": LocationInfo(18, "Shallows"),
-    "Shallows Lower Mid - Fuel Tank in Floor": LocationInfo(19, "Shallows"),
-    "Shallows Lower Mid - Torpedo Upgrade on Coral": LocationInfo(20, "Shallows"),
-    "Shallows Upper Right - Fuel Tank under Breakable Rocks": LocationInfo(21, "Shallows"),
+    "Shallows Sunken Ship - Bow Torpedo Upgrade in Wall": LocationInfo(12, "Shallows"),
+    "Shallows Sunken Ship - Depth Charge Module": LocationInfo(13, "Shallows", 4),  # 2 to touch
+    "Shallows Lower Mid - Super Booster Module": LocationInfo(14, "Shallows", 5),  # assumes light damage
+    "Shallows Lower Mid - Fuel Tank on Coral": LocationInfo(15, "Shallows", 4),  # sphere 1
+    "Shallows Lower Mid - Egg on Coral": LocationInfo(16, "Shallows", 4),  # 3 to touch
+    "Shallows Lower Mid - Lower Ceiling Torpedo Upgrade": LocationInfo(17, "Shallows", 3),  # missile or depth
+    "Shallows Lower Mid - Upper Ceiling Torpedo Upgrade": LocationInfo(18, "Shallows", 2),  # sphere 1
+    "Shallows Lower Mid - Fuel Tank in Floor": LocationInfo(19, "Shallows", 2),  # depth charge
+    "Shallows Lower Mid - Torpedo Upgrade on Coral": LocationInfo(20, "Shallows", 3),  # sphere 1
+    "Shallows Upper Right - Fuel Tank under Breakable Rocks": LocationInfo(21, "Shallows"),  # depth charge
+    # 5.5 tanks to get from base to first maze block w/o drill, 2 tanks w/ drill
+    # fuel tank: 6.5 to touch, 13 (test) or 3 to touch w/ drill (tested), 6 w/ drill (tested)
+    # torpedo: 8.5 to touch, 15 (test) or 5 to touch w/ drill (tested), 8 w/ drill (tested)
+    # egg: 10.5 to touch, 16 (test) or 7 to touch w/ drill (tested), 9 to base w/ drill (tested)
     "Shallows Upper Right - Fuel Tank in Coral Maze": LocationInfo(22, "Shallows"),
     "Shallows Upper Right - Torpedo Upgrade in Coral Maze": LocationInfo(23, "Shallows"),
     "Shallows Upper Right - Egg in Coral Maze": LocationInfo(24, "Shallows"),
     "Shallows Lower Right - Fuel Tank under Breakable Rocks": LocationInfo(25, "Shallows"),
-    "Shallows Lower Right - Buster Torpedoes Module": LocationInfo(26, "Shallows"),
+    "Shallows Lower Right - Buster Torpedoes Module": LocationInfo(26, "Shallows", 3),  # sphere 1
     "Shallows Lower Right - Egg behind ! Blocks": LocationInfo(27, "Shallows"),
-    "Shallows Lower Right - Egg in Coral": LocationInfo(28, "Shallows"),
-    "Shallows Lower Right - Drill Module": LocationInfo(29, "Shallows"),
+    "Shallows Lower Right - Egg in Coral": LocationInfo(28, "Shallows", 5),  # buster, 3 to touch
+    "Shallows Lower Right - Drill Module": LocationInfo(29, "Shallows", 6),  # buster, 3 to touch
 
     # Deeper
-    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper"),
-    "Deeper Upper Left - Egg by Urchins": LocationInfo(31, "Deeper"),
-    "Deeper Upper Left - Fuel Tank on Coral": LocationInfo(32, "Deeper"),
-    "Deeper Upper Left - Fuel Tank behind ! Blocks": LocationInfo(33, "Deeper"),
-    "Deeper Upper Mid - Torpedo Upgrade on Coral": LocationInfo(34, "Deeper"),
-    "Deeper Upper Mid - Torpedo Upgrade in Ceiling": LocationInfo(35, "Deeper"),
-    "Deeper Upper Mid - Egg in Dirt": LocationInfo(36, "Deeper"),
-    "Deeper Upper Mid - Spotlight Module": LocationInfo(37, "Deeper"),
-    "Deeper Upper Mid - Fuel Tank in Collapsed Structure": LocationInfo(38, "Deeper"),
-    "Deeper Upper Right - Fuel Tank in Collapsed Structure": LocationInfo(39, "Deeper"),
-    "Deeper Upper Right - Egg on Coral": LocationInfo(40, "Deeper"),
-    "Deeper Upper Right - Torpedo Upgrade in Wall": LocationInfo(41, "Deeper"),
+    # 1.75 from left base to non-boat deeper entrance
+    # from left base to boat depths entrance
+    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper", 8),  # 4 to touch, 8 total itemless
+    "Deeper Upper Left - Egg by Urchins": LocationInfo(31, "Deeper", 7),  # 4 to touch, 7 total
+    "Deeper Upper Left - Fuel Tank on Coral": LocationInfo(32, "Deeper", 7),  # 4 to touch, 7 total
+    "Deeper Upper Left - Fuel Tank behind ! Blocks": LocationInfo(33, "Deeper", 6),  # 4 to touch
+    "Deeper Upper Mid - Torpedo Upgrade in Coral": LocationInfo(34, "Deeper", 5),  # 3 to touch
+    "Deeper Upper Mid - Torpedo Upgrade in Ceiling": LocationInfo(35, "Deeper", 6),  # 3 to touch
+    "Deeper Upper Mid - Egg in Dirt": LocationInfo(36, "Deeper", 5),  # drill, 3 to touch
+    "Deeper Upper Mid - Spotlight Module": LocationInfo(37, "Deeper", 5),  # depth, 3 to touch
+    "Deeper Upper Mid - Fuel Tank in Collapsed Structure": LocationInfo(38, "Deeper", 5),  # 2 to touch, kinda on the edge
+    "Deeper Upper Right - Fuel Tank in Collapsed Structure": LocationInfo(39, "Deeper", 5),  # 3 to touch
+    "Deeper Upper Right - Egg on Coral": LocationInfo(40, "Deeper", 7),  # 4 to touch, about the same speed with drill
+    "Deeper Upper Right - Torpedo Upgrade in Wall": LocationInfo(41, "Deeper", 5),  # 3 to touch
     "Deeper Right - Torpedo Upgrade on Coral": LocationInfo(42, "Deeper"),
     "Deeper Upper Right - Targeting System Module": LocationInfo(43, "Deeper"),
-    "Deeper Lower Right - Egg behind Urchins": LocationInfo(44, "Deeper"),
+    "Deeper Lower Right - Egg behind Urchins": LocationInfo(44, "Deeper", 5),  # 3 to touch
     "Deeper Lower Right - Fuel Tank in Ceiling": LocationInfo(45, "Deeper"),
     "Deeper Lower Right - Egg on Coral": LocationInfo(46, "Deeper"),
-    "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper"),
-    "Deeper Lower Mid - Torpedo Upgrade on Coral": LocationInfo(48, "Deeper"),
-    "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper"),
-    "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper"),
+    "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper", 6),  # 3 to touch
+    "Deeper Lower Mid - Torpedo Upgrade on Coral": LocationInfo(48, "Deeper", 7),  # 4 to touch
+    "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper", 7),  # depth, 4 to touch
+    "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper", 7),  # 4 to touch
 
     # Abyss
     "Abyss Upper Left - Egg on Seaweed near Urchins": LocationInfo(51, "Abyss"),
@@ -92,11 +100,17 @@ location_table: Dict[str, LocationInfo] = {
     "Abyss Lower Right - Armor Plating Module": LocationInfo(69, "Abyss"),
 
     # Bosses
-    "Lamia": LocationInfo(100, "Shallows"),
-    "Second Boss": LocationInfo(101, "Shallows"),
-    "Eel": LocationInfo(102, "Deeper"),
-    "Big shell thing": LocationInfo(103, "Deeper"),
-    "Whatever was in the Abyss": LocationInfo(104, "Abyss"),
+    # combat logic is weird cause you can save damage done to a boss
+    # my gut says 7 fuel, 5 torpedo upgrades OR 5 fuel and depth charges for the first two bosses
+    "Lamia": LocationInfo(100, "Shallows"),  # shark
+    "Iku Turso": LocationInfo(101, "Shallows"),  # octopus
+
+    # 12 fuel, 8 torpedo upgrades OR 8 fuel and depth charges for the second two bosses
+    "Bakunawa": LocationInfo(102, "Deeper"),  # moray eel
+    "Neptune": LocationInfo(103, "Deeper"),  # nautilus
+
+
+    "Dracula": LocationInfo(104, "Abyss"),  # squid-thing
 
     "Garden": LocationInfo(997, "Menu"),
     "Gold": LocationInfo(998, "Abyss"),
