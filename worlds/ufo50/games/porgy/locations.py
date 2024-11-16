@@ -119,6 +119,8 @@ def get_location_groups() -> Dict[str, Set[str]]:
 # this is not a required function, but a recommended one -- the world class does not call this function
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
+        if loc_name == "Cherry" and "Porgy" not in world.options.cherry_allowed_games:
+            break
         if loc_name in ["Gold", "Cherry"] and "Porgy" in world.goal_games:
             if (loc_name == "Gold" and "Porgy" not in world.options.cherry_allowed_games) or loc_name == "Cherry":
                 loc = Location(world.player, f"Porgy - {loc_name}", None, regions[loc_data.region_name])
