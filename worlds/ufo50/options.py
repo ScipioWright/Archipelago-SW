@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import StartInventoryPool, Range, OptionSet, PerGameCommonOptions, OptionGroup
+from Options import StartInventoryPool, Range, OptionSet, PerGameCommonOptions, OptionGroup, Choice
 from .constants import game_ids
 
 
@@ -86,6 +86,21 @@ class CherryAllowed(OptionSet):
     default = {"Barbuta", "Night Manor"}
 
 
+class PorgyFuelDifficulty(Choice):
+    """
+    Determine how much fuel you need to get checks.
+    Hard means an efficient route with minimal damage.
+    Medium means 25% more fuel than Hard.
+    Easy means 50% more fuel than Hard.
+    """
+    internal_name = "porgy_fuel_difficulty"
+    display_name = "Porgy - Fuel Difficulty"
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    default = 1
+
+
 @dataclass
 class UFO50Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -96,6 +111,7 @@ class UFO50Options(PerGameCommonOptions):
     goal_games: GoalGames
     goal_game_amount: GoalGameAmount
     cherry_allowed_games: CherryAllowed
+    porgy_fuel_difficulty: PorgyFuelDifficulty
 
 
 ufo50_option_groups = [
@@ -107,5 +123,8 @@ ufo50_option_groups = [
         GoalGames,
         GoalGameAmount,
         CherryAllowed,
+    ]),
+    OptionGroup("Porgy Options", [
+        PorgyFuelDifficulty,
     ])
 ]

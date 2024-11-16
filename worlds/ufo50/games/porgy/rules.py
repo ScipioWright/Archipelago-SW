@@ -2,28 +2,33 @@ from typing import TYPE_CHECKING, Dict
 from BaseClasses import Region, CollectionState
 from worlds.generic.Rules import set_rule
 
+from ...options import PorgyFuelDifficulty
+
 if TYPE_CHECKING:
     from ... import UFO50World
 
 
 fuel = "Porgy - Fuel Tank"
-egg = "Barbuta - Egg"
-torpedo = "Barbuta - Torpedo Upgrade"
+egg = "Porgy - Fish Gratitude"
+torpedo = "Porgy - Torpedo Upgrade"
+missile = "Porgy - Missile System Module"
+depth_charge = "Porgy - Depth Charge Module"
 
 
-# count the value of the money items
-def has_money(amount: int, state: CollectionState, player: int) -> bool:
-    current_money = state.count("Barbuta - $100", player) * 100
-    if current_money >= amount:
-        return True
-    current_money += state.count("Barbuta - $50", player) * 50
-    if current_money >= amount:
-        return True
-    return False
+def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
+    # todo: factor in fuel efficiency in some fashion?
+    if world.options.porgy_fuel_difficulty < PorgyFuelDifficulty.option_hard:
+        if world.options.porgy_fuel_difficulty:
+            # medium
+            amount = int(amount * 1.25)
+        else:
+            # easy
+            amount = int(amount * 1.5)
+    return state.has(fuel, world.player, amount)
 
 
-def has_wand(state: CollectionState, player: int) -> bool:
-    return state.has(wand, player) and state.can_reach("Wand Trade Room", player)
+def can_open_ship(state: CollectionState, world: "UFO50World") -> bool:
+    return state.has(depth_charge, world.player) or (state.has(missile, world.player) and has_fuel(6, state, world))
 
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:

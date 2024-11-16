@@ -55,6 +55,7 @@ location_table: Dict[str, LocationInfo] = {
 
     # Deeper
     # 1.75 from left base to non-boat deeper entrance
+    # 1 from right base to deep entrance
     # from left base to boat depths entrance
     "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper", 8),  # 4 to touch, 8 total itemless
     "Deeper Upper Left - Egg by Urchins": LocationInfo(31, "Deeper", 7),  # 4 to touch, 7 total
@@ -104,7 +105,6 @@ location_table: Dict[str, LocationInfo] = {
     # my gut says 7 fuel, 5 torpedo upgrades OR 5 fuel and depth charges for the first two bosses
     "Lamia": LocationInfo(100, "Shallows"),  # shark
     "Iku Turso": LocationInfo(101, "Shallows"),  # octopus
-
     # 12 fuel, 8 torpedo upgrades OR 8 fuel and depth charges for the second two bosses
     "Bakunawa": LocationInfo(102, "Deeper"),  # moray eel
     "Neptune": LocationInfo(103, "Deeper"),  # nautilus
