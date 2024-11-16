@@ -46,7 +46,6 @@ location_table: Dict[str, LocationInfo] = {
     "Shallows Lower Right - Egg behind ! Blocks": LocationInfo(27, "Shallows"),
     "Shallows Lower Right - Egg in Coral": LocationInfo(28, "Shallows"),
     "Shallows Lower Right - Drill Module": LocationInfo(29, "Shallows"),
-    # todo: bosses
 
     # Deeper
     "Deeper Upper Left - Missile Upgrade in Wall": LocationInfo(30, "Deeper"),
@@ -72,28 +71,35 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper"),
 
     # Abyss
-    "Abyss Upper Left - Egg on Seaweed near Urchins": LocationInfo(47, "Abyss"),
-    "Abyss Upper Left - Fuel Tank on Seaweed": LocationInfo(48, "Abyss"),
-    "Abyss Upper Left - Egg on Seaweed above Missile Upgrade": LocationInfo(49, "Abyss"),
-    "Abyss Upper Left - Missile Upgrade in Seaweed": LocationInfo(50, "Abyss"),
-    "Abyss Lower Left - Egg in Facility": LocationInfo(51, "Abyss"),
-    "Abyss Lower Left - Missile Upgrade in Facility": LocationInfo(52, "Abyss"),
-    "Abyss Lower Left - Fuel Tank in Facility Floor": LocationInfo(53, "Abyss"),
-    "Abyss Upper Mid - Missile Upgrade in Wall": LocationInfo(54, "Abyss"),
-    "Abyss Upper Mid - Missile Upgrade in Cave": LocationInfo(55, "Abyss"),
-    "Abyss Upper Mid - Egg on Seaweed": LocationInfo(56, "Abyss"),
-    "Abyss Upper Mid - Efficient Fuel Module": LocationInfo(57, "Abyss"),
-    "Abyss Upper Mid - Egg in Seaweed": LocationInfo(58, "Abyss"),
-    "Abyss Upper Mid - Missile Upgrade behind Seaweed": LocationInfo(59, "Abyss"),
-    "Abyss Upper Right - Egg by Seaweed": LocationInfo(60, "Abyss"),
-    "Abyss Upper Right - Missile Upgrade in Wall": LocationInfo(61, "Abyss"),
-    "Abyss Lower Right - Fuel Tank in Floor": LocationInfo(62, "Abyss"),
-    "Abyss Lower Right - Egg": LocationInfo(63, "Abyss"),
-    "Abyss Lower Right - Radar System Module": LocationInfo(64, "Abyss"),
-    "Abyss Lower Right - Armor Plating Module": LocationInfo(65, "Abyss"),
+    "Abyss Upper Left - Egg on Seaweed near Urchins": LocationInfo(51, "Abyss"),
+    "Abyss Upper Left - Fuel Tank on Seaweed": LocationInfo(52, "Abyss"),
+    "Abyss Upper Left - Egg on Seaweed above Missile Upgrade": LocationInfo(53, "Abyss"),
+    "Abyss Upper Left - Missile Upgrade in Seaweed": LocationInfo(54, "Abyss"),
+    "Abyss Lower Left - Egg in Facility": LocationInfo(55, "Abyss"),
+    "Abyss Lower Left - Missile Upgrade in Facility": LocationInfo(56, "Abyss"),
+    "Abyss Lower Left - Fuel Tank in Facility Floor": LocationInfo(57, "Abyss"),
+    "Abyss Upper Mid - Missile Upgrade in Wall": LocationInfo(58, "Abyss"),
+    "Abyss Upper Mid - Missile Upgrade in Cave": LocationInfo(59, "Abyss"),
+    "Abyss Upper Mid - Egg on Seaweed": LocationInfo(60, "Abyss"),
+    "Abyss Upper Mid - Efficient Fuel Module": LocationInfo(61, "Abyss"),
+    "Abyss Upper Mid - Egg in Seaweed": LocationInfo(62, "Abyss"),
+    "Abyss Upper Mid - Missile Upgrade behind Seaweed": LocationInfo(63, "Abyss"),
+    "Abyss Upper Right - Egg by Seaweed": LocationInfo(64, "Abyss"),
+    "Abyss Upper Right - Missile Upgrade in Wall": LocationInfo(65, "Abyss"),
+    "Abyss Lower Right - Fuel Tank in Floor": LocationInfo(66, "Abyss"),
+    "Abyss Lower Right - Egg": LocationInfo(67, "Abyss"),
+    "Abyss Lower Right - Radar System Module": LocationInfo(68, "Abyss"),
+    "Abyss Lower Right - Armor Plating Module": LocationInfo(69, "Abyss"),
+
+    # Bosses
+    "Lamia": LocationInfo(100, "Shallows"),
+    "Second Boss": LocationInfo(101, "Shallows"),
+    "Eel": LocationInfo(102, "Deeper"),
+    "Big shell thing": LocationInfo(103, "Deeper"),
+    "Whatever was in the Abyss": LocationInfo(104, "Abyss"),
 
     "Garden": LocationInfo(997, "Menu"),
-    "Gold": LocationInfo(998, "Boss Area"),
+    "Gold": LocationInfo(998, "Abyss"),
     "Cherry": LocationInfo(999, "Boss Area")
 }
 
