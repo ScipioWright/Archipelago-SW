@@ -14,7 +14,7 @@ class ItemInfo(NamedTuple):
 
 
 item_table: Dict[str, ItemInfo] = {
-    "Missile Upgrade": ItemInfo(0, IC.progression, 20),
+    "Torpedo Upgrade": ItemInfo(0, IC.progression, 20),
     "Fuel Tank": ItemInfo(1, IC.progression, 20),
     "Egg": ItemInfo(2, IC.progression, 20),
     # modules
@@ -46,13 +46,15 @@ def create_item(item_name: str, world: "UFO50World", item_class: IC = None) -> I
 # for when the world is getting the items to place into the multiworld's item pool
 def create_items(world: "UFO50World") -> List[Item]:
     items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in item_table.items()}
-    Porgy_items: List[Item] = []
+    porgy_items: List[Item] = []
     for item_name, quantity in items_to_create.items():
         for _ in range(quantity):
-            Porgy_items.append(create_item(item_name, world))
-    return Porgy_items
+            porgy_items.append(create_item(item_name, world))
+    return porgy_items
+
 
 filler_items = ["Porgy - Fuel Tank", "Porgy - Missile Upgrade"]
 
-def get_filler_item_name(world: "UFO50World) -> str:
-    return self.random.choice(filler_items)
+
+def get_filler_item_name(world: "UFO50World") -> str:
+    return world.random.choice(filler_items)
