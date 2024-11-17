@@ -100,6 +100,21 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
         set_rule(world.get_location("Shallows Upper Right - Egg in Coral Maze"),
                  rule=lambda state: has_fuel(11, state, world)
                  or (has_fuel(7, state, world) and state.has(drill, player)))
+
+        # faster through the ship
+        set_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
+                 rule=lambda state: has_fuel(4, state, world)
+                 or (has_fuel(3, state, world) and state.has(depth_charge, player)))
+
+        # abyss
+        # unless noted otherwise, routes were added together using partial routes
+        # recommended to get more accurate numbers over time
+        set_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
+                 # go through the ship
+                 rule=lambda state: state.has(depth_charge, player) and has_fuel(4, state, world)
+                 # go around and through the dirt instead, less fuel than opening ship with missile
+                 or state.has(drill, player) and has_fuel(5, state, world))
+
     else:
         # shallows coral maze
         set_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
@@ -112,6 +127,17 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  rule=lambda state: has_fuel(16, state, world)
                  or (has_fuel(9, state, world) and state.has(drill, player)))
 
+        # faster through the ship
+        set_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
+                 rule=lambda state: has_fuel(8, state, world)
+                 or (has_fuel(5, state, world) and state.has(depth_charge, player)))
+
+        # abyss
+        # unless noted otherwise, routes were added together using partial routes
+        # recommended to get more accurate numbers over time
+        set_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
+                 # I promise you this rule is correct, buster can't reach it
+                 rule=lambda state: has_fuel(9, state, world) and state.has_any((depth_charge, drill), player))
 
 
     set_rule(world.get_location("Barbuta - Garden"),

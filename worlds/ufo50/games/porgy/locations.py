@@ -59,7 +59,7 @@ location_table: Dict[str, LocationInfo] = {
     # 1.75 from left base to non-boat deeper entrance
     # 1 from right base to deep entrance
     # from left base to boat depths entrance
-    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper", 4, 8),  # 4 to touch, 8 total itemless
+    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper"),  # 4/8 itemless, 3/5 w/ ship
     "Deeper Upper Left - Egg by Urchins": LocationInfo(31, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank on Coral": LocationInfo(32, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank behind ! Blocks": LocationInfo(33, "Deeper", 4, 6),
@@ -82,11 +82,7 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper", 4, 7),
 
     # Abyss
-    # Routes to the Abyss:
-    # Break rocks above abyss C: 3 tanks + buster + missile, or 3 tanks + depth
-    # BCD = 3.5 tanks
-    # BCC (via urchin maze) = 3.5 tanks
-    # BCC (via bombed rock) = 3.5 tanks
+    # there's a paint net file with Abyss routes on them, with the fuel taken for them
     "Abyss Upper Left - Egg on Seaweed near Urchins": LocationInfo(51, "Abyss"),
     "Abyss Upper Left - Fuel Tank on Seaweed": LocationInfo(52, "Abyss"),
     "Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade": LocationInfo(53, "Abyss"),
