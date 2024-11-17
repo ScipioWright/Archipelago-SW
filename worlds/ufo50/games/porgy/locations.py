@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Dict, NamedTuple, Set
+from enum import IntEnum
 from BaseClasses import Region, Location, Item, ItemClassification
 from worlds.generic.Rules import add_rule
 
@@ -8,17 +9,23 @@ if TYPE_CHECKING:
     from ... import UFO50World
 
 
+class Hidden(IntEnum):
+    not_hidden = 0
+    has_tell = 1
+    no_tell = 2
+
+
 class LocationInfo(NamedTuple):
     id_offset: int
     region_name: str
     fuel_touch: int = 0  # how many tanks it took to get to the check
     fuel_get: int = 0  # how many tanks it took to get to the check and back to a base
-    concealed: bool = False
+    concealed: int = Hidden.not_hidden
 
 
 location_table: Dict[str, LocationInfo] = {
     # Shallows
-    "Shallows Upper Left - Ceiling Torpedo Upgrade": LocationInfo(0, "Shallows", 1, 2, True),
+    "Shallows Upper Left - Ceiling Torpedo Upgrade": LocationInfo(0, "Shallows", 1, 2, Hidden.no_tell),
     "Shallows Lower Left - Fuel Tank between some Coral": LocationInfo(1, "Shallows", 1, 2),
     "Shallows Upper Left - Fuel Tank next to Coral": LocationInfo(2, "Shallows", 2, 3),
     "Shallows Lower Left - Fuel Tank above Breakable Rocks": LocationInfo(3, "Shallows - Missile"),  # missile todo amt
@@ -26,13 +33,13 @@ location_table: Dict[str, LocationInfo] = {
     "Shallows Upper Mid - Fuel Tank on Coral": LocationInfo(5, "Shallows", 1, 1),
     "Shallows Uppper Mid - Fuel Tank behind ! Blocks": LocationInfo(6, "Shallows - Buster", 2, 3),  # buster
     "Shallows Upper Mid - Egg at Surface": LocationInfo(7, "Shallows - Buster", 1, 2),  # buster
-    "Shallows Upper Mid - Fuel Tank in Floor at Surface": LocationInfo(8, "Shallows - Buster", 1, 2, True),  # buster, depth
+    "Shallows Upper Mid - Fuel Tank in Floor at Surface": LocationInfo(8, "Shallows - Buster", 1, 2, Hidden.has_tell),  # buster, depth
     "Shallows Mid - Torpedo Upgrade above Breakable Rocks": LocationInfo(9, "Shallows - Missile", 3, 5),  # missile
     # ship requires explosives to enter
     # using missiles, it requires 6 fuel tanks to open it and get back to base
     "Shallows Sunken Ship - Cargo Hold Egg": LocationInfo(10, "Sunken Ship", 2, 4),
     "Shallows Sunken Ship - Bow Egg": LocationInfo(11, "Sunken Ship - Buster", 2, 4),  # buster
-    "Shallows Sunken Ship - Bow Torpedo Upgrade in Wall": LocationInfo(12, "Sunken Ship - Buster", 2, 4, True),  # buster
+    "Shallows Sunken Ship - Bow Torpedo Upgrade in Wall": LocationInfo(12, "Sunken Ship - Buster", 2, 4, Hidden.has_tell),  # buster
     "Shallows Sunken Ship - Depth Charge Module": LocationInfo(13, "Sunken Ship", 2, 4),
     "Shallows Lower Mid - Super Booster Module": LocationInfo(14, "Shallows", 3, 5),  # assumes light damage
     "Shallows Lower Mid - Fuel Tank on Coral": LocationInfo(15, "Shallows", 2, 4),
@@ -60,7 +67,7 @@ location_table: Dict[str, LocationInfo] = {
     # 1.75 from left base to non-boat deeper entrance
     # 1 from right base to deep entrance
     # from left base to boat depths entrance
-    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper", True),  # 4/8 itemless, 3/5 w/ ship
+    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper", Hidden.has_tell),  # 4/8 itemless, 3/5 w/ ship
     "Deeper Upper Left - Egg by Urchins": LocationInfo(31, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank on Coral": LocationInfo(32, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank behind ! Blocks": LocationInfo(33, "Deeper", 4, 6),
@@ -79,7 +86,7 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Lower Right - Egg on Coral": LocationInfo(46, "Deeper", 5, 8),
     "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper", 3, 6),
     "Deeper Lower Mid - Torpedo Upgrade on Coral": LocationInfo(48, "Deeper", 4, 7),
-    "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper", 4, 7, True),  # depth
+    "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper", 4, 7, Hidden.has_tell),  # depth
     "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper", 4, 7, True),
 
     # Abyss

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, Dict
-from BaseClasses import Region, CollectionState, Location
+from BaseClasses import Region, CollectionState
 from worlds.generic.Rules import add_rule
 
-from .locations import location_table
+from .locations import location_table, Hidden
 from ...options import PorgyFuelDifficulty, PorgyRadar
 
 if TYPE_CHECKING:
@@ -43,10 +43,6 @@ def can_open_ship(state: CollectionState, world: "UFO50World") -> bool:
 
 def has_bomb(state: CollectionState, player: int) -> bool:
     return state.has_any((depth_charge, missile), player)
-
-
-def has_radar(state: CollectionState, world: "UFO50World") -> bool:
-    return world.options.porgy_radar != PorgyRadar.option_required or state.has(radar, world.player)
 
 
 def has_light(state: CollectionState, world: "UFO50World") -> bool:
@@ -98,8 +94,10 @@ def has_abyss_combat_logic(state: CollectionState, player: int) -> bool:
 def set_fuel_and_radar_reqs(world: "UFO50World", on_touch: bool) -> None:
     for loc_name, loc_data in location_table.items():
         loc = world.get_location(loc_name)
-        if loc_data.concealed:
-            add_rule(loc, lambda state: has_radar(state, world))
+        if (loc_data.concealed == Hidden.no_tell and world.options.porgy_radar >= PorgyRadar.option_required
+                or loc_data.concealed == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required):
+            add_rule(loc, lambda state: state.has(radar, world.player))
+
         fuel_needed = loc_data.fuel_touch if on_touch else loc_data.fuel_get
         # if it is not set, it means it has some special requirements
         if not fuel_needed:
