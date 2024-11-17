@@ -135,6 +135,10 @@ class UFO50World(World):
                 # UT doesn't show locations that aren't actually in your slot, so this is fine
                 self.options.cherry_allowed_games.value = {game_name for game_name in game_ids.keys()}
 
+                self.options.porgy_fuel_difficulty.value = self.ut_passthrough[options.PorgyFuelDifficulty.internal_name]
+                self.options.porgy_check_on_touch.value = self.ut_passthrough[options.PorgyCheckOnTouch.internal_name]
+                self.options.porgy_lanternless.value = self.ut_passthrough[options.PorgyLanternless.internal_name]
+
         included_game_names = sorted(self.options.always_on_games.value)
         # exclude always on games from random choice games
         maybe_games = sorted(self.options.random_choice_games.value - self.options.always_on_games.value)
@@ -249,6 +253,9 @@ class UFO50World(World):
             "included_games": included_games,
             "goal_games": goal_games,
             "cherry_games": cherry_games,
+            options.PorgyFuelDifficulty.internal_name: self.options.porgy_fuel_difficulty.value,
+            options.PorgyCheckOnTouch.internal_name: self.options.porgy_check_on_touch.value,
+            options.PorgyLanternless.internal_name: self.options.porgy_lanternless.value,
         }
         return slot_data
 

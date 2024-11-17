@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import StartInventoryPool, Range, OptionSet, PerGameCommonOptions, OptionGroup, Choice
+from Options import StartInventoryPool, Range, OptionSet, PerGameCommonOptions, OptionGroup, Choice, Toggle
 from .constants import game_ids
 
 
@@ -101,6 +101,23 @@ class PorgyFuelDifficulty(Choice):
     default = 1
 
 
+class PorgyCheckOnTouch(Toggle):
+    """
+    If enabled, you will check a location as soon as you touch it, rather than having to bring it back.
+    For a shorter, quicker experience.
+    """
+    internal_name = "porgy_check_on_touch"
+    display_name = "Porgy - Check on Touch"
+
+
+class PorgyLanternless(Toggle):
+    """
+    If enabled, you will not logically require the Spotlight in the Abyss area.
+    """
+    internal_name = "porgy_lanternless"
+    display_name = "Porgy Lanternless"
+
+
 @dataclass
 class UFO50Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -112,6 +129,8 @@ class UFO50Options(PerGameCommonOptions):
     goal_game_amount: GoalGameAmount
     cherry_allowed_games: CherryAllowed
     porgy_fuel_difficulty: PorgyFuelDifficulty
+    porgy_check_on_touch: PorgyCheckOnTouch
+    porgy_lanternless: PorgyLanternless
 
 
 ufo50_option_groups = [
@@ -126,5 +145,7 @@ ufo50_option_groups = [
     ]),
     OptionGroup("Porgy Options", [
         PorgyFuelDifficulty,
+        PorgyCheckOnTouch,
+        PorgyLanternless,
     ])
 ]
