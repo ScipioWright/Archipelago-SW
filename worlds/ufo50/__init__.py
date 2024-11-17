@@ -137,6 +137,7 @@ class UFO50World(World):
 
                 self.options.porgy_fuel_difficulty.value = self.ut_passthrough[options.PorgyFuelDifficulty.internal_name]
                 self.options.porgy_check_on_touch.value = self.ut_passthrough[options.PorgyCheckOnTouch.internal_name]
+                self.options.porgy_radar.value = self.ut_passthrough[options.PorgyRadar.internal_name]
                 self.options.porgy_lanternless.value = self.ut_passthrough[options.PorgyLanternless.internal_name]
 
         included_game_names = sorted(self.options.always_on_games.value)
@@ -255,6 +256,7 @@ class UFO50World(World):
             "cherry_games": cherry_games,
             options.PorgyFuelDifficulty.internal_name: self.options.porgy_fuel_difficulty.value,
             options.PorgyCheckOnTouch.internal_name: self.options.porgy_check_on_touch.value,
+            options.PorgyRadar.internal_name: self.options.porgy_radar.value,
             options.PorgyLanternless.internal_name: self.options.porgy_lanternless.value,
         }
         return slot_data

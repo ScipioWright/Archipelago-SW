@@ -1,22 +1,24 @@
 from typing import TYPE_CHECKING, Dict
 from BaseClasses import Region, CollectionState, Location
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import add_rule
 
 from .locations import location_table
-from ...options import PorgyFuelDifficulty
+from ...options import PorgyFuelDifficulty, PorgyRadar
 
 if TYPE_CHECKING:
     from ... import UFO50World
 
 
 fuel = "Porgy - Fuel Tank"
-egg = "Porgy - Fish Gratitude"
+fish_gratitude = "Porgy - Fish Gratitude"
 torpedo = "Porgy - Torpedo Upgrade"
+mcguffin = "Porgy - Strange Light"
 buster = "Porgy - Buster Torpedoes Module"
 missile = "Porgy - Missile System Module"
 depth_charge = "Porgy - Depth Charge Module"
 spotlight = "Porgy - Spotlight Module"
 drill = "Porgy - Drill Module"
+radar = "Porgy - Radar System Module"
 
 
 def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
@@ -43,24 +45,72 @@ def has_bomb(state: CollectionState, player: int) -> bool:
     return state.has_any((depth_charge, missile), player)
 
 
+def has_radar(state: CollectionState, world: "UFO50World") -> bool:
+    return world.options.porgy_radar != PorgyRadar.option_required or state.has(radar, world.player)
+
+
 def has_light(state: CollectionState, world: "UFO50World") -> bool:
     return world.options.porgy_lanternless or state.has(spotlight, world.player)
 
 
+def can_combat(target_score: int, state: CollectionState, player: int) -> bool:
+    score = state.count(torpedo, player)
+
+    if score >= target_score:
+        return True
+    # it's low enough that the other items here won't save it, so we might as well early out
+    if score < target_score - 12:
+        return False
+
+    score += state.count(fish_gratitude, player) // 5 * 2
+
+    if score >= target_score:
+        return True
+    # it's low enough that the other items here won't save it, so we might as well early out
+    if score < target_score - 4:
+        return False
+
+    has_buster = state.has(buster, player)
+    has_missile = state.has(missile, player)
+    if has_buster or has_missile:
+        score += 2
+    # need enough capacity to have some other utility with you
+    if has_buster and has_missile and state.has(mcguffin, player, 2):
+        score += 2
+
+    if score >= target_score:
+        return True
+    return False
+
+
+def has_abyss_combat_logic(state: CollectionState, player: int) -> bool:
+    torpedo_count = state.count(torpedo, player)
+    # from looking at the map and hidden items, it seems they expect you to have 8 torpedo upgrades
+    # as well as the missile launcher and/or burst torpedoes and the first 2 fish helpers
+    if torpedo_count < 8:
+        return False
+    if torpedo_count < 10:
+        return state.has(fish_gratitude, player, 5)
+    return True
+
+
 # set the basic fuel requirements for spots that don't have multiple viable routes
-def set_fuel_reqs(world: "UFO50World", on_touch: bool) -> None:
+def set_fuel_and_radar_reqs(world: "UFO50World", on_touch: bool) -> None:
     for loc_name, loc_data in location_table.items():
+        loc = world.get_location(loc_name)
+        if loc_data.concealed:
+            add_rule(loc, lambda state: has_radar(state, world))
         fuel_needed = loc_data.fuel_touch if on_touch else loc_data.fuel_get
         # if it is not set, it means it has some special requirements
         if not fuel_needed:
             continue
-        set_rule(world.get_location(loc_name), lambda state, amt=fuel_needed: has_fuel(amt, state, world))
+        add_rule(loc, lambda state, amt=fuel_needed: has_fuel(amt, state, world))
 
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
     check_on_touch = bool(world.options.porgy_check_on_touch)
-    set_fuel_reqs(world, check_on_touch)
+    set_fuel_and_radar_reqs(world, check_on_touch)
 
     regions["Menu"].connect(regions["Shallows"])
     regions["Shallows"].connect(regions["Deeper"])
@@ -74,9 +124,9 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                                 rule=lambda state: can_open_ship(state, world))
     regions["Sunken Ship"].connect(regions["Sunken Ship - Buster"],
                                    rule=lambda state: state.has(buster, player))
-    # todo: some level of combat logic
+    # vanilla seems to want you to have 8 torpedo upgrades, 2 fish friends, missiles, and buster before abyss
     regions["Deeper"].connect(regions["Abyss"],
-                              rule=lambda state: has_light(state, world))
+                              rule=lambda state: has_light(state, world) and can_combat(16, state, player))
 
     # buster is covered by the region
     add_rule(world.get_location("Shallows Upper Mid - Fuel Tank in Floor at Surface"),
@@ -91,25 +141,25 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
 
     if check_on_touch:
         # shallows coral maze
-        set_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
+        add_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
                  rule=lambda state: has_fuel(7, state, world)
                  or (has_fuel(3, state, world) and state.has(drill, player)))
-        set_rule(world.get_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze"),
+        add_rule(world.get_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze"),
                  rule=lambda state: has_fuel(9, state, world)
                  or (has_fuel(5, state, world) and state.has(drill, player)))
-        set_rule(world.get_location("Shallows Upper Right - Egg in Coral Maze"),
+        add_rule(world.get_location("Shallows Upper Right - Egg in Coral Maze"),
                  rule=lambda state: has_fuel(11, state, world)
                  or (has_fuel(7, state, world) and state.has(drill, player)))
 
         # faster through the ship
-        set_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
+        add_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
                  rule=lambda state: has_fuel(4, state, world)
                  or (has_fuel(3, state, world) and state.has(depth_charge, player)))
 
         # abyss
         # unless noted otherwise, routes were added together using partial routes
         # recommended to get more accurate numbers over time
-        set_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
+        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
                  # go through the ship
                  rule=lambda state: state.has(depth_charge, player) and has_fuel(4, state, world)
                  # go around and through the dirt instead, less fuel than opening ship with missile
@@ -117,34 +167,35 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
 
     else:
         # shallows coral maze
-        set_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
+        add_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
                  rule=lambda state: has_fuel(13, state, world)
                  or (has_fuel(6, state, world) and state.has(drill, player)))
-        set_rule(world.get_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze"),
+        add_rule(world.get_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze"),
                  rule=lambda state: has_fuel(15, state, world)
                  or (has_fuel(8, state, world) and state.has(drill, player)))
-        set_rule(world.get_location("Shallows Upper Right - Egg in Coral Maze"),
+        add_rule(world.get_location("Shallows Upper Right - Egg in Coral Maze"),
                  rule=lambda state: has_fuel(16, state, world)
                  or (has_fuel(9, state, world) and state.has(drill, player)))
 
         # faster through the ship
-        set_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
+        add_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
                  rule=lambda state: has_fuel(8, state, world)
                  or (has_fuel(5, state, world) and state.has(depth_charge, player)))
 
         # abyss
         # unless noted otherwise, routes were added together using partial routes
         # recommended to get more accurate numbers over time
-        set_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
+        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
                  # I promise you this rule is correct, buster can't reach it
                  rule=lambda state: has_fuel(9, state, world) and state.has_any((depth_charge, drill), player))
 
+    add_rule(world.get_location("Porgy - Garden"),
+             rule=lambda state: world.get_location("Porgy - Lamia").can_reach(state))
 
-    set_rule(world.get_location("Barbuta - Garden"),
-             rule=lambda state: state.has_any((pin, necklace), player))
-    set_rule(world.get_location("Barbuta - Gold"),
-             rule=lambda state: state.has_any((blood_sword, bat_orb), player) or has_wand(state, player))
+    add_rule(world.get_location("Porgy - Gold"),
+             rule=lambda state: can_combat(26, state, player) and has_fuel(16, state, world))
     if "Porgy" in world.options.cherry_allowed_games:
-        set_rule(world.get_location("Barbuta - Cherry"),
-                 rule=lambda state: state.has(bat_orb, player)
-                 and (state.has(blood_sword, player) or has_wand(state, player)))
+        add_rule(world.get_location("Porgy - Cherry"),
+                 rule=lambda state: can_combat(26, state, player) and has_fuel(16, state, world)
+                 and state.has_all((depth_charge, drill), player)
+                 and has_light(state, world))

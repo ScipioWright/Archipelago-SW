@@ -110,12 +110,27 @@ class PorgyCheckOnTouch(Toggle):
     display_name = "Porgy - Check on Touch"
 
 
+class PorgyRadar(Choice):
+    """
+    Choose how the Radar System and its logic behave.
+    Always On: The Radar System is always on without needing to equip it or receive it.
+    Required: The Radar System is logically required for concealed locations.
+    Not Required: The Radar System is not logically required for concealed locations.
+    """
+    internal_name = "porgy_radar"
+    display_name = "Porgy - Radar Logic"
+    option_always_on = 0
+    option_required = 1
+    option_not_required = 2
+    default = 1
+
+
 class PorgyLanternless(Toggle):
     """
     If enabled, you will not logically require the Spotlight in the Abyss area.
     """
     internal_name = "porgy_lanternless"
-    display_name = "Porgy Lanternless"
+    display_name = "Porgy - Lanternless"
 
 
 @dataclass
@@ -130,6 +145,7 @@ class UFO50Options(PerGameCommonOptions):
     cherry_allowed_games: CherryAllowed
     porgy_fuel_difficulty: PorgyFuelDifficulty
     porgy_check_on_touch: PorgyCheckOnTouch
+    porgy_radar: PorgyRadar
     porgy_lanternless: PorgyLanternless
 
 
@@ -146,6 +162,7 @@ ufo50_option_groups = [
     OptionGroup("Porgy Options", [
         PorgyFuelDifficulty,
         PorgyCheckOnTouch,
+        PorgyRadar,
         PorgyLanternless,
     ])
 ]
