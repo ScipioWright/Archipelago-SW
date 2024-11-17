@@ -85,9 +85,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     set_rule(world.get_location("Barbuta - Little Guy Breaks a Wall - R4C7"),
              rule=lambda state: has_money(500, state, player))
 
-    # based on vibes for now
-    set_rule(world.get_location("Barbuta - Garden"),
-             rule=lambda state: state.has_any((pin, necklace), player))
+    # garden is sphere 1
     set_rule(world.get_location("Barbuta - Gold"),
              rule=lambda state: state.has_any((blood_sword, bat_orb), player) or has_wand(state))
     if "Barbuta" in world.options.cherry_allowed_games:
