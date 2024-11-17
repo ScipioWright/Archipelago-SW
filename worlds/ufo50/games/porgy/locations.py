@@ -71,8 +71,8 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Upper Left - Egg by Urchins": LocationInfo(31, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank on Coral": LocationInfo(32, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank behind ! Blocks": LocationInfo(33, "Deeper", 4, 6),
-    "Deeper Upper Mid - Torpedo Upgrade in Coral": LocationInfo(34, "Deeper", 3, 5, True),
-    "Deeper Upper Mid - Torpedo Upgrade in Ceiling": LocationInfo(35, "Deeper", 3, 6, True),
+    "Deeper Upper Mid - Torpedo Upgrade in Coral": LocationInfo(34, "Deeper", 3, 5, Hidden.no_tell),
+    "Deeper Upper Mid - Torpedo Upgrade in Ceiling": LocationInfo(35, "Deeper", 3, 6, Hidden.has_tell),
     "Deeper Upper Mid - Egg in Dirt": LocationInfo(36, "Deeper", 3, 5, True),  # drill
     "Deeper Upper Mid - Spotlight Module": LocationInfo(37, "Deeper", 3, 5),  # depth
     "Deeper Upper Mid - Fuel Tank in Collapsed Structure": LocationInfo(38, "Deeper", 2, 5),

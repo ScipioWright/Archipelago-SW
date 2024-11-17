@@ -28,7 +28,7 @@ item_table: Dict[str, ItemInfo] = {
     "Super Booster Module": ItemInfo(9, IC.useful, 1, "Modules"),
     "Spotlight Module": ItemInfo(10, IC.progression, 1, "Modules"),
     "Drill Module": ItemInfo(11, IC.progression, 1, "Modules"),
-    "Targeting System Module": ItemInfo(12, IC.useful, 1, "Modules"),
+    "Targeting System Module": ItemInfo(12, IC.progression, 1, "Modules"),
 
     # the mcguffins
     "Strange Light": ItemInfo(13, IC.progression_skip_balancing, 5),

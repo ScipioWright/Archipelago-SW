@@ -19,6 +19,7 @@ depth_charge = "Porgy - Depth Charge Module"
 spotlight = "Porgy - Spotlight Module"
 drill = "Porgy - Drill Module"
 radar = "Porgy - Radar System Module"
+homing = "Porgy - Targeting System Module"
 
 
 def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
@@ -66,13 +67,10 @@ def can_combat(target_score: int, state: CollectionState, player: int) -> bool:
     if score < target_score - 4:
         return False
 
-    has_buster = state.has(buster, player)
-    has_missile = state.has(missile, player)
-    if has_buster or has_missile:
-        score += 2
-    # need enough capacity to have some other utility with you
-    if has_buster and has_missile and state.has(mcguffin, player, 2):
-        score += 2
+    extra_power_count: int = state.has(buster, player) + state.has(missile, player) + state.has(homing, player)
+    slots = 2 + state.count(mcguffin, player) // 2
+
+    score += min(extra_power_count, slots - 1) * 2
 
     if score >= target_score:
         return True
