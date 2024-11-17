@@ -29,8 +29,8 @@ location_table: Dict[str, LocationInfo] = {
     # ship requires explosives to enter
     # using missiles, it requires 6 fuel tanks to open it and get back to base
     "Shallows Sunken Ship - Cargo Hold Egg": LocationInfo(10, "Shallows", 4),  # 2 to touch
-    "Shallows Sunken Ship - Bow Egg": LocationInfo(11, "Shallows"),
-    "Shallows Sunken Ship - Bow Torpedo Upgrade in Wall": LocationInfo(12, "Shallows"),
+    "Shallows Sunken Ship - Bow Egg": LocationInfo(11, "Shallows", 4),  # 2 to touch
+    "Shallows Sunken Ship - Bow Torpedo Upgrade in Wall": LocationInfo(12, "Shallows", 4),
     "Shallows Sunken Ship - Depth Charge Module": LocationInfo(13, "Shallows", 4),  # 2 to touch
     "Shallows Lower Mid - Super Booster Module": LocationInfo(14, "Shallows", 5),  # assumes light damage
     "Shallows Lower Mid - Fuel Tank on Coral": LocationInfo(15, "Shallows", 4),  # sphere 1
@@ -39,7 +39,7 @@ location_table: Dict[str, LocationInfo] = {
     "Shallows Lower Mid - Upper Ceiling Torpedo Upgrade": LocationInfo(18, "Shallows", 2),  # sphere 1
     "Shallows Lower Mid - Fuel Tank in Floor": LocationInfo(19, "Shallows", 2),  # depth charge
     "Shallows Lower Mid - Torpedo Upgrade on Coral": LocationInfo(20, "Shallows", 3),  # sphere 1
-    "Shallows Upper Right - Fuel Tank under Breakable Rocks": LocationInfo(21, "Shallows"),  # depth charge
+    "Shallows Upper Right - Fuel Tank under Breakable Rocks": LocationInfo(21, "Shallows", 3),  # depth charge, 2 to touch
     # 5.5 tanks to get from base to first maze block w/o drill, 2 tanks w/ drill
     # fuel tank: 6.5 to touch, 13 (test) or 3 to touch w/ drill (tested), 6 w/ drill (tested)
     # torpedo: 8.5 to touch, 15 (test) or 5 to touch w/ drill (tested), 8 w/ drill (tested)
@@ -47,9 +47,10 @@ location_table: Dict[str, LocationInfo] = {
     "Shallows Upper Right - Fuel Tank in Coral Maze": LocationInfo(22, "Shallows"),
     "Shallows Upper Right - Torpedo Upgrade in Coral Maze": LocationInfo(23, "Shallows"),
     "Shallows Upper Right - Egg in Coral Maze": LocationInfo(24, "Shallows"),
-    "Shallows Lower Right - Fuel Tank under Breakable Rocks": LocationInfo(25, "Shallows"),
+
+    "Shallows Lower Right - Fuel Tank under Breakable Rocks": LocationInfo(25, "Shallows", 7),  # depth charge, 3 to touch
     "Shallows Lower Right - Buster Torpedoes Module": LocationInfo(26, "Shallows", 3),  # sphere 1
-    "Shallows Lower Right - Egg behind ! Blocks": LocationInfo(27, "Shallows"),
+    "Shallows Lower Right - Egg behind ! Blocks": LocationInfo(27, "Shallows", 3),  # buster
     "Shallows Lower Right - Egg in Coral": LocationInfo(28, "Shallows", 5),  # buster, 3 to touch
     "Shallows Lower Right - Drill Module": LocationInfo(29, "Shallows", 6),  # buster, 3 to touch
 
