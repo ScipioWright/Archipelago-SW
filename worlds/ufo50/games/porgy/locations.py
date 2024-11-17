@@ -41,9 +41,9 @@ location_table: Dict[str, LocationInfo] = {
     "Shallows Lower Mid - Torpedo Upgrade on Coral": LocationInfo(20, "Shallows", 3),  # sphere 1
     "Shallows Upper Right - Fuel Tank under Breakable Rocks": LocationInfo(21, "Shallows", 3),  # depth charge, 2 to touch
     # 5.5 tanks to get from base to first maze block w/o drill, 2 tanks w/ drill
-    # fuel tank: 6.5 to touch, 13 (test) or 3 to touch w/ drill (tested), 6 w/ drill (tested)
-    # torpedo: 8.5 to touch, 15 (test) or 5 to touch w/ drill (tested), 8 w/ drill (tested)
-    # egg: 10.5 to touch, 16 (test) or 7 to touch w/ drill (tested), 9 to base w/ drill (tested)
+    # fuel tank: 6.5 to touch, 13 or 3 to touch w/ drill (tested), 6 w/ drill
+    # torpedo: 8.5 to touch, 15 or 5 to touch w/ drill (tested), 8 w/ drill
+    # egg: 10.5 to touch, 16 or 7 to touch w/ drill (tested), 9 to base w/ drill
     "Shallows Upper Right - Fuel Tank in Coral Maze": LocationInfo(22, "Shallows"),
     "Shallows Upper Right - Torpedo Upgrade in Coral Maze": LocationInfo(23, "Shallows"),
     "Shallows Upper Right - Egg in Coral Maze": LocationInfo(24, "Shallows"),
@@ -70,11 +70,11 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Upper Right - Fuel Tank in Collapsed Structure": LocationInfo(39, "Deeper", 5),  # 3 to touch
     "Deeper Upper Right - Egg on Coral": LocationInfo(40, "Deeper", 7),  # 4 to touch, about the same speed with drill
     "Deeper Upper Right - Torpedo Upgrade in Wall": LocationInfo(41, "Deeper", 5),  # 3 to touch
-    "Deeper Right - Torpedo Upgrade on Coral": LocationInfo(42, "Deeper"),
-    "Deeper Upper Right - Targeting System Module": LocationInfo(43, "Deeper"),
+    "Deeper Right - Torpedo Upgrade on Coral": LocationInfo(42, "Deeper", 8),  # 5 to touch, same speed to blow up rocks
+    "Deeper Upper Right - Targeting System Module": LocationInfo(43, "Deeper", 9),  # 5 to touch
     "Deeper Lower Right - Egg behind Urchins": LocationInfo(44, "Deeper", 5),  # 3 to touch
-    "Deeper Lower Right - Fuel Tank in Ceiling": LocationInfo(45, "Deeper"),
-    "Deeper Lower Right - Egg on Coral": LocationInfo(46, "Deeper"),
+    "Deeper Lower Right - Fuel Tank in Ceiling": LocationInfo(45, "Deeper", 8),  # 5 to touch
+    "Deeper Lower Right - Egg on Coral": LocationInfo(46, "Deeper", 8),  # 5 to touch
     "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper", 6),  # 3 to touch
     "Deeper Lower Mid - Torpedo Upgrade on Coral": LocationInfo(48, "Deeper", 7),  # 4 to touch
     "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper", 7),  # depth, 4 to touch
