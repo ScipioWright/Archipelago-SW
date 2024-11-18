@@ -35,6 +35,8 @@ def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
     # you start with 4 fuel tanks
     if amount <= 4:
         return True
+    # max fuel is 24, requiring all fuel tanks is a pain
+    amount = min(amount, 21)
     return state.has(fuel, world.player, amount - 4)
 
 
