@@ -115,7 +115,7 @@ class PorgyRadar(Choice):
     Choose how the Radar System and its logic behave.
     Always On: The Radar System is always on without needing to equip it or receive it.
     Not Required: The Radar System is not logically required for concealed locations.
-    Required: The Radar System is logically required for concealed locations.
+    Required: The Radar System is logically required for all concealed locations.
     Required No Tell: The Radar System is logically required for concealed locations without a visual cue.
     """
     internal_name = "porgy_radar"

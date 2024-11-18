@@ -67,7 +67,7 @@ location_table: Dict[str, LocationInfo] = {
     # 1.75 from left base to non-boat deeper entrance
     # 1 from right base to deep entrance
     # from left base to boat depths entrance
-    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper", Hidden.has_tell),  # 4/8 itemless, 3/5 w/ ship
+    "Deeper Upper Left - Torpedo Upgrade in Wall": LocationInfo(30, "Deeper", Hidden.has_tell),
     "Deeper Upper Left - Egg by Urchins": LocationInfo(31, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank on Coral": LocationInfo(32, "Deeper", 4, 7),
     "Deeper Upper Left - Fuel Tank behind ! Blocks": LocationInfo(33, "Deeper", 4, 6),
@@ -94,7 +94,7 @@ location_table: Dict[str, LocationInfo] = {
     "Abyss Upper Left - Egg on Seaweed near Urchins": LocationInfo(51, "Abyss"),
     "Abyss Upper Left - Fuel Tank on Seaweed": LocationInfo(52, "Abyss", 4, 9),  # put in a rule if combat logic changes
     "Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade": LocationInfo(53, "Abyss"),
-    "Abyss Upper Left - Torpedo Upgrade in Seaweed": LocationInfo(54, "Abyss", True),
+    "Abyss Upper Left - Torpedo Upgrade in Seaweed": LocationInfo(54, "Abyss", Hidden.no_tell),
     "Abyss Lower Left - Egg in Facility": LocationInfo(55, "Abyss"),
     "Abyss Lower Left - Torpedo Upgrade in Facility": LocationInfo(56, "Abyss"),
     "Abyss Lower Left - Fuel Tank in Facility Floor": LocationInfo(57, "Abyss", True),

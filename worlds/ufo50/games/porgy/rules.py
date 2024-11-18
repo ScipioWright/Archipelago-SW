@@ -88,6 +88,24 @@ def has_abyss_combat_logic(state: CollectionState, player: int) -> bool:
     return True
 
 
+def has_enough_slots(hidden_status: int, abyss: bool, extra_mods_needed: int, state: CollectionState,
+                     world: "UFO50World") -> bool:
+    mods_needed = extra_mods_needed
+    if abyss and not world.options.porgy_lanternless:
+        mods_needed += 1
+    if hidden_status == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required:
+        mods_needed += 1
+    elif hidden_status == Hidden.no_tell and world.options.porgy_radar >= PorgyRadar.option_required:
+        mods_needed += 1
+
+    mcguffins_needed = 2 * (mods_needed - 2)
+    if mcguffins_needed <= 0:
+        return True
+    if mcguffins_needed > 5:
+        return False
+    return state.has(mcguffin, world.player, mcguffins_needed)
+
+
 # set the basic fuel requirements for spots that don't have multiple viable routes
 def set_fuel_and_radar_reqs(world: "UFO50World", on_touch: bool) -> None:
     for loc_name, loc_data in location_table.items():
@@ -160,6 +178,38 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  rule=lambda state: state.has(depth_charge, player) and has_fuel(4, state, world)
                  # go around and through the dirt instead, less fuel than opening ship with missile
                  or state.has(drill, player) and has_fuel(5, state, world))
+
+        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade"),
+                 # itemless: not valid
+                 # drill only: 8/15
+                 # depth only: 4/8
+                 # missile only: not valid
+                 # buster only: 6/10
+                 # buster + drill: 5/10
+                 # drill + missile: 7/14
+                 # buster + missile: x/9
+                 # buster + drill + depth charge path: 4/8 (same as depth only, so not relevant)
+                 # buster + drill + missile path: x/8 (7 to open the rock with missile, 8 for the more efficient path)
+                 rule=lambda state:
+                 (has_fuel(4, state, world) and state.has(depth_charge, player))
+                 or (has_fuel(5, state, world) and state.has_all((drill, buster), player)
+                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                 or (has_fuel(6, state, world) and state.has(buster, player))
+                 or (has_fuel(7, state, world) and state.has_all((drill, missile), player))
+                 or (has_fuel(8, state, world) and state.has(drill, player)))
+        add_rule(world.get_location("Abyss Upper Left - Torpedo Upgrade in Seaweed"),
+                 # see above
+                 rule=lambda state:
+                 (has_fuel(4, state, world) and state.has(depth_charge, player))
+                 or (has_enough_slots(Hidden.no_tell, True, 1, state, world)
+                     and ((has_fuel(6, state, world) and state.has(buster, player))
+                          or (has_fuel(7, state, world) and state.has_all((drill, missile), player))
+                          or (has_fuel(8, state, world) and state.has(drill, player))
+                          )
+                     )
+                 or (has_enough_slots(Hidden.no_tell, True, 2, state, world)
+                     and has_fuel(5, state, world) and state.has_all((drill, buster), player))
+                 )
 
     else:
         # shallows coral maze
