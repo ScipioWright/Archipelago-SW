@@ -213,6 +213,26 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                      and has_fuel(5, state, world) and state.has_all((drill, buster), player))
                  )
 
+        add_rule(world.get_location("Abyss Lower Left - Egg in Facility"),
+                 # hard-requires drill, depth, or buster
+                 # drill only: invalid
+                 # buster only: invalid
+                 # depth only: 7/10, only because you can only bring 2 depth charges with you
+                 # buster + drill: 9/14
+                 # buster + depth: 6/12 (12 > 10)
+                 # drill + depth: 6/11 (11 > 10)
+                 # buster + drill + missile: 8/12 (must bring missile with you, so you need the slots for it)
+                 # buster + drill + depth: worse than depth only
+                 rule=lambda state:
+                 (state.has(depth_charge, player) and (has_fuel(7, state, world)
+                                                       or (state.has_any((buster, drill), player)
+                                                           and has_fuel(6, state, world))))
+                 or (state.has_all((buster, drill), player) and has_fuel(9, state, world)
+                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                 or (state.has_all((buster, drill, missile), player) and has_fuel(8, state, world)
+                     and has_enough_slots(Hidden.not_hidden, True, 3, state, world))
+                 )
+
     else:
         # shallows coral maze
         add_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
@@ -259,6 +279,24 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                           ))
                  or (has_fuel(8, state, world) and state.has_all((drill, missile, buster), player)
                      and has_enough_slots(Hidden.no_tell, True, 2, state, world)))
+
+        add_rule(world.get_location("Abyss Lower Left - Egg in Facility"),
+                 # hard-requires drill, depth, or buster
+                 # drill only: invalid
+                 # buster only: invalid
+                 # depth only: 7/10, only because you can only bring 2 depth charges with you
+                 # buster + drill: 9/14
+                 # buster + depth: 6/12 (12 > 10)
+                 # drill + depth: 6/11 (11 > 10)
+                 # buster + drill + missile: 8/12 (must bring missile with you, so you need the slots for it)
+                 # buster + drill + depth: worse than depth only
+                 rule=lambda state:
+                 (state.has(depth_charge, player) and (has_fuel(10, state, world)))
+                 or (state.has_all((buster, drill), player) and has_fuel(14, state, world)
+                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                 or (state.has_all((buster, drill, missile), player) and has_fuel(12, state, world)
+                     and has_enough_slots(Hidden.not_hidden, True, 3, state, world))
+                 )
 
     add_rule(world.get_location("Porgy - Garden"),
              rule=lambda state: world.get_location("Porgy - Lamia").can_reach(state))
