@@ -237,6 +237,29 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  # I promise you this rule is correct, buster can't reach it
                  rule=lambda state: has_fuel(9, state, world) and state.has_any((depth_charge, drill), player))
 
+        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade"),
+                 # see this check in the on touch section
+                 rule=lambda state:
+                 (has_fuel(8, state, world) and state.has(depth_charge, player))
+                 or (has_fuel(8, state, world) and state.has_all((drill, missile, buster), player)
+                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                 or (has_fuel(9, state, world) and state.has_all((buster, missile), player))
+                 or (has_fuel(10, state, world) and state.has(buster, player))
+                 or (has_fuel(14, state, world) and state.has_all((drill, missile), player))
+                 or (has_fuel(15, state, world) and state.has(drill, player)))
+        add_rule(world.get_location("Abyss Upper Left - Torpedo Upgrade in Seaweed"),
+                 # see above
+                 rule=lambda state:
+                 (has_fuel(8, state, world) and state.has(depth_charge, player))
+                 or (has_enough_slots(Hidden.no_tell, True, 1, state, world)
+                     and ((has_fuel(9, state, world) and state.has_all((buster, missile), player))
+                          or (has_fuel(10, state, world) and state.has(buster, player))
+                          or (has_fuel(14, state, world) and state.has_all((drill, missile), player))
+                          or (has_fuel(15, state, world) and state.has(drill, player))
+                          ))
+                 or (has_fuel(8, state, world) and state.has_all((drill, missile, buster), player)
+                     and has_enough_slots(Hidden.no_tell, True, 2, state, world)))
+
     add_rule(world.get_location("Porgy - Garden"),
              rule=lambda state: world.get_location("Porgy - Lamia").can_reach(state))
 
