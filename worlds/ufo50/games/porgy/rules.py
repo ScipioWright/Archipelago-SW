@@ -90,9 +90,11 @@ def has_abyss_combat_logic(state: CollectionState, player: int) -> bool:
     return True
 
 
-def has_enough_slots(hidden_status: int, abyss: bool, extra_mods_needed: int, state: CollectionState,
+def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionState,
                      world: "UFO50World") -> bool:
     mods_needed = extra_mods_needed
+    abyss = location_table[loc_name].region_name == "Abyss"
+    hidden_status = location_table[loc_name].concealed
     if abyss and not world.options.porgy_lanternless:
         mods_needed += 1
     if hidden_status == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required:
@@ -195,7 +197,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  rule=lambda state:
                  (has_fuel(4, state, world) and state.has(depth_charge, player))
                  or (has_fuel(5, state, world) and state.has_all((drill, buster), player)
-                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                     and has_enough_slots("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade", 2, state, world))
                  or (has_fuel(6, state, world) and state.has(buster, player))
                  or (has_fuel(7, state, world) and state.has_all((drill, missile), player))
                  or (has_fuel(8, state, world) and state.has(drill, player)))
@@ -203,13 +205,13 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  # see above
                  rule=lambda state:
                  (has_fuel(4, state, world) and state.has(depth_charge, player))
-                 or (has_enough_slots(Hidden.no_tell, True, 1, state, world)
+                 or (has_enough_slots("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade", 1, state, world)
                      and ((has_fuel(6, state, world) and state.has(buster, player))
                           or (has_fuel(7, state, world) and state.has_all((drill, missile), player))
                           or (has_fuel(8, state, world) and state.has(drill, player))
                           )
                      )
-                 or (has_enough_slots(Hidden.no_tell, True, 2, state, world)
+                 or (has_enough_slots("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade", 2, state, world)
                      and has_fuel(5, state, world) and state.has_all((drill, buster), player))
                  )
 
@@ -228,10 +230,38 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                                                        or (state.has_any((buster, drill), player)
                                                            and has_fuel(6, state, world))))
                  or (state.has_all((buster, drill), player) and has_fuel(9, state, world)
-                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                     and has_enough_slots("Abyss Lower Left - Egg in Facility", 2, state, world))
                  or (state.has_all((buster, drill, missile), player) and has_fuel(8, state, world)
-                     and has_enough_slots(Hidden.not_hidden, True, 3, state, world))
+                     and has_enough_slots("Abyss Lower Left - Egg in Facility", 3, state, world))
                  )
+
+        add_rule(world.get_location("Abyss Lower Left - Torpedo Upgrade in Facility"),
+                 # hard-requires drill, depth, or buster
+                 # drill only: invalid
+                 # buster only: invalid
+                 # depth only: 7/10
+                 # buster + drill: 9/15
+                 # buster + depth: 6/x
+                 # drill + depth: 6/x
+                 # buster + drill + missile: 9/13 (must bring missile with you, so you need the slots for it)
+                 # buster + drill + depth: worse than depth only
+                 rule=lambda state:
+                 (state.has(depth_charge, player) and (has_fuel(7, state, world)
+                                                       or (state.has_any((buster, drill), player)
+                                                           and has_fuel(6, state, world))))
+                 or (state.has_all((buster, drill), player) and has_fuel(9, state, world)
+                     and has_enough_slots("Abyss Lower Left - Torpedo Upgrade in Facility", 2, state, world))
+                 or (state.has_all((buster, drill, missile), player) and has_fuel(9, state, world)
+                     and has_enough_slots("Abyss Lower Left - Torpedo Upgrade in Facility", 3, state, world))
+                 )
+
+        add_rule(world.get_location("Abyss Lower Left - Fuel Tank in Facility Floor"),
+                 # requires buster and depth
+                 # buster + depth: 7/9
+                 # all others look worse
+                 rule=lambda state:
+                 state.has_all((buster, depth_charge) and has_fuel(7, state, world)
+                               and has_enough_slots("Abyss Lower Left - Fuel Tank in Facility Floor", 2, state, world)))
 
     else:
         # shallows coral maze
@@ -262,7 +292,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  rule=lambda state:
                  (has_fuel(8, state, world) and state.has(depth_charge, player))
                  or (has_fuel(8, state, world) and state.has_all((drill, missile, buster), player)
-                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                     and has_enough_slots("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade", 2, state, world))
                  or (has_fuel(9, state, world) and state.has_all((buster, missile), player))
                  or (has_fuel(10, state, world) and state.has(buster, player))
                  or (has_fuel(14, state, world) and state.has_all((drill, missile), player))
@@ -271,14 +301,14 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  # see above
                  rule=lambda state:
                  (has_fuel(8, state, world) and state.has(depth_charge, player))
-                 or (has_enough_slots(Hidden.no_tell, True, 1, state, world)
+                 or (has_enough_slots("Abyss Upper Left - Torpedo Upgrade in Seaweed", 1, state, world)
                      and ((has_fuel(9, state, world) and state.has_all((buster, missile), player))
                           or (has_fuel(10, state, world) and state.has(buster, player))
                           or (has_fuel(14, state, world) and state.has_all((drill, missile), player))
                           or (has_fuel(15, state, world) and state.has(drill, player))
                           ))
                  or (has_fuel(8, state, world) and state.has_all((drill, missile, buster), player)
-                     and has_enough_slots(Hidden.no_tell, True, 2, state, world)))
+                     and has_enough_slots("Abyss Upper Left - Torpedo Upgrade in Seaweed", 2, state, world)))
 
         add_rule(world.get_location("Abyss Lower Left - Egg in Facility"),
                  # hard-requires drill, depth, or buster
@@ -293,10 +323,35 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  rule=lambda state:
                  (state.has(depth_charge, player) and (has_fuel(10, state, world)))
                  or (state.has_all((buster, drill), player) and has_fuel(14, state, world)
-                     and has_enough_slots(Hidden.not_hidden, True, 2, state, world))
+                     and has_enough_slots("Abyss Lower Left - Egg in Facility", 2, state, world))
                  or (state.has_all((buster, drill, missile), player) and has_fuel(12, state, world)
-                     and has_enough_slots(Hidden.not_hidden, True, 3, state, world))
+                     and has_enough_slots("Abyss Lower Left - Egg in Facility", 3, state, world))
                  )
+        add_rule(world.get_location("Abyss Lower Left - Torpedo Upgrade in Facility"),
+                 # hard-requires drill, depth, or buster
+                 # drill only: invalid
+                 # buster only: invalid
+                 # depth only: 7/10
+                 # buster + drill: 9/15
+                 # buster + depth: 6/x
+                 # drill + depth: 6/x
+                 # buster + drill + missile: 9/13 (must bring missile with you, so you need the slots for it)
+                 # buster + drill + depth: worse than depth only
+                 rule=lambda state:
+                 (state.has(depth_charge, player) and (has_fuel(10, state, world)))
+                 or (state.has_all((buster, drill), player) and has_fuel(15, state, world)
+                     and has_enough_slots("Abyss Lower Left - Torpedo Upgrade in Facility", 2, state, world))
+                 or (state.has_all((buster, drill, missile), player) and has_fuel(13, state, world)
+                     and has_enough_slots("Abyss Lower Left - Torpedo Upgrade in Facility", 3, state, world))
+                 )
+
+        add_rule(world.get_location("Abyss Lower Left - Fuel Tank in Facility Floor"),
+                 # requires buster and depth
+                 # buster + depth: 7/9
+                 # all others look worse
+                 rule=lambda state:
+                 state.has_all((buster, depth_charge) and has_fuel(9, state, world)
+                               and has_enough_slots("Abyss Lower Left - Fuel Tank in Facility Floor", 2, state, world)))
 
     add_rule(world.get_location("Porgy - Garden"),
              rule=lambda state: world.get_location("Porgy - Lamia").can_reach(state))
