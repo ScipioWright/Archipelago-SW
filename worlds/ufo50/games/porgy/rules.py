@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Dict
-from BaseClasses import Region, CollectionState
+from BaseClasses import Region, CollectionState, Location
 from worlds.generic.Rules import add_rule
 
 from .locations import location_table, Hidden
@@ -22,6 +22,10 @@ radar = "Porgy - Radar System Module"
 homing = "Porgy - Targeting System Module"
 
 
+def get_porgy_location(name: str, world: "UFO50World") -> Location:
+    return world.get_location(f"Porgy - {name}")
+
+
 def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
     # todo: factor in fuel efficiency in some fashion?
     # todo: check for lambda capture shenanigans
@@ -38,10 +42,6 @@ def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
     # max fuel is 24, requiring all fuel tanks is a pain
     amount = min(amount, 21)
     return state.has(fuel, world.player, amount - 4)
-
-
-def can_open_ship(state: CollectionState, world: "UFO50World") -> bool:
-    return state.has(depth_charge, world.player) or (state.has(missile, world.player) and has_fuel(6, state, world))
 
 
 def has_bomb(state: CollectionState, player: int) -> bool:
@@ -113,7 +113,7 @@ def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionSta
 # set the basic fuel requirements for spots that don't have multiple viable routes
 def set_fuel_and_radar_reqs(world: "UFO50World", on_touch: bool) -> None:
     for loc_name, loc_data in location_table.items():
-        loc = world.get_location(loc_name)
+        loc = get_porgy_location(loc_name, world)
         if (loc_data.concealed == Hidden.no_tell and world.options.porgy_radar >= PorgyRadar.option_required
                 or loc_data.concealed == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required):
             add_rule(loc, lambda state: state.has(radar, world.player))
@@ -139,51 +139,67 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     regions["Shallows"].connect(regions["Shallows - Depth"],
                                 rule=lambda state: state.has(depth_charge, player))
     regions["Shallows"].connect(regions["Sunken Ship"],
-                                rule=lambda state: can_open_ship(state, world))
+                                rule=lambda state: state.has("Porgy - Bomb Open the Ship", player))
     regions["Sunken Ship"].connect(regions["Sunken Ship - Buster"],
                                    rule=lambda state: state.has(buster, player))
     # vanilla seems to want you to have 8 torpedo upgrades, 2 fish friends, missiles, and buster before abyss
     regions["Deeper"].connect(regions["Abyss"],
                               rule=lambda state: has_light(state, world) and can_combat(16, state, player))
 
+    # events
+    add_rule(get_porgy_location("Sunken Ship", world),
+             rule=lambda state: state.has(depth_charge, world.player)
+             or (state.has(missile, world.player) and has_fuel(6, state, world)))
+
+    add_rule(get_porgy_location("Rock at Buster Urchin Path", world),
+             rule=lambda state: has_fuel(7, state, world)
+             and (state.has_all((missile, buster), player) or state.has(depth_charge, player)))
+
+    add_rule(get_porgy_location("Rock at Leftmost Abyss Entrance", world),
+             rule=lambda state: has_fuel(7, state, world) and state.has(depth_charge, player))
+
+    add_rule(get_porgy_location("Rock at Second from Left Abyss Entrance", world),
+             rule=lambda state: (has_fuel(6, state, world) and state.has(depth_charge, player))
+             or (has_fuel(7, state, world) and state.has(missile, player)))
+
     # buster is covered by the region
-    add_rule(world.get_location("Shallows Upper Mid - Fuel Tank in Floor at Surface"),
+    add_rule(get_porgy_location("Shallows Upper Mid - Fuel Tank in Floor at Surface", world),
              lambda state: state.has(depth_charge, player))
 
-    add_rule(world.get_location("Deeper Upper Mid - Egg in Dirt"),
+    add_rule(get_porgy_location("Deeper Upper Mid - Egg in Dirt", world),
              lambda state: state.has(drill, player))
-    add_rule(world.get_location("Deeper Upper Mid - Spotlight Module"),
+    add_rule(get_porgy_location("Deeper Upper Mid - Spotlight Module", world),
              lambda state: state.has(depth_charge, player))
-    add_rule(world.get_location("Deeper Lower Mid - Fuel Tank in Floor"),
+    add_rule(get_porgy_location("Deeper Lower Mid - Fuel Tank in Floor", world),
              lambda state: state.has(depth_charge, player))
 
     if check_on_touch:
         # shallows coral maze
-        add_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
+        add_rule(get_porgy_location("Shallows Upper Right - Fuel Tank in Coral Maze", world),
                  rule=lambda state: has_fuel(7, state, world)
                  or (has_fuel(3, state, world) and state.has(drill, player)))
-        add_rule(world.get_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze"),
+        add_rule(get_porgy_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze", world),
                  rule=lambda state: has_fuel(9, state, world)
                  or (has_fuel(5, state, world) and state.has(drill, player)))
-        add_rule(world.get_location("Shallows Upper Right - Egg in Coral Maze"),
+        add_rule(get_porgy_location("Shallows Upper Right - Egg in Coral Maze", world),
                  rule=lambda state: has_fuel(11, state, world)
                  or (has_fuel(7, state, world) and state.has(drill, player)))
 
         # faster through the ship
-        add_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
+        add_rule(get_porgy_location("Deeper Upper Left - Torpedo Upgrade in Wall", world),
                  rule=lambda state: has_fuel(4, state, world)
                  or (has_fuel(3, state, world) and state.has(depth_charge, player)))
 
         # abyss
         # unless noted otherwise, routes were added together using partial routes
         # recommended to get more accurate numbers over time
-        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
+        add_rule(get_porgy_location("Abyss Upper Left - Egg on Seaweed near Urchins", world),
                  # go through the ship
                  rule=lambda state: state.has(depth_charge, player) and has_fuel(4, state, world)
                  # go around and through the dirt instead, less fuel than opening ship with missile
                  or state.has(drill, player) and has_fuel(5, state, world))
 
-        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade"),
+        add_rule(get_porgy_location("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade", world),
                  # itemless: not valid
                  # drill only: 8/15
                  # depth only: 4/8
@@ -201,7 +217,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  or (has_fuel(6, state, world) and state.has(buster, player))
                  or (has_fuel(7, state, world) and state.has_all((drill, missile), player))
                  or (has_fuel(8, state, world) and state.has(drill, player)))
-        add_rule(world.get_location("Abyss Upper Left - Torpedo Upgrade in Seaweed"),
+        add_rule(get_porgy_location("Abyss Upper Left - Torpedo Upgrade in Seaweed", world),
                  # see above
                  rule=lambda state:
                  (has_fuel(4, state, world) and state.has(depth_charge, player))
@@ -215,7 +231,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                      and has_fuel(5, state, world) and state.has_all((drill, buster), player))
                  )
 
-        add_rule(world.get_location("Abyss Lower Left - Egg in Facility"),
+        add_rule(get_porgy_location("Abyss Lower Left - Egg in Facility", world),
                  # hard-requires drill, depth, or buster
                  # drill only: invalid
                  # buster only: invalid
@@ -235,7 +251,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                      and has_enough_slots("Abyss Lower Left - Egg in Facility", 3, state, world))
                  )
 
-        add_rule(world.get_location("Abyss Lower Left - Torpedo Upgrade in Facility"),
+        add_rule(get_porgy_location("Abyss Lower Left - Torpedo Upgrade in Facility", world),
                  # hard-requires drill, depth, or buster
                  # drill only: invalid
                  # buster only: invalid
@@ -255,7 +271,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                      and has_enough_slots("Abyss Lower Left - Torpedo Upgrade in Facility", 3, state, world))
                  )
 
-        add_rule(world.get_location("Abyss Lower Left - Fuel Tank in Facility Floor"),
+        add_rule(get_porgy_location("Abyss Lower Left - Fuel Tank in Facility Floor", world),
                  # requires buster and depth
                  # buster + depth: 7/9
                  # all others look worse
@@ -263,31 +279,70 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  state.has_all((buster, depth_charge) and has_fuel(7, state, world)
                                and has_enough_slots("Abyss Lower Left - Fuel Tank in Facility Floor", 2, state, world)))
 
+        add_rule(get_porgy_location("Abyss Upper Mid - Torpedo Upgrade in Wall", world),
+                 # depth + drill: 3.375/6.75 (don't need to bring depth with for non-touch)
+                 # drill only: 4.375/8.75
+                 # drill + missile: x/7.75
+                 # buster only: 4.75/9.5
+                 # depth only: 4.75/9.5
+                 rule=lambda state:
+                 (has_fuel(4, state, world) and state.has_all((depth_charge, drill), player)
+                  and has_enough_slots("Abyss Upper Mid - Torpedo Upgrade in Wall", 2, state, world))
+                 or (has_fuel(5, state, world) and state.has_any((drill, buster, depth_charge), player)
+                     and has_enough_slots("Abyss Upper Mid - Torpedo Upgrade in Wall", 1, state, world)))
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Efficient Fuel Module", world),
+                 # depth + drill: 3.625/7.25
+                 # depth only: 5.125/10.25
+                 rule=lambda state: state.has(depth_charge, player)
+                 and state.has_fuel(6, state, world)
+                 or (state.has(drill, player) and has_fuel(4, state, world)
+                     and has_enough_slots("Abyss Upper Mid - Efficient Fuel Module", 2, state, world))
+                 )
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Torpedo Upgrade in Cave", world),
+                 # depth + drill: 4/8
+                 # depth + drill + buster: same amount as depth + drill, so invalid
+                 # drill + buster: 4/8
+                 # drill + buster + missile (to pre-open rock, but only go down with drill): 7/8
+                 # drill only: 5/10
+                 rule=lambda state: state.has(drill, player)
+                 and (has_enough_slots("Abyss Upper Mid - Torpedo Upgrade in Cave", 2, state, world)
+                      and state.has_any((buster, depth_charge), player))
+                 or has_fuel(5, state, world))
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Egg on Seaweed", world),
+                 # depth only: 4.5/9
+                 # buster only: 4.5/9
+                 # drill only: 4.75/9.5
+                 # drill + break second to left rock: x/7.5
+                 rule=lambda state: has_fuel(5, state, world) and state.has_any((depth_charge, buster, drill), player))
+
     else:
         # shallows coral maze
-        add_rule(world.get_location("Shallows Upper Right - Fuel Tank in Coral Maze"),
+        add_rule(get_porgy_location("Shallows Upper Right - Fuel Tank in Coral Maze", world),
                  rule=lambda state: has_fuel(13, state, world)
                  or (has_fuel(6, state, world) and state.has(drill, player)))
-        add_rule(world.get_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze"),
+        add_rule(get_porgy_location("Shallows Upper Right - Torpedo Upgrade in Coral Maze", world),
                  rule=lambda state: has_fuel(15, state, world)
                  or (has_fuel(8, state, world) and state.has(drill, player)))
-        add_rule(world.get_location("Shallows Upper Right - Egg in Coral Maze"),
+        add_rule(get_porgy_location("Shallows Upper Right - Egg in Coral Maze", world),
                  rule=lambda state: has_fuel(16, state, world)
                  or (has_fuel(9, state, world) and state.has(drill, player)))
 
         # faster through the ship
-        add_rule(world.get_location("Deeper Upper Left - Torpedo Upgrade in Wall"),
+        add_rule(get_porgy_location("Deeper Upper Left - Torpedo Upgrade in Wall", world),
                  rule=lambda state: has_fuel(8, state, world)
                  or (has_fuel(5, state, world) and state.has(depth_charge, player)))
 
         # abyss
         # unless noted otherwise, routes were added together using partial routes
         # recommended to get more accurate numbers over time
-        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed near Urchins"),
+        add_rule(get_porgy_location("Abyss Upper Left - Egg on Seaweed near Urchins", world),
                  # I promise you this rule is correct, buster can't reach it
                  rule=lambda state: has_fuel(9, state, world) and state.has_any((depth_charge, drill), player))
 
-        add_rule(world.get_location("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade"),
+        add_rule(get_porgy_location("Abyss Upper Left - Egg on Seaweed above Torpedo Upgrade", world),
                  # see this check in the on touch section
                  rule=lambda state:
                  (has_fuel(8, state, world) and state.has(depth_charge, player))
@@ -297,7 +352,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  or (has_fuel(10, state, world) and state.has(buster, player))
                  or (has_fuel(14, state, world) and state.has_all((drill, missile), player))
                  or (has_fuel(15, state, world) and state.has(drill, player)))
-        add_rule(world.get_location("Abyss Upper Left - Torpedo Upgrade in Seaweed"),
+        add_rule(get_porgy_location("Abyss Upper Left - Torpedo Upgrade in Seaweed", world),
                  # see above
                  rule=lambda state:
                  (has_fuel(8, state, world) and state.has(depth_charge, player))
@@ -310,7 +365,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  or (has_fuel(8, state, world) and state.has_all((drill, missile, buster), player)
                      and has_enough_slots("Abyss Upper Left - Torpedo Upgrade in Seaweed", 2, state, world)))
 
-        add_rule(world.get_location("Abyss Lower Left - Egg in Facility"),
+        add_rule(get_porgy_location("Abyss Lower Left - Egg in Facility", world),
                  # hard-requires drill, depth, or buster
                  # drill only: invalid
                  # buster only: invalid
@@ -327,7 +382,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  or (state.has_all((buster, drill, missile), player) and has_fuel(12, state, world)
                      and has_enough_slots("Abyss Lower Left - Egg in Facility", 3, state, world))
                  )
-        add_rule(world.get_location("Abyss Lower Left - Torpedo Upgrade in Facility"),
+        add_rule(get_porgy_location("Abyss Lower Left - Torpedo Upgrade in Facility", world),
                  # hard-requires drill, depth, or buster
                  # drill only: invalid
                  # buster only: invalid
@@ -345,7 +400,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                      and has_enough_slots("Abyss Lower Left - Torpedo Upgrade in Facility", 3, state, world))
                  )
 
-        add_rule(world.get_location("Abyss Lower Left - Fuel Tank in Facility Floor"),
+        add_rule(get_porgy_location("Abyss Lower Left - Fuel Tank in Facility Floor", world),
                  # requires buster and depth
                  # buster + depth: 7/9
                  # all others look worse
@@ -353,13 +408,59 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  state.has_all((buster, depth_charge) and has_fuel(9, state, world)
                                and has_enough_slots("Abyss Lower Left - Fuel Tank in Facility Floor", 2, state, world)))
 
-    add_rule(world.get_location("Porgy - Garden"),
-             rule=lambda state: world.get_location("Porgy - Lamia").can_reach(state))
+        add_rule(get_porgy_location("Abyss Upper Mid - Torpedo Upgrade in Wall", world),
+                 # depth + drill: 3.375/6.75 (don't need to bring depth with for non-touch)
+                 # drill only: 4.375/8.75
+                 # drill + missile: x/7.75 (don't need to bring missile for non-touch)
+                 # buster only: 4.75/9.5
+                 # depth only: 4.75/9.5
+                 rule=lambda state: has_enough_slots("Abyss Upper Mid - Torpedo Upgrade in Wall", 1, state, world)
+                 and ((state.has(drill, player)
+                       and (state.has(depth_charge, player) and has_fuel(7, state, world))
+                       or (state.has(missile, player) and has_fuel(8, state, world))
+                       or (has_fuel(9, state, world)))
+                      or (has_fuel(10, state, world) and state.has_any((buster, depth_charge), player)))
+                 )
 
-    add_rule(world.get_location("Porgy - Gold"),
+        add_rule(get_porgy_location("Abyss Upper Mid - Efficient Fuel Module", world),
+                 # depth + drill: 3.625/7.25
+                 # depth only: 5.125/10.25
+                 rule=lambda state: state.has(depth_charge, player)
+                 and state.has_fuel(11, state, world)
+                 or (state.has(drill, player) and has_fuel(8, state, world)
+                     and has_enough_slots("Abyss Upper Mid - Efficient Fuel Module", 2, state, world))
+                 )
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Torpedo Upgrade in Cave", world),
+                 # depth + drill: 4/8
+                 # depth + drill + buster: same amount as depth + drill, so invalid
+                 # drill + buster: 4/8
+                 # drill + buster + missile (to pre-open rock, but only go down with drill): 7/8
+                 # drill only: 5/10
+                 rule=lambda state: state.has(drill, player)
+                 and (state.has("Bomb the Buster Urchin Path Exit Rock", player) and has_fuel(8, state, world))
+                 or has_fuel(10, state, world))
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Egg on Seaweed", world),
+                 # depth only: 4.5/9
+                 # buster only: 4.5/9
+                 # drill only: 4.75/9.5
+                 # drill + break second to left rock: x/7.5
+                 rule=lambda state:
+                 (has_fuel(9, state, world) and state.has_any((depth_charge, buster), player))
+                 or (state.has(drill, player)
+                     and (has_fuel(10, state, world)
+                          or (has_fuel(8, state, world)
+                              and state.has("Rock at Second from Left Abyss Entrance", player))))
+                 )
+
+    add_rule(get_porgy_location("Garden", world),
+             rule=lambda state: get_porgy_location("Porgy - Lamia", world).can_reach(state))
+
+    add_rule(get_porgy_location("Gold", world),
              rule=lambda state: can_combat(26, state, player) and has_fuel(16, state, world))
     if "Porgy" in world.options.cherry_allowed_games:
-        add_rule(world.get_location("Porgy - Cherry"),
+        add_rule(get_porgy_location("Cherry", world),
                  rule=lambda state: can_combat(26, state, player) and has_fuel(16, state, world)
                  and state.has_all((depth_charge, drill), player)
                  and has_light(state, world))

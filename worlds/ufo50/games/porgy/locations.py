@@ -23,6 +23,12 @@ class LocationInfo(NamedTuple):
     concealed: int = Hidden.not_hidden
 
 
+# for breaking variuos rocks mostly
+class EventInfo(NamedTuple):
+    region_name: str
+    item_name: str
+
+
 location_table: Dict[str, LocationInfo] = {
     # Shallows
     "Shallows Upper Left - Ceiling Torpedo Upgrade": LocationInfo(0, "Shallows", 1, 2, Hidden.no_tell),
@@ -84,7 +90,7 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Lower Right - Egg behind Urchins": LocationInfo(44, "Deeper", 3, 5, True),
     "Deeper Lower Right - Fuel Tank in Ceiling": LocationInfo(45, "Deeper", 5, 8, True),
     "Deeper Lower Right - Egg on Coral": LocationInfo(46, "Deeper", 5, 8),
-    "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper", 3, 6),
+    "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper", 4, 7),
     "Deeper Lower Mid - Torpedo Upgrade on Coral": LocationInfo(48, "Deeper", 4, 7),
     "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper", 4, 7, Hidden.has_tell),  # depth
     "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper", 4, 7, True),
@@ -129,6 +135,14 @@ location_table: Dict[str, LocationInfo] = {
 }
 
 
+event_table: Dict[str, EventInfo] = {
+    "Sunken Ship": EventInfo("Shallows", "Bomb Open the Ship"),
+    "Rock at Buster Urchin Path": EventInfo("Deeper", "Bomb the Buster Urchin Path Exit Rock"),
+    "Rock at Leftmost Abyss Entrance": EventInfo("Deeper", "Bomb the Leftmost Abyss Entrance Rock"),
+    "Rock at Second from Left Abyss Entrance": EventInfo("Deeper", "Bomb the Second from Left Abyss Entrance Rock"),
+}
+
+
 # this is for filling out location_name_to_id, it should be static regardless of yaml options
 def get_locations() -> Dict[str, int]:
     return {f"Porgy - {name}": data.id_offset + get_game_base_id("Porgy") for name, data in location_table.items()}
@@ -157,3 +171,8 @@ def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
         loc = Location(world.player, f"Porgy - {loc_name}", get_game_base_id("Porgy") + loc_data.id_offset,
                        regions[loc_data.region_name])
         regions[loc_data.region_name].locations.append(loc)
+
+    for event_name, event_data in event_table.items():
+        event_loc = Location(world.player, f"Porgy - {event_name}", None, regions[event_data.region_name])
+        event_item = Item(f"Porgy - {event_data.item_name}", ItemClassification.progression, None, world.player)
+        event_loc.place_locked_item(event_item)
