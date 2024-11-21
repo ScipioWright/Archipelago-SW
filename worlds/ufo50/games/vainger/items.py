@@ -36,7 +36,7 @@ def get_items() -> Dict[str, int]:
 
 def get_item_groups() -> Dict[str, Set[str]]:
     item_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {item_name}" for item_name in item_table.keys()},
-                                        "Vainger - Mods": {f"Vainger - {item_name}" for item_name in ["Heat Mod, Multi Mod, Pulse Mod, Force Mod"]},
+                                        "Vainger - Mods": {f"Vainger - {item_name}" for item_name in ["Heat Mod", "Multi Mod", "Pulse Mod", "Force Mod"]},
                                         "Vainger - Key Codes": {f"Vainger - Key Code {letter}" for letter in ["A", "B", "C", "D"]}}
     return item_groups
 

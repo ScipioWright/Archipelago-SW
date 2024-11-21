@@ -86,11 +86,12 @@ location_table: Dict[str, LocationInfo] = {
 
 def get_locations() -> Dict[str, int]:
     return {f"Vainger - {name}": data.id_offset + get_game_base_id("Vainger") for name, data in location_table.items()
-            if data.id_offset}
+            if data.id_offset is not None}
 
 
 def get_location_groups() -> Dict[str, Set[str]]:
-    location_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {loc_name}" for loc_name in location_table.keys()}}
+    location_groups: Dict[str, Set[str]] = {"Vainger": {f"Vainger - {loc_name}" for loc_name, loc_data in location_table.items()
+                                                        if loc_data.id_offset is not None}}
     return location_groups
 
 
@@ -106,8 +107,8 @@ def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
                 break
 
         loc = Location(world.player, f"Vainger - {loc_name}",
-                       loc_data.id_offset + get_game_base_id("Vainger") if loc_data.id_offset else None, region)
-        if not loc_data.id_offset:      # this is an event location
+                       loc_data.id_offset + get_game_base_id("Vainger") if loc_data.id_offset is not None else None, region)
+        if loc_data.id_offset is None:      # this is an event location
             loc.place_locked_item(Item(f"Vainger - {loc_name}", ItemClassification.progression, None,
                                        world.player))
         region.locations.append(loc)

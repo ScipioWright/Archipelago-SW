@@ -114,8 +114,6 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(bronze_key, player))
     set_rule(world.get_location("Night Manor - Play Room - Aluminum Key"),
              rule=lambda state: state.has_all((kitchen_knife, doll), player))
-    set_rule(world.get_location("Night Manor - Crafting - Fungicide"),
-             rule=lambda state: state.has_all((bowl, tea_tree_oil, hydrogen_peroxide, cigar_butt), player))
     set_rule(world.get_location("Night Manor - Kids Bedroom - Glasses"),
              rule=lambda state: state.has(aluminum_key, player))
     set_rule(world.get_location("Night Manor - Play Room - Maze Directions"),
