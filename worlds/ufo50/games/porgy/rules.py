@@ -21,10 +21,11 @@ drill = "Porgy - Drill Module"
 radar = "Porgy - Radar System Module"
 homing = "Porgy - Targeting System Module"
 
-ship_rocks = "Bomb Open the Ship"
-urchin_rock = "Bomb the Buster Urchin Path Exit Rock"
-leftmost_rock = "Bomb the Leftmost Abyss Entrance Rock"
-second_left_rock = "Bomb the Second from Left Abyss Entrance Rock"
+ship_rocks = "Bombed Open the Ship"
+urchin_rock = "Bombed the Buster Urchin Path Exit Rock"
+leftmost_rock = "Bombed the Leftmost Abyss Entrance Rock"
+second_left_rock = "Bombed the Second from Left Abyss Entrance Rock"
+rightmost_rock = "Bombed the Rightmost Abyss Rock"
 
 
 def get_porgy_location(name: str, world: "UFO50World") -> Location:
@@ -98,8 +99,8 @@ def has_abyss_combat_logic(state: CollectionState, player: int) -> bool:
 def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionState,
                      world: "UFO50World") -> bool:
     mods_needed = extra_mods_needed
-    abyss = location_table[loc_name].region_name == "Abyss"
-    hidden_status = location_table[loc_name].concealed
+    abyss = loc_name == "Abyss Rock" or location_table[loc_name].region_name == "Abyss"
+    hidden_status = Hidden.not_hidden if loc_name == "Abyss Rock" else location_table[loc_name].concealed
     if abyss and not world.options.porgy_lanternless:
         mods_needed += 1
     if hidden_status == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required:
@@ -166,6 +167,12 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     add_rule(get_porgy_location("Rock at Second from Left Abyss Entrance", world),
              rule=lambda state: (has_fuel(6, state, world) and state.has(depth_charge, player))
              or (has_fuel(7, state, world) and state.has(missile, player)))
+
+    add_rule(get_porgy_location("Rightmost Abyss Rock", world),
+             rule=lambda state: (has_fuel(8, state, world) and state.has(depth_charge, player))
+             or (has_enough_slots("Abyss Rock", 2, state, world) and state.has(missile, player)
+                 and (state.has(buster, player) and has_fuel(12, state, world)
+                      or state.has(drill, player) and has_fuel(11, state, world))))
 
     # buster is covered by the region
     add_rule(get_porgy_location("Shallows Upper Mid - Fuel Tank in Floor at Surface", world),
@@ -343,6 +350,40 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                   or (has_fuel(6, state, world) and state.has(drill, player)))
                  or (state.has(urchin_rock, player)))
 
+        add_rule(get_porgy_location("Abyss Upper Right - Egg by Seaweed", world),
+                 # buster only: 4.75/9.5
+                 # depth only: 7.75/15.5
+                 # drill only: 4.5/9
+                 rule=lambda state:
+                 (has_fuel(5, state, world) and state.has_any((buster, drill), player))
+                 or (has_fuel(8, state, world) and state.has(depth_charge, player)))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Fuel Tank in Floor", world),
+                 # depth only: 4.5/9, and since it's required, this is the only viable path
+                 rule=lambda state: state.has(depth_charge, player) and has_fuel(5, state, world))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Egg by Skull", world),
+                 # depth only: 7/14
+                 # drill only: 4.25/8.5
+                 # buster only: 5.5/11
+                 rule=lambda state:
+                 (state.has(depth_charge, player) and has_fuel(7, state, world))
+                 or (state.has(drill, player) and has_fuel(5, state, world))
+                 or (state.has(buster, player) and has_fuel(6, state, world)))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Radar System Module", world),
+                 # depth only: 6.5/12
+                 # drill only: 5.5/10.25
+                 rule=lambda state:
+                 (state.has(depth_charge, player) and has_fuel(7, state, world))
+                 or (state.has(drill, player) and has_fuel(6, state, world)))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Armor Plating Module", world),
+                 # depth only: 5.5/11
+                 # buster only: 5.625/11.25
+                 # drill only: 5.375/10.75
+                 rule=lambda state: state.has_any((depth_charge, drill, buster), player) and has_fuel(6, state, world))
+
     else:
         # shallows coral maze
         add_rule(get_porgy_location("Shallows Upper Right - Fuel Tank in Coral Maze", world),
@@ -500,6 +541,43 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  (has_fuel(9, state, world)
                   and (state.has(urchin_rock, player) or state.has(buster, player)))
                  or (has_fuel(11, state, world) and state.has(drill, player)))
+
+        add_rule(get_porgy_location("Abyss Upper Right - Egg by Seaweed", world),
+                 # buster only: 4.75/9.5
+                 # depth only: 7.75/15.5
+                 # drill only: 4.5/9
+                 rule=lambda state:
+                 (has_fuel(9, state, world) and state.has(drill, player))
+                 or (has_fuel(10, state, world) and state.has(buster, player))
+                 or (has_fuel(16, state, world) and state.has(depth_charge, player)))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Fuel Tank in Floor", world),
+                 # depth only: 4.5/9, and since it's required, this is the only viable path
+                 rule=lambda state: state.has(depth_charge, player) and has_fuel(9, state, world))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Egg by Skull", world),
+                 # depth only: 7/14
+                 # drill only: 4.25/8.5
+                 # buster only: 5.5/11
+                 rule=lambda state:
+                 (state.has(rightmost_rock, player) and has_fuel(14, state, world))
+                 or (state.has(drill, player) and has_fuel(9, state, world))
+                 or (state.has(buster, player) and has_fuel(11, state, world)))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Radar System Module", world),
+                 # depth only: 6.5/12
+                 # drill only: 5.5/10.25
+                 rule=lambda state:
+                 (state.has(depth_charge, player) and has_fuel(12, state, world))
+                 or (state.has(drill, player) and has_fuel(11, state, world)))
+
+        add_rule(get_porgy_location("Abyss Lower Right - Armor Plating Module", world),
+                 # depth only: 5.5/11
+                 # buster only: 5.625/11.25
+                 # drill only: 5.375/10.75
+                 rule=lambda state:
+                 (state.has_any((depth_charge, drill), player) and has_fuel(11, state, world))
+                 or (state.has(buster, player) and has_fuel(12, state, world)))
 
     add_rule(get_porgy_location("Garden", world),
              rule=lambda state: get_porgy_location("Porgy - Lamia", world).can_reach(state))

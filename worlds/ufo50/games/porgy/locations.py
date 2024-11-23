@@ -88,7 +88,7 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Right - Torpedo Upgrade on Coral": LocationInfo(42, "Deeper", 5, 8),  # same speed to blow up rocks
     "Deeper Upper Right - Targeting System Module": LocationInfo(43, "Deeper", 5, 9),
     "Deeper Lower Right - Egg behind Urchins": LocationInfo(44, "Deeper", 3, 5, True),
-    "Deeper Lower Right - Fuel Tank in Ceiling": LocationInfo(45, "Deeper", 5, 8, True),
+    "Deeper Lower Right - Fuel Tank in Ceiling": LocationInfo(45, "Deeper", 4, 7, True),
     "Deeper Lower Right - Egg on Coral": LocationInfo(46, "Deeper", 5, 8),
     "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper", 4, 7),
     "Deeper Lower Mid - Torpedo Upgrade on Coral": LocationInfo(48, "Deeper", 4, 7),
@@ -111,7 +111,7 @@ location_table: Dict[str, LocationInfo] = {
     "Abyss Upper Mid - Egg in Seaweed": LocationInfo(62, "Abyss", Hidden.no_tell),  # 4 to touch, 9 to base w/ bomb,
     "Abyss Upper Mid - Torpedo Upgrade behind Seaweed": LocationInfo(63, "Abyss"),
     "Abyss Upper Right - Egg by Seaweed": LocationInfo(64, "Abyss"),
-    "Abyss Upper Right - Torpedo Upgrade in Wall": LocationInfo(65, "Abyss", True),
+    "Abyss Upper Right - Torpedo Upgrade in Wall": LocationInfo(65, "Abyss", 4, 8, True),
     "Abyss Lower Right - Fuel Tank in Floor": LocationInfo(66, "Abyss", True),
     "Abyss Lower Right - Egg by Skull": LocationInfo(67, "Abyss"),
     "Abyss Lower Right - Radar System Module": LocationInfo(68, "Abyss"),
@@ -136,10 +136,11 @@ location_table: Dict[str, LocationInfo] = {
 
 
 event_table: Dict[str, EventInfo] = {
-    "Sunken Ship": EventInfo("Shallows", "Bomb Open the Ship"),
-    "Rock at Buster Urchin Path": EventInfo("Deeper", "Bomb the Buster Urchin Path Exit Rock"),
-    "Rock at Leftmost Abyss Entrance": EventInfo("Deeper", "Bomb the Leftmost Abyss Entrance Rock"),
-    "Rock at Second from Left Abyss Entrance": EventInfo("Deeper", "Bomb the Second from Left Abyss Entrance Rock"),
+    "Sunken Ship": EventInfo("Shallows", "Bombed Open the Ship"),
+    "Rock at Buster Urchin Path": EventInfo("Deeper", "Bombed the Buster Urchin Path Exit Rock"),
+    "Rock at Leftmost Abyss Entrance": EventInfo("Deeper", "Bombed the Leftmost Abyss Entrance Rock"),
+    "Rock at Second from Left Abyss Entrance": EventInfo("Deeper", "Bombed the Second from Left Abyss Entrance Rock"),
+    "Rightmost Abyss Rock": EventInfo("Abyss", "Bombed the Rightmost Abyss Rock"),
 }
 
 
