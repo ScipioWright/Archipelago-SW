@@ -21,6 +21,11 @@ drill = "Porgy - Drill Module"
 radar = "Porgy - Radar System Module"
 homing = "Porgy - Targeting System Module"
 
+ship_rocks = "Bomb Open the Ship"
+urchin_rock = "Bomb the Buster Urchin Path Exit Rock"
+leftmost_rock = "Bomb the Leftmost Abyss Entrance Rock"
+second_left_rock = "Bomb the Second from Left Abyss Entrance Rock"
+
 
 def get_porgy_location(name: str, world: "UFO50World") -> Location:
     return world.get_location(f"Porgy - {name}")
@@ -318,6 +323,26 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  # drill + break second to left rock: x/7.5
                  rule=lambda state: has_fuel(5, state, world) and state.has_any((depth_charge, buster, drill), player))
 
+        add_rule(get_porgy_location("Abyss Upper Mid - Egg in Seaweed", world),
+                 # buster only: 4/8
+                 # depth only: 4/8
+                 # drill only: 5/10
+                 # drill + break second to left rock: x/8
+                 rule=lambda state:
+                 (has_enough_slots("Abyss Upper Mid - Egg in Seaweed", 1, state, world)
+                  and ((has_fuel(4, state, world) and state.has_any((depth_charge, buster), player))
+                       or (has_fuel(5, state, world) and state.has(drill, player))))
+                 or (state.has(urchin_rock, player)))
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Torpedo Upgrade behind Seaweed", world),
+                 # buster only: 4.25/8.5
+                 # depth only: 4.25/8.5
+                 # drill only: 5.25/10.5
+                 rule=lambda state:
+                 ((has_fuel(5, state, world) and state.has_any((depth_charge, buster), player))
+                  or (has_fuel(6, state, world) and state.has(drill, player)))
+                 or (state.has(urchin_rock, player)))
+
     else:
         # shallows coral maze
         add_rule(get_porgy_location("Shallows Upper Right - Fuel Tank in Coral Maze", world),
@@ -438,7 +463,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  # drill + buster + missile (to pre-open rock, but only go down with drill): 7/8
                  # drill only: 5/10
                  rule=lambda state: state.has(drill, player)
-                 and (state.has("Bomb the Buster Urchin Path Exit Rock", player) and has_fuel(8, state, world))
+                 and (state.has(urchin_rock, player) and has_fuel(8, state, world))
                  or has_fuel(10, state, world))
 
         add_rule(get_porgy_location("Abyss Upper Mid - Egg on Seaweed", world),
@@ -451,8 +476,30 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  or (state.has(drill, player)
                      and (has_fuel(10, state, world)
                           or (has_fuel(8, state, world)
-                              and state.has("Rock at Second from Left Abyss Entrance", player))))
+                              and state.has(second_left_rock, player))))
                  )
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Egg in Seaweed", world),
+                 # buster only: 4/8
+                 # depth only: 4/8
+                 # drill only: 5/10
+                 # drill + break second to left rock: slower than breaking urchin path rock
+                 rule=lambda state:
+                 (has_fuel(8, state, world)
+                  and (state.has(urchin_rock, player)
+                       or (state.has(buster, player)
+                           and has_enough_slots("Abyss Upper Mid - Egg in Seaweed", 1, state, world))))
+                 or (has_fuel(10, state, world) and state.has(drill, player)))
+
+        add_rule(get_porgy_location("Abyss Upper Mid - Torpedo Upgrade behind Seaweed", world),
+                 # buster only: 4.25/8.5
+                 # depth only: 4.25/8.5
+                 # drill only: 5.25/10.5
+                 # drill + break second to left rock: slower than breaking urchin path rock
+                 rule=lambda state:
+                 (has_fuel(9, state, world)
+                  and (state.has(urchin_rock, player) or state.has(buster, player)))
+                 or (has_fuel(11, state, world) and state.has(drill, player)))
 
     add_rule(get_porgy_location("Garden", world),
              rule=lambda state: get_porgy_location("Porgy - Lamia", world).can_reach(state))

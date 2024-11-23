@@ -108,7 +108,7 @@ location_table: Dict[str, LocationInfo] = {
     "Abyss Upper Mid - Torpedo Upgrade in Cave": LocationInfo(59, "Abyss"),
     "Abyss Upper Mid - Egg on Seaweed": LocationInfo(60, "Abyss"),
     "Abyss Upper Mid - Efficient Fuel Module": LocationInfo(61, "Abyss"),
-    "Abyss Upper Mid - Egg in Seaweed": LocationInfo(62, "Abyss", True),  # 4 to touch, 9 to base w/ bomb,
+    "Abyss Upper Mid - Egg in Seaweed": LocationInfo(62, "Abyss", Hidden.no_tell),  # 4 to touch, 9 to base w/ bomb,
     "Abyss Upper Mid - Torpedo Upgrade behind Seaweed": LocationInfo(63, "Abyss"),
     "Abyss Upper Right - Egg by Seaweed": LocationInfo(64, "Abyss"),
     "Abyss Upper Right - Torpedo Upgrade in Wall": LocationInfo(65, "Abyss", True),
