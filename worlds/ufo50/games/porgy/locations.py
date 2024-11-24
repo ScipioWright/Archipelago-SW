@@ -59,9 +59,9 @@ location_table: Dict[str, LocationInfo] = {
     # fuel tank: 6.5 to touch, 13 or 3 to touch w/ drill (tested), 6 w/ drill
     # torpedo: 8.5 to touch, 15 or 5 to touch w/ drill (tested), 8 w/ drill
     # egg: 10.5 to touch, 16 or 7 to touch w/ drill (tested), 9 to base w/ drill
-    "Shallows Upper Right - Fuel Tank in Coral Maze": LocationInfo(22, "Shallows", concealed=True),
-    "Shallows Upper Right - Torpedo Upgrade in Coral Maze": LocationInfo(23, "Shallows"),
-    "Shallows Upper Right - Egg in Coral Maze": LocationInfo(24, "Shallows"),
+    "Shallows Upper Right - Fuel Tank in Coral Maze": LocationInfo(22, "Shallows - Buster", True),
+    "Shallows Upper Right - Torpedo Upgrade in Coral Maze": LocationInfo(23, "Shallows - Buster"),
+    "Shallows Upper Right - Egg in Coral Maze": LocationInfo(24, "Shallows - Buster"),
 
     "Shallows Lower Right - Fuel Tank under Breakable Rocks": LocationInfo(25, "Shallows - Depth", 3, 7),  # depth
     "Shallows Lower Right - Buster Torpedoes Module": LocationInfo(26, "Shallows", 2, 3),
