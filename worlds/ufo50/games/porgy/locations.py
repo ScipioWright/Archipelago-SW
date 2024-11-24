@@ -79,7 +79,7 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Upper Left - Fuel Tank behind ! Blocks": LocationInfo(33, "Deeper", 4, 6),
     "Deeper Upper Mid - Torpedo Upgrade in Coral": LocationInfo(34, "Deeper", 3, 5, Hidden.no_tell),
     "Deeper Upper Mid - Torpedo Upgrade in Ceiling": LocationInfo(35, "Deeper", 3, 6, Hidden.has_tell),
-    "Deeper Upper Mid - Egg in Dirt": LocationInfo(36, "Deeper", 3, 5, True),  # drill
+    "Deeper Upper Mid - Egg in Dirt": LocationInfo(36, "Deeper", True),  # drill, 3/5
     "Deeper Upper Mid - Spotlight Module": LocationInfo(37, "Deeper", 3, 5),  # depth
     "Deeper Upper Mid - Fuel Tank in Collapsed Structure": LocationInfo(38, "Deeper", 2, 5),
     "Deeper Upper Right - Fuel Tank in Collapsed Structure": LocationInfo(39, "Deeper", 3, 5),
@@ -92,7 +92,7 @@ location_table: Dict[str, LocationInfo] = {
     "Deeper Lower Right - Egg on Coral": LocationInfo(46, "Deeper", 5, 8),
     "Deeper Lower Mid - Missile System Module": LocationInfo(47, "Deeper", 4, 7),
     "Deeper Lower Mid - Torpedo Upgrade on Coral": LocationInfo(48, "Deeper", 4, 7),
-    "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper", 4, 7, Hidden.has_tell),  # depth
+    "Deeper Lower Mid - Fuel Tank in Floor": LocationInfo(49, "Deeper", Hidden.has_tell),  # depth, 4/7
     "Deeper Lower Left - Egg in Wall": LocationInfo(50, "Deeper", 4, 7, True),
 
     # Abyss

@@ -1,7 +1,7 @@
 from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Region, Item, ItemClassification, Location
+from BaseClasses import Tutorial, Region, Item, ItemClassification, Location, CollectionState
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld

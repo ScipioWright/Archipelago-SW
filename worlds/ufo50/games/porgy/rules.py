@@ -20,6 +20,7 @@ spotlight = "Porgy - Spotlight Module"
 drill = "Porgy - Drill Module"
 radar = "Porgy - Radar System Module"
 homing = "Porgy - Targeting System Module"
+efficiency = "Porgy - Efficient Fuel Module"
 
 ship_rocks = "Bombed Open the Ship"
 urchin_rock = "Bombed the Buster Urchin Path Exit Rock"
@@ -30,24 +31,6 @@ rightmost_rock = "Bombed the Rightmost Abyss Rock"
 
 def get_porgy_location(name: str, world: "UFO50World") -> Location:
     return world.get_location(f"Porgy - {name}")
-
-
-def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
-    # todo: factor in fuel efficiency in some fashion?
-    # todo: check for lambda capture shenanigans
-    if world.options.porgy_fuel_difficulty < PorgyFuelDifficulty.option_hard:
-        if world.options.porgy_fuel_difficulty:
-            # medium
-            amount = int(amount * 1.25)
-        else:
-            # easy
-            amount = int(amount * 1.5)
-    # you start with 4 fuel tanks
-    if amount <= 4:
-        return True
-    # max fuel is 24, requiring all fuel tanks is a pain
-    amount = min(amount, 21)
-    return state.has(fuel, world.player, amount - 4)
 
 
 def has_bomb(state: CollectionState, player: int) -> bool:
@@ -75,8 +58,8 @@ def can_combat(target_score: int, state: CollectionState, player: int) -> bool:
     if score < target_score - 4:
         return False
 
-    extra_power_count: int = state.has(buster, player) + state.has(missile, player) + state.has(homing, player)
-    slots = 2 + state.count(mcguffin, player) // 2
+    extra_power_count: int = state.has(buster, player) + state.has(missile, player)
+    slots = min(4, 2 + state.count(mcguffin, player) // 2)
 
     score += min(extra_power_count, slots - 1) * 2
 
@@ -99,10 +82,19 @@ def has_abyss_combat_logic(state: CollectionState, player: int) -> bool:
 def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionState,
                      world: "UFO50World") -> bool:
     mods_needed = extra_mods_needed
-    abyss = loc_name == "Abyss Rock" or location_table[loc_name].region_name == "Abyss"
-    hidden_status = Hidden.not_hidden if loc_name == "Abyss Rock" else location_table[loc_name].concealed
+    if loc_name == "Abyss Rock":
+        abyss = True
+        hidden_status = False
+    elif loc_name == "":
+        abyss = False
+        hidden_status = False
+    else:
+        abyss = location_table[loc_name].region_name == "Abyss"
+        hidden_status = location_table[loc_name].concealed
+
     if abyss and not world.options.porgy_lanternless:
         mods_needed += 1
+
     if hidden_status == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required:
         mods_needed += 1
     elif hidden_status == Hidden.no_tell and world.options.porgy_radar >= PorgyRadar.option_required:
@@ -111,9 +103,50 @@ def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionSta
     mcguffins_needed = 2 * (mods_needed - 2)
     if mcguffins_needed <= 0:
         return True
-    if mcguffins_needed > 5:
+    if mcguffins_needed > 4:
         return False
     return state.has(mcguffin, world.player, mcguffins_needed)
+
+
+def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
+    # todo: check for lambda capture shenanigans
+    if world.options.porgy_fuel_difficulty == PorgyFuelDifficulty.option_easy:
+        # medium
+        amount = round(amount * 1.5)
+    elif world.options.porgy_fuel_difficulty == PorgyFuelDifficulty.option_medium:
+        # easy
+        amount = round(amount * 1.25)
+
+    # you start with 4 fuel tanks
+    if amount <= 4:
+        return True
+    # max fuel is 24, requiring all fuel tanks is a pain
+    amount = min(amount, 21)
+    return state.has(fuel, world.player, amount - 4)
+
+
+def has_fuel_opt_eff(amount: int, state: CollectionState, world: "UFO50World") -> bool:
+    if has_fuel(amount, state, world):
+        return True
+    return state.has(efficiency, world.player) and has_fuel(round(3 * amount / 4), state, world)
+
+
+def has_fuel_and_slots(fuel_needed: int, loc_name: str, extra_mods_needed: int,
+                       state: CollectionState, world: "UFO50World") -> bool:
+    # if you don't have enough slots, it's not possible for you to get any further here
+    if not has_enough_slots(loc_name, extra_mods_needed, state, world):
+        return False
+    # conversely, if you have enough fuel now, you don't need to check further
+    if has_fuel(fuel_needed, state, world):
+        return True
+
+    fuel_with_efficiency = round(3 * fuel_needed / 4)
+    if not has_enough_slots(loc_name, extra_mods_needed + 1, state, world):
+        return False
+    if has_fuel(fuel_with_efficiency, state, world):
+        return True
+
+    return False
 
 
 # set the basic fuel requirements for spots that don't have multiple viable routes
@@ -128,7 +161,7 @@ def set_fuel_and_radar_reqs(world: "UFO50World", on_touch: bool) -> None:
         # if it is not set, it means it has some special requirements
         if not fuel_needed:
             continue
-        add_rule(loc, lambda state, amt=fuel_needed: has_fuel(amt, state, world))
+        add_rule(loc, lambda state, amt=fuel_needed: has_fuel_opt_eff(amt, state, world))
 
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
@@ -155,34 +188,32 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     # events
     add_rule(get_porgy_location("Sunken Ship", world),
              rule=lambda state: state.has(depth_charge, world.player)
-             or (state.has(missile, world.player) and has_fuel(6, state, world)))
+             or (state.has(missile, world.player) and has_fuel_opt_eff(6, state, world)))
 
     add_rule(get_porgy_location("Rock at Buster Urchin Path", world),
-             rule=lambda state: has_fuel(7, state, world)
-             and (state.has_all((missile, buster), player) or state.has(depth_charge, player)))
+             rule=lambda state:
+             (state.has_all((missile, buster), player) and has_fuel_and_slots(7, "", 2, state, world))
+             or (state.has(depth_charge, player) and has_fuel_opt_eff(7, state, world)))
 
     add_rule(get_porgy_location("Rock at Leftmost Abyss Entrance", world),
-             rule=lambda state: has_fuel(7, state, world) and state.has(depth_charge, player))
+             rule=lambda state: has_fuel_opt_eff(7, state, world) and state.has(depth_charge, player))
 
     add_rule(get_porgy_location("Rock at Second from Left Abyss Entrance", world),
-             rule=lambda state: (has_fuel(6, state, world) and state.has(depth_charge, player))
-             or (has_fuel(7, state, world) and state.has(missile, player)))
+             rule=lambda state: (has_fuel_opt_eff(6, state, world) and state.has(depth_charge, player))
+             or (has_fuel_opt_eff(7, state, world) and state.has(missile, player)))
 
     add_rule(get_porgy_location("Rightmost Abyss Rock", world),
-             rule=lambda state: (has_fuel(8, state, world) and state.has(depth_charge, player))
-             or (has_enough_slots("Abyss Rock", 2, state, world) and state.has(missile, player)
-                 and (state.has(buster, player) and has_fuel(12, state, world)
-                      or state.has(drill, player) and has_fuel(11, state, world))))
+             rule=lambda state: (has_fuel_and_slots(8, "Abyss Rock", 1, state, world)
+                                 and state.has(depth_charge, player))
+             or (state.has(missile, player)
+                 and (has_fuel_and_slots(12, "Abyss Rock", 2, state, world) and state.has(buster, player))
+                 or (has_fuel_and_slots(11, "Abyss Rock", 2, state, world) and state.has(drill, player))))
 
     # buster is covered by the region
     add_rule(get_porgy_location("Shallows Upper Mid - Fuel Tank in Floor at Surface", world),
              lambda state: state.has(depth_charge, player))
 
-    add_rule(get_porgy_location("Deeper Upper Mid - Egg in Dirt", world),
-             lambda state: state.has(drill, player))
     add_rule(get_porgy_location("Deeper Upper Mid - Spotlight Module", world),
-             lambda state: state.has(depth_charge, player))
-    add_rule(get_porgy_location("Deeper Lower Mid - Fuel Tank in Floor", world),
              lambda state: state.has(depth_charge, player))
 
     if check_on_touch:
@@ -199,8 +230,17 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
 
         # faster through the ship
         add_rule(get_porgy_location("Deeper Upper Left - Torpedo Upgrade in Wall", world),
-                 rule=lambda state: has_fuel(4, state, world)
-                 or (has_fuel(3, state, world) and state.has(depth_charge, player)))
+                 rule=lambda state: has_fuel_opt_eff(4, state, world)
+                 or (state.has(depth_charge, player)
+                     and has_fuel_and_slots(3, "Deeper Upper Left - Torpedo Upgrade in Wall", 1, state, world)))
+
+        add_rule(get_porgy_location("Deeper Upper Mid - Egg in Dirt", world),
+                 rule=lambda state: state.has(drill, player)
+                 and has_fuel_and_slots(3, "Deeper Upper Mid - Egg in Dirt", 1, state, world))
+
+        add_rule(get_porgy_location("Deeper Lower Mid - Fuel Tank in Floor", world),
+                 lambda state: state.has(depth_charge, player)
+                 and has_fuel_and_slots(4, "Deeper Lower Mid - Fuel Tank in Floor", 1, state, world))
 
         # abyss
         # unless noted otherwise, routes were added together using partial routes
@@ -398,8 +438,17 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
 
         # faster through the ship
         add_rule(get_porgy_location("Deeper Upper Left - Torpedo Upgrade in Wall", world),
-                 rule=lambda state: has_fuel(8, state, world)
-                 or (has_fuel(5, state, world) and state.has(depth_charge, player)))
+                 rule=lambda state: has_fuel_opt_eff(8, state, world)
+                 or (has_fuel_and_slots(5, "Deeper Upper Left - Torpedo Upgrade in Wall", 1, state, world)
+                     and state.has(depth_charge, player)))
+
+        add_rule(get_porgy_location("Deeper Upper Mid - Egg in Dirt", world),
+                 rule=lambda state: state.has(drill, player)
+                 and has_fuel_and_slots(5, "Deeper Upper Mid - Egg in Dirt", 1, state, world))
+
+        add_rule(get_porgy_location("Deeper Lower Mid - Fuel Tank in Floor", world),
+                 lambda state: state.has(depth_charge, player)
+                 and has_fuel_and_slots(7, "Deeper Lower Mid - Fuel Tank in Floor", 1, state, world))
 
         # abyss
         # unless noted otherwise, routes were added together using partial routes
