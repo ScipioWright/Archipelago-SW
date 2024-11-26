@@ -88,6 +88,7 @@ def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionSta
     extra_mods_needed is how many mod slots you need on top of that may be required by the location
     """
     mods_needed = extra_mods_needed
+    # todo: precalculate these for locations in a dictionary or something
     if loc_name == "Abyss Rock":
         abyss = True
         hidden_status = False
@@ -111,6 +112,7 @@ def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionSta
         return True
     if mcguffins_needed > 4:
         return False
+    # todo: also return how many slots you have
     return state.has(mcguffin, world.player, mcguffins_needed)
 
 
