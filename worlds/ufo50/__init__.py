@@ -117,6 +117,8 @@ class UFO50World(World):
     starting_games: List[str]  # the games you start with unlocked
     goal_games: List[str]  # the games that are your goals
 
+    porgy_lantern_and_radar_slots_req: Dict[str, int]
+
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")

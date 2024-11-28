@@ -79,41 +79,24 @@ def has_abyss_combat_logic(state: CollectionState, player: int) -> bool:
     return True
 
 
-def has_enough_slots(loc_name: str, extra_mods_needed: int, state: CollectionState,
-                     world: "UFO50World") -> bool:
-    """
-    loc_name is used to figure out if you need the Spotlight and if you need the Radar
-    loc_name is either the name of the location, "Abyss Rock" to tell it to check the Lanternless option,
-    or "" to tell it that no Spotlight or Radar are required
-    extra_mods_needed is how many mod slots you need on top of that may be required by the location
-    """
-    mods_needed = extra_mods_needed
-    # todo: precalculate these for locations in a dictionary or something
-    if loc_name == "Abyss Rock":
-        abyss = True
-        hidden_status = False
-    elif loc_name == "":
-        abyss = False
-        hidden_status = False
-    else:
-        abyss = location_table[loc_name].region_name == "Abyss"
-        hidden_status = location_table[loc_name].concealed
+def setup_lantern_and_radar_table(world: "UFO50World") -> None:
+    world.porgy_lantern_and_radar_slots_req = {}
+    for location_name, location_data in location_table.items():
+        mods_needed = 0
+        if not world.options.porgy_lanternless and location_data.region_name == "Abyss":
+            mods_needed += 1
+        if location_data.concealed == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required:
+            mods_needed += 1
+        elif location_data.concealed == Hidden.no_tell and world.options.porgy_radar >= PorgyRadar.option_required:
+            mods_needed += 1
+        world.porgy_lantern_and_radar_slots_req[location_name] = mods_needed
+    mods_needed = 0
 
-    if abyss and not world.options.porgy_lanternless:
+    # setting up the shortcut version
+    if not world.options.porgy_lanternless:
         mods_needed += 1
-
-    if hidden_status == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required:
-        mods_needed += 1
-    elif hidden_status == Hidden.no_tell and world.options.porgy_radar >= PorgyRadar.option_required:
-        mods_needed += 1
-
-    mcguffins_needed = 2 * (mods_needed - 2)
-    if mcguffins_needed <= 0:
-        return True
-    if mcguffins_needed > 4:
-        return False
-    # todo: also return how many slots you have
-    return state.has(mcguffin, world.player, mcguffins_needed)
+    world.porgy_lantern_and_radar_slots_req[""] = mods_needed
+    world.porgy_lantern_and_radar_slots_req["Abyss Rock"] = mods_needed
 
 
 def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
@@ -155,20 +138,20 @@ def has_fuel_and_slots(fuel_needed: int, loc_name: str, extra_mods_needed: int,
     or "" to tell it that no Spotlight or Radar are required.
     extra_mods_needed is how many mod slots you need on top of that may be required by the location.
     """
+    num_slots = min(4, state.count(mcguffin, world.player) // 2 + 2)
     # if you don't have enough slots, it's not possible for you to get any further here
-    if not has_enough_slots(loc_name, extra_mods_needed, state, world):
+    slots_needed = world.porgy_lantern_and_radar_slots_req[loc_name] + extra_mods_needed
+    if slots_needed > num_slots:
         return False
     # conversely, if you have enough fuel now, you don't need to check further
     if has_fuel(fuel_needed, state, world):
         return True
 
     fuel_with_efficiency = round(3 * fuel_needed / 4)
-    if not has_enough_slots(loc_name, extra_mods_needed + 1, state, world):
+    slots_needed += 1
+    if slots_needed > num_slots:
         return False
-    if has_fuel(fuel_with_efficiency, state, world):
-        return True
-
-    return False
+    return has_fuel(fuel_with_efficiency, state, world)
 
 
 # set the basic fuel requirements for spots that don't have multiple viable routes
@@ -191,6 +174,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
     check_on_touch = bool(world.options.porgy_check_on_touch)
     set_fuel_and_radar_reqs(world, check_on_touch)
+    setup_lantern_and_radar_table(world)
 
     regions["Menu"].connect(regions["Shallows"])
     regions["Shallows"].connect(regions["Deeper"])
