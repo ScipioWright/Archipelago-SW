@@ -66,7 +66,7 @@ def create_items(world: "UFO50World") -> List[Item]:
     return porgy_items
 
 
-filler_items = ["Porgy - Fuel Tank", "Porgy - Missile Upgrade"]
+filler_items = ["Porgy - Fuel Tank", "Porgy - Torpedo Upgrade"]
 
 
 def get_filler_item_name(world: "UFO50World") -> str:

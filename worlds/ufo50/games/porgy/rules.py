@@ -157,7 +157,13 @@ def has_fuel_and_slots(fuel_needed: int, loc_name: str, extra_mods_needed: int,
 # set the basic fuel requirements for spots that don't have multiple viable routes
 def set_fuel_and_radar_reqs(world: "UFO50World", on_touch: bool) -> None:
     for loc_name, loc_data in location_table.items():
-        loc = get_porgy_location(loc_name, world)
+        try:
+            loc = get_porgy_location(loc_name, world)
+        except KeyError:
+            if loc_name == "Cherry":
+                continue
+            else:
+                raise Exception("UFO 50: Unknown error occurred in Porgy regarding location names.")
         if (loc_data.concealed == Hidden.no_tell and world.options.porgy_radar >= PorgyRadar.option_required
                 or loc_data.concealed == Hidden.has_tell and world.options.porgy_radar == PorgyRadar.option_required):
             add_rule(loc, lambda state: state.has(radar, world.player))
@@ -185,7 +191,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     regions["Shallows"].connect(regions["Shallows - Depth"],
                                 rule=lambda state: state.has(depth_charge, player))
     regions["Shallows"].connect(regions["Sunken Ship"],
-                                rule=lambda state: state.has("Porgy - Bomb Open the Ship", player))
+                                rule=lambda state: state.has("Porgy - Bombed Open the Ship", player))
     regions["Sunken Ship"].connect(regions["Sunken Ship - Buster"],
                                    rule=lambda state: state.has(buster, player))
     # vanilla seems to want you to have 8 torpedo upgrades, 2 fish friends, missiles, and buster before abyss

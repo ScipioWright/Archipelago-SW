@@ -177,3 +177,4 @@ def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
         event_loc = Location(world.player, f"Porgy - {event_name}", None, regions[event_data.region_name])
         event_item = Item(f"Porgy - {event_data.item_name}", ItemClassification.progression, None, world.player)
         event_loc.place_locked_item(event_item)
+        regions[event_data.region_name].locations.append(event_loc)
