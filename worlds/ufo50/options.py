@@ -11,7 +11,7 @@ class AlwaysOnGames(OptionSet):
     display_name = "Always On Games"
     valid_keys = {game_name for game_name in game_ids.keys()}
     # default is here so the unit tests don't fail
-    default = ["Barbuta", "Vainger", "Night Manor"]
+    default = ["Barbuta", "Vainger", "Night Manor", "Porgy"]
 
 
 class RandomChoiceGames(OptionSet):
@@ -78,6 +78,8 @@ class CherryAllowed(OptionSet):
     Choose which games you want to include the Cherry goal in.
     If the game is set as your Goal Game, then you will need to Cherry that game to complete that goal.
     If the game is not set as a Goal Game, then Cherrying that game will be a check.
+    If the game is not selected at all, then this option will not affect it.
+    The defaults are ones where we believe the Cherry goal is reasonable in the context of a randomizer.
     """
     internal_name = "cherry_allowed_games"
     display_name = "Cherry-Allowed Games"
