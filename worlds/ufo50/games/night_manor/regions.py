@@ -30,7 +30,7 @@ regions: List[str] = [
 # it is recommended that you prepend each region name with the game it is from to avoid overlap
 def create_regions_and_rules(world: "UFO50World") -> Dict[str, Region]:
     night_manor_regions: Dict[str, Region] = {}
-    for region_name, region_data in region_info.items():
+    for region_name in regions:
         night_manor_regions[region_name] = Region(f"Night Manor - {region_name}", world.player, world.multiworld)
 
     create_locations(world, night_manor_regions)
