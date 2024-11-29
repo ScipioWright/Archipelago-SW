@@ -103,7 +103,6 @@ def has_fuel(amount: int, state: CollectionState, world: "UFO50World") -> bool:
     """
     Checks if you have enough fuel based on which fuel difficulty option was chosen.
     """
-    # todo: check for lambda capture shenanigans
     if world.options.porgy_fuel_difficulty == PorgyFuelDifficulty.option_easy:
         # medium
         amount = round(amount * 1.5)
@@ -346,7 +345,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                  # buster + depth: 7/9
                  # all others look worse
                  rule=lambda state:
-                 state.has_all((buster, depth_charge) and has_fuel_and_slots(7, loc, 2, state, world)))
+                 state.has_all((buster, depth_charge), player) and has_fuel_and_slots(7, loc, 2, state, world))
 
         loc = "Abyss Upper Mid - Torpedo Upgrade in Wall"
         add_rule(get_porgy_location(loc, world),
