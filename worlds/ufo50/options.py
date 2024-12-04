@@ -147,6 +147,7 @@ class UFO50Options(PerGameCommonOptions):
     goal_games: GoalGames
     goal_game_amount: GoalGameAmount
     cherry_allowed_games: CherryAllowed
+
     porgy_fuel_difficulty: PorgyFuelDifficulty
     porgy_check_on_touch: PorgyCheckOnTouch
     porgy_radar: PorgyRadar
