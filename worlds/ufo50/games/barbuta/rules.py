@@ -28,12 +28,12 @@ def has_money(amount: int, state: CollectionState, player: int) -> bool:
     return False
 
 
-def has_wand(state: CollectionState, player: int) -> bool:
-    return state.has(wand, player) and state.can_reach("Wand Trade Room", player)
-
-
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     player = world.player
+
+    def has_wand(state: CollectionState) -> bool:
+        return state.has(wand, player) and state.can_reach(regions["Wand Trade Room"])
+
     regions["Menu"].connect(regions["Starting Area"])
 
     regions["Starting Area"].connect(regions["Key Room"])
@@ -46,7 +46,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     regions["Starting Area"].connect(regions["R6C7 and Nearby"],
                                      rule=lambda state: state.has(pin, player))
     regions["Starting Area"].connect(regions["Mimic Room"],
-                                     rule=lambda state: has_wand(state, player))
+                                     rule=lambda state: has_wand(state))
     regions["Starting Area"].connect(regions["R3C7 above Ladders"],
                                      rule=lambda state: state.has(candy, player))
 
@@ -85,12 +85,10 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     set_rule(world.get_location("Barbuta - Little Guy Breaks a Wall - R4C7"),
              rule=lambda state: has_money(500, state, player))
 
-    # based on vibes for now
-    set_rule(world.get_location("Barbuta - Garden"),
-             rule=lambda state: state.has_any((pin, necklace), player))
+    # garden is sphere 1
     set_rule(world.get_location("Barbuta - Gold"),
-             rule=lambda state: state.has_any((blood_sword, bat_orb), player) or has_wand(state, player))
+             rule=lambda state: state.has_any((blood_sword, bat_orb), player) or has_wand(state))
     if "Barbuta" in world.options.cherry_allowed_games:
         set_rule(world.get_location("Barbuta - Cherry"),
                  rule=lambda state: state.has(bat_orb, player)
-                 and (state.has(blood_sword, player) or has_wand(state, player)))
+                 and (state.has(blood_sword, player) or has_wand(state)))
