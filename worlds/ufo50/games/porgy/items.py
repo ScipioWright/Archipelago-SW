@@ -15,23 +15,23 @@ class ItemInfo(NamedTuple):
 
 
 item_table: Dict[str, ItemInfo] = {
-    "Torpedo Upgrade": ItemInfo(0, IC.progression, 20),
-    "Fuel Tank": ItemInfo(1, IC.progression, 20),
-    "Fish Gratitude": ItemInfo(2, IC.progression, 20),
+    "Torpedo Upgrade": ItemInfo(300, IC.progression, 20),
+    "Fuel Tank": ItemInfo(301, IC.progression, 20),
+    "Fish Gratitude": ItemInfo(302, IC.progression, 20),
     # modules
-    "Missile System Module": ItemInfo(3, IC.progression, 1, "Modules"),
-    "Radar System Module": ItemInfo(4, IC.progression, 1, "Modules"),
-    "Buster Torpedoes Module": ItemInfo(5, IC.progression, 1, "Modules"),
-    "Depth Charge Module": ItemInfo(6, IC.progression, 1, "Modules"),
-    "Efficient Fuel Module": ItemInfo(7, IC.progression, 1, "Modules"),
-    "Armor Plating Module": ItemInfo(8, IC.useful, 1, "Modules"),
-    "Super Booster Module": ItemInfo(9, IC.useful, 1, "Modules"),
-    "Spotlight Module": ItemInfo(10, IC.progression, 1, "Modules"),
-    "Drill Module": ItemInfo(11, IC.progression, 1, "Modules"),
-    "Targeting System Module": ItemInfo(12, IC.useful, 1, "Modules"),
+    "Missile System Module": ItemInfo(191, IC.progression, 1, "Modules"),
+    "Radar System Module": ItemInfo(291, IC.progression, 1, "Modules"),
+    "Buster Torpedoes Module": ItemInfo(90, IC.progression, 1, "Modules"),
+    "Depth Charge Module": ItemInfo(92, IC.progression, 1, "Modules"),
+    "Efficient Fuel Module": ItemInfo(290, IC.progression, 1, "Modules"),
+    "Armor Plating Module": ItemInfo(292, IC.useful, 1, "Modules"),
+    "Super Booster Module": ItemInfo(93, IC.useful, 1, "Modules"),
+    "Spotlight Module": ItemInfo(192, IC.progression, 1, "Modules"),
+    "Drill Module": ItemInfo(91, IC.progression, 1, "Modules"),
+    "Targeting System Module": ItemInfo(190, IC.useful, 1, "Modules"),
 
     # the mcguffins
-    "Strange Light": ItemInfo(13, IC.progression_skip_balancing, 5),
+    "Strange Light": ItemInfo(303, IC.progression_skip_balancing, 5),
 }
 
 
