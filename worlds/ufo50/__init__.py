@@ -1,7 +1,7 @@
 from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Region, Item, ItemClassification, Location
+from BaseClasses import Tutorial, Region, Item, ItemClassification, Location, CollectionState
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
@@ -11,8 +11,9 @@ from . import options
 
 from .general_items import cartridge_items, cartridge_item_group
 
-from .games import barbuta, vainger, night_manor
+from .games import barbuta, porgy, vainger, night_manor
 from .games.barbuta import items, locations, regions
+from .games.porgy import items, locations, regions
 from .games.vainger import items, locations, regions
 from .games.night_manor import items, locations, regions
 
@@ -63,6 +64,7 @@ class UFO50Web(WebWorld):
 # try to keep them in the same order as on the main menu
 ufo50_games: Dict = {
     "Barbuta": barbuta,
+    "Porgy": porgy,
     "Vainger": vainger,
     "Night Manor": night_manor,
 }
@@ -115,6 +117,8 @@ class UFO50World(World):
     starting_games: List[str]  # the games you start with unlocked
     goal_games: List[str]  # the games that are your goals
 
+    porgy_lantern_and_radar_slots_req: Dict[str, int]
+
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
@@ -132,6 +136,11 @@ class UFO50World(World):
                 self.options.goal_game_amount.value = 50
                 # UT doesn't show locations that aren't actually in your slot, so this is fine
                 self.options.cherry_allowed_games.value = {game_name for game_name in game_ids.keys()}
+
+                self.options.porgy_fuel_difficulty.value = self.ut_passthrough[options.PorgyFuelDifficulty.internal_name]
+                self.options.porgy_check_on_touch.value = self.ut_passthrough[options.PorgyCheckOnTouch.internal_name]
+                self.options.porgy_radar.value = self.ut_passthrough[options.PorgyRadar.internal_name]
+                self.options.porgy_lanternless.value = self.ut_passthrough[options.PorgyLanternless.internal_name]
 
         included_game_names = sorted(self.options.always_on_games.value)
         # exclude always on games from random choice games
@@ -235,7 +244,7 @@ class UFO50World(World):
         self.multiworld.itempool += created_items
 
     def get_filler_item_name(self) -> str:
-        return ufo50_games[self.random.choice(self.included_games)].items.get_filler_item_name()
+        return ufo50_games[self.random.choice(self.included_games)].items.get_filler_item_name(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         included_games = [game_ids[game_name] for game_name in self.included_games]
@@ -247,6 +256,10 @@ class UFO50World(World):
             "included_games": included_games,
             "goal_games": goal_games,
             "cherry_games": cherry_games,
+            options.PorgyFuelDifficulty.internal_name: self.options.porgy_fuel_difficulty.value,
+            options.PorgyCheckOnTouch.internal_name: self.options.porgy_check_on_touch.value,
+            options.PorgyRadar.internal_name: self.options.porgy_radar.value,
+            options.PorgyLanternless.internal_name: self.options.porgy_lanternless.value,
         }
         return slot_data
 

@@ -97,6 +97,8 @@ def get_location_groups() -> Dict[str, Set[str]]:
 
 def create_locations(world: "UFO50World", regions: Dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
+        if loc_name == "Cherry" and "Vainger" not in world.options.cherry_allowed_games:
+            break
         region = regions[f"Vainger - {loc_data.region_name}"]
         if loc_name in ["Gold", "Cherry"] and "Vainger" in world.goal_games:
             if (loc_name == "Gold" and "Vainger" not in world.options.cherry_allowed_games) or loc_name == "Cherry":
