@@ -315,7 +315,7 @@ class AnimalWellContext(CommonContext):
 
     async def on_bean_death(self):
         # todo: put something in to modify DEATHLINK_MESSAGE based on how or where the player died, or something random
-        death_link_key = f"{self.get_active_game_slot()}|death_link"
+        death_link_key = f"{self.slot}|death_link"
         if self.stored_data.get(death_link_key, None) is None:
             if self.slot_data.get("death_link", None) == 1:
                 await self.send_death(DEATHLINK_MESSAGE)
@@ -507,7 +507,7 @@ class AnimalWellContext(CommonContext):
 
     def get_active_game_slot(self) -> int:
         """
-        Get the game slot currently being played
+        Get the game slot currently being played, as in the in-game slot, not the AP player slot
         """
         if platform.uname()[0] == "Windows":
             slot = self.process_handle.read_bytes(self.start_address + 0xC, 1)[0]
