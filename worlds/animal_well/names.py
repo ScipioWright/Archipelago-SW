@@ -335,15 +335,15 @@ class LocationNames(str, Enum):
     candle_bear = "Bear Candle in Dark Maze - R6C14"
 
     # candle checks - event versions
-    candle_first_event = "Squirrel First Candle Event"  # the obvious first one
-    candle_dog_dark_event = "Dog Dark Room Candle Event"  # in the dark room a few rooms after your first dog encounter
-    candle_dog_switch_box_event = "Dog Boxed Candle Event"
-    candle_dog_many_switches_event = "Dog Candle in Many Switches Room Event"
-    candle_dog_disc_switches_event = "Dog Candle in Disc Switch Maze Event"
-    candle_dog_bat_event = "Dog Candle in Bat Room Event"
-    candle_fish_event = "Fish Candle in Penguin Room Event"
-    candle_frog_event = "Frog Candle Switch Carousel Event"  # to screens to the right of the wombat save point
-    candle_bear_event = "Bear Candle in Dark Maze Event"
+    candle_first_event = "Squirrel First Candle - R10C9 Event"  # the obvious first one
+    candle_dog_dark_event = "Dog Dark Room Candle - R6C5 Event"  # in the dark room a few rooms after your first dog encounter
+    candle_dog_switch_box_event = "Dog Boxed Candle - R4C5 Event"
+    candle_dog_many_switches_event = "Dog Candle in Many Switches Room - R4C3 Event"
+    candle_dog_disc_switches_event = "Dog Candle in Disc Switch Maze - R3C7 Event"
+    candle_dog_bat_event = "Dog Candle in Bat Room - R3C3 Event"
+    candle_fish_event = "Fish Candle in Penguin Room - R10C4 Event"
+    candle_frog_event = "Frog Candle Switch Carousel - R10C15 Event"  # to screens to the right of the wombat save point
+    candle_bear_event = "Bear Candle in Dark Maze - R6C14 Event"
 
     # key chests
     key_bear_lower = "Key Chest in Lower Bear - R7C16"  # early in the green area
