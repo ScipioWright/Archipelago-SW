@@ -33,6 +33,19 @@ candle_event_to_item: Dict[str, str] = {
 }
 
 
+candle_locations: Set[str] = {
+    lname.candle_first,
+    lname.candle_dog_dark,
+    lname.candle_dog_switch_box,
+    lname.candle_dog_many_switches,
+    lname.candle_dog_disc_switches,
+    lname.candle_dog_bat,
+    lname.candle_fish,
+    lname.candle_frog,
+    lname.candle_bear,
+}
+
+
 class AnimalWellTracker:
     player_options: Dict[str, int] = {
         Goal.internal_name: 0,

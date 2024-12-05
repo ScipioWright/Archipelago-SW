@@ -25,7 +25,7 @@ from ..locations import location_name_to_id, location_table, events_table, ByteS
 from ..names import ItemNames as iname, LocationNames as lname
 from ..options import FinalEggLocation, Goal
 from ..client.bean_patcher import BeanPatcher
-from ..client.logic_tracker import AnimalWellTracker, CheckStatus, candle_event_to_item
+from ..client.logic_tracker import AnimalWellTracker, CheckStatus, candle_event_to_item, candle_locations
 
 CONNECTION_ABORTED_STATUS = "Connection Aborted. Some unrecoverable error occurred."
 CONNECTION_REFUSED_STATUS = ("Connection Refused. Likely causes are your game not "
@@ -611,10 +611,10 @@ class AnimalWellContext(CommonContext):
                                                   and location_name_to_id[k] in self.missing_locations})
         if self.slot_data.get("candle_checks", None):
             self.bean_patcher.tracker_candles = len({k: v for (k, v) in self.logic_tracker.check_logic_status.items()
-                                                     if "Candle" in k and "Event" not in k and v == CheckStatus.checked})
+                                                     if k in candle_locations and v == CheckStatus.checked})
         else:
             self.bean_patcher.tracker_candles = len({k: v for (k, v) in self.logic_tracker.check_logic_status.items()
-                                                     if "Candle" in k and "Event" in k and v == CheckStatus.checked})
+                                                     if k in candle_event_to_item and v == CheckStatus.checked})
         self.bean_patcher.update_tracker_text()
 
     def check_if_in_game(self) -> bool:
