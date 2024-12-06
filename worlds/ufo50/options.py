@@ -9,7 +9,7 @@ class AlwaysOnGames(OptionSet):
     """
     internal_name = "always_on_games"
     display_name = "Always On Games"
-    valid_keys = {game_name for game_name in game_ids.keys()}
+    valid_keys = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
     # default is here so the unit tests don't fail
     default = ["Barbuta", "Vainger", "Night Manor", "Porgy"]
 
@@ -21,7 +21,7 @@ class RandomChoiceGames(OptionSet):
     """
     internal_name = "random_choice_games"
     display_name = "Random Choice Games"
-    valid_keys = {game_name for game_name in game_ids.keys()}
+    valid_keys = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
 
 
 class RandomChoiceGameCount(Range):
@@ -56,8 +56,8 @@ class GoalGames(OptionSet):
     """
     internal_name = "goal_games"
     display_name = "Goal Games"
-    valid_keys = {game_name for game_name in game_ids.keys()}
-    default = {game_name for game_name in game_ids.keys()}
+    valid_keys = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
+    default = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
 
 
 class GoalGameAmount(Range):
@@ -83,7 +83,7 @@ class CherryAllowed(OptionSet):
     """
     internal_name = "cherry_allowed_games"
     display_name = "Cherry-Allowed Games"
-    valid_keys = {game_name for game_name in game_ids.keys()}
+    valid_keys = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
     # include the games where it makes sense to be Cherry by default
     default = {"Barbuta", "Night Manor"}
 

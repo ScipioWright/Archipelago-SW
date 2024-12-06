@@ -51,7 +51,7 @@ location_table: Dict[str, LocationInfo] = {
     "Shallows Lower Mid - Fuel Tank on Coral": LocationInfo(2, "Shallows", 2, 4),
     "Shallows Lower Mid - Egg on Coral": LocationInfo(53, "Shallows", 3, 4),
     "Shallows Lower Mid - Lower Ceiling Torpedo Upgrade": LocationInfo(22, "Shallows - Missile", 2, 3, Hidden.no_tell),  # missile
-    "Shallows Lower Mid - Upper Ceiling Torpedo Upgrade": LocationInfo(24, "Shallows", 1, 2, Hidden.no_tell),
+    "Shallows Lower Mid - Upper Ceiling Torpedo Upgrade": LocationInfo(21, "Shallows", 1, 2, Hidden.no_tell),
     "Shallows Lower Mid - Fuel Tank in Floor": LocationInfo(7, "Shallows - Depth", 1, 2, Hidden.has_tell),  # depth
     "Shallows Lower Mid - Torpedo Upgrade on Coral": LocationInfo(23, "Shallows", 2, 3),
     "Shallows Upper Right - Fuel Tank under Breakable Rocks": LocationInfo(5, "Shallows - Depth", 2, 3),  # depth
