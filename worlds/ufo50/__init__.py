@@ -16,14 +16,24 @@ from .games.barbuta import items, locations, regions
 from .games.porgy import items, locations, regions
 from .games.vainger import items, locations, regions
 from .games.night_manor import items, locations, regions
+from worlds.LauncherComponents import components, Component, launch_subprocess, Type as ComponentType
+
+
+def launch_client(*args: str):
+    from .Client import launch
+    launch_subprocess(launch(*args), name=CLIENT_NAME)
+
+
+components.append(
+    Component(f"UFO 50 Client", game_name="UFO 50", func=launch_client, component_type=ComponentType.CLIENT,
+              supports_uri=True)
+)
 
 
 class UFO50Settings(Group):
     class GamePath(UserFilePath):
-        """Path to the game executable from which files are extracted"""
-        description = "the UFO 50 game executable"
+        """Path to the game executable"""
         is_exe = True
-        md5s = [GAME_HASH]
 
     class InstallFolder(LocalFolderPath):
         """Path to the mod installation folder"""
