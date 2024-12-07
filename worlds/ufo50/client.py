@@ -306,10 +306,7 @@ def launch(*args: str) -> Any:
     if UFO50World.settings.launch_game:
         logging.info("Launching game.")
         try:
-            # subprocess.run(f"{UFO50World.settings.launch_command} {name} {password} {server}")
-            # idk why the below works, but the above crashes the launcher
-            # if you do it without a variable assignment it doesn't work
-            _ = subprocess.Popen(f"{UFO50World.settings.launch_command} {name} {password} {server}")
+            subprocess.Popen(f"{UFO50World.settings.launch_command} {name} {password} {server}")
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
