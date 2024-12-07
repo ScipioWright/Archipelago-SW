@@ -235,13 +235,18 @@ class UFO50World(World):
             }
             if game_name in self.options.cherry_allowed_games:
                 locs[f"{game_name} - Cherry"] = self.location_name_to_id[f"{game_name} - Cherry"]
-            menu.add_locations(locs)
+            region = Region(f"{game_name} Region", self.player, self.multiworld)
+            region.add_locations(locs)
+            menu.connect(region, f"Boot {game_name}",
+                         rule=lambda state, name=game_name: state.has(f"{name} Cartridge", self.player))
 
     def create_item(self, name: str, item_class: ItemClassification = None) -> Item:
         # figure out which game it's from and call its create_item
         game_name = name.split(" - ", 1)[0]
         if game_name in ufo50_games:
             return ufo50_games[game_name].items.create_item(name, self, item_class)
+        if name.endswith("Cartridge"):
+            item_class = item_class or ItemClassification.progression
         return Item(name, item_class or ItemClassification.filler, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
@@ -249,8 +254,11 @@ class UFO50World(World):
         for game_name in self.included_games:
             game = ufo50_games[game_name]
             created_items += game.items.create_items(self)
+
+        all_games = self.included_games + self.included_unimplemented_games
+        for game_name in all_games:
             cartridge = self.create_item(f"{game_name} Cartridge", ItemClassification.progression)
-            if game.game_name in self.starting_games:
+            if game_name in self.starting_games:
                 self.multiworld.push_precollected(cartridge)
             else:
                 created_items.append(cartridge)
