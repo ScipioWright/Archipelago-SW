@@ -60,7 +60,7 @@ class UFO50Settings(Group):
     launch_game: Union[LaunchGame, bool] = True
     launch_command: LaunchCommand = LaunchCommand("ufo50.exe" if Utils.is_windows
                                                   else "wine ufo50.exe")
-    allow_unimplemented: AllowUnimplemented = False
+    allow_unimplemented: Union[AllowUnimplemented, bool] = False
 
 
 class UFO50Web(WebWorld):
