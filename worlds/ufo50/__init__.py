@@ -20,7 +20,7 @@ from .games.night_manor import items, locations, regions
 
 
 def launch_client(*args: str):
-    from .Client import launch
+    from .client import launch
     launch_subprocess(launch(*args), name=CLIENT_NAME)
 
 

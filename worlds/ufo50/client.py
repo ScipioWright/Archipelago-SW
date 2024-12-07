@@ -25,10 +25,12 @@ from . import UFO50World
 
 KEEP_FILES = ["verify.json", "ufo_50_basepatch.bsdiff4", "gm-apclientpp.dll", "LICENSE"]
 
+
 class UpdateResult(Enum):
     SUCCESS = 1
     API_LIMIT = 2
     VERSION_MISMATCH = 3
+
 
 class UrlResponse:
     def __init__(self, response_code: int, data: Any):
@@ -36,7 +38,7 @@ class UrlResponse:
         self.data = data
 
 
-def find_steam_app_path(app_id: str, app_title: str):
+def find_steam_app_path(app_id: str, app_title: str) -> str:
     """
     Attempts to find a Steam game's install folder given its app id.
     If not found, an empty string is returned.
@@ -277,7 +279,6 @@ def launch(*args: str) -> Any:
                     password = f'--password="{urllib.parse.unquote(url.password)}"'
             else:
                 parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
-
     os.chdir(UFO50World.settings.install_folder)
 
     # check that the mod installation is valid
@@ -305,7 +306,10 @@ def launch(*args: str) -> Any:
     if UFO50World.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.run(f"{UFO50World.settings.launch_command} {name} {password} {server}")
+            # subprocess.run(f"{UFO50World.settings.launch_command} {name} {password} {server}")
+            # idk why the below works, but the above crashes the launcher
+            # if you do it without a variable assignment it doesn't work
+            _ = subprocess.Popen(f"{UFO50World.settings.launch_command} {name} {password} {server}")
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
