@@ -17,18 +17,17 @@ from typing import Any
 
 import bsdiff4
 import requests
-import vdf
 
 import Utils
 from Utils import open_filename
 from . import UFO50World
 
-KEEP_FILES = ["verify.json", "ufo_50_basepatch.bsdiff4", "gm-apclientpp.dll", "LICENSE"]
 
 class UpdateResult(Enum):
     SUCCESS = 1
     API_LIMIT = 2
     VERSION_MISMATCH = 3
+
 
 class UrlResponse:
     def __init__(self, response_code: int, data: Any):
@@ -42,6 +41,7 @@ def find_steam_app_path(app_id: str, app_title: str):
     If not found, an empty string is returned.
     """
     try:
+        import vdf
         # fetch the vdf file path
         if Utils.is_windows:
             vdf_path = find_windows_vdf()
@@ -139,7 +139,6 @@ def update(target_asset: str, url: str) -> UpdateResult:
     try:
         logging.info(f"Checking for {target_asset} updates.")
         response = send_request(url)
-        print(response)
         if response.response_code == 403:  # rate limit exceeded
             return UpdateResult.API_LIMIT
         assets = response.data[0]["assets"]
@@ -163,10 +162,10 @@ def update(target_asset: str, url: str) -> UpdateResult:
                 with urllib.request.urlopen(release_url) as download:
                     with zipfile.ZipFile(BytesIO(download.read())) as zf:
                         zf.extractall()
-                set_date(target_asset, newest_date)
-                if not verify_patch():
+                if not verify_game_version():
                     return UpdateResult.VERSION_MISMATCH
                 patch_game()
+                set_date(target_asset, newest_date)
     except (ValueError, RuntimeError, urllib.error.HTTPError):
         update_error = f"Failed to apply update."
         messagebox.showerror("Failure", update_error)
@@ -174,7 +173,7 @@ def update(target_asset: str, url: str) -> UpdateResult:
     return UpdateResult.SUCCESS
 
 
-def verify_patch() -> bool:
+def verify_game_version() -> bool:
     """Checks that the current version of the game matches that in the verify file"""
     try:
         with open("verify.json", "r") as verify:
@@ -205,46 +204,56 @@ def is_install_valid() -> bool:
     Checks the hash of files listed in the verify file, if it exists
     Returns true if it can fetch and verify the targets
     """
-    try:
-        with open("verify.json", "r") as verify:
-            targets = json.load(verify)["files"]
-        for file_name, expected_hash in targets.items():
-            if not os.path.exists(file_name):
-                return False
-            with open(file_name, "rb") as target:
-                current_hash = hashlib.md5(target.read()).hexdigest()
-            if not secrets.compare_digest(current_hash, expected_hash):
-                return False
-    except (FileNotFoundError, KeyError, json.decoder.JSONDecodeError):
-        return False
+    if os.path.isfile("verify.json"):
+        try:
+            with open("verify.json", "r") as verify:
+                targets = json.load(verify)["files"]
+            for file_name, expected_hash in targets.items():
+                with open(file_name, "rb") as target:
+                    current_hash = hashlib.md5(target.read()).hexdigest()
+                if not secrets.compare_digest(current_hash, expected_hash):
+                    return False
+        except (FileNotFoundError, KeyError, json.decoder.JSONDecodeError):
+            return False
     return True
 
 
 def install() -> bool:
     """Copies all game files into the mod installation folder"""
     logging.info("Mod installation missing or corrupted, proceeding to reinstall.")
-    # clean up files from previous installations
-    logging.info("Deleting old non-patch files.")
-    os.chdir(UFO50World.settings.install_folder)
-    for file_name in os.listdir(os.curdir):
-        if os.path.isfile(file_name):
-            if file_name not in KEEP_FILES:
-                os.remove(file_name)
-        elif os.path.isdir(file_name):
-            shutil.rmtree(file_name)
-
     # find the source folder
     source_path = find_steam_app_path("1147860", "UFO 50")
-    source_path = open_filename(
+    source_file = open_filename(
         f"Locate UFO 50 executable {get_version()}",
         (('ufo50.exe', ('.exe',)),),
-        fr"{source_path}\ufo50.exe")
+        os.path.join(source_path, "ufo50.exe") if source_path else "")
+    source_path = os.path.dirname(source_file)
     if not source_path:
         return False
 
+    # check that the provided file is what we needed, if we have verify available
+    if not os.path.exists(os.path.join(source_path, "data.win")):
+        return False
+    if not os.path.exists(os.path.join(source_path, "ufo50.exe")):
+        return False
+    if os.path.isfile("verify.json"):
+        try:
+            with open("verify.json", "r") as verify:
+                targets = json.load(verify)["files"]
+            with open(os.path.join(source_path, "data.win"), "rb") as target:
+                current_hash = hashlib.md5(target.read()).hexdigest()
+                if not secrets.compare_digest(current_hash, targets["original_data.win"]):
+                    return False
+            with open(os.path.join(source_path, "ufo50.exe"), "rb") as target:
+                current_hash = hashlib.md5(target.read()).hexdigest()
+                if not secrets.compare_digest(current_hash, targets["ufo50.exe"]):
+                    return False
+        except (FileNotFoundError, KeyError, json.decoder.JSONDecodeError):
+            return False
+
     # copy all files over
     logging.info("Copying game files to installation folder.")
-    shutil.copytree(os.path.dirname(source_path), os.curdir, dirs_exist_ok=True)
+    shutil.copytree(source_path, os.curdir, dirs_exist_ok=True)
 
     shutil.copyfile("data.win", "original_data.win")  # and make a copy of data.win
     for file_name in ["steam_api64.dll", "Steamworks_x64.dll"]:
@@ -256,13 +265,13 @@ def install() -> bool:
 
 def launch(*args: str) -> Any:
     """Check args, then the mod installation, then launch the game"""
-    Utils.init_logging("UFO 50 Client", exception_logger="Client")
+    Utils.init_logging("UFO 50", exception_logger="Client")
 
     name: str = ""
     password: str = ""
     server: str = ""
     if args:
-        parser = argparse.ArgumentParser(description=f"UFO 50 Client Launcher")
+        parser = argparse.ArgumentParser(description=f"UFO 50 Launcher")
         parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
         args = parser.parse_args(args)
 
@@ -284,7 +293,10 @@ def launch(*args: str) -> Any:
     if not is_install_valid():
         if messagebox.askyesnocancel(f"Mod installation missing or corrupted!",
                                      "Would you like to reinstall now?"):
-            install()
+            if not install():
+                messagebox.showerror("Could not locate executable",
+                                     f"The provided file did not match UFO 50 {get_version()}")
+                return
         # if there is no mod installation, and we are not installing it, then there isn't much to do
         else:
             return
@@ -293,21 +305,21 @@ def launch(*args: str) -> Any:
     update_result = update("ufo_50_archipelago.zip", "https://api.github.com/repos/UFO-50-Archipelago/Patch/releases")
     if update_result == UpdateResult.VERSION_MISMATCH:
         messagebox.showerror("Could not apply patch",
-                             "The new patch targets a different version of UFO 50.\n"
-                             "You will need to launch the client again to install it.")
+                             "The new patch targets a different version of UFO 50\n"
+                             "You will need to launch the client again to install it")
         return
     if update_result == UpdateResult.API_LIMIT:
         messagebox.showinfo("Rate limit exceeded",
                             "GitHub REST API limit exceeded, could not check for updates.\n\n"
-                            "This will not prevent the game from being played if it was already playable.")
+                            "This will not prevent the game from being played if it was already playable")
 
     # and try to launch the game
     if UFO50World.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.run(f"{UFO50World.settings.launch_command} {name} {password} {server}")
+            subprocess.Popen(f"{UFO50World.settings.launch_command} {name} {password} {server}")
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
-                     "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
+                     "Please check that launch_command in options.yaml or host.yaml is set up correctly")
             messagebox.showerror("Command error!", f"Error: {error}")
             raise RuntimeError(error)

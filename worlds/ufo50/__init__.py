@@ -25,7 +25,7 @@ def launch_client(*args: str):
 
 
 components.append(
-    Component(f"UFO 50 Client", game_name="UFO 50", func=launch_client, component_type=ComponentType.CLIENT,
+    Component(f"UFO 50", game_name="UFO 50", func=launch_client, component_type=ComponentType.CLIENT,
               supports_uri=True)
 )
 
@@ -37,7 +37,7 @@ class UFO50Settings(Group):
 
     class InstallFolder(LocalFolderPath):
         """Path to the mod installation folder"""
-        description = "the folder to install UFO 50 Archipelago to"
+        description = "the folder to install UFO 50 Archipelago to (do not select vanilla UFO 50 folder)"
 
     class LaunchGame(Bool):
         """Set this to false to never autostart the game"""
