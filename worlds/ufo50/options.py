@@ -1,11 +1,16 @@
 from dataclasses import dataclass
-from Options import StartInventoryPool, Range, OptionSet, PerGameCommonOptions, OptionGroup, Choice, Toggle
+from Options import (StartInventoryPool, Range, OptionSet, PerGameCommonOptions, OptionGroup, Choice, Toggle,
+                     DefaultOnToggle)
 from .constants import game_ids
 
 
 class AlwaysOnGames(OptionSet):
     """
     Choose which games you would like to enable.
+
+    The following games have full implementations: Barbuta, Vainger, Night Manor, Porgy
+    There is a host.yaml setting that you must enable to include unimplemented games.
+    Unimplemented games will only have Garden, Gold, and/or Cherry checks.
     """
     internal_name = "always_on_games"
     display_name = "Always On Games"
@@ -137,6 +142,15 @@ class PorgyLanternless(Toggle):
     display_name = "Porgy - Lanternless"
 
 
+# Night Manor
+class NMEarlyPin(DefaultOnToggle):
+    """
+    If enabled, the Hairpin will be on the floor in the starting room on either the Bowl or Spoon checks.
+    """
+    internal_name = "nm_early_pin"
+    display_name = "Night Manor Early Hairpin"
+
+
 @dataclass
 class UFO50Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -152,6 +166,8 @@ class UFO50Options(PerGameCommonOptions):
     porgy_check_on_touch: PorgyCheckOnTouch
     porgy_radar: PorgyRadar
     porgy_lanternless: PorgyLanternless
+
+    nm_early_pin: NMEarlyPin
 
 
 ufo50_option_groups = [
@@ -169,5 +185,8 @@ ufo50_option_groups = [
         PorgyCheckOnTouch,
         PorgyRadar,
         PorgyLanternless,
+    ]),
+    OptionGroup("Night Manor Options", [
+        NMEarlyPin,
     ])
 ]

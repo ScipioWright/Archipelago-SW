@@ -24,6 +24,7 @@ from Utils import open_filename
 from . import UFO50World
 
 
+
 class UpdateResult(Enum):
     SUCCESS = 1
     API_LIMIT = 2
@@ -36,7 +37,7 @@ class UrlResponse:
         self.data = data
 
 
-def find_steam_app_path(app_id: str, app_title: str):
+def find_steam_app_path(app_id: str, app_title: str) -> str:
     """
     Attempts to find a Steam game's install folder given its app id.
     If not found, an empty string is returned.
@@ -291,7 +292,6 @@ def launch(*args: str) -> Any:
                     password = shlex.quote(f"--password={urllib.parse.unquote(url.password)}")
             else:
                 parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
-
     os.chdir(UFO50World.settings.install_folder)
 
     # check that the mod installation is valid
