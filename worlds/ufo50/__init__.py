@@ -215,12 +215,12 @@ class UFO50World(World):
                          rule=lambda state, name=game.game_name: state.has(f"{name} Cartridge", self.player))
 
         for game_name in self.included_unimplemented_games:
-            # todo: make this dependent on some option so you can just turn on only garden and gold and not cherry
             locs = {
                 f"{game_name} - Garden": self.location_name_to_id[f"{game_name} - Garden"],
                 f"{game_name} - Gold": self.location_name_to_id[f"{game_name} - Gold"],
-                f"{game_name} - Cherry": self.location_name_to_id[f"{game_name} - Cherry"],
             }
+            if game_name in self.options.cherry_allowed_games:
+                locs[f"{game_name} - Cherry"] = self.location_name_to_id[f"{game_name} - Cherry"]
             menu.add_locations(locs)
 
     def create_item(self, name: str, item_class: ItemClassification = None) -> Item:
