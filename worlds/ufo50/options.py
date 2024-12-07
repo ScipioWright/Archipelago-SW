@@ -7,6 +7,10 @@ from .constants import game_ids
 class AlwaysOnGames(OptionSet):
     """
     Choose which games you would like to enable.
+
+    The following games have full implementations: Barbuta, Vainger, Night Manor, Porgy
+    There is a host.yaml setting that you must enable to include unimplemented games.
+    Unimplemented games will only have Garden, Gold, and/or Cherry checks.
     """
     internal_name = "always_on_games"
     display_name = "Always On Games"

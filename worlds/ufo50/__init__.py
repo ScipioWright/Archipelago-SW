@@ -1,10 +1,11 @@
 from typing import ClassVar, Any, Union, List
 
 import Utils
-from BaseClasses import Tutorial, Region, Item, ItemClassification, Location, CollectionState
+from BaseClasses import Tutorial, Region, Item, ItemClassification, Location
 from Options import OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import components, Component, launch_subprocess, Type as ComponentType
 
 from .constants import *
 from . import options
@@ -16,7 +17,6 @@ from .games.barbuta import items, locations, regions
 from .games.porgy import items, locations, regions
 from .games.vainger import items, locations, regions
 from .games.night_manor import items, locations, regions
-from worlds.LauncherComponents import components, Component, launch_subprocess, Type as ComponentType
 
 
 def launch_client(*args: str):
@@ -48,11 +48,19 @@ class UFO50Settings(Group):
         The command will be executed with the installation folder as the current directory
         """
 
+    class AllowUnimplemented (Bool):
+        """
+        Allow the player to choose unimplemented games.
+        These games will only send checks when the player does the Garden, Gold, or Cherry checks.
+        This is not recommended to be enabled.
+        """
+
     exe_path: GamePath = GamePath("ufo50.exe")
     install_folder: InstallFolder = InstallFolder("UFO 50")
     launch_game: Union[LaunchGame, bool] = True
     launch_command: LaunchCommand = LaunchCommand("ufo50.exe" if Utils.is_windows
                                                   else "wine ufo50.exe")
+    allow_unimplemented: AllowUnimplemented = False
 
 
 class UFO50Web(WebWorld):
@@ -171,6 +179,12 @@ class UFO50World(World):
                 self.included_games.append(game_name)
             else:
                 self.included_unimplemented_games.append(game_name)
+
+        if self.included_unimplemented_games and not self.settings.allow_unimplemented:
+            raise OptionError(f"UFO 50: {self.player_name} has selected an unimplemented game, but the host "
+                              f"does not have them enabled. Please enable the host.yaml setting or remove the "
+                              f"unimplemented games from the selected games.\n"
+                              f"Unimplemented games: {self.included_unimplemented_games}")
 
         if not self.included_games:
             raise OptionError(f"UFO 50: {self.player_name} has not selected any games that have implementations. "
