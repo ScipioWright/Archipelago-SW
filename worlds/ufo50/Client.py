@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import secrets
+import shlex
 import shutil
 import subprocess
 import urllib
@@ -279,11 +280,15 @@ def launch(*args: str) -> Any:
         if args.url:
             url = urllib.parse.urlparse(args.url)
             if url.scheme == "archipelago":
-                server = f'--server="{url.hostname}:{url.port}"'
+                if url.hostname:
+                    if url.port:
+                        server = shlex.quote(f"--server={url.hostname}:{url.port}")
+                    else:
+                        server = shlex.quote(f"--server={url.hostname}")
                 if url.username:
-                    name = f'--name="{urllib.parse.unquote(url.username)}"'
+                    name = shlex.quote(f"--name={urllib.parse.unquote(url.username)}")
                 if url.password:
-                    password = f'--password="{urllib.parse.unquote(url.password)}"'
+                    password = shlex.quote(f"--password={urllib.parse.unquote(url.password)}")
             else:
                 parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
 
@@ -317,7 +322,7 @@ def launch(*args: str) -> Any:
     if UFO50World.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.Popen(f"{UFO50World.settings.launch_command} {name} {password} {server}")
+            subprocess.Popen(f"{UFO50World.settings.launch_command} {name} {password} {server}", shell=True)
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly")
