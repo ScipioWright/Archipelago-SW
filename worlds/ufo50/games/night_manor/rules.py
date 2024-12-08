@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 spoon = "Night Manor - Spoon"
 bowl = "Night Manor - Bowl"
+coins = "Night Manor - Coins"
 hairpin = "Night Manor - Hairpin"
 hook = "Night Manor - Hook"
 tweezers = "Night Manor - Tweezers"
@@ -121,6 +122,8 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(aluminum_key, player))
     set_rule(world.get_location("Night Manor - Play Room - Maze Directions"),
              rule=lambda state: state.has(glasses, player))
+    set_rule(world.get_location("Night Manor - Lounge - Sheet Music"),
+             rule=lambda state: state.has(coins, player))
     set_rule(world.get_location("Night Manor - Maze - Crossbow Bolt"),
              rule=lambda state: state.has(maze_directions, player))
     set_rule(world.get_location("Night Manor - Manor - Iron Key"),
