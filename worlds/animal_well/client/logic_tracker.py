@@ -24,12 +24,12 @@ candle_event_to_item: Dict[str, str] = {
     lname.candle_first_event.value: iname.event_candle_first.value,
     lname.candle_dog_dark_event.value: iname.event_candle_dog_dark.value,
     lname.candle_dog_switch_box_event.value: iname.event_candle_dog_switch_box.value,
-    lname.candle_dog_many_switches_event.value: iname.event_candle_dog_many_switches,
-    lname.candle_dog_disc_switches_event.value: iname.event_candle_dog_disc_switches,
-    lname.candle_dog_bat_event.value: iname.event_candle_dog_bat,
+    lname.candle_dog_many_switches_event.value: iname.event_candle_dog_many_switches.value,
+    lname.candle_dog_disc_switches_event.value: iname.event_candle_dog_disc_switches.value,
+    lname.candle_dog_bat_event.value: iname.event_candle_dog_bat.value,
     lname.candle_fish_event.value: iname.event_candle_penguin.value,
-    lname.candle_frog_event.value: iname.event_candle_frog,
-    lname.candle_bear_event.value: iname.event_candle_bear,
+    lname.candle_frog_event.value: iname.event_candle_frog.value,
+    lname.candle_bear_event.value: iname.event_candle_bear.value,
 }
 
 

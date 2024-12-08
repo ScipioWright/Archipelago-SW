@@ -340,7 +340,7 @@ class LocationNames(str, Enum):
     candle_dog_switch_box_event = "Dog Boxed Candle - R4C5 Event"
     candle_dog_many_switches_event = "Dog Candle in Many Switches Room - R4C3 Event"
     candle_dog_disc_switches_event = "Dog Candle in Disc Switch Maze - R3C7 Event"
-    candle_dog_bat_event = "Dog Candle in Bat Room - R3C3"
+    candle_dog_bat_event = "Dog Candle in Bat Room - R3C3 Event"
     candle_fish_event = "Fish Candle in Penguin Room - R10C4 Event"
     candle_frog_event = "Frog Candle Switch Carousel - R10C15 Event"  # to screens to the right of the wombat save point
     candle_bear_event = "Bear Candle in Dark Maze - R6C14 Event"
