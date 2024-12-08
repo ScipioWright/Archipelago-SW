@@ -23,6 +23,7 @@ ornamental_egg = "Night Manor - Ornamental Egg"
 pool_cue = "Night Manor - Pool Cue"
 sheet_music = "Night Manor - Sheet Music"
 copper_key = "Night Manor - Copper Key"
+brass_key = "Night Manor - Brass Key"
 wrench = "Night Manor - Wrench"
 hedge_shears = "Night Manor - Hedge Shears"
 shovel = "Night Manor - Shovel"
@@ -74,6 +75,8 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(spoon, player))
     set_rule(world.get_location("Night Manor - Starting Room - Hairpin"),
              rule=lambda state: state.has(spoon, player))
+    set_rule(world.get_location("Night Manor - Foyer - Gear"),
+             rule=lambda state: state.has(brass_key, player))
     set_rule(world.get_location("Night Manor - Garage - Gas Can"),
              rule=lambda state: state.has(oil_can, player))
     set_rule(world.get_location("Night Manor - Garage - Crowbar"),
