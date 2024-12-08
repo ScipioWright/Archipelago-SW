@@ -500,7 +500,6 @@ class BeanPatcher:
 
         return arg_address + after_address
 
-
     def attach_to_process(self, process=None) -> bool:
         if process is not None:
             self.process = process

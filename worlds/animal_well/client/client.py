@@ -305,6 +305,8 @@ class AnimalWellContext(CommonContext):
         self.logic_tracker = AnimalWellTracker()
         self.console_task = None
 
+        self.disconnected_intentionally = True
+
     def display_dialog(self, text: str, title: str, action_text: str = ""):
         if self.bean_patcher is not None and self.bean_patcher.attached_to_process:
             self.bean_patcher.display_dialog(text, title, action_text)
@@ -359,6 +361,7 @@ class AnimalWellContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
+            self.disconnected_intentionally = True
             self.slot_data = args.get("slot_data", {})
             self.display_text_in_client("Connected to the AP server!")
 
@@ -387,6 +390,7 @@ class AnimalWellContext(CommonContext):
             self.bean_patcher.save_team = args["team"]
             self.bean_patcher.save_slot = args["slot"]
             self.bean_patcher.apply_seeded_save_patch()
+            self.disconnected_intentionally = False
         try:
             if cmd == "PrintJSON":
                 msg_type = args.get("type")
