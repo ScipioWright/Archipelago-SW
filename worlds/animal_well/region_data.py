@@ -50,7 +50,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.dog_upper:
             AWData(AWType.region),
         rname.bird_capybara_waterfall:  # kinda tight with the disc, but you can just make it to the egg chest
-            AWData(AWType.region, [[iname.disc], [iname.bubble_short], [iname.wheel_climb]]),
+            AWData(AWType.region, [[iname.disc, iname.obscure_tricks], [iname.disc_hop],
+                                   [iname.bubble_short], [iname.wheel_climb]]),
         lname.fruit_79:
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bird_below_mouse_statues:  # enter from the room where you can get the planet egg
