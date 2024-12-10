@@ -243,6 +243,7 @@ class AnimalWellOptions(PerGameCommonOptions):
 
 aw_option_groups = [
     OptionGroup("Logic Options", [
+        TankingDamage,
         BubbleJumping,
         DiscHopping,
         WheelTricks,
@@ -250,7 +251,6 @@ aw_option_groups = [
         FluteJumps,
         ObscureTricks,
         PreciseTricks,
-        TankingDamage,
     ])
 ]
 
