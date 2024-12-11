@@ -400,11 +400,22 @@ class AnimalWellContext(CommonContext):
                     text = args.get("data")[0]["text"]
                     self.display_text_in_client(f"{text}")
                 elif msg_type == "Hint":
-                    if args.get("receiving") == self.slot:
+                    if self.slot_concerns_self(args.get("receiving")):
                         player_slot = args.get("item").player
                         item_name = self.item_names.lookup_in_slot(args.get("item").item, self.slot)
                         location_name = self.location_names.lookup_in_slot(args.get("item").location, player_slot)
-                        text = f"Hint: Your {item_name} is at {location_name}."
+                        if not self.slot_concerns_self(player_slot):
+                            player_name = self.player_names.get(player_slot)
+                            text = f"Hint: Your {item_name} is at {location_name} in {player_name}'s World."
+                        else:
+                            text = f"Hint: Your {item_name} is at your {location_name}."
+                        self.display_text_in_client(text)
+                    elif args.get("item").player == self.slot:
+                        receiving_player_slot = args.get("receiving")
+                        player_name = self.player_names.get(receiving_player_slot)
+                        item_name = self.item_names.lookup_in_slot(args.get("item").item, receiving_player_slot)
+                        location_name = self.location_names.lookup_in_slot(args.get("item").location, self.slot)
+                        text = f"Hint: {player_name}'s {item_name} is at your {location_name}."
                         self.display_text_in_client(text)
                 elif msg_type == "Join":
                     self.display_text_in_client(args.get("data")[0]["text"])
