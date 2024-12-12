@@ -284,33 +284,33 @@ class LocationNames(str, Enum):
         return self.value
 
     # major unique items
-    map_chest = "Map Chest"
-    stamp_chest = "Stamp Chest"
-    pencil_chest = "Pencil Chest"
+    map_chest = "Map Chest - R9C10"
+    stamp_chest = "Stamp Chest - R7C8"
+    pencil_chest = "Pencil Chest - R7C7"
 
-    b_wand_chest = "B. Wand Chest"
-    flute_chest = "Animal Flute Chest"
-    slink_chest = "Slink Chest"
-    yoyo_chest = "Yoyo Chest"
-    mock_disc_chest = "Mock Disc Chest"
-    disc_spot = "Wolf Disc Shrine"
-    lantern_chest = "Lantern Chest"
-    b_ball_chest = "B. Ball Chest"
-    remote_chest = "Remote Chest"
-    uv_lantern_chest = "UV Lantern Chest"
-    wheel_chest = "Wheel Chest"
-    top_chest = "Top Chest"
-    bb_wand_chest = "B.B. Wand Chest"
+    b_wand_chest = "B. Wand Chest - R10C2"
+    flute_chest = "Animal Flute Chest - R7C6"
+    slink_chest = "Slink Chest - R5C12"
+    yoyo_chest = "Yoyo Chest - R15C13"
+    mock_disc_chest = "Mock Disc Chest - R5C7"
+    disc_spot = "Wolf Disc Shrine - R6C7"
+    lantern_chest = "Lantern Chest - R11C10"
+    b_ball_chest = "B. Ball Chest - R4C1"
+    remote_chest = "Remote Chest - R13C7"
+    uv_lantern_chest = "UV Lantern Chest - R16C1"
+    wheel_chest = "Wheel Chest - R12C1"
+    top_chest = "Top Chest - R7C7"
+    bb_wand_chest = "B.B. Wand Chest - R15C5"
     # firecracker_first = "Pick Up Firecrackers"
-    fanny_pack_chest = "Fanny Pack Chest"
-    key_house = "House Key Drop"
-    key_office = "Office Key Chest"
+    fanny_pack_chest = "Fanny Pack Chest - R16C7"
+    key_house = "House Key Drop - R16C6"
+    key_office = "Office Key Chest - R6C9"
     # medal_k = "K. Medal Shard Bag"  # you need three to open the kangaroo door
-    medal_s = "S. Medal Chest"
-    medal_e = "E. Medal Chest"
+    medal_s = "S. Medal Chest - R6C12"
+    medal_e = "E. Medal Chest - R14C5"
 
     # minor unique items
-    mama_cha = "Mama Cha Chest"  # the same place as the barcode bunny at grass bowl
+    mama_cha = "Mama Cha Chest - R3C5"  # the same place as the barcode bunny at grass bowl
 
     # match chests
     match_start_ceiling = "Match in Tutorial Chest - R10C6"
@@ -354,10 +354,10 @@ class LocationNames(str, Enum):
     key_dog = "Key Chest in Dog with Chinchilla Crank - R4C2"  # maybe rename
 
     # flames
-    flame_blue = "B. Flame"  # fish area
-    flame_green = "G. Flame"  # frog area
-    flame_pink = "P. Flame"  # dog area
-    flame_violet = "V. Flame"  # bear area
+    flame_blue = "B. Flame - R14C2"  # fish area
+    flame_green = "G. Flame - R16C16"  # frog area
+    flame_pink = "P. Flame - R2C9"  # dog area
+    flame_violet = "V. Flame - R2C11"  # bear area
 
     # eggs, not in any particular order
     egg_forbidden = "Forbidden Egg Chest - R2C1"  # swordfish lake
@@ -425,25 +425,25 @@ class LocationNames(str, Enum):
     egg_obsidian = "Obsidian Egg Chest - R14C15"  # behind fish pipe to lower rat lab
     egg_golden = "Golden Egg Chest - R16C11"  # ostrich wheel puzzle
 
-    egg_65 = "65th Egg Chest"  # move to Major Items if Eggsanity becomes a setting
+    egg_65 = "65th Egg Chest - R7C7"  # move to Major Items if Eggsanity becomes a setting
 
     # bnuuy
-    bunny_mural = "Community Bunny"
-    bunny_map = "Doodle Bunny"
+    bunny_mural = "Community Bunny - R8C12"
+    bunny_map = "Doodle Bunny - R3C11"
     bunny_uv = "Invisible Bunny"
-    bunny_fish = "Fish Bunny"
-    bunny_face = "Face Bunny"
-    bunny_crow = "Singing Bunny"
-    bunny_duck = "Illusion Bunny"
+    bunny_fish = "Fish Bunny - R9C7"
+    bunny_face = "Face Bunny - R11C6"
+    bunny_crow = "Singing Bunny - R2C14"
+    bunny_duck = "Illusion Bunny - R8C11"
     bunny_dream = "Imaginary Bunny"
-    bunny_lava = "Lava Bunny"  # floor is lava
-    bunny_tv = "Flashing Bunny"
-    bunny_ghost_dog = "Statue Bunny"  # ghost dog bunny
-    bunny_disc_spike = "Disc Spike Bunny"
-    bunny_water_spike = "Water Spike Bunny"
-    bunny_barcode = "Paper Bunny"  # printer or barcode both get you it
-    bunny_chinchilla_vine = "Chinchilla Bunny"  # the one where the code is covered by vines
-    bunny_file_bud = "Flowering Bunny"  # bunny from file start codes
+    bunny_lava = "Lava Bunny - R3C6"  # floor is lava
+    bunny_tv = "Flashing Bunny - R16C7"
+    bunny_ghost_dog = "Statue Bunny - R4C13"  # ghost dog bunny
+    bunny_disc_spike = "Disc Spike Bunny - R1C1"
+    bunny_water_spike = "Water Spike Bunny - R9C9"
+    bunny_barcode = "Paper Bunny - R3C5"  # printer or barcode both get you it
+    bunny_chinchilla_vine = "Chinchilla Bunny - R6C1"  # the one where the code is covered by vines
+    bunny_file_bud = "Flowering Bunny - R10C5"  # bunny from file start codes
 
     # event locations
     activate_bird_fast_travel = "Activate Bird Fast Travel"
