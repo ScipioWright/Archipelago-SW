@@ -244,6 +244,67 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
             traceback.print_exc()
             bean_logger.info(f"Animal Well Connection Status: {self.ctx.connection_status}")
 
+    def _cmd_songs(self, val=""):
+        """Print notation for songs. Formats are UDLR or Numpad"""
+        def udlr(notation: str) -> str:
+            return notation.replace("1", "DL ")\
+                .replace("2", "D ")\
+                .replace("3", "DR ")\
+                .replace("4", "L ")\
+                .replace("6", "R ")\
+                .replace("7", "UL ")\
+                .replace("8", "U ")\
+                .replace("9", "UR ")
+
+        if isinstance(self.ctx, AnimalWellContext):
+            formats = ()
+            songs = {
+                "Bottom to Well": "68982412",
+                "Top of Well": "37373737",
+                "Warp Zone": "66442288",
+                "Secret Warp Zone": "68424242",
+                "bunn1": "69626116",
+                "bunn2": "78321242",
+                "bunn3": "62486279\n"
+                         "62483179",
+
+                "Ghost Banish": "63214789",
+                "cat mom": "63216321\n"
+                           "32143214\n"
+                           "21472148\n"
+                           "98741212\n"
+                           "32324789\n"
+                           "69392919\n"
+                           "49798999",
+                "cat1": "34936",
+                "cat2": "69872",
+                "cat3": "77112",
+                "cat4": "38334",
+                "cat5": "42138",
+
+                "egg song": "72627262\n"
+                            "71317131\n"
+                            "94249424\n"
+                            "84348434\n"
+                            "72627262\n"
+                            "71317131\n"
+                            "79719842\n"
+                            "87148747",
+                "fish mural": "44369449",
+                "duck song": "82824646",
+                "dog grass": "69847842",
+                "paper": "69847842",
+                "tv": "97138426"
+
+            }
+
+            if not val or val.lower() == "udlr":
+                for title, notation in songs.items():
+                    logger.info(f"{title}: {udlr(notation)}")
+            else:
+                for title, notation in songs.items():
+                    logger.info(f"{title}: {notation}")
+
 
 class Stamp:
     def __init__(self, x, y, stamp_type=0):
