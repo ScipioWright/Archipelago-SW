@@ -224,7 +224,8 @@ class AnimalWellOptions(PerGameCommonOptions):
     fruitsanity: Fruitsanity
     exclude_song_chests: ExcludeSongChests
     random_final_egg_location: FinalEggLocation
-    
+
+    tanking_damage: TankingDamage
     bubble_jumping: BubbleJumping
     disc_hopping: DiscHopping
     wheel_tricks: WheelTricks
@@ -232,7 +233,6 @@ class AnimalWellOptions(PerGameCommonOptions):
     flute_jumps: FluteJumps
     obscure_tricks: ObscureTricks
     precise_tricks: PreciseTricks
-    tanking_damage: TankingDamage
     
     death_link: AWDeathLink
     start_inventory_from_pool: StartInventoryPool
