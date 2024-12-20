@@ -1044,7 +1044,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.frog_bird_after_yoyo_1:  # can bypass the locked door with bubble jumps + lantern
             AWData(AWType.region, [[iname.yoyo], [iname.bubble_long, iname.lantern], [iname.ball_trick_hard],
                                    # spam bubbles then jump up the left side
-                                   [iname.bubble_long_real, iname.precise_tricks]]),
+                                   [iname.bubble_long, iname.precise_tricks]]),
     },
     rname.frog_bird_after_yoyo_1: {
         rname.frog_bird_after_yoyo_2:  # pain in the ass, but you can get up with downwards bubbles
