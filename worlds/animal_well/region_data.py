@@ -498,8 +498,9 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_29:
             AWData(AWType.location, loc_type=LocType.fruit),
+        # just throw the ball into the hole, it'll hit the yellow button like 99% of the time
         rname.bear_middle_phone_room:
-            AWData(AWType.region, [[iname.slink], [iname.ball]]),
+            AWData(AWType.region, [[iname.slink], [iname.ball_easy]]),
         lname.egg_post_modern:
             AWData(AWType.location, [[iname.top, iname.switch_for_post_modern_egg]]),
         rname.bear_truth_egg_spot:  # throw disc to the right after jumping down the waterfall
