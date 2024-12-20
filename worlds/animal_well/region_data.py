@@ -599,7 +599,9 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bear_above_chameleon:
             AWData(AWType.region, [[iname.yoyo], [iname.ball_trick_medium, iname.obscure_tricks],
-                                   [iname.slink, iname.bubble, iname.obscure_tricks]]),
+                                   [iname.slink, iname.bubble, iname.obscure_tricks],
+                                   [iname.disc, iname.slink, iname.obscure_tricks],
+                                   [iname.disc, iname.top, iname.obscure_tricks]]),
     },
     rname.bear_above_chameleon: {  # includes the screens to the right of it
         lname.egg_swan:  # wake one chinchilla, lure upper one right, run left
