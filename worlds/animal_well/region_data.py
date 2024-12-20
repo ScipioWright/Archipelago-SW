@@ -492,7 +492,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bear_ladder_after_chameleon:
             AWData(AWType.region),  # just press a button
-        # just throw the ball into the hole, it'll hit the yellow button like 99% of the time
+        rname.bear_slink_room:
+            AWData(AWType.region),  # just go up
         lname.fruit_40:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_29:
@@ -534,7 +535,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
                                    [iname.wheel_climb, iname.tanking_damage]]),
         rname.bear_chameleon_room_2:
             AWData(AWType.region, [[iname.bubble_long, iname.tanking_damage],
-                                   [iname.disc_hop_hard, iname.tanking_damage]]),
+                                   [iname.disc_hop_hard, iname.tanking_damage],
+                                   [iname.bubble_long_real, iname.lantern]]),  # preset your bubbles then lantern jump up
     },
     rname.bear_crow_rooms: {
         rname.bear_shadow_egg_spot:  # get across the room with the lifters and the miasma
@@ -817,6 +819,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     rname.behind_kangaroo: {
         rname.bear_middle_phone_room:
             AWData(AWType.region),  # activate dynamite
+        rname.dog_swordfish_lake_ledge:
+            AWData(AWType.region, [[iname.top]]),  # destroy blocks under block by forbidden egg chest
         lname.egg_plant:
             AWData(AWType.location, [[iname.disc, iname.slink], [iname.bubble_short, iname.obscure_tricks]]),
         lname.fruit_35:
