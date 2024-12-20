@@ -442,15 +442,17 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_chameleon_room_1:
             AWData(AWType.region),
         lname.candle_bear:
-            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox]],
+            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox],
+                                     [iname.wheel_hop, iname.matchbox]],
                    loc_type=LocType.candle),
         lname.candle_bear_event:
-            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox]],
+            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox],
+                                     [iname.wheel_hop, iname.matchbox]],
                    event=iname.event_candle_bear),
         lname.fruit_49:
-            AWData(AWType.location, [[iname.bubble], [iname.disc]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.matchbox]], loc_type=LocType.fruit),
         lname.fruit_50:
-            AWData(AWType.location, [[iname.bubble], [iname.disc]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.matchbox]], loc_type=LocType.fruit),
         lname.egg_lf:
             AWData(AWType.location, [[iname.firecrackers, iname.bubble], [iname.firecrackers, iname.disc],
                                      [iname.firecrackers, iname.wheel_hop]]),
