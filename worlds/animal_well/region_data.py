@@ -55,7 +55,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.fruit_79:
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bird_below_mouse_statues:  # enter from the room where you can get the planet egg
-            AWData(AWType.region, [[iname.can_break_spikes_below]]),
+            AWData(AWType.region, [[iname.can_break_spikes_below], [iname.disc, iname.tanking_damage]]),
         rname.frog_near_wombat:  # to the right of the bunny mural, drop down
             AWData(AWType.region),
         rname.hippo_entry:
