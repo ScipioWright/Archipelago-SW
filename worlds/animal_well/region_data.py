@@ -537,7 +537,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_chameleon_room_2:
             AWData(AWType.region, [[iname.bubble_long, iname.tanking_damage],
                                    [iname.disc_hop_hard, iname.tanking_damage, iname.precise_tricks],
-                                   [iname.wheel_climb, iname.tanking_damage, iname.precise_tricks],
+                                   [iname.wheel_hard, iname.tanking_damage, iname.precise_tricks],
                                    [iname.bubble_long_real, iname.lantern]]),  # preset your bubbles then lantern jump up
     },
     rname.bear_crow_rooms: {
