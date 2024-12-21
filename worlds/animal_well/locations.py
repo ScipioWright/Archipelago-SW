@@ -237,7 +237,7 @@ location_table: Dict[str, AWLocationData] = {
     lname.fruit_45.value: AWLocationData(1045, ByteSect.fruits, 45, ["Fruits"], AWTracker(130, 0, 0, 0, 28)),
     lname.fruit_46.value: AWLocationData(1046, ByteSect.fruits, 46, ["Fruits"], AWTracker(130, 0, 0, 0, 29)),
     lname.fruit_47.value: AWLocationData(1047, ByteSect.fruits, 47, ["Fruits"], AWTracker(130, 0, 0, 0, 30)),
-    lname.fruit_48.value: AWLocationData(1048, ByteSect.fruits, 48, ["Fruits"], AWTracker(130, 0, 0, 0, 15)),
+    lname.fruit_48.value: AWLocationData(1048, ByteSect.fruits, 48, ["Fruits"], AWTracker(174, 0, 0, 0, 15)),
     lname.fruit_49.value: AWLocationData(1049, ByteSect.fruits, 49, ["Fruits"], AWTracker(174, 0, 0, 0, 16)),
     lname.fruit_50.value: AWLocationData(1050, ByteSect.fruits, 50, ["Fruits"], AWTracker(130, 0, 0, 0, 31)),
     lname.fruit_51.value: AWLocationData(1051, ByteSect.fruits, 51, ["Fruits"], AWTracker(130, 0, 0, 0, 32)),
