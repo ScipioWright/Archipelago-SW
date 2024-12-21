@@ -452,7 +452,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.fruit_49:
             AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.matchbox]], loc_type=LocType.fruit),
         lname.fruit_50:
-            AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.matchbox]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.wheel_hop]], loc_type=LocType.fruit),
         lname.egg_lf:
             AWData(AWType.location, [[iname.firecrackers, iname.bubble], [iname.firecrackers, iname.disc],
                                      [iname.firecrackers, iname.wheel_hop]]),
