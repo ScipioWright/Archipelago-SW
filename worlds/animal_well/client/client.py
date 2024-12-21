@@ -697,7 +697,14 @@ class AnimalWellContext(CommonContext):
         """
         Checks if the game is currently running or is still in the main menu
         """
-        current_game_state = self.process_handle.read_uchar(self.start_address + 0x750cc)
+        try:
+            current_game_state = self.process_handle.read_uchar(self.start_address + 0x750cc)
+        except:
+            bean_logger.error("Failure here means you have run into an unrecoverable state. Closing the client.")
+            self.exit_event.set()
+            if self.ui:
+                self.ui.stop()
+            raise Exception("Probably closed the game.")
 
         if current_game_state != self.last_game_state:
             self.last_game_state = current_game_state
