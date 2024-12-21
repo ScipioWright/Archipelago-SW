@@ -493,7 +493,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_ladder_after_chameleon:
             AWData(AWType.region),  # just press a button
         rname.bear_slink_room:
-            AWData(AWType.region),  # just go up
+            AWData(AWType.region, [[iname.bubble], [iname.disc_hop], [iname.wheel_hop]]),  # just go up
         lname.fruit_40:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_29:
