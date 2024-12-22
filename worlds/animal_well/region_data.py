@@ -55,7 +55,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.fruit_79:
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bird_below_mouse_statues:  # enter from the room where you can get the planet egg
-            AWData(AWType.region, [[iname.can_break_spikes_below]]),
+            AWData(AWType.region, [[iname.can_break_spikes_below], [iname.disc, iname.tanking_damage]]),
         rname.frog_near_wombat:  # to the right of the bunny mural, drop down
             AWData(AWType.region),
         rname.hippo_entry:
@@ -442,15 +442,17 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.bear_chameleon_room_1:
             AWData(AWType.region),
         lname.candle_bear:
-            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox]],
+            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox],
+                                     [iname.wheel_hop, iname.matchbox]],
                    loc_type=LocType.candle),
         lname.candle_bear_event:
-            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox]],
+            AWData(AWType.location, [[iname.bubble, iname.matchbox], [iname.disc, iname.matchbox],
+                                     [iname.wheel_hop, iname.matchbox]],
                    event=iname.event_candle_bear),
         lname.fruit_49:
-            AWData(AWType.location, [[iname.bubble], [iname.disc]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.wheel_hop]], loc_type=LocType.fruit),
         lname.fruit_50:
-            AWData(AWType.location, [[iname.bubble], [iname.disc]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.wheel_hop]], loc_type=LocType.fruit),
         lname.egg_lf:
             AWData(AWType.location, [[iname.firecrackers, iname.bubble], [iname.firecrackers, iname.disc],
                                      [iname.firecrackers, iname.wheel_hop]]),
@@ -490,13 +492,15 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bear_ladder_after_chameleon:
             AWData(AWType.region),  # just press a button
-        # just throw the ball into the hole, it'll hit the yellow button like 99% of the time
+        rname.bear_slink_room:
+            AWData(AWType.region, [[iname.bubble], [iname.disc_hop], [iname.wheel_hop]]),  # just go up
         lname.fruit_40:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_29:
             AWData(AWType.location, loc_type=LocType.fruit),
+        # just throw the ball into the hole, it'll hit the yellow button like 99% of the time
         rname.bear_middle_phone_room:
-            AWData(AWType.region, [[iname.slink], [iname.ball]]),
+            AWData(AWType.region, [[iname.slink], [iname.ball_trick_easy]]),
         lname.egg_post_modern:
             AWData(AWType.location, [[iname.top, iname.switch_for_post_modern_egg]]),
         rname.bear_truth_egg_spot:  # throw disc to the right after jumping down the waterfall
@@ -528,10 +532,13 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         # shoot some hoops! throw the ball to the button. can be done without vertical if you throw early
         rname.bear_match_chest_spot:
             AWData(AWType.region, [[iname.ball_trick_medium], [iname.bubble, iname.tanking_damage],
-                                   [iname.disc, iname.tanking_damage, iname.precise_tricks]]),
+                                   [iname.disc, iname.tanking_damage, iname.precise_tricks],
+                                   [iname.wheel_climb, iname.tanking_damage]]),
         rname.bear_chameleon_room_2:
             AWData(AWType.region, [[iname.bubble_long, iname.tanking_damage],
-                                   [iname.disc_hop_hard, iname.tanking_damage]]),
+                                   [iname.disc_hop_hard, iname.tanking_damage, iname.precise_tricks],
+                                   [iname.wheel_hard, iname.tanking_damage, iname.precise_tricks],
+                                   [iname.bubble_long_real, iname.lantern]]),  # preset your bubbles then lantern jump up
     },
     rname.bear_crow_rooms: {
         rname.bear_shadow_egg_spot:  # get across the room with the lifters and the miasma
@@ -593,7 +600,9 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bear_above_chameleon:
             AWData(AWType.region, [[iname.yoyo], [iname.ball_trick_medium, iname.obscure_tricks],
-                                   [iname.slink, iname.bubble, iname.obscure_tricks]]),
+                                   [iname.slink, iname.bubble, iname.obscure_tricks],
+                                   [iname.disc, iname.slink, iname.obscure_tricks],
+                                   [iname.disc, iname.top, iname.obscure_tricks]]),
     },
     rname.bear_above_chameleon: {  # includes the screens to the right of it
         lname.egg_swan:  # wake one chinchilla, lure upper one right, run left
@@ -814,6 +823,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     rname.behind_kangaroo: {
         rname.bear_middle_phone_room:
             AWData(AWType.region),  # activate dynamite
+        rname.dog_swordfish_lake_ledge:
+            AWData(AWType.region, [[iname.top]]),  # destroy blocks under block by forbidden egg chest
         lname.egg_plant:
             AWData(AWType.location, [[iname.disc, iname.slink], [iname.bubble_short, iname.obscure_tricks]]),
         lname.fruit_35:
@@ -1036,7 +1047,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.frog_bird_after_yoyo_1:  # can bypass the locked door with bubble jumps + lantern
             AWData(AWType.region, [[iname.yoyo], [iname.bubble_long, iname.lantern], [iname.ball_trick_hard],
                                    # spam bubbles then jump up the left side
-                                   [iname.bubble_long_real, iname.precise_tricks]]),
+                                   [iname.bubble_long, iname.precise_tricks]]),
     },
     rname.frog_bird_after_yoyo_1: {
         rname.frog_bird_after_yoyo_2:  # pain in the ass, but you can get up with downwards bubbles
