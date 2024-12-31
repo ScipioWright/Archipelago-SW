@@ -21,9 +21,9 @@ Note: You will need to use Archipelago version 0.5.0.
 - Upload your generated game (in you `Archipelago/output` folder) at the [Archipelago Uploads page](https://archipelago.gg/uploads), or host locally.
 
 ## Play the Randomized Game
-1. Launch ANIMAL WELL, and start a new game on an empty save file (or continue from your previous save file that you used for this Archipelago session).
-2. Open up the Archipelago Launcher, and click on ANIMAL WELL Client. Do not open up the ANIMAL WELL Client before doing the previous step.
-3. Connect to the server and start playing.
+1. Launch ANIMAL WELL, and leave it on the title screen.
+2. Open up the Archipelago Launcher, and click on ANIMAL WELL Client.
+3. Connect the client to the server. You should see it show the version number on the title screen if done correctly.
 
 ## Notes
 - There are some options missing. This is known, and they will be made available as we get them to function.
