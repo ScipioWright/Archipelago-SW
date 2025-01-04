@@ -147,6 +147,7 @@ item_name_groups: Dict[str, Set[str]] = {
 extra_groups: Dict[str, Set[str]] = {
     "Flute": {"Animal Flute"},
     "Wand": {"B. Wand"},
+    "Bubble Wand": {"B. Wand"},
     "Ball": {"B. Ball"},
 }
 
