@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set, Optional
 from BaseClasses import ItemClassification as IC, Item
 
 from ...constants import get_game_base_id
+from ...options import PorgyRadar
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -60,6 +61,8 @@ def create_item(item_name: str, world: "UFO50World", item_class: IC = None) -> I
 def create_items(world: "UFO50World") -> List[Item]:
     items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in item_table.items()}
     porgy_items: List[Item] = []
+    if world.options.porgy_radar == PorgyRadar.option_always_on:
+        items_to_create["Radar System Module"] = 0
     for item_name, quantity in items_to_create.items():
         for _ in range(quantity):
             porgy_items.append(create_item(item_name, world))

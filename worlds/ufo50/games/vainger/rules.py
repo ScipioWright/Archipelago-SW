@@ -129,7 +129,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                       rule=lambda state: state.has(security_clearance, player, 2)
                       or state.has(heat_mod, player))  # hot-shot for the shortcut R5C6 -> R5C5
     verder7c9.connect(verdeswarea,
-                      rule=lambda state: state.has(security_clearance, player, 1))
+                      rule=lambda state: state.has(security_clearance, player, 2))
     verdeswarea.connect(verder9c9,
                         rule=lambda state: state.has(security_clearance, player, 2)
                         and state.has("Vainger - VerdeR9C9 - Sura Defeated", player))  # genepod only exists after boss

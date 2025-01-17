@@ -25,7 +25,7 @@ item_table: Dict[str, ItemInfo] = {
     "Key": ItemInfo(8, IC.progression, 1),
     "Bat Orb": ItemInfo(9, IC.progression, 1),
     "Trash": ItemInfo(10, IC.filler, 1),
-    "Egg": ItemInfo(11, IC.filler, 0),
+    "Egg": ItemInfo(11, IC.progression, 2),
     "A Broken Wall": ItemInfo(12, IC.progression, 1),
 }
 
