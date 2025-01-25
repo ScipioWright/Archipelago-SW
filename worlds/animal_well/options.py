@@ -8,7 +8,6 @@ class Goal(Choice):
     """
     What you need to do to beat the game.
     Fireworks requires you to get the 4 flames and defeat the Manticore. The House Key is placed in its vanilla location.
-    Bunny Land requires you to find the 65th Egg, bring it to the incubator, and leave the Well.
     Egg Hunt requires you to collect the amount of eggs you need to open the 4th Egg Door, then open the chest inside.
     """
     internal_name = "goal"
