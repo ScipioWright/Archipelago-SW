@@ -24,11 +24,11 @@ from Utils import open_filename
 from . import UFO50World
 
 
-
 class UpdateResult(Enum):
     SUCCESS = 1
     API_LIMIT = 2
     VERSION_MISMATCH = 3
+    ERROR = 4
 
 
 class UrlResponse:
@@ -131,16 +131,17 @@ def send_request(request_url: str) -> UrlResponse:
     return UrlResponse(response.status_code, data)
 
 
-def update(target_asset: str, url: str) -> UpdateResult:
+def download_patch() -> UpdateResult:
     """
-    Returns UpdateResult.SUCCESS if patching succedded
-        (or it was already on the latest version, or the user refused the update)
+    Returns UpdateResult.UP_TO_DATE if the newest patch is the same as the one that is applied
+    Returns UpdateResult.VERSION_MISMATCH if the downloaded patch is for a different version of the game
     Returns UpdateResult.API_LIMIT if rate limit was exceeded
-    Returns UpdateResult.VERSION_MISMATCH if updating otherwise failed
+    Returns UpdateResult.ERROR if downloading otherwise failed
     """
+    target_asset = "ufo_50_archipelago.zip"
     try:
         logging.info(f"Checking for {target_asset} updates.")
-        response = send_request(url)
+        response = send_request("https://api.github.com/repos/UFO-50-Archipelago/Patch/releases")
         if response.response_code == 403:  # rate limit exceeded
             return UpdateResult.API_LIMIT
         assets = response.data[0]["assets"]
@@ -154,24 +155,19 @@ def update(target_asset: str, url: str) -> UpdateResult:
     except (KeyError, IndexError, TypeError, RuntimeError):
         update_error = f"Failed to fetch latest {target_asset}."
         messagebox.showerror("Failure", update_error)
-        raise RuntimeError(update_error)
+        return UpdateResult.ERROR
     try:
-        update_available = get_timestamp(newest_date) > get_timestamp(get_date(target_asset))
-        if update_available and messagebox.askyesnocancel(f"New {target_asset}",
-                                                          "Would you like to install the new version now?"):
-            if target_asset == "ufo_50_archipelago.zip":
-                # unzip and patch
-                with urllib.request.urlopen(release_url) as download:
-                    with zipfile.ZipFile(BytesIO(download.read())) as zf:
-                        zf.extractall()
-                if not verify_game_version():
-                    return UpdateResult.VERSION_MISMATCH
-                patch_game()
-                set_date(target_asset, newest_date)
+        # unzip
+        with urllib.request.urlopen(release_url) as download:
+            with zipfile.ZipFile(BytesIO(download.read())) as zf:
+                zf.extractall()
+        if not verify_game_version():
+            return UpdateResult.VERSION_MISMATCH
+        set_date(target_asset, newest_date)
     except (ValueError, RuntimeError, urllib.error.HTTPError):
-        update_error = f"Failed to apply update."
+        update_error = f"Failed to download update."
         messagebox.showerror("Failure", update_error)
-        raise RuntimeError(update_error)
+        return UpdateResult.ERROR
     return UpdateResult.SUCCESS
 
 
@@ -199,6 +195,7 @@ def patch_game() -> None:
         with open("data.win", "wb") as data:
             data.write(patched_data)
         logging.info("Done!")
+    set_date("ufo50.exe", get_date("ufo_50_archipelago.zip"))
 
 
 def is_install_valid() -> bool:
@@ -206,17 +203,16 @@ def is_install_valid() -> bool:
     Checks the hash of files listed in the verify file, if it exists
     Returns true if it can fetch and verify the targets
     """
-    if os.path.isfile("verify.json"):
-        try:
-            with open("verify.json", "r") as verify:
-                targets = json.load(verify)["files"]
-            for file_name, expected_hash in targets.items():
-                with open(file_name, "rb") as target:
-                    current_hash = hashlib.md5(target.read()).hexdigest()
-                if not secrets.compare_digest(current_hash, expected_hash):
-                    return False
-        except (FileNotFoundError, KeyError, json.decoder.JSONDecodeError):
-            return False
+    try:
+        with open("verify.json", "r") as verify:
+            targets = json.load(verify)["files"]
+        for file_name, expected_hash in targets.items():
+            with open(file_name, "rb") as target:
+                current_hash = hashlib.md5(target.read()).hexdigest()
+            if not secrets.compare_digest(current_hash, expected_hash):
+                return False
+    except (FileNotFoundError, KeyError, json.decoder.JSONDecodeError):
+        return False
     return True
 
 
@@ -227,7 +223,7 @@ def install() -> bool:
     source_path = find_steam_app_path("1147860", "UFO 50")
     source_file = open_filename(
         f"Locate UFO 50 executable {get_version()}",
-        (('ufo50.exe', ('.exe',)),),
+        (("ufo50.exe", (".exe",)),),
         os.path.join(source_path, "ufo50.exe") if source_path else "")
     source_path = os.path.dirname(source_file)
     if not source_path:
@@ -295,28 +291,48 @@ def launch(*args: str) -> Any:
     os.chdir(UFO50World.settings.install_folder)
 
     # check that the mod installation is valid
+    is_reinstall = False
     if not is_install_valid():
+        # if the user wants to reinstall, we simply remove the existing versions file, so it looks like a blank slate
         if messagebox.askyesnocancel(f"Mod installation missing or corrupted!",
                                      "Would you like to reinstall now?"):
-            if not install():
-                messagebox.showerror("Could not locate executable",
-                                     f"The provided file did not match UFO 50 {get_version()}")
-                return
+            is_reinstall = True
+            if os.path.isfile("versions.json"):
+                os.remove("versions.json")
         # if there is no mod installation, and we are not installing it, then there isn't much to do
         else:
             return
 
-    # check for updates
-    update_result = update("ufo_50_archipelago.zip", "https://api.github.com/repos/UFO-50-Archipelago/Patch/releases")
-    if update_result == UpdateResult.VERSION_MISMATCH:
-        messagebox.showerror("Could not apply patch",
-                             "The new patch targets a different version of UFO 50\n"
-                             "You will need to launch the client again to install it")
-        return
-    if update_result == UpdateResult.API_LIMIT:
+    # check if there's a new version
+    version_result = download_patch()
+    if version_result == UpdateResult.ERROR:
+        messagebox.showinfo("Unexpected error",
+                            "Could not check for patch updates.\n\n"
+                            "This will not prevent the game from being played if it was already playable")
+    elif version_result == UpdateResult.API_LIMIT:
         messagebox.showinfo("Rate limit exceeded",
                             "GitHub REST API limit exceeded, could not check for updates.\n\n"
                             "This will not prevent the game from being played if it was already playable")
+    elif version_result == UpdateResult.VERSION_MISMATCH:
+        # ask if the player wants to update, unless it's a reinstall, in which case we update right away
+        if (
+                is_reinstall or
+                messagebox.askyesnocancel(f"Update found!",
+                                          "A new version of the mod has been found.\n"
+                                          "Would you like to update now?")
+        ):
+            # find the right ufo 50 version and patch it
+            while not is_install_valid():
+                if install():
+                    patch_game()
+                else:
+                    messagebox.showerror("Could not locate executable!",
+                                         f"The provided file did not match UFO 50 {get_version()}\n"
+                                         f"Please, select ufo50.exe matching version {get_version()}.")
+                    # if the user gives up, stop trying to update
+                    if not messagebox.askyesnocancel(f"Could not locate executable!",
+                                                     "Would you like to try again?"):
+                        return
 
     # and try to launch the game
     if UFO50World.settings.launch_game:
