@@ -10,8 +10,6 @@
 ## Configure Archipelago Options
 
 ### Configure Your YAML File and Generate a Randomized Game
-Note: You will need to use Archipelago version 0.5.0.
-
 - Place the `animal_well.apworld` in your `Archipelago/custom_worlds` folder.
 - Open up the Archipelago Launcher.
 - Click on Generate Template Options.
