@@ -1,7 +1,7 @@
 # ANIMAL WELL
 
 ## Where is the options page?
-Generate a template yaml by placing the apworld in your `lib/worlds` folder, then opening the Archipelago Launcher and clicking on Generate Template Options.
+Generate a template yaml by placing the apworld in your `custom_worlds` folder, then opening the Archipelago Launcher and clicking on Generate Template Options.
 When the game is on the website,
 The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
