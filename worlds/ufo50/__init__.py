@@ -75,6 +75,7 @@ class UFO50Web(WebWorld):
         ["LeonarthCG"]
     )
     tutorials = [setup_en]
+    option_groups = options.ufo50_option_groups
 
 
 # games with an actual implementation
