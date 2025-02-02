@@ -65,7 +65,7 @@ class UFO50Settings(Group):
 
 class UFO50Web(WebWorld):
     theme = "partyTime"
-    bug_report_page = "https://github.com/UFO-50-Archipelago/ufo-50-archipelago/issues"
+    bug_report_page = "https://github.com/UFO-50-Archipelago/Archipelago/issues"
     setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up UFO 50 for Archipelago multiworld.",
