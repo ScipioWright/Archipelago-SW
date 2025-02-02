@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set
 from BaseClasses import ItemClassification as IC, Item
 
 from ...constants import get_game_base_id
+from .locations import sphere_1_locs
 
 if TYPE_CHECKING:
     from ... import UFO50World
@@ -144,13 +145,19 @@ def create_item(item_name: str, world: "UFO50World", item_class: IC = None) -> I
 
 
 def create_items(world: "UFO50World") -> List[Item]:
-    items_to_create: Dict[str, int] = {
-        item_name: data.quantity for item_name, data in item_table.items()}
+    items_to_create: Dict[str, int] = {item_name: data.quantity for item_name, data in item_table.items()}
     night_manor_items: List[Item] = []
+    if world.options.nm_early_pin:
+        items_to_create["Hairpin"] = 0
+        hairpin = create_item("Hairpin", world)
+        loc = world.get_location("Night Manor - " + world.random.choice(sphere_1_locs))
+        loc.place_locked_item(hairpin)
+
     for item_name, quantity in items_to_create.items():
         for _ in range(quantity):
             night_manor_items.append(create_item(item_name, world))
     return night_manor_items
+
 
 def get_filler_item_name(world: "UFO50World") -> str:
     return "Night Manor - Yellow Note"

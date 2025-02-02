@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, NamedTuple, Set
+from typing import TYPE_CHECKING, Dict, NamedTuple, Set, List
 from BaseClasses import Region, Location, Item, ItemClassification
 from worlds.generic.Rules import add_rule
 
@@ -122,6 +122,9 @@ location_table: Dict[str, LocationInfo] = {
     "Gold": LocationInfo(998, "First Floor & Exterior"),
     "Cherry": LocationInfo(999, "Basement")
 }
+
+
+sphere_1_locs: List[str] = ["Starting Room - Spoon", "Starting Room - Bowl"]
 
 
 # this is for filling out location_name_to_id, it should be static regardless of yaml options

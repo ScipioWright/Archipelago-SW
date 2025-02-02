@@ -15,6 +15,7 @@ blood_sword = "Barbuta - Blood Sword"
 broken_wall = "Barbuta - A Broken Wall"
 wand = "Barbuta - Wand"
 bat_orb = "Barbuta - Bat Orb"
+egg = "Barbuta - Egg"
 
 
 # count the value of the money items
@@ -91,4 +92,5 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     if "Barbuta" in world.options.cherry_allowed_games:
         set_rule(world.get_location("Barbuta - Cherry"),
                  rule=lambda state: state.has(bat_orb, player)
+                 and state.has(egg, player, 2)
                  and (state.has(blood_sword, player) or has_wand(state)))
