@@ -8,7 +8,7 @@ class AlwaysOnGames(OptionSet):
     """
     Choose which games you would like to enable.
 
-    The following games have full implementations: Barbuta, Vainger, Night Manor, Porgy
+    The following games have full implementations: Barbuta, Vainger, Night Manor, and Porgy.
     There is a host.yaml setting that you must enable to include unimplemented games.
     Unimplemented games will only have Garden, Gold, and/or Cherry checks.
     """
@@ -16,7 +16,7 @@ class AlwaysOnGames(OptionSet):
     display_name = "Always On Games"
     valid_keys = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
     # default is here so the unit tests don't fail
-    default = ["Barbuta", "Vainger", "Night Manor", "Porgy"]
+    default = ["Barbuta"]
 
 
 class RandomChoiceGames(OptionSet):
