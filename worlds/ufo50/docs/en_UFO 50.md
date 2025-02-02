@@ -1,12 +1,18 @@
 # UFO 50
 
+## What does randomization do in this game?
+On the whole, the mod limits which games in the UFO 50 collection the player can play, making it so for each specific game an item must be found to unlock it.
+Unlocking the Garden Gift and getting Gold and Cherry become locations the player can check.
+
+Other than this, what the mod does depends on the game being played. You can expect that, if a game has items and upgrades, then those are things you can receive from other players. At the same time, they will become locations to check on your end.
+
 ## Where is the options page?
 
 The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 If this is not on a web page, the above link will not work. Instead, you will need to place the UFO 50 APWorld in your `custom_worlds` folder, open the Archipelago Launcher, and click on Generate Template Options.
 This will bring you to your `templates` folder, where you can find a UFO 50 template yaml.
 
-## Which games have been implemented?
+## Which games have been implemented so far?
 Barbuta, Night Manor, Porgy, and Vainger.
 
 ## Can I pick and choose which games I play?
