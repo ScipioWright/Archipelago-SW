@@ -44,7 +44,7 @@ class RandomChoiceGameCount(Range):
 class StartingGameAmount(Range):
     """
     Choose how many games to have unlocked at the start.
-    At least on of the starting games will always be one of the implemented games.
+    At least one of the starting games will always be one of the implemented games.
     If this value is higher than the number of games you selected, you will start with all of them unlocked.
     If you put a game in your start inventory from pool, it will count towards the amount from this option.
     """
