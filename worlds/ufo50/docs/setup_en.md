@@ -7,8 +7,8 @@
 ## Installation
 
 ### Automated Installation
-Place the UFO 50 APWorld in your `custom_worlds` folder.
-Open the UFO 50 Client and follow the prompts shown.
+1. Place the UFO 50 APWorld in your `custom_worlds` folder.
+2. Open the UFO 50 Client and follow the prompts shown.
 
 ### Manual Installation
 
@@ -19,17 +19,18 @@ Steps:
 1. Copy all of your UFO 50 files to a safe location.
 2. Extract all files from `ufo_50_archipelago.zip` into the same directory as the files extracted in the previous step.
    * This should include, at least, `ufo_50_basepatch.bsdiff4` and `gm-apclientpp.dll`.
-3. If you don't have `original_data.win`, copy `data.win` and rename its copy to `original_data.win`.
+3. Delete `steam_api64.dll` and `Steamworks_x64.dll`.
+4. If you don't have `original_data.win`, copy `data.win` and rename its copy to `original_data.win`.
    * By keeping an unmodified copy of `data.win`, you will have an easier time updating in the future.
-4. Apply the `ufo_50_basepatch.bsdiff4` patch using your patching software.
-5. To launch the game, run `ufo50.exe`.
+5. Apply the `ufo_50_basepatch.bsdiff4` patch using your patching software.
+6. To launch the game, run `ufo50.exe`.
 
 ### Downpatching
 
 As UFO 50 is a game that is still receiving updates, periods of time between new official patches and the mod being updated will exist.
 Therefore, the user may end up having to either wait for the mod to be updated or use an older version of the game in order to play.  You can check which version of UFO 50 the mod targets [in the patch releases page](https://github.com/UFO-50-Archipelago/Patch/releases).
 
-You can download a version of UFO 50 published on a specific date by going to the [UFO 50 SteamDB page](download_depot 1147860 1147861 3089918629065615857) and pressing on the "copy to clipboard" button of the release you want. Follow the instructions from there.
+You can download a version of UFO 50 published on a specific date by going to the UFO 50 SteamDB page (download_depot 1147860 1147861 3089918629065615857) and pressing on the "copy to clipboard" button of the release you want. Follow the instructions from there.
 
 ## Joining a MultiWorld Game
 
