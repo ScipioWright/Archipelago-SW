@@ -52,7 +52,7 @@ class UFO50Settings(Group):
         """
         Allow the player to choose unimplemented games.
         These games will only send checks when the player does the Garden, Gold, or Cherry checks.
-        This is not recommended to be enabled.
+        This can cause issues because the time per check is much higher than normal, and some games are very long.
         """
 
     exe_path: GamePath = GamePath("ufo50.exe")
@@ -88,6 +88,8 @@ ufo50_games: Dict = {
     "Night Manor": night_manor,
 }
 
+allowable_unimplemented: set[str] = {"Ninpek", "Magic Garden", "Velgress", "Waldorf's Journey"}
+
 
 # for the purpose of generically making the gift, gold, and cherry locations
 unimplemented_ufo50_games: List[str] = [name for name in game_ids.keys() if name not in ufo50_games.keys()]
@@ -115,6 +117,7 @@ class UFO50World(World):
 
     item_name_to_id = {k: v for game in ufo50_games.values() for k, v in game.items.get_items().items()}
     item_name_to_id.update(cartridge_items)
+    item_name_to_id.update({"Intentional Nothing Filler Item": base_id - 100})
     location_name_to_id = temp_ufo50_location_name_to_id
 
     item_name_groups = {k: v for game in ufo50_games.values() for k, v in game.items.get_item_groups().items()}
@@ -129,6 +132,7 @@ class UFO50World(World):
     # for universal tracker support
     using_ut: bool
     ut_passthrough: Dict[str, Any]
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     included_games: List[str]  # list of games that are going to be played by this player
     included_unimplemented_games: List[str]  # list of included unimplemented games being played by this player
@@ -182,15 +186,24 @@ class UFO50World(World):
                 self.included_unimplemented_games.append(game_name)
 
         if self.included_unimplemented_games and not self.settings.allow_unimplemented:
-            raise OptionError(f"UFO 50: {self.player_name} has selected an unimplemented game, but the host "
-                              f"does not have them enabled. Please enable the host.yaml setting or remove the "
-                              f"unimplemented games from the selected games.\n"
-                              f"Unimplemented games: {self.included_unimplemented_games}")
+            for game_name in self.included_unimplemented_games:
+                if game_name in allowable_unimplemented:
+                    break
+            else:
+                raise OptionError(f"UFO 50: {self.player_name} has selected an unimplemented game, but the host "
+                                  f"does not have them enabled. Please enable the host.yaml setting or remove the "
+                                  f"unimplemented games from the selected games.\n"
+                                  f"Unimplemented games: {self.included_unimplemented_games}")
 
-        if not self.included_games:
-            raise OptionError(f"UFO 50: {self.player_name} has not selected any games that have implementations. "
-                              f"Please select at least one game that has an actual implementation. "
-                              f"The following games have actual implementations: {[name for name in ufo50_games]}")
+        if not self.included_games and not self.settings.allow_unimplemented:
+            for game_name in self.included_unimplemented_games:
+                if game_name in allowable_unimplemented:
+                    break
+            else:
+                raise OptionError(f"UFO 50: {self.player_name} has not selected any games that have implementations. "
+                                  f"Please select at least one game that has an actual implementation, or have the "
+                                  f"host enable the host.yaml setting to allow them.\n"
+                                  f"The following games have actual implementations: {[name for name in ufo50_games]}")
 
         if self.options.starting_game_amount >= len(included_game_names):
             self.starting_games = included_game_names
@@ -201,9 +214,10 @@ class UFO50World(World):
                 if game_name in ufo50_games.keys():
                     break
             else:
-                # remove a game, add an implemented game
-                self.starting_games.pop()
-                self.starting_games.append(self.random.choice(self.included_games))
+                # remove a game, add an implemented game, unless none are implemented
+                if self.included_games:
+                    self.starting_games.pop()
+                    self.starting_games.append(self.random.choice(self.included_games))
 
         potential_goal_games = [game_name for game_name in included_game_names if game_name in self.options.goal_games]
         if self.options.goal_game_amount >= len(potential_goal_games):
@@ -277,6 +291,8 @@ class UFO50World(World):
         self.multiworld.itempool += created_items
 
     def get_filler_item_name(self) -> str:
+        if not self.included_games:
+            return "Intentional Nothing Filler Item"
         return ufo50_games[self.random.choice(self.included_games)].items.get_filler_item_name(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:

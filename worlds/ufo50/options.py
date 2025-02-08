@@ -11,6 +11,8 @@ class AlwaysOnGames(OptionSet):
     The following games have full implementations: Barbuta, Vainger, Night Manor, and Porgy.
     There is a host.yaml setting that you must enable to include unimplemented games.
     Unimplemented games will only have Garden, Gold, and/or Cherry checks.
+    The host.yaml setting is not required for the following games due to their short length:
+    Ninpek, Magic Garden, Velgress, and Waldorf's Journey
     """
     internal_name = "always_on_games"
     display_name = "Always On Games"
@@ -32,7 +34,7 @@ class RandomChoiceGames(OptionSet):
 class RandomChoiceGameCount(Range):
     """
     Choose how many Random Choice Games will be included alongside your Always On Games.
-    If you do not have enough Random Choice Games selected, it will enable all your selected games.
+    If your Random Choice Game Count is larger than the number of games in your Random Choice Games list, all of them will be enabled.
     """
     internal_name = "random_choice_game_count"
     display_name = "Random Choice Game Count"
@@ -44,7 +46,7 @@ class RandomChoiceGameCount(Range):
 class StartingGameAmount(Range):
     """
     Choose how many games to have unlocked at the start.
-    At least one of the starting games will always be one of the implemented games.
+    At least one of the starting games will always be one of the implemented games, to avoid issues with generation and very early BK.
     If this value is higher than the number of games you selected, you will start with all of them unlocked.
     If you put a game in your start inventory from pool, it will count towards the amount from this option.
     """
