@@ -57,10 +57,10 @@ item_table: Dict[str, ItemInfo] = {
     "Maze Directions": ItemInfo(66, IC.progression),
     "Crossbow Bolt": ItemInfo(67, IC.progression),
 
-    "Red Gemstone": ItemInfo(23, IC.progression),
-    "Green Gemstone": ItemInfo(43, IC.progression),
-    "Yellow Gemstone": ItemInfo(53, IC.progression),
-    "White Gemstone": ItemInfo(64, IC.progression),
+    "Ruby": ItemInfo(23, IC.progression),
+    "Emerald": ItemInfo(43, IC.progression),
+    "Topaz": ItemInfo(53, IC.progression),
+    "Diamond": ItemInfo(64, IC.progression),
 
     "Copper Key": ItemInfo(28, IC.progression),
     "Bronze Key": ItemInfo(34, IC.progression),

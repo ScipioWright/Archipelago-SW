@@ -107,16 +107,16 @@ location_table: Dict[str, LocationInfo] = {
     "Attic - Crossbow": LocationInfo(58, "Second Floor"),  # in chest to the right after unlocking with bronze key
     
     "Play Room - Doll": LocationInfo(59, "Second Floor"),  # in bottom right corner of room
-    "Play Room - Aluminum Key": LocationInfo(60, "Second Floor"),  # get by cutting doll with knife
+    "Manor - Aluminum Key": LocationInfo(60, "First Floor & Exterior"),  # get by cutting doll with knife
     "Play Room - Journal Entry 14": LocationInfo(61, "Second Floor"),  # in bottom left corner
     "Play Room - Maze Directions": LocationInfo(66, "Second Floor"),  # use red glasses on scribbles on wall
 
     # open gate with gems, use directions on maze, get bolt from statue
     "Maze - Crossbow Bolt": LocationInfo(67, "Maze"),
     # combine crossbow and bolt, lure killer or wait, shoot him and get the key
-    "Manor - Iron Key": LocationInfo(68, "Maze"),
+    "Manor - Iron Key": LocationInfo(68, "First Floor & Exterior"),
 
-    "Basement - Journal Entry 17": LocationInfo(69, "Maze"),  # on floor
+    "Basement - Journal Entry 17": LocationInfo(69, "Basement"),  # on floor
 
     "Garden": LocationInfo(997, "First Floor & Exterior"),
     "Gold": LocationInfo(998, "First Floor & Exterior"),

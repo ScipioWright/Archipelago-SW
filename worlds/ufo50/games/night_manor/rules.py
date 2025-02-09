@@ -42,10 +42,10 @@ hydrogen_peroxide = "Night Manor - Hydrogen Peroxide"
 cigar_butt = "Night Manor - Cigar Butt"
 aluminum_key = "Night Manor - Aluminum Key"
 glasses = "Night Manor - Glasses"
-red_gemstone = "Night Manor - Red Gemstone"
-green_gemstone = "Night Manor - Green Gemstone"
-yellow_gemstone = "Night Manor - Yellow Gemstone"
-white_gemstone = "Night Manor - White Gemstone"
+red_gemstone = "Night Manor - Ruby"
+green_gemstone = "Night Manor - Emerald"
+yellow_gemstone = "Night Manor - Topaz"
+white_gemstone = "Night Manor - Diamond"
 maze_directions = "Night Manor - Maze Directions"
 crossbow = "Night Manor - Crossbow"
 crossbow_bolt = "Night Manor - Crossbow Bolt"
@@ -54,6 +54,8 @@ gear = "Night Manor - Gear"
 piano_wire = "Night Manor - Piano Wire"
 iron_key = "Night Manor - Iron Key"
 fungicide = "Night Manor - Fungicide"
+safe_combo = "Night Manor - Safe Combination"
+password = "Night Manor - Computer Password"
 
 
 def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
@@ -66,7 +68,9 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     regions["First Floor & Exterior"].connect(regions["Shed"],
                                               rule=lambda state: state.has(copper_key, player))
     regions["First Floor & Exterior"].connect(regions["Maze"],
-                                              rule=lambda state: state.has_all((red_gemstone, green_gemstone, yellow_gemstone, white_gemstone), player))
+                                              rule=lambda state: state.has_all((red_gemstone, green_gemstone,
+                                                                                yellow_gemstone, white_gemstone),
+                                                                               player))
     regions["First Floor & Exterior"].connect(regions["Basement"],
                                               rule=lambda state: state.has(iron_key, player))
     regions["Second Floor"].connect(regions["Master Bedroom"],
@@ -116,7 +120,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(sheet_music, player))
     set_rule(world.get_location("Night Manor - Attic - Crossbow"),
              rule=lambda state: state.has(bronze_key, player))
-    set_rule(world.get_location("Night Manor - Play Room - Aluminum Key"),
+    set_rule(world.get_location("Night Manor - Manor - Aluminum Key"),
              rule=lambda state: state.has_all((kitchen_knife, doll), player))
     set_rule(world.get_location("Night Manor - Kids Bedroom - Glasses"),
              rule=lambda state: state.has(aluminum_key, player))
@@ -128,10 +132,15 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(maze_directions, player))
     set_rule(world.get_location("Night Manor - Manor - Iron Key"),
              rule=lambda state: state.has_all((crossbow, crossbow_bolt), player))
+    set_rule(world.get_location("Night Manor - Master Bedroom - White Gemstone"),
+             rule=lambda state: state.has(safe_combo, player))
+    set_rule(world.get_location("Night Manor - Office - Fungicide Recipe"),
+             rule=lambda state: state.has(password, player))
 
     set_rule(world.get_location("Night Manor - Gold"),
              rule=lambda state: state.has_all((wrench, motor, steel_key), player))
 
     if "Night Manor" in world.options.cherry_allowed_games:
         set_rule(world.get_location("Night Manor - Cherry"),
-                 rule=lambda state: state.has_all((screwdriver, gear, oil_can, piano_wire, bowl, tea_tree_oil, hydrogen_peroxide, cigar_butt), player))
+                 rule=lambda state: state.has_all((screwdriver, gear, oil_can, piano_wire, bowl, tea_tree_oil,
+                                                   hydrogen_peroxide, cigar_butt), player))
