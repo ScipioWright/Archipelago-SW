@@ -11,7 +11,7 @@ from .items import item_name_to_id, item_table, item_name_groups, filler_items, 
 from .locations import location_name_groups, location_name_to_id
 from .region_data import AWData, traversal_requirements
 from .region_scripts import create_regions_and_set_rules
-from .options import AnimalWellOptions, aw_option_presets, Goal, FinalEggLocation, aw_option_groups
+from .options import AnimalWellOptions, aw_option_presets, Goal, FinalEggLocation, aw_option_groups, BunniesAsChecks
 from .names import ItemNames, LocationNames, RegionNames
 # todo: remove animal_well_map.pdn
 
@@ -141,8 +141,8 @@ class AnimalWellWorld(World):
             items_to_create[ItemNames.match.value] = 0
             items_to_create[ItemNames.matchbox.value] = 1
 
-        # UV Lamp isn't needed for anything if bunnies as checks is off
-        if not self.options.bunnies_as_checks:
+        # UV Lamp isn't needed for anything if bunnies as checks is off or tedious
+        if self.options.option_all_bunnies != BunniesAsChecks.option_all_bunnies:
             items_to_create[ItemNames.uv.value] = 0
             aw_items.append(self.create_item_alt(ItemNames.uv.value, ItemClassification.useful))
 
