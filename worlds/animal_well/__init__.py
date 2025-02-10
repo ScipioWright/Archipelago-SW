@@ -142,7 +142,7 @@ class AnimalWellWorld(World):
             items_to_create[ItemNames.matchbox.value] = 1
 
         # UV Lamp isn't needed for anything if bunnies as checks is off or tedious
-        if self.options.option_all_bunnies != BunniesAsChecks.option_all_bunnies:
+        if self.options.bunnies_as_checks != BunniesAsChecks.option_all_bunnies:
             items_to_create[ItemNames.uv.value] = 0
             aw_items.append(self.create_item_alt(ItemNames.uv.value, ItemClassification.useful))
 
