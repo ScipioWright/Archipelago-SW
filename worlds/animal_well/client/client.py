@@ -91,6 +91,20 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                 logger.info(f"Enabling fullbright...")
                 self.ctx.bean_patcher.enable_fullbright()
 
+    def _cmd_goodboy(self, val=""):
+        """
+        Disables ghost dog contact damage and the looping sound that plays while it's aggro
+        """
+        if isinstance(self.ctx, AnimalWellContext):
+            if val == "":
+                self.ctx.bean_patcher.toggle_goodboy()
+            elif val == "off":
+                logger.info(f"Disabling goodboy...")
+                self.ctx.bean_patcher.disable_goodboy()
+            else:
+                logger.info(f"Enabling goodboy...")
+                self.ctx.bean_patcher.enable_goodboy()
+
     def _cmd_deathlink(self, val=""):
         """
         Toggles deathlink.
