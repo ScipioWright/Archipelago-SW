@@ -129,7 +129,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
                       rule=lambda state: state.has(security_clearance, player, 2)
                       or state.has(heat_mod, player))  # hot-shot for the shortcut R5C6 -> R5C5
     verder7c9.connect(verdeswarea,
-                      rule=lambda state: state.has(security_clearance, player, 2))
+                      rule=lambda state: state.has(security_clearance, player, 1))
     verdeswarea.connect(verder9c9,
                         rule=lambda state: state.has(security_clearance, player, 2)
                         and state.has("Vainger - VerdeR9C9 - Sura Defeated", player))  # genepod only exists after boss
@@ -232,7 +232,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     sr("VerdeR5C7 - Shield Upgrade", rule=lambda state: state.has(pulse_mod, player))  # thunder
     # VerdeSW Area - note that depending on entrance, the player *may* be required to have hot-shot equipped here
     # I found this surprisingly difficult casually, I'm giving it boss logic for now
-    sr("VerdeR5C2 - Force Mod", rule=lambda state: boss_logic(2, state, world))
+    sr("VerdeR5C2 - Force Mod", rule=lambda state: boss_logic(2, state, world) and state.has(security_clearance, player, 2))
     # sr("VerdeR5C3 - Shield Upgrade")
     # sr("VerdeR5C5 - Security Clearance")
     sr("VerdeR8C6 - Shield Upgrade", rule=lambda state: state.has(pulse_mod, player))  # thunder
