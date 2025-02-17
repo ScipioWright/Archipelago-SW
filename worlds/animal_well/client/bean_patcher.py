@@ -372,7 +372,8 @@ class BeanPatcher:
         self.ghost_disable_moaning_patch: Optional[Patch] = None
         self.ghost_disable_contact_damage_patch: Optional[Patch] = None
         self.no_dog_patch: Optional[Patch] = None
-
+        self.immediately_spawn_dog_patch: Optional[Patch] = None
+        self.prevent_despawning_dog_patch: Optional[Patch] = None
         self.cmd_prompt = False
         self.cmd = ""
         self.cmd_ready = False
@@ -1345,7 +1346,7 @@ class BeanPatcher:
         # spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0") + 3
         # self.no_ghost_patch = Patch("no_ghost", spawn_ghost_dog_address, self.process).add_bytes(b"\x00")
 
-        spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0")
+        spawn_ghost_dog_address = self.find_pattern("c7 45 0c 00 00 00 00 c7 45 00 01 00 00 00") + 7
         self.no_dog_patch = Patch("no_dog", spawn_ghost_dog_address, self.process).nop(7)
 
         if self.log_debug_info:
