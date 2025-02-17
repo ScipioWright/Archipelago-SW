@@ -105,6 +105,12 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                 logger.info(f"Enabling goodboy...")
                 self.ctx.bean_patcher.enable_goodboy()
 
+    def _cmd_gooddog(self, val=""):
+        """
+        Alias for /goodboy
+        """
+        self._cmd_goodboy(val)
+
     def _cmd_nodog(self, val=""):
         """
         Disables ghost dog entirely
@@ -119,6 +125,12 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                 logger.info(f"Enabling no_dog...")
                 self.ctx.bean_patcher.enable_no_dog()
 
+    def _cmd_noghost(self, val=""):
+        """
+        Alias for /nodog
+        """
+        self._cmd_nodog(val)
+
     def _cmd_alwaysdog(self, val=""):
         """
         Ghost dog hunts you eternally
@@ -132,6 +144,12 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
             else:
                 logger.info(f"Enabling always_dog...")
                 self.ctx.bean_patcher.enable_always_dog()
+
+    def _cmd_alwaysghost(self, val=""):
+        """
+        Alias for /alwaysdog
+        """
+        self._cmd_alwaysdog(val)
 
     def _cmd_deathlink(self, val=""):
         """
