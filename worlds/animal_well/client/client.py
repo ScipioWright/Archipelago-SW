@@ -105,6 +105,20 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                 logger.info(f"Enabling goodboy...")
                 self.ctx.bean_patcher.enable_goodboy()
 
+    def _cmd_noghost(self, val=""):
+        """
+        Disables ghost dog entirely
+        """
+        if isinstance(self.ctx, AnimalWellContext):
+            if val == "":
+                self.ctx.bean_patcher.toggle_no_ghost()
+            elif val == "off":
+                logger.info(f"Disabling no_ghost...")
+                self.ctx.bean_patcher.disable_no_ghost()
+            else:
+                logger.info(f"Enabling no_ghost...")
+                self.ctx.bean_patcher.enable_no_ghost()
+
     def _cmd_deathlink(self, val=""):
         """
         Toggles deathlink.

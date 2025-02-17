@@ -371,6 +371,7 @@ class BeanPatcher:
 
         self.ghost_disable_moaning_patch: Optional[Patch] = None
         self.ghost_disable_contact_damage_patch: Optional[Patch] = None
+        self.no_ghost_patch: Optional[Patch] = None
 
         self.cmd_prompt = False
         self.cmd = ""
@@ -635,6 +636,8 @@ class BeanPatcher:
         self.generate_fullbright_patch()
 
         self.generate_good_boy_patches()
+
+        self.generate_no_ghost_patch()
 
         self.apply_item_collection_patches()
 
@@ -1314,26 +1317,27 @@ class BeanPatcher:
     def generate_good_boy_patches(self):
         ghost_start_moaning_address = self.find_pattern("c7 45 0c 00 00 00 00 c7 45 00 01 00 00 00 4c 8b 15 ?? ?? ?? ?? 45 8b 82 ?? ?? ?? ?? 31 c9 45 85 c0") - 5
 
-        self.ghost_disable_moaning_patch = (Patch("ghost_disable_moaning_patch", ghost_start_moaning_address, self.process)
+        self.ghost_disable_moaning_patch = (Patch("ghost_disable_moaning", ghost_start_moaning_address, self.process)
                                       .nop(5))
 
         if self.log_debug_info:
             self.log_info(f"Generating patch to disable ghost dog moaning...\n{self.ghost_disable_moaning_patch}")
 
-
         ghost_contact_damage_address = self.find_pattern("f3 44 0f 58 45 10 f3 44 0f 11 45 10 f3 0f 58 7d 14 f3 0f 11 7d 14 40 b7 01", True) - 3
 
-        self.ghost_disable_contact_damage_patch = (Patch("ghost_disable_contact_damage_patch", ghost_contact_damage_address, self.process)
+        self.ghost_disable_contact_damage_patch = (Patch("ghost_disable_contact_damage", ghost_contact_damage_address, self.process)
                                       .add_bytes(b"\x40\xB7\x00")) # mov dil, 0
 
         if self.log_debug_info:
             self.log_info(f"Generating patch to disable ghost dog contact damage...\n{self.ghost_disable_contact_damage_patch}")
 
-    def apply_slow_boy_patches(self):
-        pass
+    def generate_no_ghost_patch(self):
+        spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0") + 3
 
-    def apply_fast_boy_patch(self):
-        pass
+        self.no_ghost_patch = Patch("no_ghost", spawn_ghost_dog_address, self.process).add_bytes(b"\x00")
+
+        if self.log_debug_info:
+            self.log_info(f"Generating patch to disable ghost dog entirely...\n{self.no_ghost_patch}")
 
     def write_protected_memory(self, addr, data):
         page = ctypes.c_ulonglong(addr & ~0xFFF)
@@ -1470,19 +1474,42 @@ class BeanPatcher:
             return None
 
         if self.ghost_disable_contact_damage_patch.patch_applied:
-            self.ghost_disable_contact_damage_patch.revert()
-            self.ghost_disable_moaning_patch.revert()
-            self.revertable_patches.remove(self.ghost_disable_contact_damage_patch)
-            self.revertable_patches.remove(self.ghost_disable_moaning_patch)
-            self.display_to_client("GhostDog is no longer a good boy...")
+            self.disable_goodboy()
         else:
-            if self.ghost_disable_contact_damage_patch.apply():
-                self.revertable_patches.append(self.ghost_disable_contact_damage_patch)
+            self.enable_goodboy()
 
-            if self.ghost_disable_moaning_patch.apply():
-                self.revertable_patches.append(self.ghost_disable_moaning_patch)
+    def enable_no_ghost(self) -> None:
+        if self.no_ghost_patch is None or self.no_ghost_patch.patch_applied:
+            return None
 
-            self.display_to_client("GhostDog is feeling like a good boy...")
+        if self.log_debug_info:
+            self.log_info(f"Applying no ghost patch...")
+
+        if self.no_ghost_patch.apply():
+            self.revertable_patches.append(self.no_ghost_patch)
+
+        self.display_to_client("GhostDog is nowhere to be found...")
+
+    def disable_no_ghost(self) -> None:
+        if self.no_ghost_patch is None or not self.no_ghost_patch.patch_applied:
+            return None
+
+        if self.log_debug_info:
+            self.log_info(f"Reverting no ghost patch...")
+
+        self.no_ghost_patch.revert()
+        self.revertable_patches.remove(self.no_ghost_patch)
+
+        self.display_to_client("GhostDog has been found...")
+
+    def toggle_no_ghost(self) -> None:
+        if self.no_ghost_patch is None:
+            return None
+
+        if self.no_ghost_patch.patch_applied:
+            self.disable_no_ghost()
+        else:
+            self.enable_no_ghost()
 
 
     def generate_fullbright_patch(self):
