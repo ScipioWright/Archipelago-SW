@@ -446,6 +446,16 @@ class BeanPatcher:
         return self.tracker_stamps_addr
 
     @property
+    def ghost_dog_address(self):
+        if not self.attached_to_process:
+            self.log_error("Can't get ghost dog address without being attached to a process.")
+            return None
+        if self.application_state_address is None or self.application_state_address == 0:
+            return None
+
+        return self.application_state_address + 0x754A8 + 0x26B20
+
+    @property
     def base_layer_address(self):
         if not self.attached_to_process:
             self.log_error("Can't get base layer address without being attached to a process.")
@@ -1332,9 +1342,11 @@ class BeanPatcher:
             self.log_info(f"Generating patch to disable ghost dog contact damage...\n{self.ghost_disable_contact_damage_patch}")
 
     def generate_no_ghost_patch(self):
-        spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0") + 3
+        # spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0") + 3
+        # self.no_ghost_patch = Patch("no_ghost", spawn_ghost_dog_address, self.process).add_bytes(b"\x00")
 
-        self.no_ghost_patch = Patch("no_ghost", spawn_ghost_dog_address, self.process).add_bytes(b"\x00")
+        spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0")
+        self.no_ghost_patch = Patch("no_ghost", spawn_ghost_dog_address, self.process).nop(7)
 
         if self.log_debug_info:
             self.log_info(f"Generating patch to disable ghost dog entirely...\n{self.no_ghost_patch}")
@@ -1487,6 +1499,12 @@ class BeanPatcher:
 
         if self.no_ghost_patch.apply():
             self.revertable_patches.append(self.no_ghost_patch)
+
+        current_ghost_dog_state = self.process.read_uchar(self.ghost_dog_address)
+        if current_ghost_dog_state == 1 or current_ghost_dog_state == 2:
+            self.process.write_bytes(self.ghost_dog_address, b"\x03", 1)
+        else:
+            self.process.write_bytes(self.ghost_dog_address, b"\x00", 1)
 
         self.display_to_client("GhostDog is nowhere to be found...")
 
