@@ -925,7 +925,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.frog_dark_room:  # take the bubble pipe by the dynamite, this is the really long pipe
             AWData(AWType.region, [[iname.bubble]]),
         rname.dog_elevator:
-            AWData(AWType.region, [[iname.slink]]),
+            AWData(AWType.region, [[iname.slink], [iname.ball_trick_medium]]),
     },
     rname.dog_elevator: {
         lname.switch_for_post_modern_egg:
