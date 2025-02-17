@@ -366,6 +366,15 @@ class Patch:
         self.add_bytes(b'\x0f\x87' + diff.to_bytes(4, 'little'))
         return self
 
+    def jmp_short_offset(self, offset):
+        """
+        Jumps a specific number of bytes from the NEXT instruction
+        2 bytes
+        """
+        diff = offset
+        self.add_bytes(b'\xeb' + diff.to_bytes(4, 'little', signed=True))
+        return self
+
     def jmp_near_offset(self, offset):
         """
         Jumps a specific number of bytes from the NEXT instruction

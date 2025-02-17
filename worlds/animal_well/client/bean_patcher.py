@@ -371,7 +371,7 @@ class BeanPatcher:
 
         self.ghost_disable_moaning_patch: Optional[Patch] = None
         self.ghost_disable_contact_damage_patch: Optional[Patch] = None
-        self.no_ghost_patch: Optional[Patch] = None
+        self.no_dog_patch: Optional[Patch] = None
 
         self.cmd_prompt = False
         self.cmd = ""
@@ -646,8 +646,8 @@ class BeanPatcher:
         self.generate_fullbright_patch()
 
         self.generate_good_boy_patches()
-
-        self.generate_no_ghost_patch()
+        self.generate_no_dog_patch()
+        self.generate_always_dog_patches()
 
         self.apply_item_collection_patches()
 
@@ -1331,7 +1331,7 @@ class BeanPatcher:
                                       .nop(5))
 
         if self.log_debug_info:
-            self.log_info(f"Generating patch to disable ghost dog moaning...\n{self.ghost_disable_moaning_patch}")
+            self.log_info(f"Generated patch to disable ghost dog moaning...\n{self.ghost_disable_moaning_patch}")
 
         ghost_contact_damage_address = self.find_pattern("f3 44 0f 58 45 10 f3 44 0f 11 45 10 f3 0f 58 7d 14 f3 0f 11 7d 14 40 b7 01", True) - 3
 
@@ -1339,17 +1339,30 @@ class BeanPatcher:
                                       .add_bytes(b"\x40\xB7\x00")) # mov dil, 0
 
         if self.log_debug_info:
-            self.log_info(f"Generating patch to disable ghost dog contact damage...\n{self.ghost_disable_contact_damage_patch}")
+            self.log_info(f"Generated patch to disable ghost dog contact damage...\n{self.ghost_disable_contact_damage_patch}")
 
-    def generate_no_ghost_patch(self):
+    def generate_no_dog_patch(self):
         # spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0") + 3
         # self.no_ghost_patch = Patch("no_ghost", spawn_ghost_dog_address, self.process).add_bytes(b"\x00")
 
         spawn_ghost_dog_address = self.find_pattern("c7 45 00 01 00 00 00 4c 8b 15 3f b3 c2 02 45 8b 82 f8 8d 0a 00 31 c9 45 85 c0")
-        self.no_ghost_patch = Patch("no_ghost", spawn_ghost_dog_address, self.process).nop(7)
+        self.no_dog_patch = Patch("no_dog", spawn_ghost_dog_address, self.process).nop(7)
 
         if self.log_debug_info:
-            self.log_info(f"Generating patch to disable ghost dog entirely...\n{self.no_ghost_patch}")
+            self.log_info(f"Generated patch to disable ghost dog entirely...\n{self.no_dog_patch}")
+
+    def generate_always_dog_patches(self):
+        spawn_ghost_dog_checks_address = self.find_pattern("48 8b 44 24 40 8a 80 ef 01 00 00 c0 e8 05 24 03 3c 03", True)
+        self.immediately_spawn_dog_patch = Patch("immediately_spawn_dog", spawn_ghost_dog_checks_address, self.process).jmp_short_offset(2)
+
+        if self.log_debug_info:
+            self.log_info(f"Generated patch to immediately spawn ghost dog...\n{self.immediately_spawn_dog_patch}")
+
+        despawn_ghost_dog_address = self.find_pattern("48 8b 44 24 40 8a 80 ef 01 00 00 c0 e8 05 24 03 74 12 3c 03 74 0e", True)
+        self.prevent_despawning_dog_patch = Patch("prevent_despawning_dog", despawn_ghost_dog_address, self.process).nop(14)
+
+        if self.log_debug_info:
+            self.log_info(f"Generated patch to prevent despawning ghost dog...\n{self.prevent_despawning_dog_patch}")
 
     def write_protected_memory(self, addr, data):
         page = ctypes.c_ulonglong(addr & ~0xFFF)
@@ -1490,15 +1503,17 @@ class BeanPatcher:
         else:
             self.enable_goodboy()
 
-    def enable_no_ghost(self) -> None:
-        if self.no_ghost_patch is None or self.no_ghost_patch.patch_applied:
+    def enable_no_dog(self) -> None:
+        if self.no_dog_patch is None or self.no_dog_patch.patch_applied:
             return None
 
         if self.log_debug_info:
-            self.log_info(f"Applying no ghost patch...")
+            self.log_info(f"Applying no dog patch...")
 
-        if self.no_ghost_patch.apply():
-            self.revertable_patches.append(self.no_ghost_patch)
+        self.disable_always_dog()
+
+        if self.no_dog_patch.apply():
+            self.revertable_patches.append(self.no_dog_patch)
 
         current_ghost_dog_state = self.process.read_uchar(self.ghost_dog_address)
         if current_ghost_dog_state == 1 or current_ghost_dog_state == 2:
@@ -1508,27 +1523,67 @@ class BeanPatcher:
 
         self.display_to_client("GhostDog is nowhere to be found...")
 
-    def disable_no_ghost(self) -> None:
-        if self.no_ghost_patch is None or not self.no_ghost_patch.patch_applied:
+    def disable_no_dog(self) -> None:
+        if self.no_dog_patch is None or not self.no_dog_patch.patch_applied:
             return None
 
         if self.log_debug_info:
-            self.log_info(f"Reverting no ghost patch...")
+            self.log_info(f"Reverting no dog patch...")
 
-        self.no_ghost_patch.revert()
-        self.revertable_patches.remove(self.no_ghost_patch)
+        self.no_dog_patch.revert()
+        self.revertable_patches.remove(self.no_dog_patch)
 
         self.display_to_client("GhostDog has been found...")
 
-    def toggle_no_ghost(self) -> None:
-        if self.no_ghost_patch is None:
+    def toggle_no_dog(self) -> None:
+        if self.no_dog_patch is None:
             return None
 
-        if self.no_ghost_patch.patch_applied:
-            self.disable_no_ghost()
+        if self.no_dog_patch.patch_applied:
+            self.disable_no_dog()
         else:
-            self.enable_no_ghost()
+            self.enable_no_dog()
 
+    def enable_always_dog(self) -> None:
+        if self.immediately_spawn_dog_patch is None or self.immediately_spawn_dog_patch.patch_applied:
+            return None
+
+        if self.log_debug_info:
+            self.log_info(f"Applying always dog patches...")
+
+        self.disable_no_dog()
+
+        if self.immediately_spawn_dog_patch.apply():
+            self.revertable_patches.append(self.immediately_spawn_dog_patch)
+
+        if self.prevent_despawning_dog_patch.apply():
+            self.revertable_patches.append(self.prevent_despawning_dog_patch)
+
+        self.display_to_client("What a horrible night to be a bean...")
+
+    def disable_always_dog(self) -> None:
+        if self.immediately_spawn_dog_patch is None or not self.immediately_spawn_dog_patch.patch_applied:
+            return None
+
+        if self.log_debug_info:
+            self.log_info(f"Reverting always dog patches...")
+
+        self.immediately_spawn_dog_patch.revert()
+        self.revertable_patches.remove(self.immediately_spawn_dog_patch)
+
+        self.prevent_despawning_dog_patch.revert()
+        self.revertable_patches.remove(self.prevent_despawning_dog_patch)
+
+        self.display_to_client("The jumping bean has vanquished the horrible night...")
+
+    def toggle_always_dog(self) -> None:
+        if self.immediately_spawn_dog_patch is None:
+            return None
+
+        if self.immediately_spawn_dog_patch.patch_applied:
+            self.disable_always_dog()
+        else:
+            self.enable_always_dog()
 
     def generate_fullbright_patch(self):
         """

@@ -105,19 +105,33 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                 logger.info(f"Enabling goodboy...")
                 self.ctx.bean_patcher.enable_goodboy()
 
-    def _cmd_noghost(self, val=""):
+    def _cmd_nodog(self, val=""):
         """
         Disables ghost dog entirely
         """
         if isinstance(self.ctx, AnimalWellContext):
             if val == "":
-                self.ctx.bean_patcher.toggle_no_ghost()
+                self.ctx.bean_patcher.toggle_no_dog()
             elif val == "off":
-                logger.info(f"Disabling no_ghost...")
-                self.ctx.bean_patcher.disable_no_ghost()
+                logger.info(f"Disabling no_dog...")
+                self.ctx.bean_patcher.disable_no_dog()
             else:
-                logger.info(f"Enabling no_ghost...")
-                self.ctx.bean_patcher.enable_no_ghost()
+                logger.info(f"Enabling no_dog...")
+                self.ctx.bean_patcher.enable_no_dog()
+
+    def _cmd_alwaysdog(self, val=""):
+        """
+        Ghost dog hunts you eternally
+        """
+        if isinstance(self.ctx, AnimalWellContext):
+            if val == "":
+                self.ctx.bean_patcher.toggle_always_dog()
+            elif val == "off":
+                logger.info(f"Disabling always_dog...")
+                self.ctx.bean_patcher.disable_always_dog()
+            else:
+                logger.info(f"Enabling always_dog...")
+                self.ctx.bean_patcher.enable_always_dog()
 
     def _cmd_deathlink(self, val=""):
         """
