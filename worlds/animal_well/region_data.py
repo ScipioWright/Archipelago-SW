@@ -811,12 +811,14 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_forbidden:
             AWData(AWType.location),
         lname.bunny_disc_spike:  # not disc hop since you literally need to do this
-            AWData(AWType.location, [[iname.disc], [iname.bubble_long, iname.wheel_hop, iname.precise_tricks]],
+            AWData(AWType.location, [[iname.disc_hop_hard], [iname.bubble_long, iname.wheel_hop, iname.precise_tricks]],
                    loc_type=LocType.bunny),
         lname.fruit_0:
-            AWData(AWType.location, [[iname.disc], [iname.bubble_long]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.disc_hop_hard], [iname.bubble, iname.disc],
+                                     [iname.bubble_long]], loc_type=LocType.fruit),
         lname.fruit_1:
-            AWData(AWType.location, [[iname.disc], [iname.bubble_long, iname.wheel_hop, iname.precise_tricks]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.disc_hop_hard], [iname.bubble_long, iname.wheel_hop, iname.precise_tricks]],
+                   loc_type=LocType.fruit),
         rname.behind_kangaroo:
             AWData(AWType.region, [[iname.slink]]),
     },

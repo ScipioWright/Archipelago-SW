@@ -175,6 +175,12 @@ def create_regions_and_set_rules(world: "AnimalWellWorld") -> None:
             continue
         for destination_name, data in destinations.items():
             destination_name = cast(str, destination_name.value)
+            if destination_name in (lname.fruit_1.value, lname.bunny_disc_spike.value):
+                # putting these on separate lines to make it easier to read
+                if (options.disc_hopping != DiscHopping.option_multiple
+                        and not (options.wheel_tricks and options.precise_tricks)):
+                    continue
+
             if data.type == AWType.location:
                 if not options.bunnies_as_checks and data.loc_type == LocType.bunny:
                     continue
