@@ -228,6 +228,9 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
     add_rule(get_porgy_location("Deeper Upper Mid - Spotlight Module", world),
              lambda state: state.has(depth_charge, player))
 
+    add_rule(get_porgy_location("Deeper Upper Left - Fuel Tank behind ! Blocks", world),
+             lambda state: state.has(buster, player))
+
     if check_on_touch:
         # shallows coral maze, buster covered by region
         loc = "Shallows Upper Right - Fuel Tank in Coral Maze"
