@@ -261,9 +261,9 @@ class AnimalWellTracker:
                                 and destination_name in [lname.bunny_mural.value, lname.bunny_dream.value,
                                                          lname.bunny_uv.value, lname.bunny_lava.value]):
                             self.check_logic_status[destination_name] = CheckStatus.dont_show.value
-                    # we ignore these and rely on the event version
                     elif destination_data.loc_type == LocType.candle:
-                        self.check_logic_status[destination_name] = CheckStatus.dont_show.value
+                        if not self.player_options[CandleChecks.internal_name]:
+                            self.check_logic_status[destination_name] = CheckStatus.dont_show.value
                     elif destination_data.loc_type == LocType.fruit:
                         if not self.player_options[Fruitsanity.internal_name]:
                             self.check_logic_status[destination_name] = CheckStatus.dont_show.value
