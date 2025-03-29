@@ -680,7 +680,6 @@ class AnimalWellContext(CommonContext):
         self.bean_patcher.tracker_total = len(self.server_locations)
         self.bean_patcher.tracker_checked = len(self.checked_locations)
         self.bean_patcher.tracker_missing = len(self.missing_locations)
-        # self.bean_patcher.tracker_in_logic = countOf(self.logic_tracker.check_logic_status.values(), CheckStatus.in_logic.value)
         self.bean_patcher.tracker_in_logic = len({k: v for (k, v) in self.logic_tracker.check_logic_status.items()
                                                   if v == CheckStatus.in_logic
                                                   and k in location_name_to_id
