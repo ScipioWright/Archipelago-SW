@@ -34,7 +34,7 @@ Steps:
 As UFO 50 is a game that is still receiving updates, periods of time between new official patches and the mod being updated will exist.
 Therefore, the user may end up having to either wait for the mod to be updated or use an older version of the game in order to play.  You can check which version of UFO 50 the mod targets [in the patch releases page](https://github.com/UFO-50-Archipelago/Patch/releases).
 
-You can download a version of UFO 50 published on a specific date by going to the UFO 50 SteamDB page (`download_depot 1147860 1147861 3089918629065615857`) and pressing on the "copy to clipboard" button of the release you want. Follow the instructions from there.
+You can download a version of UFO 50 published on a specific date by going to the UFO 50 SteamDB page (`download_depot 1147860 1147861 3089918629065615857`) and pressing on the "copy to clipboard" button of the release you want. Follow the instructions from there. If you launch it and it shows the wrong version, try deleting the two steam dlls from the depot folder.
 
 ## Joining a MultiWorld Game
 
