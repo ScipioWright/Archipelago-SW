@@ -929,14 +929,16 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.frog_dark_room:  # take the bubble pipe by the dynamite, this is the really long pipe
             AWData(AWType.region, [[iname.bubble]]),
         rname.dog_elevator:
-            AWData(AWType.region, [[iname.slink], [iname.ball_trick_medium]]),
+            AWData(AWType.region, [[iname.slink], [iname.ball_trick_hard]]),
+        rname.match_center_well_spot:  # not connected to dog elevator directly because of the dog plinko doors
+            AWData(AWType.region, [[iname.slink], [iname.ball_trick_hard]]),
     },
     rname.dog_elevator: {
         lname.switch_for_post_modern_egg:
             AWData(AWType.location, event=iname.switch_for_post_modern_egg),
         rname.dog_wheel:
             AWData(AWType.region, [[iname.remote]]),
-        rname.dog_elevator_upper:
+        rname.dog_elevator_upper:  # no direct connection to middle due to indirect connection through upper
             AWData(AWType.region, [[iname.dog_wheel_flip]]),
         lname.fruit_46:
             AWData(AWType.location, loc_type=LocType.fruit),
@@ -966,7 +968,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_22:
             AWData(AWType.location, loc_type=LocType.fruit),
-        rname.dog_elevator:
+        rname.dog_elevator:  # no connection to upper due to redundant connection with dog_elevator
             AWData(AWType.region),
     },
 
