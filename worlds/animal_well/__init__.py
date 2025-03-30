@@ -89,9 +89,6 @@ class AnimalWellWorld(World):
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
-    # todo: remove later
-    topology_present = True
-
     traversal_requirements: Dict[Union[LocationNames, RegionNames], Dict[Union[LocationNames, RegionNames], AWData]]
 
     def generate_early(self) -> None:
