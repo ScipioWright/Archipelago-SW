@@ -8,7 +8,7 @@
 
 ### Automated Installation
 1. Place the UFO 50 APWorld in your `custom_worlds` folder.
-2. Create a new folder for the modded UFO 50 installation (don't put it in your normal UFO 50 install folder).
+2. Create a new folder for the modded UFO 50 installation (don't put it in your normal UFO 50 install folder). Do not manually copy anything into this folder.
 3. Open the Archipelago Launcher and click on the UFO 50 Client.
 4. When it asks you to select a folder for the mod installation, select the folder you created in step 2.
 5. When it asks you to locate the UFO 50 executable, navigate to your UFO 50 .exe file and select it.
