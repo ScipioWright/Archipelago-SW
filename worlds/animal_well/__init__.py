@@ -77,7 +77,7 @@ class AnimalWellWorld(World):
     """
     game = "ANIMAL WELL"
     web = AnimalWellWeb()
-    version_string: str = "v0.5.2"
+    version_string: str = "v0.6.0 RC1"
 
     options: AnimalWellOptions
     options_dataclass = AnimalWellOptions
