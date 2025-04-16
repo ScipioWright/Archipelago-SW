@@ -114,8 +114,8 @@ location_table: Dict[str, LocationInfo] = {
     "Abyss Upper Right - Torpedo Upgrade in Wall": LocationInfo(224, "Abyss", 4, 8, Hidden.has_tell),
     "Abyss Lower Right - Fuel Tank in Floor": LocationInfo(202, "Abyss", Hidden.no_tell),  # technically has a tell but eh
     "Abyss Lower Right - Egg by Skull": LocationInfo(250, "Abyss"),
-    "Abyss Lower Right - Radar System Module": LocationInfo(292, "Abyss"),
-    "Abyss Lower Right - Armor Plating Module": LocationInfo(291, "Abyss"),
+    "Abyss Lower Right - Radar System Module": LocationInfo(291, "Abyss"),
+    "Abyss Lower Right - Armor Plating Module": LocationInfo(292, "Abyss"),
 
     # Bosses
     # combat logic is weird cause you can save damage done to a boss
