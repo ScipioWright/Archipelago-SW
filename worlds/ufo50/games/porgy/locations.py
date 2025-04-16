@@ -131,7 +131,7 @@ location_table: Dict[str, LocationInfo] = {
 
     "Garden": LocationInfo(997, "Menu"),
     "Gold": LocationInfo(998, "Abyss"),
-    "Cherry": LocationInfo(999, "Boss Area")
+    "Cherry": LocationInfo(999, "Abyss")
 }
 
 
