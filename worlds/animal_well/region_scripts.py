@@ -202,7 +202,7 @@ def create_regions_and_set_rules(world: "AnimalWellWorld") -> None:
                     location = AWLocation(player, destination_name, world.location_name_to_id[destination_name],
                                           aw_regions[origin_name])
                 location.access_rule = interpret_rule(data.rules, world)
-                if data.eggs_required:  # swap to count_from_list_unique in 0.5.0
+                if data.eggs_required:
                     add_rule(location, lambda state, eggs_required=data.eggs_required:
                              state.count_from_list_unique(egg_group, player) >= eggs_required * egg_ratio)
                 aw_regions[origin_name].locations.append(location)
@@ -211,7 +211,7 @@ def create_regions_and_set_rules(world: "AnimalWellWorld") -> None:
                     continue
                 entrance = aw_regions[origin_name].connect(connecting_region=aw_regions[destination_name],
                                                            rule=interpret_rule(data.rules, world))
-                if data.eggs_required:  # swap to count_from_list_unique in 0.5.0
+                if data.eggs_required:
                     add_rule(entrance, lambda state, eggs_required=data.eggs_required:
                              state.count_from_list_unique(egg_group, player) >= eggs_required * egg_ratio)
 
