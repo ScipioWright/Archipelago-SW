@@ -1,6 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional, Union
 from enum import IntEnum
 from .names import ItemNames as iname, LocationNames as lname, RegionNames as rname
+from .options import Goal
 
 
 class AWType(IntEnum):
@@ -21,7 +22,8 @@ class AWData(NamedTuple):
     # the rules are formatted such that [[wand], [disc, remote]] means you need wand OR you need disc + remote
     loc_type: Optional[int] = None
     eggs_required: int = 0
-    event: Optional[str] = None  # if the location is an event, fill in what item it gives
+    event: Optional[str] = None  # if the location is a non-victory event, fill in what item it gives
+    victory: Optional[int] = None  # if the location is a victory event, list the goal value.
     bunny_warp: bool = False  # flag for entrances not to make if bunny warp logic is off
 
 
@@ -72,6 +74,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.wheel_hop]], eggs_required=32),
         lname.egg_65:
             AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.wheel_hop]], eggs_required=64),
+        lname.victory_egg_hunt:
+            AWData(AWType.location, [[iname.bubble], [iname.disc], [iname.wheel_hop]], eggs_required=64, victory=Goal.option_egg_hunt),
         lname.key_office:  # does not actually require eggs. edit if we shuffle songs
             AWData(AWType.location, [[iname.bubble_short, iname.flute], [iname.disc, iname.flute],
                                      [iname.bubble, iname.wheel_hop, iname.flute]]),
@@ -1215,7 +1219,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     },
     rname.hippo_fireworks: {
         lname.victory_first:
-            AWData(AWType.location, event=iname.victory),
+            AWData(AWType.location, victory=Goal.option_fireworks), 
         lname.fruit_111:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.key_house:

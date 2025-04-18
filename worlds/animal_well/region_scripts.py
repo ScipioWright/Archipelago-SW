@@ -198,6 +198,12 @@ def create_regions_and_set_rules(world: "AnimalWellWorld") -> None:
                 if data.event:
                     location = AWLocation(player, destination_name, None, aw_regions[origin_name])
                     location.place_locked_item(AWItem(data.event, ItemClassification.progression, None, player))
+                elif data.victory:
+                    if options.goal != data.victory:
+                        continue
+                    else:
+                        location = AWLocation(player, destination_name, None, aw_regions[origin_name])
+                        location.place_locked_item(AWItem(iname.victory, ItemClassification.progression, None, player))
                 else:
                     location = AWLocation(player, destination_name, world.location_name_to_id[destination_name],
                                           aw_regions[origin_name])
