@@ -45,6 +45,7 @@ class BunniesAsChecks(Choice):
     """
     Include the secret bunnies as checks.
     Exclude Tedious removes the Mural, Dream, UV, and Floor is Lava bunnies.
+    The Disc Spike bunny will not be a check unless you have multiple disc hops or you have both precise tricks and wheel tricks enabled.
     """
     internal_name = "bunnies_as_checks"
     display_name = "Bunnies as Checks"
@@ -119,7 +120,6 @@ class DiscHopping(Choice):
     Include jumping onto the disc without letting it bounce off of a wall first in logic.
     Single means doing it once from the ground.
     Multiple means having to chain them in midair.
-    Exception: The bunny that requires you to use this tech.
     """
     internal_name = "disc_hopping"
     display_name = "Midair Disc Jumping"
