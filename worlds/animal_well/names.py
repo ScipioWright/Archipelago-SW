@@ -464,7 +464,8 @@ class LocationNames(str, Enum):
     upgraded_wand = "Upgraded to B.B. Wand"  # for when you get your second b wand, this is a hack
     k_medal = "Assembled the K. Medal"
     kangaroo_first_spot = "Kangaroo First Spot"  # first spot the kangaroo appears
-    victory_first = "First Victory"
+    victory_first = "Fireworks Launched"
+    victory_egg_hunt = "Final Egg Door Opened"
 
     # fruits, by row and column, top left room is R1C1
     fruit_0 = "Big Blue Fruit before Disc Spike Bunny - R1C1a"  # big blue fruit, disc spike room
