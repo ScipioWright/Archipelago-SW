@@ -10,7 +10,8 @@ It is recommended to play the vanilla game first. The randomizer will spoil mech
 We recommend you find all of the eggs, all of the equipment items, and as many bunnies as you can before playing this randomizer.
 
 ## What does randomization do to this game?
-All items you can find in chests (eggs, toys, keys, matches) are shuffled into the item pool.
+All items you normally find in chests (eggs, toys, keys, matches) are shuffled into the item pool.
+Locations that contain random items from the item pool include opening chests, as well as optionally finding bunnies, lighting candles, and eating fruits.
 
 ## What is the goal of ANIMAL WELL when randomized?
 The standard goal is the same as the vanilla game. Find the 4 flames and set off the fireworks at the end.
