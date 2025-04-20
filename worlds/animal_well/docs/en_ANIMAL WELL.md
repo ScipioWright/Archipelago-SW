@@ -26,8 +26,6 @@ They just look like the standard chests.
 
 ## Is there a tracker?
 A map tracker is built into the client, and is visible on your in-game map.
-There is also a [Poptracker Pack](https://github.com/SporyTike/ANIMAL-WELL-AP-Tracker/releases/latest) which was made by SporyTike.
-If you find issues in the tracker pack, please let them know about them.
 Universal Tracker is also an option, and will not run into any of its common issues.
 
 ## What should I know regarding logic?
