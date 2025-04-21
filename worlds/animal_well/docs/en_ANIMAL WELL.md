@@ -10,7 +10,8 @@ It is recommended to play the vanilla game first. The randomizer will spoil mech
 We recommend you find all of the eggs, all of the equipment items, and as many bunnies as you can before playing this randomizer.
 
 ## What does randomization do to this game?
-All items you can find in chests (eggs, toys, keys, matches) are shuffled into the item pool.
+All items you normally find in chests (eggs, toys, keys, matches) are shuffled into the item pool.
+Locations that contain random items from the item pool include opening chests, as well as optionally finding bunnies, lighting candles, and eating fruits.
 
 ## What is the goal of ANIMAL WELL when randomized?
 The standard goal is the same as the vanilla game. Find the 4 flames and set off the fireworks at the end.
@@ -25,8 +26,6 @@ They just look like the standard chests.
 
 ## Is there a tracker?
 A map tracker is built into the client, and is visible on your in-game map.
-There is also a [Poptracker Pack](https://github.com/SporyTike/ANIMAL-WELL-AP-Tracker/releases/latest) which was made by SporyTike.
-If you find issues in the tracker pack, please let them know about them.
 Universal Tracker is also an option, and will not run into any of its common issues.
 
 ## What should I know regarding logic?
