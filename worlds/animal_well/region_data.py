@@ -538,6 +538,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         # shoot some hoops! throw the ball to the button. can be done without vertical if you throw early
         rname.bear_match_chest_spot:
             AWData(AWType.region, [[iname.ball_trick_medium], [iname.bubble, iname.tanking_damage],
+                                   [iname.bubble_long_real, iname.lantern],
                                    [iname.disc, iname.tanking_damage, iname.precise_tricks],
                                    [iname.wheel_climb, iname.tanking_damage]]),
         rname.bear_chameleon_room_2:
@@ -598,6 +599,11 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
                                    # throw the ball in the yoyo pipe then run left with yoyo or slink
                                    [iname.slink, iname.ball_trick_easy],
                                    [iname.yoyo, iname.ball_trick_easy]]),
+        rname.bear_middle_phone_room:
+            AWData(AWType.region, [[iname.bubble, iname.tanking_damage],
+                                   [iname.bubble_long_real, iname.lantern],
+                                   [iname.disc, iname.tanking_damage, iname.precise_tricks],
+                                   [iname.wheel_climb, iname.tanking_damage]]),
     },
     rname.bear_upper_phone_room: {
         lname.fruit_8:
