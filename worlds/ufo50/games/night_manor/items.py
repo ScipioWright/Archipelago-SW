@@ -118,10 +118,10 @@ def get_item_groups() -> Dict[str, Set[str]]:
             "Night Manor - Journal Entry 16",
             "Night Manor - Journal Entry 17"},
         "Night Manor - Gems": {
-            "Night Manor - Red Gemstone",
-            "Night Manor - Green Gemstone",
-            "Night Manor - Yellow Gemstone",
-            "Night Manor - White Gemstone"},
+            "Night Manor - Ruby",
+            "Night Manor - Emerald",
+            "Night Manor - Topaz",
+            "Night Manor - Diamond"},
         "Night Manor - Keys": {
             "Night Manor - Copper Key",
             "Night Manor - Bronze Key",

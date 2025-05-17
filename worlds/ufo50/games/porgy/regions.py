@@ -18,7 +18,6 @@ regions: List[str] = [
     "Sunken Ship - Buster",
     "Deeper",
     "Abyss",
-    "Boss Area",
 ]
 
 

@@ -88,7 +88,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(oil_can, player))
     set_rule(world.get_location("Night Manor - Dining Room - Ornamental Egg"),
              rule=lambda state: state.has_any((crowbar, wrench, shovel), player)),
-    set_rule(world.get_location("Night Manor - Living Room - Red Gemstone"),
+    set_rule(world.get_location("Night Manor - Living Room - Ruby"),
              rule=lambda state: state.has_all((gas_can, matches), player))
     set_rule(world.get_location("Night Manor - Pool - Copper Key"),
              rule=lambda state: state.has_all((hook, duct_tape, pool_cue), player))
@@ -108,11 +108,11 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(hacksaw, player))
     set_rule(world.get_location("Night Manor - Guest Bedroom - Brass Key"),
              rule=lambda state: state.has(silver_key, player))
-    set_rule(world.get_location("Night Manor - Exterior Front - Green Gemstone"),
+    set_rule(world.get_location("Night Manor - Exterior Front - Emerald"),
              rule=lambda state: state.has(ring, player))
     set_rule(world.get_location("Night Manor - Master Bathroom - Safe Combination"),
              rule=lambda state: state.has_any((crowbar, wrench, shovel), player))
-    set_rule(world.get_location("Night Manor - Garden - Yellow Gemstone"),
+    set_rule(world.get_location("Night Manor - Garden - Topaz"),
              rule=lambda state: state.has_all((hacksaw, kitchen_knife), player)),
     set_rule(world.get_location("Night Manor - Kids Bedroom - Computer Password"),
              rule=lambda state: state.has(magnifying_glass, player))
@@ -132,7 +132,7 @@ def create_rules(world: "UFO50World", regions: Dict[str, Region]) -> None:
              rule=lambda state: state.has(maze_directions, player))
     set_rule(world.get_location("Night Manor - Manor - Iron Key"),
              rule=lambda state: state.has_all((crossbow, crossbow_bolt), player))
-    set_rule(world.get_location("Night Manor - Master Bedroom - White Gemstone"),
+    set_rule(world.get_location("Night Manor - Master Bedroom - Diamond"),
              rule=lambda state: state.has(safe_combo, player))
     set_rule(world.get_location("Night Manor - Office - Fungicide Recipe"),
              rule=lambda state: state.has(password, player))

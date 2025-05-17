@@ -36,7 +36,7 @@ location_table: Dict[str, LocationInfo] = {
     "Living Room - Journal Entry 1": LocationInfo(9, "First Floor & Exterior"),
     "Living Room - Coins": LocationInfo(10, "First Floor & Exterior"),  # in couch
     "Living Room - Matches": LocationInfo(11, "First Floor & Exterior"),  # above fireplace
-    "Living Room - Red Gemstone": LocationInfo(23, "First Floor & Exterior"),  # In fireplace after you burn
+    "Living Room - Ruby": LocationInfo(23, "First Floor & Exterior"),  # In fireplace after you burn
 
     "Dining Room - Journal Entry 4": LocationInfo(12, "First Floor & Exterior"),
     "Dining Room - Ornamental Egg": LocationInfo(22, "First Floor & Exterior"),  # In cabinet after you smash it,
@@ -75,17 +75,17 @@ location_table: Dict[str, LocationInfo] = {
 
     "Garden - Steel Key": LocationInfo(37, "First Floor & Exterior"),  # in hole after you dig with shovel
     # after you cut the corpse down from the balcony, cut with knife
-    "Garden - Yellow Gemstone": LocationInfo(53, "Master Bedroom"),
+    "Garden - Topaz": LocationInfo(53, "Master Bedroom"),
 
     "Foyer - Gear": LocationInfo(42, "First Floor & Exterior"),  # in clock after used with brass key
 
     # in statue if you use ring on insignia
-    "Exterior Front - Green Gemstone": LocationInfo(43, "First Floor & Exterior"),
+    "Exterior Front - Emerald": LocationInfo(43, "First Floor & Exterior"),
 
     "Master Bedroom - Journal Entry 12": LocationInfo(44, "Master Bedroom"),  # on dresser
     "Master Bedroom - Journal Entry 15": LocationInfo(45, "Master Bedroom"),  # in bedside table
     # get from safe behind painting above bed, use combination
-    "Master Bedroom - White Gemstone": LocationInfo(64, "Master Bedroom"),
+    "Master Bedroom - Diamond": LocationInfo(64, "Master Bedroom"),
 
     "Office - Journal Entry 6": LocationInfo(46, "Master Bedroom"),  # on floor near desk
     "Office - Magnifying Glass": LocationInfo(47, "Master Bedroom"),  # on bottom of back shelf
