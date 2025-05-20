@@ -26,6 +26,20 @@ class BreakableType(IntEnum):
     wall = 10
 
 
+name_conv: dict[BreakableType, str] = {
+    BreakableType.pot: "Pot",
+    BreakableType.fire_pot: "Fire Pot",
+    BreakableType.explosive_pot: "Explosive Pot",
+    BreakableType.sign: "Sign",
+    BreakableType.barrel: "Barrel",
+    BreakableType.crate: "Crate",
+    BreakableType.table: "Table",
+    BreakableType.glass: "Glass",
+    BreakableType.leaves: "Leaves",
+    BreakableType.wall: "Wall"
+}
+
+
 class TunicLocationData(NamedTuple):
     er_region: str
     breakable: BreakableType
@@ -340,6 +354,38 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Quarry - [East] Break Bombable Wall": TunicLocationData("Quarry", BreakableType.wall),
 }
 
+line_to_print = ""
+second_line = ""
+for number, line in enumerate(breakable_location_table):
+    current_line: str = ""
+    name: str
+    break_type = name_conv[breakable_location_table[line].breakable]
+    area, name = line.split(" - ", 1)
+    name_end = name.split(" ")[-1]
+    ends_with_number = True if name_end.isnumeric() else False
+    if ends_with_number:
+        name_list = name.split(name_end)
+        name_list.pop()
+        name = ""
+        for num, word in enumerate(name_list):
+            name += word
+            if len(name_list) > 1 and num <= len(name_list):
+                name += name_end
+        if break_type in name:
+            name = name.replace(break_type, break_type + "s")
+        name = name[:-1]
+    current_line += "[" + str(breakable_base_id + number) + "] = {\"@Breakables/"
+    current_line += area
+    current_line += "/"
+    current_line += name
+    current_line += "/"
+    current_line += break_type
+    if ends_with_number:
+        current_line += " " + name_end
+    current_line += "\"},"
+    line_to_print += current_line + "\n"
+
+print(line_to_print)
 
 breakable_location_name_to_id: dict[str, int] = {name: breakable_base_id + index
                                                  for index, name in enumerate(breakable_location_table)}
