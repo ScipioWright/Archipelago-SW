@@ -106,7 +106,7 @@ class AnimalWellTracker:
                         continue
                 if destination_data.type == AWType.location:
                     # events aren't in location_name_to_id, so give them a key here
-                    if destination_data.event:
+                    if destination_data.event or destination_data.victory:
                         self.check_logic_status.setdefault(str(destination_name), 0)
                     # bools are ints
                     if self.check_logic_status[destination_name] >= 1 + in_logic:
@@ -138,9 +138,9 @@ class AnimalWellTracker:
                         if destination_data.event:
                             inventory_set.add(destination_data.event)
                             # add the event item immediately, but let the client handle the event location
-                            if ("Candle" not in destination_name and "Flame" not in destination_name
-                                    and destination_name != lname.victory_first.value):
+                            if "Candle" not in destination_name and "Flame" not in destination_name:
                                 self.check_logic_status[destination_name] = CheckStatus.checked.value
+
         # if the length of the region set or inventory changed, loop through again
         if inventory_count != len(regions_set) + len(inventory_set):
             self.update_spots_status(in_logic)
