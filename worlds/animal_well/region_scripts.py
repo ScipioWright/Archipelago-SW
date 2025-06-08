@@ -144,7 +144,7 @@ def convert_tech_reqs(reqs: List[List[str]], options: AnimalWellOptions) -> List
 def create_aw_regions(world: "AnimalWellWorld") -> Dict[str, Region]:
     aw_regions: Dict[str, Region] = {}
     for region_name in rname:
-        aw_regions[region_name] = Region(region_name, world.player, world.multiworld)
+        aw_regions[str(region_name)] = Region(str(region_name), world.player, world.multiworld)
     return aw_regions
 
 
@@ -167,14 +167,14 @@ def create_regions_and_set_rules(world: "AnimalWellWorld") -> None:
     aw_regions = create_aw_regions(world)
     egg_group = [x for x in world.item_name_groups["Eggs"] if x != iname.egg_65.value]  # egg 65 doesn't open egg doors
     for origin_name, destinations in world.traversal_requirements.items():
-        origin_name = cast(str, origin_name.value)
+        origin_name = str(origin_name)
         # don't create these regions if bunny warps are not in logic
         if not options.bunny_warps_in_logic and origin_name in [rname.bulb_bunny_spot,
                                                                 rname.bear_map_bunny_spot,
                                                                 rname.bear_chinchilla_song_room]:
             continue
         for destination_name, data in destinations.items():
-            destination_name = cast(str, destination_name.value)
+            destination_name = str(destination_name)
             if destination_name in (lname.fruit_1.value, lname.bunny_disc_spike.value):
                 # putting these on separate lines to make it easier to read
                 if (options.disc_hopping != DiscHopping.option_multiple
@@ -197,13 +197,13 @@ def create_regions_and_set_rules(world: "AnimalWellWorld") -> None:
                     continue
                 if data.event:
                     location = AWLocation(player, destination_name, None, aw_regions[origin_name])
-                    location.place_locked_item(AWItem(data.event, ItemClassification.progression, None, player))
+                    location.place_locked_item(AWItem(str(data.event), ItemClassification.progression, None, player))
                 elif data.victory:
                     if data.victory != options.goal:
                         continue
                     else:
                         location = AWLocation(player, destination_name, None, aw_regions[origin_name])
-                        location.place_locked_item(AWItem(iname.victory, ItemClassification.progression, None, player))
+                        location.place_locked_item(AWItem(iname.victory.value, ItemClassification.progression, None, player))
                 else:
                     location = AWLocation(player, destination_name, world.location_name_to_id[destination_name],
                                           aw_regions[origin_name])
@@ -222,29 +222,29 @@ def create_regions_and_set_rules(world: "AnimalWellWorld") -> None:
                              state.count_from_list_unique(egg_group, player) >= eggs_required * egg_ratio)
 
     if not options.key_ring:
-        location = AWLocation(player, lname.got_all_keys, None, aw_regions[rname.bird_area])
-        location.place_locked_item(AWItem(iname.can_use_keys, ItemClassification.progression, None, player))
-        location.access_rule = lambda state: state.has(iname.key, player, 6)
-        aw_regions[rname.bird_area].locations.append(location)
+        location = AWLocation(player, lname.got_all_keys.value, None, aw_regions[rname.bird_area.value])
+        location.place_locked_item(AWItem(iname.can_use_keys.value, ItemClassification.progression, None, player))
+        location.access_rule = lambda state: state.has(iname.key.value, player, 6)
+        aw_regions[rname.bird_area.value].locations.append(location)
 
     if not options.matchbox:
-        location = AWLocation(player, lname.got_all_matches, None, aw_regions[rname.bird_area])
-        location.place_locked_item(AWItem(iname.can_use_matches, ItemClassification.progression, None, player))
-        location.access_rule = lambda state: state.has(iname.match, player, 9)
-        aw_regions[rname.bird_area].locations.append(location)
+        location = AWLocation(player, lname.got_all_matches.value, None, aw_regions[rname.bird_area.value])
+        location.place_locked_item(AWItem(iname.can_use_matches.value, ItemClassification.progression, None, player))
+        location.access_rule = lambda state: state.has(iname.match.value, player, 9)
+        aw_regions[rname.bird_area.value].locations.append(location)
 
     # a little hacky but oh well, it keeps other parts from being more convoluted
-    bbwand = AWLocation(player, lname.upgraded_wand, None, aw_regions[rname.bird_area])
-    bbwand.place_locked_item(AWItem(iname.bubble_long_real, ItemClassification.progression, None, player))
-    bbwand.access_rule = lambda state: state.has(iname.bubble, player, 2)
+    bbwand = AWLocation(player, lname.upgraded_wand.value, None, aw_regions[rname.bird_area.value])
+    bbwand.place_locked_item(AWItem(iname.bubble_long_real.value, ItemClassification.progression, None, player))
+    bbwand.access_rule = lambda state: state.has(iname.bubble.value, player, 2)
     aw_regions[rname.bird_area].locations.append(bbwand)
 
     for region in aw_regions.values():
         world.multiworld.regions.append(region)
 
     # special handling to deal with a quantity required
-    world.multiworld.get_entrance(rname.dog_bat_room.value + " -> " + rname.kangaroo_room.value, player).access_rule = \
-        lambda state: (state.has(iname.k_shard.value, player, 3) 
+    world.get_entrance(rname.dog_bat_room.value + " -> " + rname.kangaroo_room.value).access_rule = \
+        lambda state: (state.has(iname.k_shard.value, player, 3)
                        and (state.has_any({iname.disc.value, iname.bubble.value}, player)
                             or (state.has(iname.wheel.value, player) and options.wheel_tricks)))
 

@@ -77,7 +77,7 @@ class AnimalWellWorld(World):
     """
     game = "ANIMAL WELL"
     web = AnimalWellWeb()
-    version_string: str = "v0.6.0 RC1"
+    version_string: str = "v0.6.0 RC2"
 
     options: AnimalWellOptions
     options_dataclass = AnimalWellOptions
@@ -101,10 +101,8 @@ class AnimalWellWorld(World):
         create_regions_and_set_rules(self)
 
         if self.options.exclude_song_chests:
-            self.multiworld.get_location(LocationNames.wheel_chest.value, self.player).progress_type \
-                = LocationProgressType.EXCLUDED
-            self.multiworld.get_location(LocationNames.key_office.value, self.player).progress_type \
-                = LocationProgressType.EXCLUDED
+            self.get_location(LocationNames.wheel_chest.value).progress_type = LocationProgressType.EXCLUDED
+            self.get_location(LocationNames.key_office.value).progress_type = LocationProgressType.EXCLUDED
 
     def create_item(self, name: str) -> AWItem:
         item_data = item_table[name]
