@@ -2,8 +2,6 @@ import string
 import pymem
 import pymem.ressources.kernel32
 import ctypes
-# import win32api
-# import win32gui
 
 from time import time
 from typing import List, Optional, Callable, Any, Awaitable, Dict
@@ -1673,14 +1671,19 @@ class BeanPatcher:
             return False
         return self.cmd_keys[key]
 
-    # def run_cmd_prompt(self):
-    #     if win32gui.GetWindowText(win32gui.GetForegroundWindow()) != "ANIMAL WELL":
-    #         return
-    #     self.cmd_keys = []
-    #     for key in range(0xff):
-    #         self.cmd_keys.append(win32api.GetAsyncKeyState(key) != 0)
-    #     self.update_cmd_prompt()
-    #     self.cmd_keys_old = self.cmd_keys
+    def run_cmd_prompt(self):
+        try:
+            import win32gui, win32api
+            if win32gui.GetWindowText(win32gui.GetForegroundWindow()) != "ANIMAL WELL":
+                return
+            self.cmd_keys = []
+            for key in range(0xff):
+                self.cmd_keys.append(win32api.GetAsyncKeyState(key) != 0)
+            self.update_cmd_prompt()
+            self.cmd_keys_old = self.cmd_keys
+        except ImportError:
+            # it's not working because the install wasn't built such that win32gui is importable
+            pass
 
     def update_cmd_prompt(self):
         if not self.cmd_prompt:
@@ -1740,15 +1743,15 @@ class BeanPatcher:
                 self.cmd = self.cmd[:100]
                 self.display_to_client_bottom(f"> {self.cmd}" + ("|" if (time() % 1 < 0.5) else ""))
 
-    # def get_cmd(self):
-    #     self.run_cmd_prompt()
-    #     if self.cmd_ready:
-    #         self.cmd_ready = False
-    #         cmd = self.cmd.strip()
-    #         self.cmd = ""
-    #         if cmd:
-    #             return cmd
-    #     return None
+    def get_cmd(self):
+        self.run_cmd_prompt()
+        if self.cmd_ready:
+            self.cmd_ready = False
+            cmd = self.cmd.strip()
+            self.cmd = ""
+            if cmd:
+                return cmd
+        return None
 
     def display_dialog(self, text: str, title: str = "", action_text: str = ""):
         try:
