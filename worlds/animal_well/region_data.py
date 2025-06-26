@@ -226,7 +226,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location),
         lname.egg_dazzle:  # little obstacle course, feels like the bubble jump tutorial?
             AWData(AWType.location, [[iname.bubble], [iname.disc, iname.wheel], [iname.disc_hop_hard],
-                                     [iname.wheel_hard]]),
+                                     [iname.wheel_hard], [iname.flute_jump, iname.wheel_climb]]),
         lname.fruit_65:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_64:
