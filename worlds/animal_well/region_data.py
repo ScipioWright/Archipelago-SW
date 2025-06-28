@@ -226,7 +226,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location),
         lname.egg_dazzle:  # little obstacle course, feels like the bubble jump tutorial?
             AWData(AWType.location, [[iname.bubble], [iname.disc, iname.wheel], [iname.disc_hop_hard],
-                                     [iname.wheel_hard]]),
+                                     [iname.wheel_hard], [iname.flute_jump, iname.wheel_climb]]),
         lname.fruit_65:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_64:
@@ -1133,6 +1133,10 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         # it's in this region so that we don't mess with the rest of the logic for that area
         lname.egg_desert:
             AWData(AWType.location, [[iname.bubble]]),
+        rname.bobcat_room:
+            AWData(AWType.region, [[iname.top, iname.bubble]]),
+        # You can access desert egg and bobcat entry point without switching the elevator direction,
+        # but you need b.wand to guarantee you can switch it back if you DO switch it.
     },
     rname.frog_ruby_egg_ledge: {
         lname.egg_ruby:  # this whole region just for one egg
@@ -1164,8 +1168,6 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, [[iname.bubble, iname.slink], [iname.bubble_short, iname.obscure_tricks]], loc_type=LocType.fruit),
         lname.flame_green:
             AWData(AWType.location, [[iname.can_open_flame]], event=iname.green_flame),
-        rname.bobcat_room:
-            AWData(AWType.region, [[iname.top]]),
         # bird_area:  # pipe after flame, you need bubble to be here so no need to put the item requirement
         #     AWData(AWType.region),
     },
