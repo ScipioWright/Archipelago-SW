@@ -318,7 +318,7 @@ def get_junk_item(rand, count=1, pool=None, plando_pool=None):
         try:
             junk_items, junk_weights = zip(*jw_list)
         except ValueError:
-            raise RuntimeError("Not enough junk is available in the item pool to replace removed items.")
+            raise OptionError("OoT: Not enough junk is available in the item pool to replace removed items.")
     else:
         junk_items, junk_weights = zip(*junk_pool)
     return_pool.extend(rand.choices(junk_items, weights=junk_weights, k=count))
