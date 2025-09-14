@@ -649,7 +649,7 @@ class TunicWorld(World):
         set_er_location_rules(self)
 
     def connect_entrances(self) -> None:
-        if self.using_ut and self.settings.ut_show_entrances:
+        if self.using_ut and self.settings.ut_show_entrances and self.multiworld.enforce_deferred_connections:
             ut_stuff.disconnect_entrances(self)
             ut_stuff.setup_found_entrances_datastorage(self)
 
