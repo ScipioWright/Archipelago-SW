@@ -37,17 +37,9 @@ class TunicSettings(Group):
         description = "TUNIC Poptracker Pack zip file"
         required = False
 
-    class UTShowEntrances(Bool):
-        """
-        Decide whether Universal Tracker should show available entrances and not checks behind them,
-        or just show all available checks.
-        If Universal Tracker eventually lets you toggle this, this setting will need to be on as well.
-        """
-
     disable_local_spoiler: DisableLocalSpoiler | bool = False
     limit_grass_rando: LimitGrassRando | bool = True
     ut_poptracker_path: UTPoptrackerPath | str = UTPoptrackerPath()
-    ut_show_entrances: UTShowEntrances | bool = False
 
 
 class TunicWeb(WebWorld):
@@ -650,7 +642,7 @@ class TunicWorld(World):
         set_er_location_rules(self)
 
     def connect_entrances(self) -> None:
-        if self.using_ut and self.settings.ut_show_entrances and self.multiworld.enforce_deferred_connections:
+        if self.using_ut and self.multiworld.enforce_deferred_connections:
             ut_stuff.disconnect_entrances(self)
             ut_stuff.setup_found_entrances_datastorage(self)
 
