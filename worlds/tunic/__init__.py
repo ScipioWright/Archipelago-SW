@@ -41,6 +41,7 @@ class TunicSettings(Group):
         """
         Decide whether Universal Tracker should show available entrances and not checks behind them,
         or just show all available checks.
+        If Universal Tracker eventually lets you toggle this, this setting will need to be on as well.
         """
 
     disable_local_spoiler: DisableLocalSpoiler | bool = False
