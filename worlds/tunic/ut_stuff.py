@@ -43,7 +43,6 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
         world.using_ut = False
 
 
-
 def modify_shop_key(portal_sdt: str) -> str:
     if portal_sdt.startswith("Shop, ") and not portal_sdt.startswith("Shop, P"):
         # the mod internally uses Shop, Previous Region instead of just having the number
