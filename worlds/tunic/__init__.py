@@ -2,7 +2,7 @@ from dataclasses import fields
 from logging import warning
 from typing import Any, TypedDict, ClassVar, TextIO
 
-from BaseClasses import Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState, Entrance, Region
+from BaseClasses import Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, Removed
 from settings import Group, Bool, FilePath
 from worlds.AutoWorld import WebWorld, World
@@ -22,7 +22,7 @@ from .logic_helpers import randomize_ability_unlocks, gold_hexagon
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
                       check_options, LocalFill, get_hexagons_in_pool, HexagonQuestAbilityUnlockType)
-from . import ut_stuff
+from .ut_stuff import UTMixin
 
 
 class TunicSettings(Group):
@@ -77,7 +77,7 @@ class SeedGroup(TypedDict):
     plando: list[PlandoConnection]  # consolidated plando connections for the seed group
 
 
-class TunicWorld(World):
+class TunicWorld(UTMixin, World):
     """
     Explore a land filled with lost legends, ancient powers, and ferocious monsters in TUNIC, an isometric action game
     about a small fox on a big adventure. Stranded on a mysterious beach, armed with only your own curiosity, you will
@@ -129,13 +129,6 @@ class TunicWorld(World):
     # if these are locations instead of their info, it gives a memory leak error
     item_link_locations: dict[int, dict[str, list[tuple[int, str]]]] = {}
     player_item_link_locations: dict[str, list[Location]]
-
-    using_ut: bool  # so we can check if we're using UT only once
-    passthrough: dict[str, Any]
-    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
-    tracker_world: ClassVar = ut_stuff.tracker_world
-    disconnected_entrances: dict[Entrance, Region]
-    found_entrances_datastorage_key: list[str]
 
     def generate_early(self) -> None:
         # if you have multiple APWorlds, we want it to fail here instead of at the end of gen
@@ -194,7 +187,7 @@ class TunicWorld(World):
                                       f"They have Direction Pairs enabled and the connection "
                                       f"{cxn.entrance} --> {cxn.exit} does not abide by this option.")
 
-        ut_stuff.setup_options_from_slot_data(self)
+        self.setup_options_from_slot_data(self)
 
         self.player_location_table = standard_location_name_to_id.copy()
 
@@ -619,17 +612,6 @@ class TunicWorld(World):
     def set_rules(self) -> None:
         set_er_location_rules(self)
 
-    def connect_entrances(self) -> None:
-        if self.using_ut and self.multiworld.enforce_deferred_connections in ("on", "default"):
-            ut_stuff.disconnect_entrances(self)
-            ut_stuff.setup_found_entrances_datastorage(self)
-
-    def reconnect_found_entrances(self, key: str, value: Any) -> None:
-        if not value:
-            return
-        else:
-            ut_stuff.reconnect_found_entrance(self, key.split(":")[-1])
-
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
 
@@ -772,12 +754,4 @@ class TunicWorld(World):
                 for _ in range(self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
 
-        return slot_data
-
-    # for the universal tracker, doesn't get called in standard gen
-    # docs: https://github.com/FarisTheAncient/Archipelago/blob/tracker/worlds/tracker/docs/re-gen-passthrough.md
-    @staticmethod
-    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
-        # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
-        # we are using re_gen_passthrough over modifying the world here due to complexities with ER
         return slot_data
