@@ -147,7 +147,7 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player)
     elif item == Items.LONGSHOT:
         return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player, 2)
-    elif item == Items.BOMB_BAG:
+    elif item == Items.PROGRESSIVE_BOMB_BAG:
         return state.has(Items.PROGRESSIVE_BOMB_BAG.value, player)
     elif item == Items.CHILD_WALLET:
         return can_afford(99, bundle)
@@ -232,7 +232,7 @@ def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
     bombchu_bag_enabled = False
     if bombchu_bag_enabled:  # TODO bombchu bag enabled
         return has_item(Items.BOMBCHU_BAG, bundle)
-    return has_item(Items.BOMB_BAG, bundle)
+    return has_item(Items.PROGRESSIVE_BOMB_BAG, bundle)
 
 
 ocarina_buttons_required: dict[str, list[str]] = {
@@ -264,7 +264,7 @@ def can_play_song(song: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"
 
 def has_explosives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has access to explosives (bombs or bombchus)."""
-    return can_use_any([Items.BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], bundle)
+    return can_use_any([Items.PROGRESSIVE_BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], bundle)
 
 
 def blast_or_smash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -470,7 +470,7 @@ def call_gossip_fairy(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bo
 
 
 def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return can_break_upper_beehives(bundle) or can_use(Items.BOMB_BAG, bundle)
+    return can_break_upper_beehives(bundle) or can_use(Items.PROGRESSIVE_BOMB_BAG, bundle)
 
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -500,7 +500,7 @@ def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance
         return True
     if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.STICKS, bundle)):
         return True
-    if distance <= EnemyDistance.BOMB_THROW and not in_water and can_use(Items.BOMB_BAG, bundle):
+    if distance <= EnemyDistance.BOMB_THROW and not in_water and can_use(Items.PROGRESSIVE_BOMB_BAG, bundle):
         return True
     if distance <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, bundle):
         return True
@@ -538,7 +538,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
             return True
         if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.STICKS, bundle)):
             return True
-        if distance <= EnemyDistance.BOMB_THROW and (not in_water and can_use(Items.BOMB_BAG, bundle)):
+        if distance <= EnemyDistance.BOMB_THROW and (not in_water and can_use(Items.PROGRESSIVE_BOMB_BAG, bundle)):
             return True
         if distance <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, bundle) or (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))):
             return True
@@ -597,7 +597,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or (quantity <= 1 and can_use(Items.STICKS, bundle))):
             return True
         if distance <= EnemyDistance.BOMB_THROW and quantity <= 2 and not timer and not in_water and \
-                                (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle)) and can_use(Items.BOMB_BAG, bundle):
+                                (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle)) and can_use(Items.PROGRESSIVE_BOMB_BAG, bundle):
             return True
         if distance <= EnemyDistance.HOOKSHOT and wall_or_floor and can_use(Items.BOMBCHUS_5, bundle):
             return True
@@ -619,7 +619,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     if enemy in [Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.WALLMASTER]:
         return can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or \
                    can_use(Items.BOMBCHUS_5, bundle) or can_use(Items.DINS_FIRE, bundle) or \
-                   (can_use(Items.BOMB_BAG, bundle) and (can_use(Items.NUTS, bundle) or can_use(Items.HOOKSHOT, bundle) or can_use(Items.BOOMERANG, bundle)))
+                   (can_use(Items.PROGRESSIVE_BOMB_BAG, bundle) and (can_use(Items.NUTS, bundle) or can_use(Items.HOOKSHOT, bundle) or can_use(Items.BOOMERANG, bundle)))
 
     if enemy == Enemies.GERUDO_WARRIOR:
         return can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle) or \
@@ -674,7 +674,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
                (can_use(Items.NUTS, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or hookshot_or_boomerang(bundle))
     if enemy == Enemies.KING_DODONGO:
         return (has_boss_soul(Items.KING_DODONGOS_SOUL, bundle) and can_jump_slash(bundle) and
-                (can_use(Items.BOMB_BAG, bundle) or has_item(Items.GORONS_BRACELET, bundle) or
+                (can_use(Items.PROGRESSIVE_BOMB_BAG, bundle) or has_item(Items.GORONS_BRACELET, bundle) or
                  (False and is_adult(bundle) and can_use(Items.BOMBCHUS_5, bundle)))) #TODO replace False with ctx->get_trick_option(RT_DC_DODONGO_CHU)
     if enemy == Enemies.BARINADE:
         return has_boss_soul(Items.BARINADES_SOUL, bundle) and can_use(Items.BOOMERANG, bundle) and can_jump_slash_except_hammer(bundle)
@@ -731,7 +731,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
                can_use(Items.ICE_ARROW, bundle)
     if enemy == Enemies.OCTOROK:
         return can_reflect_nuts(bundle) or hookshot_or_boomerang(bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or \
-               can_use(Items.BOMB_BAG, bundle) or (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))
+               can_use(Items.PROGRESSIVE_BOMB_BAG, bundle) or (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))
 
     return False
 
@@ -995,4 +995,4 @@ def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return has_item(Items.MAGIC_BEAN, bundle) and can_be_both_ages(bundle)
 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
-    return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
+    return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.PROGRESSIVE_BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
