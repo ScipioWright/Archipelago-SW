@@ -1,15 +1,9 @@
 from .entrance_class import DeathsDoorEntrance
 from ..rule_builder_overrides import HasAll, Has
-try:
-    from rule_builder import (
-        True_,
-        OptionFilter,
-    )
-except ModuleNotFoundError:
-    from ..rule_builder import (
-        True_,
-        OptionFilter,
-    )
+from rule_builder.rules import (
+    True_,
+    OptionFilter,
+)
 from ..items import DeathsDoorItemName as I
 from ..regions import DeathsDoorRegionName as R
 from ..options import GateRollsGlitch

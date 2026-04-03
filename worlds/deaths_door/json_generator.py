@@ -2,10 +2,7 @@ from typing import Any
 
 import json
 
-try:
-    from rule_builder import True_
-except ModuleNotFoundError:
-    from .rule_builder import True_
+from rule_builder.rules import True_
 from .entrances.entrances import deathsdoor_internal_entrances, DeathsDoorEntrance
 from .entrances.scene_transitions import two_way_scene_transitions, one_way_scene_transitions
 from .locations import location_table

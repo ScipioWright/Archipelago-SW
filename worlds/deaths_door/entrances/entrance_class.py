@@ -1,10 +1,8 @@
 from enum import IntEnum
 from typing import TYPE_CHECKING, NamedTuple
 
-try:
-    from rule_builder import Rule
-except ModuleNotFoundError:
-    from ..rule_builder import Rule
+from rule_builder.rules import Rule
+
 from ..regions import DeathsDoorRegionName as R
 
 if TYPE_CHECKING:

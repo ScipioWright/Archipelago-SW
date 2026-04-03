@@ -3,10 +3,8 @@ from logging import warning
 
 from Options import Option, PlandoConnection
 
-try:
-    from rule_builder import RuleWorldMixin, Rule, False_
-except ModuleNotFoundError:
-    from .rule_builder import RuleWorldMixin, Rule, False_
+from rule_builder.rules import Rule, False_
+from rule_builder.cached_world import CachedRuleBuilderWorld
 from .options import (
     DeathsDoorOptions,
     Goal,
@@ -87,7 +85,7 @@ class DeathsDoorWeb(WebWorld):
     ]
 
 
-class DeathsDoorWorld(RuleWorldMixin, World):
+class DeathsDoorWorld(CachedRuleBuilderWorld, World):
     """Reaping souls of the dead and punching a clock might get monotonous but it's honest work for a Crow.
     The job gets lively when your assigned soul is stolen and you must track down a desperate thief to a realm
     untouched by death - where creatures grow far past their expiry."""
@@ -493,7 +491,7 @@ class DeathsDoorWorld(RuleWorldMixin, World):
             completion_rule = completion_rule | Has(E.LIFE_SEED_DOOR)
 
         self.set_completion_rule(completion_rule)
-        self.register_dependencies()
+        self.register_rule_builder_dependencies()
 
         # generate_rule_json()
         # generate_items_json()
