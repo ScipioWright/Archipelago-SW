@@ -64,6 +64,10 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.region, [[iname.blue_flame, iname.green_flame, iname.pink_flame, iname.violet_flame]]),
         rname.bear_truth_egg_spot:
             AWData(AWType.region, [[iname.disc_hop], [iname.bubble_long_real, iname.obscure_tricks]]),
+        rname.match_center_well_spot:  # overwhelm the hummingbird with bubbles on the screen edge
+            AWData(AWType.region, [[iname.bubble_long_real, iname.obscure_tricks]]),
+        rname.chocolate_egg_spot:
+            AWData(AWType.region, [[iname.bubble_long_real, iname.obscure_tricks]]),
         lname.stamp_chest:
             AWData(AWType.location),
         rname.bird_flute_chest:
@@ -1093,6 +1097,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.key_frog_guard_room_east:
             AWData(AWType.location, [[iname.yoyo], [iname.bubble, iname.flute], 
                                      [iname.ball], [iname.flute_jump]]),
+        rname.frog_bird_after_yoyo_1:
+            AWData(AWType.region),
         rname.frog_dark_room:  # yoyo to open the door, lantern to fall through the bird, or ball to hit buttons
             AWData(AWType.region, [[iname.yoyo], [iname.lantern], [iname.ball_trick_easy]]),
         rname.frog_ruby_egg_ledge:  # fall through a bird onto it
