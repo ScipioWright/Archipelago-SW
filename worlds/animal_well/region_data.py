@@ -100,6 +100,9 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
                                      [iname.flute_jump]]),
         lname.egg_rain:
             AWData(AWType.location, [[iname.top]]),
+        # You can overwelm the humming bird with bubbles and use that to get up the shaft of the well
+        rname.top_of_the_well:
+            AWData(AWType.region, [[iname.bubble_long_real, iname.obscure_tricks]])
     },
     rname.bird_flute_chest: {
         lname.activate_bird_fast_travel:
