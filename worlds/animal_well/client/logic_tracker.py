@@ -1,14 +1,13 @@
-from typing import Dict, Set
+from typing import Any
 from enum import IntEnum
 
-from worlds.animal_well.locations import location_name_to_id, events_table
-from worlds.animal_well.region_data import AWType, LocType, traversal_requirements
-from worlds.animal_well.region_scripts import helper_reference
-from worlds.animal_well.names import ItemNames as iname, LocationNames as lname, RegionNames as rname
-from worlds.animal_well.options import (Goal, EggsNeeded, KeyRing, Matchbox, BunniesAsChecks, BunnyWarpsInLogic,
-                                        CandleChecks, BubbleJumping, DiscHopping, WheelTricks, ExcludeSongChests,
-                                        BallThrowing, TankingDamage, ObscureTricks, PreciseTricks, Fruitsanity,
-                                        FluteJumps)
+from ..locations import location_name_to_id, events_table
+from ..region_data import AWType, LocType, traversal_requirements
+from ..region_scripts import helper_reference
+from ..names import ItemNames as iname, LocationNames as lname, RegionNames as rname
+from ..options import (Goal, EggsNeeded, KeyRing, Matchbox, BunniesAsChecks, BunnyWarpsInLogic, CandleChecks,
+                       BubbleJumping, DiscHopping, WheelTricks, ExcludeSongChests, BallThrowing, TankingDamage,
+                       ObscureTricks, PreciseTricks, Fruitsanity, FluteJumps)
 
 
 class CheckStatus(IntEnum):
@@ -20,7 +19,7 @@ class CheckStatus(IntEnum):
 
 
 # keys are location names, values are item names
-candle_event_to_item: Dict[str, str] = {
+candle_event_to_item: dict[str, str] = {
     lname.candle_first_event.value: iname.event_candle_first.value,
     lname.candle_dog_dark_event.value: iname.event_candle_dog_dark.value,
     lname.candle_dog_switch_box_event.value: iname.event_candle_dog_switch_box.value,
@@ -33,7 +32,7 @@ candle_event_to_item: Dict[str, str] = {
 }
 
 
-candle_locations: Set[str] = {
+candle_locations: set[str] = {
     lname.candle_first,
     lname.candle_dog_dark,
     lname.candle_dog_switch_box,
@@ -47,7 +46,7 @@ candle_locations: Set[str] = {
 
 
 class AnimalWellTracker:
-    player_options: Dict[str, int] = {
+    player_options: dict[str, int] = {
         Goal.internal_name: 0,
         EggsNeeded.internal_name: 64,
         KeyRing.internal_name: 1,
@@ -68,23 +67,26 @@ class AnimalWellTracker:
     }
 
     # key is location name, value is its spot status. Can change the key later to something else if wanted
-    check_logic_status: Dict[str, int] = {loc_name: 0 for loc_name in location_name_to_id.keys()}
+    check_logic_status: dict[str, int] = {loc_name: 0 for loc_name in location_name_to_id.keys()}
 
     # the player's current inventory, including event items and the 65th egg, excluding eggs
-    full_inventory: Set[str] = set()
+    full_inventory: set[str] = set()
     # same as above, but includes out of logic inventory too
-    out_of_logic_full_inventory: Set[str] = set()
+    out_of_logic_full_inventory: set[str] = set()
     # update these manually
     # egg_tracker is a set instead of an int to properly deal with duplicates from get_item, start inventory, etc.
-    egg_tracker: Set[str] = set()
+    egg_tracker: set[str] = set()
     upgraded_b_wand: bool = False
     key_count: int = 0
     match_count: int = 0
     k_shard_count: int = 0
 
-    regions_in_logic: Set[str] = {rname.menu}
+    regions_in_logic: set[str] = {rname.menu}
     # includes regions accessible in logic
-    regions_out_of_logic: Set[str] = {rname.menu}
+    regions_out_of_logic: set[str] = {rname.menu}
+
+    def get_option_value(self, option: Any) -> int:
+        return self.player_options[option.internal_name]
 
     # update check_logic_status and the regions logic status
     # set in_logic to True for regions_in_logic, False for regions_out_of_logic
@@ -102,7 +104,7 @@ class AnimalWellTracker:
                         continue
                     # if it's a bunny warp, bunny warps in logic is off, and we're updating the in logic regions
                     if (destination_data.bunny_warp and in_logic
-                            and not self.player_options[BunnyWarpsInLogic.internal_name]):
+                            and not self.get_option_value(BunnyWarpsInLogic)):
                         continue
                 if destination_data.type == AWType.location:
                     # events aren't in location_name_to_id, so give them a key here
@@ -163,19 +165,19 @@ class AnimalWellTracker:
         if iname.bubble in self.full_inventory:
             self.out_of_logic_full_inventory.add(iname.bubble_short)
             self.out_of_logic_full_inventory.add(iname.bubble_long)
-            if self.player_options[BubbleJumping.internal_name] >= BubbleJumping.option_short_chains:
+            if self.get_option_value(BubbleJumping) >= BubbleJumping.option_short_chains:
                 self.full_inventory.add(iname.bubble_short)
-            if self.player_options[BubbleJumping.internal_name] >= BubbleJumping.option_long_chains:
+            if self.get_option_value(BubbleJumping) >= BubbleJumping.option_long_chains:
                 self.full_inventory.add(iname.bubble_long)
 
         if iname.wheel in self.full_inventory:
             self.out_of_logic_full_inventory.add(iname.wheel_hop)
             self.out_of_logic_full_inventory.add(iname.wheel_climb)
             self.out_of_logic_full_inventory.add(iname.wheel_hard)
-            if self.player_options[WheelTricks.internal_name] >= WheelTricks.option_simple:
+            if self.get_option_value(WheelTricks) >= WheelTricks.option_simple:
                 self.full_inventory.add(iname.wheel_hop)
                 self.full_inventory.add(iname.wheel_climb)
-            if self.player_options[WheelTricks.internal_name] >= WheelTricks.option_advanced:
+            if self.get_option_value(WheelTricks.internal_name) >= WheelTricks.option_advanced:
                 self.full_inventory.add(iname.wheel_hard)
 
         # this is temporary -- remove if we detect when the player has traded the mock disc for the real disc
@@ -186,37 +188,37 @@ class AnimalWellTracker:
         if iname.disc in self.full_inventory:
             self.out_of_logic_full_inventory.add(iname.disc_hop)
             self.out_of_logic_full_inventory.add(iname.disc_hop_hard)
-            if self.player_options[DiscHopping.internal_name] >= DiscHopping.option_single:
+            if self.get_option_value(DiscHopping) >= DiscHopping.option_single:
                 self.full_inventory.add(iname.disc_hop)
-            if self.player_options[DiscHopping.internal_name] >= DiscHopping.option_multiple:
+            if self.get_option_value(DiscHopping.internal_name) >= DiscHopping.option_multiple:
                 self.full_inventory.add(iname.disc_hop_hard)
 
         if iname.ball in self.full_inventory:
             self.full_inventory.add(iname.ball)
             self.out_of_logic_full_inventory.update({iname.ball, iname.ball_trick_easy, iname.ball_trick_medium,
                                                      iname.ball_trick_hard})
-            if self.player_options[BallThrowing.internal_name] >= BallThrowing.option_simple:
+            if self.get_option_value(BallThrowing) >= BallThrowing.option_simple:
                 self.full_inventory.add(iname.ball_trick_easy)
-            if self.player_options[BallThrowing.internal_name] >= BallThrowing.option_advanced:
+            if self.get_option_value(BallThrowing) >= BallThrowing.option_advanced:
                 self.full_inventory.add(iname.ball_trick_medium)
-            if self.player_options[BallThrowing.internal_name] >= BallThrowing.option_expert:
+            if self.get_option_value(BallThrowing) >= BallThrowing.option_expert:
                 self.full_inventory.add(iname.ball_trick_hard)
 
         if iname.flute in self.full_inventory:
             self.out_of_logic_full_inventory.add(iname.flute_jump)
-            if self.player_options[FluteJumps.internal_name]:
+            if self.get_option_value(FluteJumps):
                 self.full_inventory.add(iname.flute_jump)
 
         self.out_of_logic_full_inventory.add(iname.precise_tricks)
-        if self.player_options[PreciseTricks.internal_name]:
+        if self.get_option_value(PreciseTricks):
             self.full_inventory.add(iname.precise_tricks)
 
         self.out_of_logic_full_inventory.add(iname.obscure_tricks)
-        if self.player_options[ObscureTricks.internal_name]:
+        if self.get_option_value(ObscureTricks):
             self.full_inventory.add(iname.obscure_tricks)
 
         self.out_of_logic_full_inventory.add(iname.tanking_damage)
-        if self.player_options[TankingDamage.internal_name]:
+        if self.get_option_value(TankingDamage):
             self.full_inventory.add(iname.tanking_damage)
 
         for helper_name, items in helper_reference.items():
@@ -255,19 +257,24 @@ class AnimalWellTracker:
                         self.check_logic_status[destination_name] = CheckStatus.dont_show.value
                     # skip bunnies that aren't included in the location pool
                     elif destination_data.loc_type == LocType.bunny:
-                        if self.player_options[BunniesAsChecks.internal_name] == BunniesAsChecks.option_off:
+                        if self.get_option_value(BunniesAsChecks) == BunniesAsChecks.option_off:
                             self.check_logic_status[destination_name] = CheckStatus.dont_show.value
-                        if (self.player_options[BunniesAsChecks.internal_name] == BunniesAsChecks.option_exclude_tedious
+                        if (self.get_option_value(BunniesAsChecks) == BunniesAsChecks.option_exclude_tedious
                                 and destination_name in [lname.bunny_mural.value, lname.bunny_dream.value,
                                                          lname.bunny_uv.value, lname.bunny_lava.value]):
                             self.check_logic_status[destination_name] = CheckStatus.dont_show.value
                     elif destination_data.loc_type == LocType.candle:
-                        if not self.player_options[CandleChecks.internal_name]:
+                        if not self.get_option_value(CandleChecks):
                             self.check_logic_status[destination_name] = CheckStatus.dont_show.value
                     elif destination_data.loc_type == LocType.fruit:
-                        if not self.player_options[Fruitsanity.internal_name]:
+                        if not self.get_option_value(Fruitsanity):
                             self.check_logic_status[destination_name] = CheckStatus.dont_show.value
                     # if it's excluded due to the option, don't show it
-                    elif (self.player_options[ExcludeSongChests.internal_name] == ExcludeSongChests.option_true 
+                    elif (self.get_option_value(ExcludeSongChests) == ExcludeSongChests.option_true
                           and destination_name in [lname.wheel_chest.value, lname.key_office.value]):
+                        self.check_logic_status[destination_name] = CheckStatus.dont_show.value
+                    # this bunny and fruit are not checks if you can't logically reach them
+                    elif (self.get_option_value(DiscHopping) != DiscHopping.option_multiple
+                            and not (self.get_option_value(WheelTricks) and self.get_option_value(PreciseTricks))
+                          and destination_name in (lname.fruit_1.value, lname.bunny_disc_spike.value)):
                         self.check_logic_status[destination_name] = CheckStatus.dont_show.value
