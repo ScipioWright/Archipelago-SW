@@ -177,7 +177,7 @@ class AnimalWellTracker:
             if self.get_option_value(WheelTricks) >= WheelTricks.option_simple:
                 self.full_inventory.add(iname.wheel_hop)
                 self.full_inventory.add(iname.wheel_climb)
-            if self.get_option_value(WheelTricks.internal_name) >= WheelTricks.option_advanced:
+            if self.get_option_value(WheelTricks) >= WheelTricks.option_advanced:
                 self.full_inventory.add(iname.wheel_hard)
 
         # this is temporary -- remove if we detect when the player has traded the mock disc for the real disc
@@ -190,7 +190,7 @@ class AnimalWellTracker:
             self.out_of_logic_full_inventory.add(iname.disc_hop_hard)
             if self.get_option_value(DiscHopping) >= DiscHopping.option_single:
                 self.full_inventory.add(iname.disc_hop)
-            if self.get_option_value(DiscHopping.internal_name) >= DiscHopping.option_multiple:
+            if self.get_option_value(DiscHopping) >= DiscHopping.option_multiple:
                 self.full_inventory.add(iname.disc_hop_hard)
 
         if iname.ball in self.full_inventory:
