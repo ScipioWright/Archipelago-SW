@@ -1050,7 +1050,7 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Miniboss Platform"],
         rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world,
+        or has_ice_grapple_logic(False, IceGrappling.option_easy, state, world,
                                  [EnemySouls.voidling])
         or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses))
 
