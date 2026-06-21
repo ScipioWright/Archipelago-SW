@@ -1784,6 +1784,7 @@ class BeanPatcher:
                     self.last_message_time = 0
         except Exception as e:
             self.log_error(f"Error while attempting to display text to client: {e}")
+            self.log_error(f"Text that caused the error is {text}")
 
     def display_to_client_bottom(self, text: str):
         try:
