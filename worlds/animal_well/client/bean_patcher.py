@@ -319,8 +319,6 @@ class BeanPatcher:
         self.logger = logger
         self.log_debug_info = True
 
-        self.aw_module = None
-        self.module_base = 0
         self.application_state_address = 0
         self.last_game_state = 0
         self.custom_memory_base = None
@@ -465,35 +463,55 @@ class BeanPatcher:
 
         return base_layer_address
 
+    def find_pattern_no_wildcard(self, pattern_groups: list[str]) -> int:
+        pattern_bytes = bytes.fromhex("".join(pattern_groups))
+        address = next(self.process.search_by_value(bytes, len(pattern_groups), pattern_bytes))
+        # TODO: catch stopiteration
+
+        if not address:
+            self.log_error(f"Failed to find pattern '{pattern}'!")
+            raise ValueError
+        return address
+
     def find_pattern(self, pattern: string, add_length: bool = False) -> int:
         if pattern is None:
             self.log_error("Invalid or missing pattern.")
             return -1
 
-        if self.aw_module is None:
-            self.log_error("No AW process found. Cannot scan.")
-            return -1
-
+        pattern_groups = pattern.split(" ")
+        byte_count = len(pattern_groups)
         # self.log_info(f"Searching for pattern '{pattern}'")
 
-        byte_strings = []
+        if "??" in pattern:
+            patterns: list[bytes] = []
+            offsets: list[int] = []
+            working: list[str] | int = []
+            is_working_int = False
+            for group in pattern_groups:
+                if group == "??":
+                    if is_working_int:
+                        working += 1
+                    else:
+                        patterns.append(bytes.fromhex("".join(working)))
+                        working = 1
+                        is_working_int = True
+                else:
+                    if is_working_int:
+                        offsets.append(working)
+                        working = [group]
+                        is_working_int = False
+                    else:
+                        working.append(group)
 
-        for group in pattern.split(" "):
-            if group == "??":
-                byte_strings.append(b".")
-            else:
-                byte_strings.append(bytes("\\x" + group, "utf-8"))
+            for address in self.process.search_by_value(bytes, len(patterns[0]), patterns[0]):
+                for offset, sub_pattern in zip(offsets, patterns[1:]):
+                    if sub_pattern != self.process.read_bytes(address + offset, len(sub_pattern)):
+                        break
+                # if we get this far the address is good
+                break
 
-        byte_count = len(byte_strings)
-        pattern_bytes = b"".join(byte_strings)
-        # pattern_bytes = bytes("\\x" + pattern.replace(" ", "\\x"), "utf-8")
-        # self.log_info(f"Pattern_bytes: {pattern_bytes}")
-
-        address = self.process.pattern_scan_module(pattern_bytes, self.aw_module)
-
-        if address is None:
-            self.log_error(f"Failed to find pattern '{pattern}'!")
-            raise ValueError
+        else:
+            address = self.find_pattern_no_wildcard(pattern_groups)
 
         if add_length:
             # self.log_info(f"Address: {hex(address + byte_count)}")
@@ -514,26 +532,61 @@ class BeanPatcher:
 
     def attach_to_process(self, process=None) -> bool:
         if process is not None:
-            self.process = process
+            class ProxyProcess:
+                def __init__(self, process):
+                    self._process = process
+
+                def search_by_value(self, *args, **kwargs):
+                    return self._process.search_by_value(*args, **kwargs)
+
+                def read_float(self, address):
+                    return self._process.read_process_memory(address, float, 32)
+
+                def read_uint(self, address):
+                    return self._process.read_process_memory(address, int, 4)
+
+                def read_uchar(self, address):
+                    return self._process.read_process_memory(address, str, 1)
+
+                def read_bytes(self, address, size):
+                    return self._process.read_process_memory(address, bytes, size)
+
+                def read_int(self, address):
+                    return self._process.read_process_memory(address, int, 4)
+
+                def read_bool(self, address):
+                    return self._process.read_process_memory(address, bool, 1)
+
+                # def read_string(self, address):
+                #     return self._process.read_process_memory(address, str, 32)
+
+                def write_float(self, address, value):
+                    return self._process.write_process_memory(address, float, 32, value)
+
+                def write_uint(self, address, value):
+                    return self._process.write_process_memory(address, int, 4, value)
+
+                def write_uchar(self, address, value):
+                    return self._process.write_process_memory(address, str, 1, value)
+
+                def write_bytes(self, address, value, size):
+                    return self._process.write_process_memory(address, bytes, 32, value, size)
+
+                def write_int(self, address, value):
+                    return self._process.write_process_memory(address, int, 4, value)
+
+                def write_bool(self, address, value):
+                    return self._process.write_process_memory(address, bool, 1, value)
+
+                # def write_string(self, address, value):
+                #     return self._process.write_process_memory(address, str, 32, value)
+
+            self.process = ProxyProcess(process)
 
         if process is None:
             self.log_error("No process handle provided. Cannot attach to process!")
             self.attached_to_process = False
             return False
-
-        if self.log_debug_info:
-            self.log_info("Searching for 'Animal Well.exe' module in process memory...")
-        self.aw_module = next(f for f in list(self.process.list_modules()) if f.name.startswith("Animal Well.exe"))
-
-        if self.aw_module is None:
-            self.log_error(f"Failed to find Animal Well module within the Animal Well process!")
-            self.attached_to_process = False
-            return False
-
-        if self.log_debug_info:
-            self.log_info(f"Found it: Name({self.aw_module.name}), BaseOfDll({hex(self.aw_module.lpBaseOfDll)})")
-
-        self.module_base = self.aw_module.lpBaseOfDll
 
         application_state_pointer_address = self.find_relative_address_from_instruction(
             self.find_pattern("0f 29 bc 24 e0 00 00 00 0f 29 b4 24 d0 00 00 00 48 89 cf", True), 3)
@@ -1363,11 +1416,12 @@ class BeanPatcher:
             self.log_info(f"Generated patch to prevent despawning ghost dog...\n{self.prevent_despawning_dog_patch}")
 
     def write_protected_memory(self, addr, data):
-        page = ctypes.c_ulonglong(addr & ~0xFFF)
-        old_protect = pymem.memory.virtual_query(self.process.process_handle, addr).Protect
-        pymem.ressources.kernel32.VirtualProtectEx(self.process.process_handle, page, 0x1000, 0x40)
-        self.process.write_bytes(addr, data, len(data))
-        pymem.ressources.kernel32.VirtualProtectEx(self.process.process_handle, page, 0x1000, old_protect)
+        return
+        # page = ctypes.c_ulonglong(addr & ~0xFFF)
+        # old_protect = pymem.memory.virtual_query(self.process.process_handle, addr).Protect
+        # pymem.ressources.kernel32.VirtualProtectEx(self.process.process_handle, page, 0x1000, 0x40)
+        # self.process.write_bytes(addr, data, len(data))
+        # pymem.ressources.kernel32.VirtualProtectEx(self.process.process_handle, page, 0x1000, old_protect)
 
     def change_save_file_name(self, seeded_save_file="AnimalWell.sav"):
         if seeded_save_file == "AnimalWell.sav":

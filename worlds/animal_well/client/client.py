@@ -10,7 +10,8 @@ import random
 import time
 import traceback
 import struct
-import pymem
+# import pymem
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 import logging
 from typing import Dict, Any
 
@@ -293,7 +294,7 @@ class AnimalWellCommandProcessor(ClientCommandProcessor):
                         self.ctx.process_handle.write_bytes(slot_address + 0x1EC, buffer, 4)
                     else:
                         raise NotImplementedError("Only Windows is implemented right now")
-        except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, pymem.exception.MemoryWriteError) as e:
+        except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess) as e:
             bean_logger.error("%s", e)
             self.ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
@@ -842,7 +843,7 @@ class AWLocations:
                     ctx.bean_patcher.read_from_game()
             else:
                 raise NotImplementedError("Only Windows is implemented right now")
-        except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, ConnectionResetError) as e:
+        except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess) as e:
             bean_logger.error("%s", e)
             ctx.connection_status = CONNECTION_RESET_STATUS
             traceback.print_exc()
@@ -1472,7 +1473,7 @@ class AWItems:
                     ctx.bean_patcher.write_to_game()
             else:
                 raise NotImplementedError("Only Windows is implemented right now")
-        except (pymem.exception.ProcessError, pymem.exception.MemoryReadError, pymem.exception.MemoryWriteError,
+        except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess,
                 ConnectionResetError) as e:
             bean_logger.error("%s", e)
             ctx.connection_status = CONNECTION_RESET_STATUS
@@ -1490,10 +1491,12 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
     Get the process handle of Animal Well
     """
     try:
-        if platform.uname()[0] == "Windows":
+        try:
+        # if platform.uname()[0] == "Windows":
             bean_logger.debug("Getting process handle on Windows")
-            process_handle = pymem.Pymem("Animal Well.exe")
-            bean_logger.debug("Found PID %d", process_handle.process_id)
+            # process_handle = pymem.Pymem("Animal Well.exe")
+            process_handle = OpenProcess(process_name="Animal Well.exe")
+            bean_logger.debug("Found PID %d", process_handle.pid)
 
             ctx.bean_patcher.attach_to_process(process_handle)
 
@@ -1548,19 +1551,20 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
                             break
                         else:
                             address += max(1, i - bad_chars[process_handle.read_bytes(address + i, 1)[0]])
-                    except pymem.exception.MemoryReadError:
+                    except Exception as e:  # exception.MemoryReadError:
+                        raise Exception("idk what this raises, get_animal_well_process_handle iteations") from e
                         address += max_length
 
             bean_logger.info("Found start address of memory, %s", hex(address))
 
             # Verify
-            version = process_handle.read_uint(address)
+            version = ctx.bean_patcher.process.read_uint(address)
             bean_logger.debug("Found version number %d", version)
 
             if version != 9:
                 raise NotImplementedError("Animal Well version %d detected, only version 9 supported", version)
 
-            ctx.process_handle = process_handle
+            ctx.process_handle = ctx.bean_patcher.process
             ctx.start_address = address
 
             ctx.bean_patcher.apply_patches()
@@ -1573,10 +1577,9 @@ async def get_animal_well_process_handle(ctx: AnimalWellContext):
                 ctx.bean_patcher.revert_tracker_patches()
 
             ctx.display_dialog("Connected to client!", "")
-        else:
-            raise NotImplementedError("Only Windows is implemented right now")
-    except (pymem.exception.ProcessNotFound, pymem.exception.CouldNotOpenProcess, pymem.exception.ProcessError,
-            pymem.exception.MemoryReadError) as e:
+        except Exception as e:
+            raise NotImplementedError("Only Windows is implemented right now") from e
+    except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess) as e:
         bean_logger.error("%s", e)
         ctx.connection_status = CONNECTION_REFUSED_STATUS
         traceback.print_exc()
