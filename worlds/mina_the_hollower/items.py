@@ -214,16 +214,16 @@ def create_events(world: "MinaTheHollowerWorld"):
                  item_name=AstralPlatforms.BLUE_ASTRAL_PLATFORMS.value, loc_name="Blue Switch")
 
     create_event(world, region_name="Astral Orrery Bayou Mirror",
-                 item_name=AstralPlatforms.BLUE_ASTRAL_PLATFORMS.value, loc_name="Green Switch")
+                 item_name=AstralPlatforms.GREEN_ASTRAL_PLATFORMS.value, loc_name="Green Switch")
 
     create_event(world, region_name="Astral Orrery Bone Beach Mirror",
-                 item_name=AstralPlatforms.BLUE_ASTRAL_PLATFORMS.value, loc_name="Red Switch")
+                 item_name=AstralPlatforms.RED_ASTRAL_PLATFORMS.value, loc_name="Red Switch")
 
     create_event(world, region_name="Astral Orrery Septemburg Mirror",
-                 item_name=AstralPlatforms.BLUE_ASTRAL_PLATFORMS.value, loc_name="Yellow Switch")
+                 item_name=AstralPlatforms.YELLOW_ASTRAL_PLATFORMS.value, loc_name="Yellow Switch")
 
     create_event(world, region_name="Astral Orrery Coltrane Peak Mirror",
-                 item_name=AstralPlatforms.BLUE_ASTRAL_PLATFORMS.value, loc_name="Purple Switch")
+                 item_name=AstralPlatforms.PURPLE_ASTRAL_PLATFORMS.value, loc_name="Purple Switch")
 
     create_event(world, region_name="Radiant Manor Prime Generator",
                  item_name="Victory", loc_name="Defeat Giga Lionel")
