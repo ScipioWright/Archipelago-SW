@@ -58,6 +58,7 @@ class MinaTheHollowerWorld(MinaTheHollowerBase):
     item_lookup = {item.value: item for item in all_items}
 
     ut_can_gen_without_yaml = True
+    using_ut: bool = False
 
     tracker_world: ClassVar = {
         "map_page_folder": "tracker",
@@ -174,6 +175,7 @@ class MinaTheHollowerWorld(MinaTheHollowerBase):
         if not slot_data:
             return None
 
+        self.using_ut = True
         self.options.goal.value = slot_data["goal"]
         self.options.death_link.value = slot_data["death_link"]
         self.options.kear_rando.value = slot_data["kear_rando"]
