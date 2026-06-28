@@ -1,4 +1,4 @@
-from BaseClasses import Item, Location, ItemClassification, CollectionRule
+from BaseClasses import Item, Location, ItemClassification, CollectionRule, Region
 from rule_builder.rules import True_, Rule
 from .world_base import MinaTheHollowerBase
 from .constants import MINA_THE_HOLLOWER
@@ -8,24 +8,33 @@ from .data.items import Kear, SingleKears, AreaKears, base_items, Abilities, Bon
     trinket_powers, upgrade_powers, valid_power_types
 from .data.rules.ability_rules import CanJumpTiles
 from .data.rules.state_rules import sidearm_rules
+from .options import BoneUpCap, KearRandomization
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from . import MinaTheHollowerWorld
 
 
 class MinaTheHollowerItem(Item):
     game: str = MINA_THE_HOLLOWER
 
-def create_item(world, item: ItemData):
+
+def create_item(world: "MinaTheHollowerWorld", item: ItemData):
     for i in range(item.amount):
-        world.itempool.append(MinaTheHollowerItem(item.type.value, item.type.classification, item.type.item_id, world.player))
+        world.itempool.append(world.create_item(item.type.value))
 
-def create_single_item(world, item_type: ItemTypeEnum):
-    world.itempool.append(MinaTheHollowerItem(item_type.value, item_type.classification, item_type.item_id, world.player))
 
-def create_items(world):
-    is_ut = getattr(world.multiworld, "generation_is_fake", False)
+def create_single_item(world: "MinaTheHollowerWorld", item_type: ItemTypeEnum):
+    world.itempool.append(world.create_item(item_type.value))
+
+
+def create_items(world: "MinaTheHollowerWorld"):
+    is_ut = world.using_ut
     all_items: list[ItemData] = []
     trinket_types = set(Trinkets)
     bone_cap_types = {*BoneUps, GenericBoneUp.ALL_BONE_UP_CAP}
-    bone_cap_cap = 6 if world.options.bone_up_cap.value == 0 else 2
+    bone_cap_cap = 6 if world.options.bone_up_cap == BoneUpCap.option_perUpgrade else 2
     trinkets_selected = 0
     bags_selected = 0
     bone_caps_selected = 0
@@ -41,8 +50,8 @@ def create_items(world):
     for item_type in PlayerUpgrades:
         all_items.append(ItemData(item_type, 1))
 
-    #dont want to start
-    if world.options.bone_up_cap.value == 0:
+    # dont want to start
+    if world.options.bone_up_cap == BoneUpCap.option_perUpgrade:
         for item_type in BoneUps:
             for _ in range(9):
                 all_items.append(ItemData(item_type, 1))
@@ -51,8 +60,8 @@ def create_items(world):
             all_items.append(ItemData(GenericBoneUp.ALL_BONE_UP_CAP, 1))
 
     starting_items: list[Item] = [] if not is_ut else world.starting_items
-    #starting items
-    if world.options.random_starting_items.value:
+    # starting items
+    if world.options.random_starting_items:
         for item in base_items:
             for _ in range(item.amount):
                 all_items.append(ItemData(item.type, 1))
@@ -107,14 +116,7 @@ def create_items(world):
 
                 item_data = world.random.choice(candidates)
 
-                starting_items.append(
-                    MinaTheHollowerItem(
-                        item_data.type.value,
-                        item_data.type.classification,
-                        item_data.type.item_id,
-                        world.player,
-                    )
-                )
+                starting_items.append(world.create_item(item_data.type.value))
 
                 if item_data.type == PlayerUpgrades.TRINKET_BAG:
                     bags_selected += 1
@@ -131,33 +133,28 @@ def create_items(world):
                 if item_data.amount <= 0:
                     all_items.remove(item_data)
 
-
     else:
         for item in base_items:
             for i in range(item.amount):
-                starting_items.append(MinaTheHollowerItem(item.type.value, item.type.classification, item.type.item_id, world.player))
+                starting_items.append(world.create_item(item.type.value))
 
     for item_type in Abilities:
         if item_type.value in world.options.ability_rando.value:
             create_single_item(world, item_type)
         else:
-            starting_items.append(MinaTheHollowerItem(item_type.value, item_type.classification, item_type.item_id, world.player))
+            starting_items.append(world.create_item(item_type.value))
 
     for item in all_items:
         create_item(world, item)
 
-
-    if world.options.kear_rando.value == 0:
-        create_item(world,ItemData(Kear.UNIVERSAL_KEAR, 50))
-    elif world.options.kear_rando.value == 1:
+    if world.options.kear_rando == KearRandomization.option_vanilla:
+        create_item(world, ItemData(Kear.UNIVERSAL_KEAR, 50))
+    elif world.options.kear_rando == KearRandomization.option_apItems:
         for item_type in SingleKears:
             create_single_item(world, item_type)
-    elif world.options.kear_rando.value == 2:
+    elif world.options.kear_rando.value == 2:  # todo: change to KearRandomization.option_areaApItems
         for item_type in AreaKears:
             create_single_item(world, item_type)
-
-
-
 
     total_location_count = len(world.multiworld.get_unfilled_locations(world.player))
     # print(f"total locs at start {total_location_count}")
@@ -174,32 +171,35 @@ def create_items(world):
 
     world.multiworld.itempool += world.itempool
 
-
     return starting_items
 
-def create_event(world, region, item_name, rule: CollectionRule | Rule[MinaTheHollowerBase] = True_()):
-    event_loc = Location(world.player, "Event " + item_name, None, region)
+
+def create_event(world: "MinaTheHollowerWorld", region_name: str, item_name: str, loc_name: str | None = None,
+                 rule: CollectionRule | Rule[MinaTheHollowerBase] = True_()) -> None:
+    if loc_name is None:
+        loc_name = "Event " + item_name
+    region = world.get_region(region_name)
+    event_loc = Location(world.player, loc_name, None, region)
     world.set_rule(event_loc, rule)
     event_loc.place_locked_item(
         MinaTheHollowerItem(item_name, ItemClassification.progression, None, world.player))
     region.locations.append(event_loc)
 
-def create_events(world):
+
+def create_events(world: "MinaTheHollowerWorld"):
 
     region_gen = {
-        "Astral Orrery" : "Starry",
-        "Queensbury Crypt" : "Solemn",
+        "Astral Orrery": "Starry",
+        "Queensbury Crypt": "Solemn",
         "Coltrane Peak": "Frozen",
         "Septemburg": "Windy",
         "Bone Beach": "Shoreline",
         "Nox's Bayou": "Swampy"
     }
-    starting_region = world.get_region(
-        "Ossex City Center Main") if world.options.ossex_start.value else world.get_region(
-        "Loner's Landing Shipwreck")
+    starting_region = "Ossex City Center Main" if world.options.ossex_start else "Loner's Landing Shipwreck"
 
     for itemShortcut in sidearm_rules:
-        create_event(world, starting_region, itemShortcut.type.value, itemShortcut.access_rule)
+        create_event(world, starting_region, itemShortcut.type.value, rule=itemShortcut.access_rule)
         # starting_items.append(Item(item_type.value, item_type.classification, item_type.item_id, world.player))
 
     for area, name in region_gen.items():
@@ -207,51 +207,23 @@ def create_events(world):
         # if area in world.options.excluded_areas.value:
         #     region = starting_region
         # else:
-        region = world.get_region(area + " " + name + " Generator")
+        create_event(world, region_name=area + " " + name + " Generator",
+                     item_name="Repair " + name + " Generator", loc_name="Repair " + area + "Generator")
 
+    create_event(world, region_name="Astral Orrery Queensbury Mirror",
+                 item_name=AstralPlatforms.BLUE_ASTRAL_PLATFORMS.value, loc_name="Blue Switch")
 
-        event_loc = Location(world.player, "Repair " + area + "Generator", None, region)
-        event_loc.place_locked_item(MinaTheHollowerItem("Repair " + name + " Generator", ItemClassification.progression, None, world.player))
-        region.locations.append(event_loc)
+    create_event(world, region_name="Astral Orrery Bayou Mirror",
+                 item_name=AstralPlatforms.GREEN_ASTRAL_PLATFORMS.value, loc_name="Green Switch")
 
-    blue_region = world.get_region("Astral Orrery Queensbury Mirror")
-    event_loc_blue = Location(world.player, "Blue Switch", None, blue_region)
-    event_loc_blue.place_locked_item(
-        MinaTheHollowerItem(AstralPlatforms.BLUE_ASTRAL_PLATFORMS.value, ItemClassification.progression, None, world.player))
-    blue_region.locations.append(event_loc_blue)
+    create_event(world, region_name="Astral Orrery Bone Beach Mirror",
+                 item_name=AstralPlatforms.RED_ASTRAL_PLATFORMS.value, loc_name="Red Switch")
 
-    green_region = world.get_region("Astral Orrery Bayou Mirror")
-    event_loc_green = Location(world.player, "Green Switch", None, green_region)
-    event_loc_green.place_locked_item(
-        MinaTheHollowerItem(AstralPlatforms.GREEN_ASTRAL_PLATFORMS.value, ItemClassification.progression, None,
-                            world.player))
-    green_region.locations.append(event_loc_green)
+    create_event(world, region_name="Astral Orrery Septemburg Mirror",
+                 item_name=AstralPlatforms.YELLOW_ASTRAL_PLATFORMS.value, loc_name="Yellow Switch")
 
-    red_region = world.get_region("Astral Orrery Bone Beach Mirror")
-    event_loc_red = Location(world.player, "Red Switch", None, red_region)
-    event_loc_red.place_locked_item(
-        MinaTheHollowerItem(AstralPlatforms.RED_ASTRAL_PLATFORMS.value, ItemClassification.progression, None,
-                            world.player))
-    red_region.locations.append(event_loc_red)
+    create_event(world, region_name="Astral Orrery Coltrane Peak Mirror",
+                 item_name=AstralPlatforms.PURPLE_ASTRAL_PLATFORMS.value, loc_name="Purple Switch")
 
-    yellow_region = world.get_region("Astral Orrery Septemburg Mirror")
-    event_loc_yellow = Location(world.player, "Yellow Switch", None, yellow_region)
-    event_loc_yellow.place_locked_item(
-        MinaTheHollowerItem(AstralPlatforms.YELLOW_ASTRAL_PLATFORMS.value, ItemClassification.progression, None,
-                            world.player))
-    yellow_region.locations.append(event_loc_yellow)
-
-    purple_region = world.get_region("Astral Orrery Coltrane Peak Mirror")
-    event_loc_purple = Location(world.player, "Purple Switch", None, purple_region)
-    event_loc_purple.place_locked_item(
-        MinaTheHollowerItem(AstralPlatforms.PURPLE_ASTRAL_PLATFORMS.value, ItemClassification.progression, None,
-                            world.player))
-    purple_region.locations.append(event_loc_purple)
-
-
-    goal_region = world.get_region("Radiant Manor Prime Generator")
-    goal_event = Location(world.player, "Defeat Giga Lionel", None, goal_region)
-    goal_event.place_locked_item(
-        MinaTheHollowerItem("Victory", ItemClassification.progression, None,
-                            world.player))
-    goal_region.locations.append(goal_event)
+    create_event(world, region_name="Radiant Manor Prime Generator",
+                 item_name="Victory", loc_name="Defeat Giga Lionel")
