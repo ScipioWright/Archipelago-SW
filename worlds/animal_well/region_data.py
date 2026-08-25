@@ -388,7 +388,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.key_bear_lower:
             AWData(AWType.location),
         rname.bear_capybara_and_below:
-            AWData(AWType.region, [[iname.key_ring], [iname.bubble_short], [iname.wheel_climb]]),
+            AWData(AWType.region, [[iname.key_ring], [iname.bubble_short], [iname.wheel_climb], [iname.disc_hop_hard]]),
         rname.bear_transcendental:  # might be controversial? it's across a screen transition but only 4 bubbles
             AWData(AWType.region, [[iname.bubble_short], [iname.disc_hop_hard]]),
         rname.bear_kangaroo_waterfall:
