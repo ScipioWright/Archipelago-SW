@@ -127,7 +127,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.match_under_mouse_statue:
             AWData(AWType.location),
         lname.egg_planet:
-            AWData(AWType.location, [[iname.can_break_spikes_below]]),
+            AWData(AWType.location, [[iname.can_break_spikes_below], [iname.disc, iname.tanking_damage]]),
         rname.frog_travel_egg_spot:
             AWData(AWType.region, [[iname.top]]),
     },
