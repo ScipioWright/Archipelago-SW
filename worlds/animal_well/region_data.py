@@ -225,7 +225,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_normal:  # hidden wall in lower left of first bubble room
             AWData(AWType.location),
         lname.egg_dazzle:  # little obstacle course, feels like the bubble jump tutorial?
-            AWData(AWType.location, [[iname.bubble], [iname.disc, iname.wheel], [iname.disc_hop_hard],
+            AWData(AWType.location, [[iname.bubble], [iname.disc, iname.wheel], [iname.disc_hop, iname.precise_tricks],
                                      [iname.wheel_hard], [iname.flute_jump, iname.wheel_climb]]),
         lname.fruit_65:
             AWData(AWType.location, loc_type=LocType.fruit),
