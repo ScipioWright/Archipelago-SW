@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, Iterator
+from typing import Any, Dict, Iterator, Union
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from Options import OptionSet, PerGameCommonOptions, Range, StartInventoryPool, Toggle, Choice, OptionDict, OptionError
 import worlds
@@ -136,10 +136,6 @@ class OnePerWorldEnableDistance(Toggle):
     of each other"""
 
 
-class OnePerWorldDisplayDistance(Toggle):
-    """Makes it so it'll log the distances between worlds."""
-
-
 class OnePerWorldCheckCompletionDistance(Toggle):
     """Makes it so it'll check how many spheres it is between a game unlocking and becoming beatable is."""
 
@@ -150,6 +146,10 @@ class OnePerWorldCompletionDistance(Range):
     range_start = 0
     range_end = 5
     default = 1
+
+
+class OnePerWorldShowDebug(Toggle):
+    """Decide whether it should show debug stuff during generation"""
 
 
 @dataclass
@@ -169,9 +169,54 @@ class SlotLockOptions(PerGameCommonOptions):
     one_per_world: OnePerWorld
     one_per_world_enable_distance: OnePerWorldEnableDistance
     one_per_world_distance: OnePerWorldDistance
-    one_per_world_display_distance: OnePerWorldDisplayDistance
     one_per_world_check_completion_distance: OnePerWorldCheckCompletionDistance
     one_per_world_completion_distance: OnePerWorldCompletionDistance
+    one_per_world_show_debug: OnePerWorldShowDebug
+
+
+def get_sendable_spheres_alt(multiworld: MultiWorld) -> Iterator[set[Location]]:
+    """
+    yields a set of multiserver sendable locations (location.item.code: int) for each logical sphere
+
+    If there are unreachable locations, the last sphere of reachable locations is followed by an empty set,
+    and then a set of all of the unreachable locations.
+    """
+    state = CollectionState(multiworld)
+    locations: set[Location] = set()
+    events: set[Location] = set()
+    for location in multiworld.get_filled_locations():
+        if True or type(location.item.code) is int and type(location.address) is int:
+            locations.add(location)
+        else:
+            events.add(location)
+
+    while locations:
+        sphere: set[Location] = set()
+
+        # cull events out
+        done_events: set[Union[Location, None]] = {None}
+        while done_events:
+            done_events = set()
+            for event in events:
+                if event.can_reach(state):
+                    state.collect(event.item, True, event)
+                    done_events.add(event)
+                    sphere.add(event)
+            events -= done_events
+
+        for location in locations:
+            if location.can_reach(state):
+                sphere.add(location)
+
+        yield sphere
+        if not sphere:
+            if locations:
+                yield locations  # unreachable locations
+            break
+
+        for location in sphere:
+            state.collect(location.item, True, location)
+        locations -= sphere
 
 
 class SlotLockWorld(AutoWorld.World):
@@ -469,6 +514,10 @@ class SlotLockWorld(AutoWorld.World):
                         return state.has(f"Unlock {slot}", self.player)
                     self.get_location(f"Free Item {slot} {i+1}").access_rule = rule
 
+    def debug_info(self, text: str) -> None:
+        if self.options.one_per_world_show_debug:
+            info(text)
+
     def fill_slot_data(self):
         item_locations: dict[str, list[tuple[int, int]]] = {}
         for item in self.multiworld.get_items():
@@ -484,15 +533,20 @@ class SlotLockWorld(AutoWorld.World):
                 # print(item_name)
                 item = self.multiworld.find_item(item_name, self.player).item
                 return item
+            spheres_for_counting = get_sendable_spheres_alt(self.multiworld)
+            sphere_count = 0
+            for _ in spheres_for_counting:
+                sphere_count += 1
+            self.debug_info(f"Total number of spheres (excluding ones blocked by events) = {sphere_count}")
 
             def find_sphere_for_item(item: Item) -> (int, set[Location], Iterator[set[Location]]):
-                spheres = self.multiworld.get_sendable_spheres()
+                spheres = get_sendable_spheres_alt(self.multiworld)
                 loc_set = set()
-                for i, sphere in enumerate(spheres):
-                    loc_set.union(sphere)
-                    if item.location in sphere:
-                        # print(f"found in sphere {i + 1}")
-                        return i + 1, loc_set, spheres
+                for j, spheree in enumerate(spheres):
+                    loc_set.update(spheree)
+                    if item.location in spheree:
+                        # print(f"found in sphere {j + 1}")
+                        return j + 1, loc_set, spheres
                 else:
                     # info("messed something up in find_sphere_for_item, returning 0")
                     return 0, set()
@@ -510,9 +564,8 @@ class SlotLockWorld(AutoWorld.World):
                 game1_slot_name = self.multiworld.get_player_name(game1)
                 game2_slot_name = self.multiworld.get_player_name(game2)
 
-                if self.options.one_per_world_display_distance:
-                    info(f"{game1_slot_name} unlocks at sphere {game1_unlock_sphere} and unlocks {game2_slot_name} "
-                         f"at {game2_unlock_sphere}, so the distance is {game2_unlock_sphere - game1_unlock_sphere}")
+                self.debug_info(f"{game1_slot_name} unlocks at sphere {game1_unlock_sphere} and unlocks {game2_slot_name} "
+                                f"at {game2_unlock_sphere}, so the distance is {game2_unlock_sphere - game1_unlock_sphere}")
 
                 if (self.options.one_per_world_enable_distance
                         and game2_unlock_sphere - game1_unlock_sphere > self.options.one_per_world_distance):
@@ -524,28 +577,26 @@ class SlotLockWorld(AutoWorld.World):
 
                 if self.options.one_per_world_check_completion_distance:
                     state = CollectionState(self.multiworld)
-                    for sphere in game2_sphere_locs:
-                        for loc in sphere:
-                            info(loc)
-                            if ((loc.item.player == game2 and loc.item.advancement) or
-                                    loc.item.name == f"Unlock {game2_slot_name}"):
-                                state.collect(loc.item)
-                                info(f"collecting {loc.item}")
+                    for loc in game2_sphere_locs:
+                        if ((loc.item.player == game2 and loc.item.advancement) or
+                                loc.item.name == f"Unlock {game2_slot_name}"):
+                            state.collect(loc.item, prevent_sweep=True)
                     if self.multiworld.has_beaten_game(state, game2):
                         raise OptionError(f"SlotLock: Game {game2_slot_name} is beatable as soon as it is unlocked.")
-                    else:
-                        info("success")
-                    for i in range(self.options.one_per_world_completion_distance):
-                        sphere = next(game2_remaining_spheres)
+
+                    for i, sphere in enumerate(game2_remaining_spheres):
                         for loc in sphere:
                             if ((loc.item.player == game2 and loc.item.advancement)
                                     or loc.item.name == f"Unlock {game2_slot_name}"):
                                 state.collect(loc.item, prevent_sweep=True)
-                                info(f"collecting {loc.item}")
                         if self.multiworld.has_beaten_game(state, game2):
-                            raise OptionError(f"SlotLock: Game {game2_slot_name} is beatable {i + 1} sphere(s) after unlocking it.")
-                        else:
-                            info(f"SlotLock: Continuing, {i}")
+                            if i < self.options.one_per_world_completion_distance:
+                                raise OptionError(f"SlotLock: Game {game2_slot_name} is beatable {i + 1} sphere(s) after unlocking it.")
+                            else:
+                                self.debug_info(f"Completed after {i + 1} more spheres")
+                            break
+                    if not self.multiworld.has_beaten_game(state, game2):
+                        self.debug_info(f"Didn't complete {game2_slot_name}")
 
         return {
             "free_starting_items": self.options.free_starting_items.value,
