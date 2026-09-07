@@ -540,7 +540,7 @@ class SlotLockWorld(AutoWorld.World):
                         for loc in sphere:
                             if ((loc.item.player == game2 and loc.item.advancement)
                                     or loc.item.name == f"Unlock {game2_slot_name}"):
-                                state.collect(loc.item)
+                                state.collect(loc.item, prevent_sweep=True)
                                 info(f"collecting {loc.item}")
                         if self.multiworld.has_beaten_game(state, game2):
                             raise OptionError(f"SlotLock: Game {game2_slot_name} is beatable {i + 1} sphere(s) after unlocking it.")
