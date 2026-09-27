@@ -22,7 +22,8 @@ class RegionNames(str, Enum):
     water_spike_bunny_spot = "Water Spike Bunny Spot"
 
     fish_upper = "Fish Upper"  # everything prior to the bubble wand chest
-    fish_lower = "Fish Lower"
+    fish_lower_phone = "Fish Lower Phone Room"
+    fish_lower = "Fish Lower"  # penguins and forward
     fish_boss_1 = "Fish Boss Arena Part 1"  # just the whale
     fish_boss_2 = "Fish Boss Arena Part 2"  # whale + seahorse
     fish_wand_pit = "Fish B.Wand Chest Pit"
