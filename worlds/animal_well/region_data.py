@@ -276,8 +276,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.fruit_53:
             AWData(AWType.location, [[iname.bubble_short], [iname.disc_hop_hard], 
                                      [iname.wheel_hard], [iname.bubble, iname.disc]], loc_type=LocType.fruit),
-        rname.fish_lower:  # bubble to go down, activate switches, breakspike to pass icicles in first penguin room
-            AWData(AWType.region, [[iname.bubble, iname.remote, iname.can_break_spikes],
+        rname.fish_lower_phone:
+            AWData(AWType.region, [[iname.bubble, iname.remote],
                                    [iname.remote, iname.wheel_hop],
                                    # throwing disc to hit switch while wheel stalling is very tight
                                    [iname.disc, iname.wheel_hop, iname.precise_tricks],
@@ -304,11 +304,17 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_magic:  # open the gate in the fish tube room
             AWData(AWType.location),
     },
-    rname.fish_lower: {
+    rname.fish_lower_phone: {
         lname.fruit_87:
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.fish_west:
             AWData(AWType.region, [[iname.bubble]]),  # fish pipe left of the save point
+        rname.fish_lower:
+            AWData(AWType.region, [[iname.can_break_spikes]]),
+    },
+    rname.fish_lower: {
+        rname.fish_lower_phone:
+            AWData(AWType.region),
         # reflect water while standing on ladder to skip disc req. Other reqs are for passing whale room w/o disc
         rname.fish_boss_1:
             AWData(AWType.region, [[iname.disc], [iname.obscure_tricks, iname.bubble_long], 
