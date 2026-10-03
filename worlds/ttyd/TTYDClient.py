@@ -63,6 +63,7 @@ RECV_FLAG_HEAD = RECV_FLAG_RING + 0x0
 RECV_FLAG_TAIL = RECV_FLAG_RING + 0x2
 RECV_FLAG_EVENTS = RECV_FLAG_RING + 0x4
 RECV_FLAG_CAPACITY = 64
+DME_DOLPHIN_PROCESS_NAME_ENV_VARIABLE = "DME_DOLPHIN_PROCESS_NAME"
 
 def _check_universal_tracker_version() -> bool:
     import re
@@ -306,6 +307,20 @@ class TTYDCommandProcessor(ClientCommandProcessor):
         else:
             logger.info("Ghost display name cleared (using slot name).")
 
+    def _cmd_change_dolphin_process_name(self, process_name: str):
+        """Specify the name of the Dolphin process to connect to. "" for system default."""
+        self.ctx.hook_check = False
+        self.ctx.hook_name = process_name
+        logger.info(f"Changing Dolphin process name to: {process_name if process_name else ""}")
+        from . import TTYDSettings
+        from settings import get_settings
+        settings: TTYDSettings = get_settings().ttyd_options
+        settings.dolphin_process_name = TTYDSettings.DolphinProcessName(process_name)
+        get_settings().save()
+        log_msg: str = f"Dolphin process name set to {process_name or "default"}. You must open a new client for this to take effect."
+        logger.info(log_msg)
+        Utils.messagebox("Close TTYD Client to take effect", log_msg)
+
 
 class TTYDContext(cmmCtx):
     command_processor = TTYDCommandProcessor
@@ -328,6 +343,15 @@ class TTYDContext(cmmCtx):
         super().__init__(server_address, password)
         self.items_handling = 0b101
         self._pushed_recv_flags = set()
+
+        from . import TTYDSettings
+        from settings import get_settings
+        import os
+        settings: TTYDSettings = get_settings().ttyd_options
+        if settings.dolphin_process_name:
+            os.environ[DME_DOLPHIN_PROCESS_NAME_ENV_VARIABLE] = settings.dolphin_process_name
+        elif DME_DOLPHIN_PROCESS_NAME_ENV_VARIABLE in os.environ:
+            del os.environ[DME_DOLPHIN_PROCESS_NAME_ENV_VARIABLE]
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:

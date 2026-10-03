@@ -66,8 +66,11 @@ class TTYDSettings(Group):
         copy_to = "Paper Mario - The Thousand-Year Door (USA).iso"
         description = "US TTYD .iso File"
 
-    dolphin_path: DolphinPath = DolphinPath(None)
+    class DolphinProcessName(str):
+        """The name of the Dolphin process to connect to. Leave blank for system default."""
+
     rom_file: RomFile = RomFile(RomFile.copy_to)
+    dolphin_process_name: DolphinProcessName = ""
     rom_start: bool = True
 
 
