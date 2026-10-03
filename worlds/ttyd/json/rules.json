@@ -1,0 +1,4592 @@
+{
+  "Boggly Woods Plane Panel Room: Shine Sprite": {
+    "or": [
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Boggly Woods Plane Panel Room: Quake Hammer": {
+    "has": "Plane Mode"
+  },
+  "Boggly Woods Outside Flurrie's House: Star Piece 1": {
+    "has": "Plane Mode"
+  },
+  "Boggly Woods Shadow Sirens Room: Necklace": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Boggly Woods Outside Flurrie's House: Star Piece 2": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Boggly Woods Outside Flurrie's House: Volt Shroom": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Boggly Woods Flurrie's House: Flurrie": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Necklace"
+      }
+    ]
+  },
+  "Boggly Woods Flurrie's House Backroom: Super Appeal P": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Necklace"
+      }
+    ]
+  },
+  "Boggly Woods Flurrie's House Backroom: Star Piece": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Necklace"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Entrance: Mystic Egg": {
+    "can_reach": "Great Tree Entrance: Emerald Star"
+  },
+  "Great Tree Red Key Room: Mushroom": {
+    "can_reach": "Great Tree Entrance: Emerald Star"
+  },
+  "Keelhaul Key Grotto Entrance: Wedding Ring": {
+    "has": "Yoshi"
+  },
+  "Creepy Steeple Main Hall: Steeple Key": {
+    "or": [
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Creepy Steeple Main Hall: Lucky Start": {
+    "function": "super_hammer"
+  },
+  "Creepy Steeple Upper Room: Ruby Star": {
+    "and": [
+      {
+        "has": "Steeple Key"
+      },
+      {
+        "has": "The Letter \"p\""
+      }
+    ]
+  },
+  "Creepy Steeple Underground Tube Passage: Shine Sprite": {
+    "has": "Vivian"
+  },
+  "Creepy Steeple Boo Chest Room: Star Piece": {
+    "has": "Vivian"
+  },
+  "Creepy Steeple Parrot Room: Mr. Softener": {
+    "has": "Vivian"
+  },
+  "Creepy Steeple Parrot Room: Power Plus": {
+    "has": "Vivian"
+  },
+  "Creepy Steeple Parrot Room: Star Piece": {
+    "has": "Vivian"
+  },
+  "Creepy Steeple Parrot Room: Steeple Key 2": {
+    "has": "Vivian"
+  },
+  "Creepy Steeple Parrot Room: The Letter \"p\"": {
+    "has": "Vivian"
+  },
+  "Excess Express Middle Passenger Car: Blanket": {
+    "and": [
+      {
+        "has": "Autograph"
+      },
+      {
+        "has": "Vivian"
+      },
+      {
+        "has": "Ragged Diary"
+      }
+    ]
+  },
+  "Excess Express Back Passenger Car: Shine Sprite": {
+    "has": "Autograph"
+  },
+  "Excess Express Back Passenger Car: Mushroom": {
+    "and": [
+      {
+        "has": "Autograph"
+      },
+      {
+        "has": "Blanket"
+      },
+      {
+        "has": "Ragged Diary"
+      },
+      {
+        "has": "Vivian"
+      }
+    ]
+  },
+  "Excess Express Storage Car: Ragged Diary": {
+    "or": [
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Excess Express Front Passenger Car: Vital Paper": {
+    "and": [
+      {
+        "has": "Autograph"
+      },
+      {
+        "has": "Vivian"
+      },
+      {
+        "has": "Ragged Diary"
+      },
+      {
+        "has": "Blanket"
+      }
+    ]
+  },
+  "Excess Express Middle Passenger Car: Briefcase": {
+    "and": [
+      {
+        "has": "Autograph"
+      },
+      {
+        "has": "Vivian"
+      },
+      {
+        "has": "Ragged Diary"
+      },
+      {
+        "has": "Blanket"
+      },
+      {
+        "has": "Vital Paper"
+      }
+    ]
+  },
+  "Excess Express Middle Passenger Car: Gold Ring": {
+    "and": [
+      {
+        "has": "Autograph"
+      },
+      {
+        "has": "Vivian"
+      },
+      {
+        "has": "Ragged Diary"
+      },
+      {
+        "has": "Blanket"
+      },
+      {
+        "has": "Vital Paper"
+      }
+    ]
+  },
+  "Excess Express Middle Passenger Car: Shell Earrings": {
+    "and": [
+      {
+        "has": "Autograph"
+      },
+      {
+        "has": "Vivian"
+      },
+      {
+        "has": "Ragged Diary"
+      },
+      {
+        "has": "Blanket"
+      },
+      {
+        "has": "Vital Paper"
+      }
+    ]
+  },
+  "Excess Express Dining Car: Star Piece 1": {
+    "has": "Galley Pot"
+  },
+  "Excess Express Dining Car: Star Piece 2": {
+    "has": "Shell Earrings"
+  },
+  "Excess Express Front Passenger Car: 30 Coins": {
+    "has": "Gold Ring"
+  },
+  "Excess Express Locomotive: Star Piece": {
+    "function": "super_boots"
+  },
+  "Excess Express Middle Passenger Car: Star Piece": {
+    "function": "super_boots"
+  },
+  "Fahr Outpost Entrance: Star Piece": {
+    "function": "super_boots"
+  },
+  "Fahr Outpost Town: Star Piece 1": {
+    "function": "super_boots"
+  },
+  "Glitzville Lobby: Storage Key 2": {
+    "has": "Flurrie"
+  },
+  "Glitzville Lobby: Star Piece": {
+    "function": "super_boots"
+  },
+  "Glitzville Storage Back Room: Star Piece": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Storage Key 1"
+      },
+      {
+        "has": "Storage Key 2"
+      },
+      {
+        "has": "Yoshi"
+      },
+      {
+        "function": "super_hammer"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Charge P": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Shine Sprite": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: HP Plus P": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Storage Key 1"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Star Piece": {
+    "and": [
+      {
+        "function": "super_boots"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Main Square: Power Plus P": {
+    "function": "super_boots"
+  },
+  "Glitzville Main Square: Star Piece 4": {
+    "function": "super_boots"
+  },
+  "Glitzville Main Square: Star Piece 5": {
+    "and": [
+      {
+        "function": "super_boots"
+      },
+      {
+        "or": [
+          {
+            "has": "Koops"
+          },
+          {
+            "function": "tube_curse"
+          }
+        ]
+      }
+    ]
+  },
+  "Glitzville Minor-League Room: Yoshi": {
+    "and": [
+      {
+        "function": "super_boots"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Glitzville Minor-League Room: Dubious Paper": {
+    "and": [
+      {
+        "function": "super_hammer"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Glitzville Major-League Room: Champ's Belt": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Glitzville Major-League Room: Ice Storm": {
+    "has": "Yoshi"
+  },
+  "Glitzville Arena: Gold Star": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "super_hammer"
+      }
+    ]
+  },
+  "Great Tree Red/Blue Cages: Star Piece": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Blue Key"
+          },
+          {
+            "has": "Paper Mode"
+          }
+        ]
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Entrance: Puni Orb": {
+    "has": "Red Key"
+  },
+  "Great Tree Bubble Room: Shine Sprite": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      }
+    ]
+  },
+  "Great Tree Bubble Room: Thunder Rage": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      }
+    ]
+  },
+  "Great Tree Zigzag Room: Coin": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      }
+    ]
+  },
+  "Great Tree Zigzag Room: Damage Dodge P": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      }
+    ]
+  },
+  "Great Tree Zigzag Room: Star Piece": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      }
+    ]
+  },
+  "Great Tree Shop: Honey Syrup": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Great Tree Shop: HP Drain": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Great Tree Shop: Ice Storm": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Great Tree Shop: Mini Mr. Mini": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Great Tree Shop: Mushroom": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Great Tree Shop: Mystery": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Great Tree Blue Key Room: Blue Key": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Great Tree Super Boots Room: Super Boots": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      }
+    ]
+  },
+  "Great Tree 100-Puni Pedestal: Coin": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      }
+    ]
+  },
+  "Great Tree 100-Puni Pedestal: Star Piece": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      }
+    ]
+  },
+  "Great Tree Fake Pedestal: Star Piece": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      }
+    ]
+  },
+  "Great Tree Entrance: Emerald Star": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Elevator Pedestal: Mushroom": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Escape Ambush Room: Star Piece": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Pool Room: Dizzy Dial": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Pool Room: Shine Sprite": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Pool Room: Shrink Stomp": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Lower Duplex: Coin": {
+    "and": [
+      {
+        "has": "Red Key"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Blue Key"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree Middle Duplex: Shine Sprite": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Great Tree Blue Key Room: Charge": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "function": "super_boots"
+      },
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Koops"
+          }
+        ]
+      }
+    ]
+  },
+  "Great Tree Blue Key Room: Shine Sprite": {
+    "and": [
+      {
+        "function": "key_any"
+      },
+      {
+        "has": "Puni Orb"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Great Tree 10-Puni Pedestal: Star Piece": {
+    "function": "super_boots"
+  },
+  "Hooktail's Castle Drawbridge: HP Plus": {
+    "or": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Koops"
+      }
+    ]
+  },
+  "Hooktail's Castle Entrance: Power Bounce": {
+    "or": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Red Bones Room: Castle Key": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Red Bones Room: Star Piece": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Switch Room: Castle Key": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Switch Room: Shine Sprite": {
+    "or": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Switch Room: Star Piece 1": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Switch Room: Star Piece 2": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 2
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Central Staircase: Castle Key": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 3
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Central Staircase: Last Stand P": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 3
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Central Staircase: Shine Sprite": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 3
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Stair Central Staircase: Star Piece": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      }
+    ]
+  },
+  "Hooktail's Castle Prison Entrance: Paper Mode": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 1
+      },
+      {
+        "has": "Black Key (Paper)"
+      }
+    ]
+  },
+  "Hooktail's Castle Prison Entrance: Attack FX R": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 1
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Spikes Room: Black Key (Paper)": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 1
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Life Shroom Room: Life Shroom": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "and": [
+              {
+                "has": "Plane Mode"
+              },
+              {
+                "has": "Paper Mode"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 2
+      }
+    ]
+  },
+  "Hooktail's Castle Plane Rafters Room: Star Piece": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 3
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Hooktail's Room: Diamond Star": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 4
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Hooktail's Castle Storeroom: Castle Key": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 2
+      }
+    ]
+  },
+  "Hooktail's Castle Storeroom: Honey Syrup": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 2
+      }
+    ]
+  },
+  "Hooktail's Castle Storeroom: Mushroom": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 2
+      }
+    ]
+  },
+  "Hooktail's Castle Storeroom: Shine Sprite": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 2
+      }
+    ]
+  },
+  "Hooktail's Castle Up Arrow Room: Up Arrow": {
+    "and": [
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Castle Key",
+        "count": 1
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Keelhaul Key Landing Site: Star Piece": {
+    "function": "super_boots"
+  },
+  "Keelhaul Key Jungle Winding Climb: Coin 2": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Jungle Winding Climb: Thunder Rage": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Jungle Bridge: Coconut 1": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Jungle Bridge: Coconut 2": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Jungle Bridge: Inn Coupon": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Jungle Bridge: Shine Sprite": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Grotto Entrance: Spite Pouch": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Grotto Entrance: Star Piece": {
+    "has": "Yoshi"
+  },
+  "Keelhaul Key Jungle Bridge: Ice Power": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Keelhaul Key Jungle Winding Climb: Jammin' Jelly": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "or": [
+          {
+            "function": "ultra_boots"
+          },
+          {
+            "function": "super_hammer"
+          },
+          {
+            "has": "Bobbery"
+          }
+        ]
+      }
+    ]
+  },
+  "Keelhaul Key Jungle Winding Climb: Shine Sprite": {
+    "or": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Keelhaul Key Grotto Entrance: Bobbery": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Chuckola Cola"
+      }
+    ]
+  },
+  "Keelhaul Key Grotto Entrance: Skull Gem": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Coconut"
+      }
+    ]
+  },
+  "Keelhaul Key Town: Chuckola Cola": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Coconut"
+      }
+    ]
+  },
+  "Palace of Shadow Dark Bones Room: Palace Key": {
+    "function": "tube_curse"
+  },
+  "Palace of Shadow Second Bullet Bill Hallway: Ultra Shroom": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      }
+    ]
+  },
+  "Palace of Shadow Large Open Room: Coin": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      }
+    ]
+  },
+  "Palace of Shadow Large Open Room: Jammin' Jelly": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      }
+    ]
+  },
+  "Palace of Shadow Large Open Room: P-Up, D-Down P": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      }
+    ]
+  },
+  "Palace of Shadow Gloomtail Room: Star Key": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      }
+    ]
+  },
+  "Palace of Shadow Gloomtail Room: Jammin' Jelly": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Palace of Shadow Gloomtail Room: Ultra Shroom": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Riddle Tower Floor 1 NW: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "function": "ultra_hammer"
+      }
+    ]
+  },
+  "Riddle Tower Floor 1 NE: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Riddle Tower Floor 1 SW: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Riddle Tower Floor 1 SE: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Riddle Tower Floor 2 NW: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "function": "ultra_hammer"
+      }
+    ]
+  },
+  "Riddle Tower Floor 2 NE: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Riddle Tower Floor 2 SW: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Riddle Tower Floor 2 SE: Palace Key (Tower)": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Palace Key"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "has": "Vivian"
+      }
+    ]
+  },
+  "Petal Meadows Field: Happy Heart": {
+    "or": [
+      {
+        "has": "Koops"
+      },
+      {
+        "has": "Yoshi"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Petalburg Eastside: Mega Rush P": {
+    "has": "Paper Mode"
+  },
+  "Petalburg Eastside: Star Piece": {
+    "function": "super_boots"
+  },
+  "Petalburg Westside: Star Piece": {
+    "function": "super_boots"
+  },
+  "Pirate's Grotto Staircase: Coin": {
+    "has": "Yoshi"
+  },
+  "Pirate's Grotto Staircase: Shine Sprite": {
+    "has": "Yoshi"
+  },
+  "Pirate's Grotto Storeroom: Grotto Key": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Pirate's Grotto Storeroom: Shine Sprite": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Pirate's Grotto Storeroom: Star Piece": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Pirate's Grotto Gate Handle Room: Gate Handle": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Pirate's Grotto Staircase: Defend Plus P": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Pirate's Grotto Cortez' Hoard: Sapphire Star": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "has": "Gate Handle"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Pirate's Grotto Sluice Gate: Star Piece": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Pirate's Grotto Spike Wall Room: Shine Sprite": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Grotto Key"
+      },
+      {
+        "has": "Koops"
+      }
+    ]
+  },
+  "Pirate's Grotto Parabuzzy Room: Star Piece": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Grotto Key"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Pirate's Grotto Chest Boat: Black Key (Boat)": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Grotto Key"
+      },
+      {
+        "function": "tube_curse"
+      }
+    ]
+  },
+  "Pirate's Grotto Chest Boat: P-Down, D-Up": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Grotto Key"
+      },
+      {
+        "function": "tube_curse"
+      }
+    ]
+  },
+  "Pirate's Grotto Barrel Room: 10 Coins": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Grotto Key"
+      },
+      {
+        "function": "tube_curse"
+      }
+    ]
+  },
+  "Pirate's Grotto Barrel Room: Shine Sprite": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Grotto Key"
+      },
+      {
+        "function": "tube_curse"
+      }
+    ]
+  },
+  "Pirate's Grotto Chest Boat: Boat Mode": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Grotto Key"
+      },
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Black Key (Boat)"
+      }
+    ]
+  },
+  "Poshley Heights Station: Goldbob Guide": {
+    "and": [
+      {
+        "function": "fahr_outpost"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Poshley Heights Station: Star Piece 3": {
+    "function": "super_boots"
+  },
+  "Poshley Heights Sanctum Exterior: Shine Sprite": {
+    "function": "ultra_boots"
+  },
+  "Poshley Heights Station: HP Drain P": {
+    "has": "Paper Mode"
+  },
+  "Palace of Shadow Far Hallway 1: Thunder Rage": {
+    "or": [
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "and": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Koops"
+          },
+          {
+            "has": "Flurrie"
+          }
+        ]
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 1: Repel Cape": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "or": [
+          {
+            "has": "Bobbery"
+          },
+          {
+            "has": "Koops"
+          }
+        ]
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 2: Palace Key": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 1: Life Shroom": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 2: Life Shroom": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 2: Shooting Star": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "or": [
+          {
+            "has": "Bobbery"
+          },
+          {
+            "has": "Koops"
+          }
+        ]
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 3: Coin": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_hammer"
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 3: Point Swap": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_hammer"
+      }
+    ]
+  },
+  "Palace of Shadow Far Backroom 3: Palace Key": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_hammer"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Palace of Shadow Far Hallway 4: Life Shroom": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_hammer"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Palace of Shadow Far Hallway 4: Shooting Star": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 2
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_hammer"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Palace of Shadow Final Staircase: Jammin' Jelly": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 3
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_hammer"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Palace of Shadow Final Staircase: Ultra Shroom": {
+    "and": [
+      {
+        "has": "Yoshi"
+      },
+      {
+        "has": "Bobbery"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Palace Key",
+        "count": 3
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "ultra_hammer"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "Riverside Station Tube Mode Maze: Dried Shroom": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      },
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Riverside Station Tube Mode Maze: P-Up, D-Down": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      },
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Riverside Station Back Exterior: HP Plus": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      },
+      {
+        "function": "tube_curse"
+      }
+    ]
+  },
+  "Riverside Station Back Exterior: Shine Sprite": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      }
+    ]
+  },
+  "Riverside Station Back Exterior: Thunder Rage": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      }
+    ]
+  },
+  "Riverside Station Ultra Boots Room: Ultra Boots": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      },
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Riverside Station Goomba Room: Shine Sprite": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      },
+      {
+        "function": "tube_curse"
+      },
+      {
+        "or": [
+          {
+            "function": "ultra_boots"
+          },
+          {
+            "has": "Koops"
+          }
+        ]
+      },
+      {
+        "has": "Flurrie"
+      }
+    ]
+  },
+  "Riverside Station Ultra Boots Room: Elevator Key (Station)": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "has": "Station Key 2"
+      },
+      {
+        "function": "tube_curse"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Riverside Station Clockwork Room: Star Piece": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "function": "tube_curse"
+      }
+    ]
+  },
+  "Riverside Station Clockwork Room: Station Key 2": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "function": "tube_curse"
+      },
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "has": "Koops"
+          }
+        ]
+      }
+    ]
+  },
+  "Riverside Station Entrance: Close Call P": {
+    "and": [
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Poshley Heights Sanctum Altar: Garnet Star": {
+    "and": [
+      {
+        "function": "riverside"
+      },
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Elevator Key (Station)"
+      },
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "function": "super_hammer"
+      }
+    ]
+  },
+  "Poshley Heights Sanctum Altar: L Emblem": {
+    "and": [
+      {
+        "function": "riverside"
+      },
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Elevator Key (Station)"
+      },
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "function": "super_hammer"
+      }
+    ]
+  },
+  "Poshley Heights Sanctum Altar: Shine Sprite": {
+    "and": [
+      {
+        "function": "riverside"
+      },
+      {
+        "has": "Station Key 1"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Elevator Key (Station)"
+      },
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "function": "super_hammer"
+      }
+    ]
+  },
+  "Rogueport Sewers Boggly Woods Pipe: Star Piece": {
+    "function": "super_boots"
+  },
+  "Rogueport Sewers Boggly Woods Pipe: Damage Dodge": {
+    "has": "Paper Mode"
+  },
+  "Rogueport Sewers Town: Shine Sprite": {
+    "function": "ultra_boots"
+  },
+  "Rogueport Sewers Town: Star Piece 3": {
+    "function": "super_boots"
+  },
+  "Rogueport Sewers West Entrance: Flower Saver P": {
+    "function": "ultra_boots"
+  },
+  "Rogueport Sewers West Entrance: Shine Sprite": {
+    "or": [
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Rogueport Sewers West Entrance: Star Piece 2": {
+    "or": [
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Rogueport Sewers Spania Room: Defend Plus": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "or": [
+          {
+            "has": "Yoshi"
+          },
+          {
+            "and": [
+              {
+                "has": "Koops"
+              },
+              {
+                "function": "ultra_boots"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "Rogueport Sewers Spania Room: Shine Sprite 1": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Rogueport Sewers Spania Room: Shine Sprite 2": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Rogueport Sewers Spania Room: Shine Sprite 3": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Rogueport Blimp Room: Star Piece 1": {
+    "has": "Blimp Ticket"
+  },
+  "Rogueport Westside: Star Piece 4": {
+    "function": "super_boots"
+  },
+  "Rogueport Blimp Room: Star Piece 2": {
+    "function": "super_boots"
+  },
+  "Rogueport Sewers Thousand-Year Door: Shine Sprite": {
+    "or": [
+      {
+        "and": [
+          {
+            "function": "ttyd"
+          },
+          {
+            "has": "Paper Mode"
+          },
+          {
+            "has": "Plane Mode"
+          }
+        ]
+      },
+      {
+        "and": [
+          {
+            "function": "pit"
+          },
+          {
+            "has": "Paper Mode"
+          }
+        ]
+      }
+    ]
+  },
+  "Rogueport Sewers Thousand-Year Door: Star Piece": {
+    "and": [
+      {
+        "function": "ttyd"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Twilight Town Leftside: Vivian": {
+    "has": "Superbombomb"
+  },
+  "Twilight Town Rightside: Boo's Sheet": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside: Defend Plus": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside: Jammin' Jelly": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside Shop: Life Shroom": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside: Life Shroom": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside Shop: Maple Syrup": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside Shop: Spite Pouch": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside Shop: Stopwatch": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside Shop: Super Shroom": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside Shop: Thunder Rage": {
+    "has": "Shop Key"
+  },
+  "Twilight Town Rightside: Tube Mode": {
+    "and": [
+      {
+        "has": "Shop Key"
+      },
+      {
+        "has": "Black Key (Tube)"
+      }
+    ]
+  },
+  "Twilight Trail Fallen Tree: Shop Key": {
+    "or": [
+      {
+        "has": "Koops"
+      },
+      {
+        "function": "tube_curse"
+      }
+    ]
+  },
+  "Twilight Trail Fallen Tree: Star Piece 2": {
+    "has": "Flurrie"
+  },
+  "Twilight Trail Dark Woods First Room: 10 Coins": {
+    "has": "Flurrie"
+  },
+  "Twilight Trail Dark Woods First Room: Earth Quake": {
+    "has": "Flurrie"
+  },
+  "Twilight Trail Dark Woods Second Room: Hammer Throw": {
+    "has": "Flurrie"
+  },
+  "Twilight Trail Dark Woods Third Room: 10 Coins": {
+    "has": "Flurrie"
+  },
+  "Twilight Trail Dark Woods Third Room: Shine Sprite": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Twilight Trail Steeple Exterior: Coin": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "Twilight Trail Steeple Exterior: Star Piece": {
+    "and": [
+      {
+        "has": "Flurrie"
+      },
+      {
+        "function": "super_boots"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Coin 1": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Coin 2": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Coin 3": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Coin 4": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Coin 5": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Coin 6": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Feeling Fine": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Feeling Fine P": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Crane Room: Star Piece": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Cog"
+      }
+    ]
+  },
+  "X-Naut Fortress Ceiling Grate Room: Star Piece": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "X-Naut Fortress Teleporter Room: Cog": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "or": [
+          {
+            "has": "Koops"
+          },
+          {
+            "has": "Yoshi"
+          }
+        ]
+      }
+    ]
+  },
+  "X-Naut Fortress Quiz Room: Elevator Key 2": {
+    "has": "Elevator Key 1"
+  },
+  "X-Naut Fortress Card Key Room A: Card Key 1": {
+    "has": "Elevator Key 1"
+  },
+  "X-Naut Fortress Card Key Room A: Sleepy Sheep": {
+    "has": "Elevator Key 1"
+  },
+  "X-Naut Fortress Office: Card Key 2": {
+    "has": "Elevator Key 1"
+  },
+  "X-Naut Fortress Card Key Room B: Card Key 3": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Elevator Key 2"
+      }
+    ]
+  },
+  "X-Naut Fortress Card Key Room B: HP Drain": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Elevator Key 2"
+      }
+    ]
+  },
+  "X-Naut Fortress Factory: Ultra Shroom": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Elevator Key 2"
+      },
+      {
+        "has": "Card Key 1"
+      },
+      {
+        "has": "Card Key 2"
+      },
+      {
+        "has": "Card Key 3"
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Vivian"
+      }
+    ]
+  },
+  "X-Naut Fortress Factory: Card Key 4": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Elevator Key 2"
+      },
+      {
+        "has": "Card Key 1"
+      },
+      {
+        "has": "Card Key 2"
+      },
+      {
+        "has": "Card Key 3"
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Vivian"
+      },
+      {
+        "has": "Plane Mode"
+      }
+    ]
+  },
+  "X-Naut Fortress Boss Room: Crystal Star": {
+    "and": [
+      {
+        "has": "Elevator Key 1"
+      },
+      {
+        "has": "Elevator Key 2"
+      },
+      {
+        "has": "Card Key 1"
+      },
+      {
+        "has": "Card Key 2"
+      },
+      {
+        "has": "Card Key 3"
+      },
+      {
+        "has": "Card Key 4"
+      },
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Vivian"
+      }
+    ]
+  },
+  "Rogueport Sewers Black Chest Room: Plane Mode": {
+    "has": "Black Key (Plane)"
+  },
+  "Rogueport Docks: HP Drain": {
+    "has": "Boat Mode"
+  },
+  "Rogueport Docks: Star Piece 2": {
+    "has": "Boat Mode"
+  },
+  "Rogueport Westside: Shine Sprite 1": {
+    "has": "Bobbery"
+  },
+  "Rogueport Westside: Shine Sprite 2": {
+    "function": "tube_curse"
+  },
+  "Rogueport Westside: Train Ticket": {
+    "and": [
+      {
+        "function": "keelhaul_key"
+      },
+      {
+        "has": "Wedding Ring"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Rogueport Sewers Black Key Room: Happy Heart P": {
+    "has": "Flurrie"
+  },
+  "Rogueport Sewers Spike Room: Spike Shield": {
+    "and": [
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Vivian"
+      }
+    ]
+  },
+  "Rogueport Sewers Petal Meadows Pipe: Shine Sprite": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "has": "Boat Mode"
+      }
+    ]
+  },
+  "Rogueport Sewers Star Piece House: Star Piece": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "function": "ultra_boots"
+      }
+    ]
+  },
+  "Rogueport Sewers East Entrance: Defend Plus P": {
+    "and": [
+      {
+        "has": "Plane Mode"
+      },
+      {
+        "function": "ultra_boots"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Rogueport Docks: Star Piece": {
+    "function": "super_boots"
+  },
+  "Rogueport Sewers Black Chest Room: Star Piece": {
+    "function": "super_boots"
+  },
+  "Rogueport Sewers East Entrance: Star Piece": {
+    "function": "super_boots"
+  },
+  "Rogueport Center: Star Piece 1": {
+    "function": "super_boots"
+  },
+  "Rogueport Center: Star Piece 2": {
+    "function": "super_boots"
+  },
+  "Rogueport Eastside: Star Piece 2": {
+    "function": "super_boots"
+  },
+  "Rogueport Sewers East Pipe Room: Shine Sprite": {
+    "function": "super_hammer"
+  },
+  "Rogueport Sewers West Pipe Room: FP Plus": {
+    "function": "ultra_hammer"
+  },
+  "Rogueport Center: Ultra Hammer": {
+    "function": "ultra_boots"
+  },
+  "Rogueport Eastside: Double Dip": {
+    "and": [
+      {
+        "has": "Boat Mode"
+      },
+      {
+        "or": [
+          {
+            "has": "Paper Mode"
+          },
+          {
+            "has": "Yoshi"
+          }
+        ]
+      }
+    ]
+  },
+  "Rogueport Eastside: Shine Sprite 1": {
+    "has": "Yoshi"
+  },
+  "Rogueport Eastside: Shine Sprite 2": {
+    "has": "Yoshi"
+  },
+  "Rogueport Eastside: Shine Sprite 3": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Rogueport Center: Old Letter": {
+    "and": [
+      {
+        "function": "tube_curse"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Rogueport Eastside: Star Piece 3": {
+    "has": "Yoshi"
+  },
+  "Rogueport Eastside: Star Piece 4": {
+    "or": [
+      {
+        "has": "Paper Mode"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Rogueport Eastside: Star Piece 5": {
+    "and": [
+      {
+        "function": "super_boots"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Pit of 100 Trials Floor 10: Sleepy Stomp": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 1
+    }
+  },
+  "Pit of 100 Trials Floor 20: Fire Drive": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 1
+    }
+  },
+  "Pit of 100 Trials Floor 30: Zap Tap": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 2
+    }
+  },
+  "Pit of 100 Trials Floor 40: Pity Flower": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 2
+    }
+  },
+  "Pit of 100 Trials Floor 50: Strange Sack": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 3
+    }
+  },
+  "Pit of 100 Trials Floor 60: Double Dip": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 3
+    }
+  },
+  "Pit of 100 Trials Floor 70: Double Dip P": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 4
+    }
+  },
+  "Pit of 100 Trials Floor 80: Bump Attack": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 4
+    }
+  },
+  "Pit of 100 Trials Floor 90: Lucky Day": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 5
+    }
+  },
+  "Pit of 100 Trials Floor 100: Return Postage": {
+    "function": {
+      "name": "chapter_completions",
+      "count": 5
+    }
+  },
+  "Rogueport Sewers Town: Dazzle Item 1": {
+    "has": "Star Piece",
+    "count": 1
+  },
+  "Rogueport Sewers Town: Dazzle Item 2": {
+    "has": "Star Piece",
+    "count": 3
+  },
+  "Rogueport Sewers Town: Dazzle Item 3": {
+    "has": "Star Piece",
+    "count": 6
+  },
+  "Rogueport Sewers Town: Dazzle Item 4": {
+    "has": "Star Piece",
+    "count": 10
+  },
+  "Rogueport Sewers Town: Dazzle Item 5": {
+    "has": "Star Piece",
+    "count": 14
+  },
+  "Rogueport Sewers Town: Dazzle Item 6": {
+    "has": "Star Piece",
+    "count": 18
+  },
+  "Rogueport Sewers Town: Dazzle Item 7": {
+    "has": "Star Piece",
+    "count": 23
+  },
+  "Rogueport Sewers Town: Dazzle Item 8": {
+    "has": "Star Piece",
+    "count": 29
+  },
+  "Rogueport Sewers Town: Dazzle Item 9": {
+    "has": "Star Piece",
+    "count": 35
+  },
+  "Rogueport Sewers Town: Dazzle Item 10": {
+    "has": "Star Piece",
+    "count": 42
+  },
+  "Rogueport Sewers Town: Dazzle Item 11": {
+    "has": "Star Piece",
+    "count": 50
+  },
+  "Rogueport Sewers Town: Dazzle Item 12": {
+    "has": "Star Piece",
+    "count": 60
+  },
+  "Rogueport Sewers Town: Dazzle Item 13": {
+    "has": "Star Piece",
+    "count": 70
+  },
+  "Rogueport Sewers Town: Dazzle Item 14": {
+    "has": "Star Piece",
+    "count": 85
+  },
+  "Rogueport Sewers Town: Dazzle Item 15": {
+    "has": "Star Piece",
+    "count": 100
+  },
+  "Rogueport Eastside: Garf's Trouble Reward": {
+    "has": "House Key"
+  },
+  "Rogueport Center: McGoomba's Trouble Reward": {
+    "has": "Box"
+  },
+  "Rogueport Docks: Bomberto's Trouble Reward": {
+    "has": "Walrus Whiskers"
+  },
+  "Hooktail's Castle Life Shroom Room: Koopook's Trouble Reward": {
+    "can_reach": "Hooktail's Castle Hooktail's Room: Diamond Star"
+  },
+  "Petalburg Eastside: Kroop's Trouble Reward": {
+    "can_reach": "Hooktail's Castle Hooktail's Room: Diamond Star"
+  },
+  "Rogueport Center: Plenn T's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Hooktail's Castle Hooktail's Room: Diamond Star"
+      },
+      {
+        "has": "Courage Shell Pack"
+      }
+    ]
+  },
+  "Great Tree Entrance: Puni Elder's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Great Tree Entrance: Emerald Star"
+      },
+      {
+        "has": "Life Shroom"
+      }
+    ]
+  },
+  "Rogueport Westside: Lahla's Trouble Reward": {
+    "can_reach": "Great Tree Entrance: Emerald Star"
+  },
+  "Rogueport Sewers Pit Entrance: Pine T. Jr's Trouble Reward": {
+    "can_reach": "Great Tree Entrance: Emerald Star"
+  },
+  "Glitzville Storage Room: Battle Trunks 1": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 2": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 3": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 4": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 5": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 6": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 7": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 8": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 9": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 10": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 11": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 12": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 13": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 14": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 15": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 16": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 17": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 18": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 19": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Storage Room: Battle Trunks 20": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      }
+    ]
+  },
+  "Glitzville Promoter's Office: Jolene's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "has": "Storage Key 1"
+      },
+      {
+        "has": "Battle Trunk Pack"
+      }
+    ]
+  },
+  "Rogueport Sewers Merlee's House: Merlee's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Glitzville Arena: Gold Star"
+      },
+      {
+        "can_reach": "Petalburg Eastside: Turtley Leaf"
+      },
+      {
+        "has": "Paper Mode"
+      }
+    ]
+  },
+  "Petalburg Westside: Bub-ulber's Trouble Reward": {
+    "and": [
+        {
+            "can_reach": "Glitzville Arena: Gold Star"
+        },
+        {
+            "has": "Contact Lens"
+        }
+    ]
+  },
+  "Rogueport Center: Ms. Mowz's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Elusive Badge"
+      }
+    ]
+  },
+  "Rogueport Center: Ms. Mowz": {
+    "and": [
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Elusive Badge"
+      }
+    ]
+  },
+  "Hooktail's Castle Hooktail's Room: Elusive Badge Chest": {
+    "and": [
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "can_reach": "Hooktail's Castle Hooktail's Room: Diamond Star"
+      }
+    ]
+  },
+  "Twilight Town Leftside: Routing Slip": {
+    "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+  },
+  "Twilight Town Leftside: Mayor Dour's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "can_reach": "Great Tree Entrance: Coin"
+      },
+      {
+        "can_reach": "Petalburg Eastside: Turtley Leaf"
+      },
+      {
+        "has": "Routing Slip"
+      }
+    ]
+  },
+  "Rogueport Center: Zess T.'s Trouble Reward": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Eastside: Wedding Ring": {
+    "and": [
+      {
+        "can_reach": "Poshley Heights Sanctum Altar: Garnet Star"
+      },
+      {
+        "can_reach": "Rogueport Westside: Train Ticket"
+      },
+      {
+        "has": "Yoshi"
+      }
+    ]
+  },
+  "Rogueport Westside: Frankie's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Poshley Heights Sanctum Altar: Garnet Star"
+      },
+      {
+        "can_reach": "Rogueport Westside: Train Ticket"
+      },
+      {
+        "has": "Wedding Ring",
+        "count": 2
+      }
+    ]
+  },
+  "Twilight Town Rightside: Eve's Trouble Reward": {
+    "can_reach": "Pirate's Grotto Cortez' Hoard: Sapphire Star"
+  },
+  "Pirate's Grotto Storeroom: Goom Goom's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Pirate's Grotto Cortez' Hoard: Sapphire Star"
+      },
+      {
+        "has": "Goombella"
+      }
+    ]
+  },
+  "Excess Express Dining Car: Chef Shimi's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Poshley Heights Sanctum Altar: Garnet Star"
+      },
+      {
+        "has": "Golden Leaf"
+      },
+      {
+        "has": "Mystic Egg"
+      },
+      {
+        "has": "Keel Mango"
+      }
+    ]
+  },
+  "Poshley Heights Downtown: Toodles' Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Poshley Heights Sanctum Altar: Garnet Star"
+      },
+      {
+        "has": "Wrestling Mag"
+      }
+    ]
+  },
+  "Glitzville Main Square: Wrestling Mag": {
+    "can_reach": "Poshley Heights Sanctum Altar: Garnet Star"
+  },
+  "Glitzville Main Square: Businessman's Trouble Reward": {
+    "can_reach": "Poshley Heights Sanctum Altar: Garnet Star"
+  },
+  "Poshley Heights Downtown: Package": {
+    "can_reach": "X-Naut Fortress Boss Room: Crystal Star"
+  },
+  "Poshley Heights Downtown: Goldbob's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "X-Naut Fortress Boss Room: Crystal Star"
+      },
+      {
+        "can_reach": "Glitzville Main Square: Hot Dog"
+      },
+      {
+        "has": "Package"
+      }
+    ]
+  },
+  "Fahr Outpost Town: Gob's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "X-Naut Fortress Boss Room: Crystal Star"
+      },
+      {
+        "has": "Honey Candy"
+      }
+    ]
+  },
+  "Poshley Heights Station: Toadia's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "X-Naut Fortress Boss Room: Crystal Star"
+      },
+      {
+        "has": "L Emblem"
+      }
+    ]
+  },
+  "Boggly Woods Shadow Sirens Room: Doe T.'s Trouble Reward": {
+    "can_reach": "Palace of Shadow Final Staircase: Jammin' Jelly"
+  },
+  "Poshley Heights Station: Present": {
+    "can_reach": "Palace of Shadow Final Staircase: Jammin' Jelly"
+  },
+  "Poshley Heights Station: Bub's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Palace of Shadow Final Staircase: Jammin' Jelly"
+      },
+      {
+        "has": "Present"
+      }
+    ]
+  },
+  "Fahr Outpost Town: Swob's Trouble Reward": {
+    "and": [
+      {
+        "can_reach": "Palace of Shadow Final Staircase: Jammin' Jelly"
+      },
+      {
+        "can_reach": "Pit of 100 Trials Floor 50: Strange Sack"
+      },
+      {
+        "has": "Bobbery"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Shroom Fry": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Volt Shroom"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Shroom Roast": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Life Shroom"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Shroom Steak": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Ultra Shroom"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Mistake": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Point Swap"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Honey Shroom": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Honey Syrup"
+      },
+      {
+        "has": "Volt Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Maple Shroom": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Maple Syrup"
+      },
+      {
+        "has": "Volt Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Jelly Shroom": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Jammin' Jelly"
+      },
+      {
+        "has": "Volt Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Honey Super": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Honey Syrup"
+      },
+      {
+        "has": "Super Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Maple Super": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Maple Syrup"
+      },
+      {
+        "has": "Super Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Jelly Super": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Jammin' Jelly"
+      },
+      {
+        "has": "Super Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Honey Ultra": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Honey Syrup"
+      },
+      {
+        "has": "Ultra Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Maple Ultra": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Maple Syrup"
+      },
+      {
+        "has": "Ultra Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Jelly Ultra": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Jammin' Jelly"
+      },
+      {
+        "has": "Ultra Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Spicy Soup": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Fire Flower"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Zess Dinner": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Super Shroom"
+      },
+      {
+        "has": "Fire Flower"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Zess Special": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Whacka Bump"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Zess Deluxe": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Fresh Pasta"
+      },
+      {
+        "has": "Ultra Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Zess Dynamite": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Coconut Bomb"
+      },
+      {
+        "has": "Egg Bomb"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Zess Tea": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Golden Leaf"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Space Food": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Dried Bouquet"
+      },
+      {
+        "has": "Mushroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Icicle Pop": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Honey Syrup"
+      },
+      {
+        "has": "Ice Storm"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Zess Frappe": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Maple Syrup"
+      },
+      {
+        "has": "Ice Storm"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Snow Bunny": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Golden Leaf"
+      },
+      {
+        "has": "Ice Storm"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Coconut Bomb": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Coconut"
+      },
+      {
+        "has": "Fire Flower"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Courage Meal": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Zess Dinner"
+      },
+      {
+        "has": "Courage Shell"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Shroom Cake": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Mushroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Shroom Crepe": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Ultra Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Mousse Cake": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Fried Egg": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Mystic Egg"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Fruit Parfait": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Keel Mango"
+      },
+      {
+        "has": "Honey Syrup"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Egg Bomb": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Mystic Egg"
+      },
+      {
+        "has": "Fire Flower"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Ink Pasta": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Inky Sauce"
+      },
+      {
+        "has": "Fresh Pasta"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Spaghetti": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Fresh Pasta"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Shroom Broth": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Golden Leaf"
+      },
+      {
+        "has": "Slow Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Poison Shroom": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Point Swap"
+      },
+      {
+        "has": "Slow Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Choco Cake": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Inky Sauce"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Mango Delight": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Keel Mango"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Love Pudding": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Mango Delight"
+      },
+      {
+        "has": "Mystic Egg"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Meteor Meal": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Shroom Fry"
+      },
+      {
+        "has": "Shooting Star"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Trial Stew": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Couple's Cake"
+      },
+      {
+        "has": "Poison Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Couple's Cake": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Snow Bunny"
+      },
+      {
+        "has": "Spicy Soup"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Inky Sauce": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Hot Sauce"
+      },
+      {
+        "has": "Tasty Tonic"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Omelette Meal": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Mystic Egg"
+      },
+      {
+        "has": "Mushroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Koopa Tea": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Turtley Leaf"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Koopasta": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Turtley Leaf"
+      },
+      {
+        "has": "Fresh Pasta"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Spicy Pasta": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Hot Sauce"
+      },
+      {
+        "has": "Fresh Pasta"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Heartful Cake": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Ruin Powder"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Peach Tart": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Peachy Peach"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Electro Pop": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Volt Shroom"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Fire Pop": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Fire Flower"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Honey Candy": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Honey Syrup"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Coco Candy": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Coconut"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Jelly Candy": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Jammin' Jelly"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Zess Cookie": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Cake Mix"
+      },
+      {
+        "has": "Maple Syrup"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Healthy Salad": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Turtley Leaf"
+      },
+      {
+        "has": "Golden Leaf"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Koopa Bun": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Turtley Leaf"
+      },
+      {
+        "has": "Keel Mango"
+      },
+      {
+        "can_reach": "Creepy Steeple Upper Room: Ruby Star"
+      },
+      {
+        "has": "Cookbook"
+      }
+    ]
+  },
+  "Rogueport Center: Cook Fresh Juice": {
+    "and": [
+      {
+        "has": "Contact Lens"
+      },
+      {
+        "has": "Honey Syrup"
+      }
+    ]
+  }
+}

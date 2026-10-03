@@ -1,0 +1,1983 @@
+[
+  {
+    "item_name": "10 Coins",
+    "id": 77772000,
+    "progression": "filler",
+    "rom_id": 83,
+    "frequency": 50
+  },
+  {
+    "item_name": "All or Nothing",
+    "id": 77772002,
+    "progression": "useful",
+    "rom_id": 264,
+    "frequency": 1
+  },
+  {
+    "item_name": "Attack FX B",
+    "id": 77772220,
+    "progression": "useful",
+    "rom_id": 316,
+    "frequency": 1
+  },
+  {
+    "item_name": "Attack FX G",
+    "id": 77772003,
+    "progression": "useful",
+    "rom_id": 317,
+    "frequency": 1
+  },
+  {
+    "item_name": "Attack FX P",
+    "id": 77772004,
+    "progression": "useful",
+    "rom_id": 319,
+    "frequency": 1
+  },
+  {
+    "item_name": "Attack FX R",
+    "id": 77772005,
+    "progression": "useful",
+    "rom_id": 315,
+    "frequency": 1
+  },
+  {
+    "item_name": "Attack FX Y",
+    "id": 77772006,
+    "progression": "useful",
+    "rom_id": 318,
+    "frequency": 1
+  },
+  {
+    "item_name": "Autograph",
+    "id": 77772007,
+    "progression": "progression",
+    "rom_id": 77,
+    "frequency": 1
+  },
+  {
+    "item_name": "Briefcase",
+    "id": 77772018,
+    "progression": "progression",
+    "rom_id": 336,
+    "frequency": 1
+  },
+  {
+    "item_name": "Black Key (Plane)",
+    "id": 77772008,
+    "progression": "progression",
+    "rom_id": 33,
+    "frequency": 1
+  },
+  {
+    "item_name": "Black Key (Paper)",
+    "id": 77772009,
+    "progression": "progression",
+    "rom_id": 34,
+    "frequency": 1
+  },
+  {
+    "item_name": "Black Key (Tube)",
+    "id": 77772010,
+    "progression": "progression",
+    "rom_id": 35,
+    "frequency": 1
+  },
+  {
+    "item_name": "Black Key (Boat)",
+    "id": 77772011,
+    "progression": "progression",
+    "rom_id": 36,
+    "frequency": 1
+  },
+  {
+    "item_name": "Blanket",
+    "id": 77772012,
+    "progression": "progression",
+    "rom_id": 79,
+    "frequency": 1
+  },
+  {
+    "item_name": "Blimp Ticket",
+    "id": 77772013,
+    "progression": "progression",
+    "rom_id": 52,
+    "frequency": 1
+  },
+  {
+    "item_name": "Blue Key",
+    "id": 77772014,
+    "progression": "progression",
+    "rom_id": 17,
+    "frequency": 1
+  },
+  {
+    "item_name": "Boat Mode",
+    "id": 77772015,
+    "progression": "progression",
+    "rom_id": 5,
+    "frequency": 1
+  },
+  {
+    "item_name": "Bobbery",
+    "id": 77772016,
+    "progression": "progression",
+    "rom_id": 111,
+    "frequency": 1
+  },
+  {
+    "item_name": "Boo's Sheet",
+    "id": 77772017,
+    "progression": "filler",
+    "rom_id": 134,
+    "frequency": 4
+  },
+  {
+    "item_name": "Bump Attack",
+    "id": 77772019,
+    "progression": "useful",
+    "rom_id": 322,
+    "frequency": 1
+  },
+  {
+    "item_name": "Cake Mix",
+    "id": 77772020,
+    "progression": "progression",
+    "rom_id": 172,
+    "frequency": 1
+  },
+  {
+    "item_name": "Card Key 1",
+    "id": 77772021,
+    "progression": "progression",
+    "rom_id": 29,
+    "frequency": 1
+  },
+  {
+    "item_name": "Card Key 2",
+    "id": 77772022,
+    "progression": "progression",
+    "rom_id": 30,
+    "frequency": 1
+  },
+  {
+    "item_name": "Card Key 3",
+    "id": 77772023,
+    "progression": "progression",
+    "rom_id": 31,
+    "frequency": 1
+  },
+  {
+    "item_name": "Card Key 4",
+    "id": 77772024,
+    "progression": "progression",
+    "rom_id": 32,
+    "frequency": 1
+  },
+  {
+    "item_name": "Castle Key",
+    "id": 77772025,
+    "progression": "progression",
+    "rom_id": 12,
+    "frequency": 4
+  },
+  {
+    "item_name": "Champ's Belt",
+    "id": 77772026,
+    "progression": "useful",
+    "rom_id": 65,
+    "frequency": 1
+  },
+  {
+    "item_name": "Charge",
+    "id": 77772027,
+    "progression": "useful",
+    "rom_id": 256,
+    "frequency": 1
+  },
+  {
+    "item_name": "Charge P",
+    "id": 77772028,
+    "progression": "useful",
+    "rom_id": 257,
+    "frequency": 1
+  },
+  {
+    "item_name": "Chill Out",
+    "id": 77772029,
+    "progression": "useful",
+    "rom_id": 320,
+    "frequency": 1
+  },
+  {
+    "item_name": "Choco Cake",
+    "id": 77772221,
+    "progression": "filler",
+    "rom_id": 214,
+    "frequency": 1
+  },
+  {
+    "item_name": "Chuckola Cola",
+    "id": 77772030,
+    "progression": "progression",
+    "rom_id": 70,
+    "frequency": 1
+  },
+  {
+    "item_name": "Close Call",
+    "id": 77772031,
+    "progression": "useful",
+    "rom_id": 299,
+    "frequency": 2
+  },
+  {
+    "item_name": "Close Call P",
+    "id": 77772032,
+    "progression": "useful",
+    "rom_id": 300,
+    "frequency": 2
+  },
+  {
+    "item_name": "Coconut",
+    "id": 77772033,
+    "progression": "progression",
+    "rom_id": 166,
+    "frequency": 2
+  },
+  {
+    "item_name": "Cog",
+    "id": 77772034,
+    "progression": "progression",
+    "rom_id": 85,
+    "frequency": 1
+  },
+  {
+    "item_name": "Contact Lens",
+    "id": 77772036,
+    "progression": "progression",
+    "rom_id": 51,
+    "frequency": 1
+  },
+  {
+    "item_name": "Cookbook",
+    "id": 77772037,
+    "progression": "progression",
+    "rom_id": 60,
+    "frequency": 1
+  },
+  {
+    "item_name": "Couple's Cake",
+    "id": 77772223,
+    "progression": "progression",
+    "rom_id": 219,
+    "frequency": 1
+  },
+  {
+    "item_name": "Courage Shell",
+    "id": 77772038,
+    "progression": "progression",
+    "rom_id": 143,
+    "frequency": 3
+  },
+  {
+    "item_name": "Crystal Star",
+    "id": 77772039,
+    "progression": "progression",
+    "rom_id": 120,
+    "frequency": 1
+  },
+  {
+    "item_name": "Damage Dodge",
+    "id": 77772040,
+    "progression": "useful",
+    "rom_id": 276,
+    "frequency": 2
+  },
+  {
+    "item_name": "Damage Dodge P",
+    "id": 77772041,
+    "progression": "useful",
+    "rom_id": 277,
+    "frequency": 2
+  },
+  {
+    "item_name": "Defend Plus",
+    "id": 77772042,
+    "progression": "useful",
+    "rom_id": 274,
+    "frequency": 2
+  },
+  {
+    "item_name": "Defend Plus P",
+    "id": 77772043,
+    "progression": "useful",
+    "rom_id": 275,
+    "frequency": 2
+  },
+  {
+    "item_name": "Diamond Star",
+    "id": 77772044,
+    "progression": "progression",
+    "rom_id": 114,
+    "frequency": 1
+  },
+  {
+    "item_name": "Dizzy Dial",
+    "id": 77772045,
+    "progression": "filler",
+    "rom_id": 141,
+    "frequency": 2
+  },
+  {
+    "item_name": "Double Dip",
+    "id": 77772046,
+    "progression": "useful",
+    "rom_id": 254,
+    "frequency": 2
+  },
+  {
+    "item_name": "Double Dip P",
+    "id": 77772047,
+    "progression": "useful",
+    "rom_id": 255,
+    "frequency": 2
+  },
+  {
+    "item_name": "Double Pain",
+    "id": 77772048,
+    "progression": "useful",
+    "rom_id": 288,
+    "frequency": 1
+  },
+  {
+    "item_name": "Dried Bouquet",
+    "id": 77772224,
+    "progression": "progression",
+    "rom_id": 167,
+    "frequency": 2
+  },
+  {
+    "item_name": "Dried Shroom",
+    "id": 77772049,
+    "progression": "filler",
+    "rom_id": 152,
+    "frequency": 4
+  },
+  {
+    "item_name": "Dubious Paper",
+    "id": 77772050,
+    "progression": "useful",
+    "rom_id": 97,
+    "frequency": 1
+  },
+  {
+    "item_name": "Earth Quake",
+    "id": 77772051,
+    "progression": "filler",
+    "rom_id": 133,
+    "frequency": 3
+  },
+  {
+    "item_name": "Elevator Key (Station)",
+    "id": 77772052,
+    "progression": "progression",
+    "rom_id": 26,
+    "frequency": 1
+  },
+  {
+    "item_name": "Elusive Badge",
+    "id": 77772239,
+    "progression": "progression",
+    "rom_id": 110,
+    "frequency": 1
+  },
+  {
+    "item_name": "Elevator Key 1",
+    "id": 77772053,
+    "progression": "progression",
+    "rom_id": 27,
+    "frequency": 1
+  },
+  {
+    "item_name": "Elevator Key 2",
+    "id": 77772054,
+    "progression": "progression",
+    "rom_id": 28,
+    "frequency": 1
+  },
+  {
+    "item_name": "Emerald Star",
+    "id": 77772055,
+    "progression": "progression",
+    "rom_id": 115,
+    "frequency": 1
+  },
+  {
+    "item_name": "Feeling Fine",
+    "id": 77772056,
+    "progression": "useful",
+    "rom_id": 285,
+    "frequency": 1
+  },
+  {
+    "item_name": "Feeling Fine P",
+    "id": 77772057,
+    "progression": "useful",
+    "rom_id": 286,
+    "frequency": 1
+  },
+  {
+    "item_name": "Fire Drive",
+    "id": 77772058,
+    "progression": "useful",
+    "rom_id": 252,
+    "frequency": 2
+  },
+  {
+    "item_name": "Fire Flower",
+    "id": 77772059,
+    "progression": "progression",
+    "rom_id": 132,
+    "frequency": 7
+  },
+  {
+    "item_name": "First Attack",
+    "id": 77772060,
+    "progression": "useful",
+    "rom_id": 321,
+    "frequency": 1
+  },
+  {
+    "item_name": "Flower Finder",
+    "id": 77772061,
+    "progression": "useful",
+    "rom_id": 312,
+    "frequency": 1
+  },
+  {
+    "item_name": "Flower Saver",
+    "id": 77772062,
+    "progression": "useful",
+    "rom_id": 281,
+    "frequency": 2
+  },
+  {
+    "item_name": "Flower Saver P",
+    "id": 77772063,
+    "progression": "useful",
+    "rom_id": 282,
+    "frequency": 2
+  },
+  {
+    "item_name": "Flurrie",
+    "id": 77772064,
+    "progression": "progression",
+    "rom_id": 57,
+    "frequency": 1
+  },
+  {
+    "item_name": "FP Drain",
+    "id": 77772065,
+    "progression": "useful",
+    "rom_id": 297,
+    "frequency": 1
+  },
+  {
+    "item_name": "FP Plus",
+    "id": 77772066,
+    "progression": "useful",
+    "rom_id": 280,
+    "frequency": 3
+  },
+  {
+    "item_name": "Fresh Pasta",
+    "id": 77772067,
+    "progression": "progression",
+    "rom_id": 171,
+    "frequency": 1
+  },
+  {
+    "item_name": "Fright Mask",
+    "id": 77772068,
+    "progression": "filler",
+    "rom_id": 162,
+    "frequency": 2
+  },
+  {
+    "item_name": "Galley Pot",
+    "id": 77772069,
+    "progression": "progression",
+    "rom_id": 74,
+    "frequency": 1
+  },
+  {
+    "item_name": "Garnet Star",
+    "id": 77772070,
+    "progression": "progression",
+    "rom_id": 119,
+    "frequency": 1
+  },
+  {
+    "item_name": "Gate Handle",
+    "id": 77772071,
+    "progression": "progression",
+    "rom_id": 72,
+    "frequency": 1
+  },
+  {
+    "item_name": "Gold Bar",
+    "id": 77772072,
+    "progression": "useful",
+    "rom_id": 126,
+    "frequency": 1
+  },
+  {
+    "item_name": "Gold Bar x3",
+    "id": 77772073,
+    "progression": "useful",
+    "rom_id": 127,
+    "frequency": 1
+  },
+  {
+    "item_name": "Gold Card",
+    "id": 77772241,
+    "progression": "useful",
+    "rom_id": 93,
+    "frequency": 1
+  },
+  {
+    "item_name": "Gold Ring",
+    "id": 77772074,
+    "progression": "progression",
+    "rom_id": 75,
+    "frequency": 1
+  },
+  {
+    "item_name": "Gold Star",
+    "id": 77772075,
+    "progression": "progression",
+    "rom_id": 116,
+    "frequency": 1
+  },
+  {
+    "item_name": "Goldbob Guide",
+    "id": 77772076,
+    "progression": "progression",
+    "rom_id": 82,
+    "frequency": 1
+  },
+  {
+    "item_name": "Golden Leaf",
+    "id": 77772077,
+    "progression": "progression",
+    "rom_id": 169,
+    "frequency": 1
+  },
+  {
+    "item_name": "Goombella",
+    "id": 77772078,
+    "progression": "progression",
+    "rom_id": 55,
+    "frequency": 1
+  },
+  {
+    "item_name": "Gradual Syrup",
+    "id": 77772079,
+    "progression": "filler",
+    "rom_id": 158,
+    "frequency": 2
+  },
+  {
+    "item_name": "Grotto Key",
+    "id": 77772080,
+    "progression": "progression",
+    "rom_id": 20,
+    "frequency": 1
+  },
+  {
+    "item_name": "Hammer Throw",
+    "id": 77772081,
+    "progression": "useful",
+    "rom_id": 249,
+    "frequency": 2
+  },
+  {
+    "item_name": "Hammerman",
+    "id": 77772082,
+    "progression": "useful",
+    "rom_id": 290,
+    "frequency": 1
+  },
+  {
+    "item_name": "Happy Flower",
+    "id": 77772083,
+    "progression": "useful",
+    "rom_id": 294,
+    "frequency": 2
+  },
+  {
+    "item_name": "Happy Heart",
+    "id": 77772084,
+    "progression": "useful",
+    "rom_id": 292,
+    "frequency": 2
+  },
+  {
+    "item_name": "Happy Heart P",
+    "id": 77772085,
+    "progression": "useful",
+    "rom_id": 293,
+    "frequency": 2
+  },
+  {
+    "item_name": "Head Rattle",
+    "id": 77772086,
+    "progression": "useful",
+    "rom_id": 251,
+    "frequency": 2
+  },
+  {
+    "item_name": "Heart Finder",
+    "id": 77772087,
+    "progression": "useful",
+    "rom_id": 311,
+    "frequency": 1
+  },
+  {
+    "item_name": "Honey Candy",
+    "id": 77772245,
+    "progression": "progression",
+    "rom_id": 229,
+    "frequency": 1
+  },
+  {
+    "item_name": "Honey Shroom",
+    "id": 77772225,
+    "progression": "filler",
+    "rom_id": 183,
+    "frequency": 1
+  },
+  {
+    "item_name": "Honey Syrup",
+    "id": 77772088,
+    "progression": "progression",
+    "rom_id": 154,
+    "frequency": 7
+  },
+  {
+    "item_name": "Horsetail",
+    "id": 77772089,
+    "progression": "filler",
+    "rom_id": 175,
+    "frequency": 1
+  },
+  {
+    "item_name": "Hot Dog",
+    "id": 77772090,
+    "progression": "filler",
+    "rom_id": 159,
+    "frequency": 1
+  },
+  {
+    "item_name": "Hot Sauce",
+    "id": 77772226,
+    "progression": "progression",
+    "rom_id": 173,
+    "frequency": 2
+  },
+  {
+    "item_name": "HP Drain",
+    "id": 77772091,
+    "progression": "filler",
+    "rom_id": 144,
+    "frequency": 2
+  },
+  {
+    "item_name": "HP Drain (Badge)",
+    "id": 77772092,
+    "progression": "useful",
+    "rom_id": 295,
+    "frequency": 1
+  },
+  {
+    "item_name": "HP Drain P",
+    "id": 77772093,
+    "progression": "useful",
+    "rom_id": 296,
+    "frequency": 1
+  },
+  {
+    "item_name": "HP Plus",
+    "id": 77772094,
+    "progression": "useful",
+    "rom_id": 278,
+    "frequency": 3
+  },
+  {
+    "item_name": "HP Plus P",
+    "id": 77772095,
+    "progression": "useful",
+    "rom_id": 279,
+    "frequency": 3
+  },
+  {
+    "item_name": "Ice Power",
+    "id": 77772096,
+    "progression": "useful",
+    "rom_id": 283,
+    "frequency": 1
+  },
+  {
+    "item_name": "Ice Smash",
+    "id": 77772097,
+    "progression": "useful",
+    "rom_id": 253,
+    "frequency": 2
+  },
+  {
+    "item_name": "Ice Storm",
+    "id": 77772098,
+    "progression": "progression",
+    "rom_id": 131,
+    "frequency": 5
+  },
+  {
+    "item_name": "Inn Coupon",
+    "id": 77772099,
+    "progression": "filler",
+    "rom_id": 164,
+    "frequency": 7
+  },
+  {
+    "item_name": "Item Hog",
+    "id": 77772100,
+    "progression": "useful",
+    "rom_id": 314,
+    "frequency": 1
+  },
+  {
+    "item_name": "Jammin' Jelly",
+    "id": 77772101,
+    "progression": "progression",
+    "rom_id": 156,
+    "frequency": 9
+  },
+  {
+    "item_name": "Jumpman",
+    "id": 77772102,
+    "progression": "useful",
+    "rom_id": 289,
+    "frequency": 1
+  },
+  {
+    "item_name": "Keel Mango",
+    "id": 77772103,
+    "progression": "progression",
+    "rom_id": 170,
+    "frequency": 1
+  },
+  {
+    "item_name": "Koops",
+    "id": 77772104,
+    "progression": "progression",
+    "rom_id": 56,
+    "frequency": 1
+  },
+  {
+    "item_name": "L Emblem",
+    "id": 77772105,
+    "progression": "progression",
+    "rom_id": 327,
+    "frequency": 1
+  },
+  {
+    "item_name": "Last Stand",
+    "id": 77772106,
+    "progression": "useful",
+    "rom_id": 272,
+    "frequency": 2
+  },
+  {
+    "item_name": "Last Stand P",
+    "id": 77772107,
+    "progression": "useful",
+    "rom_id": 273,
+    "frequency": 2
+  },
+  {
+    "item_name": "Life Shroom",
+    "id": 77772108,
+    "progression": "progression",
+    "rom_id": 151,
+    "frequency": 10
+  },
+  {
+    "item_name": "Lucky Day",
+    "id": 77772110,
+    "progression": "useful",
+    "rom_id": 303,
+    "frequency": 2
+  },
+  {
+    "item_name": "Lucky Start",
+    "id": 77772111,
+    "progression": "useful",
+    "rom_id": 326,
+    "frequency": 1
+  },
+  {
+    "item_name": "Maple Syrup",
+    "id": 77772112,
+    "progression": "progression",
+    "rom_id": 155,
+    "frequency": 5
+  },
+  {
+    "item_name": "Mega Rush",
+    "id": 77772113,
+    "progression": "useful",
+    "rom_id": 266,
+    "frequency": 1
+  },
+  {
+    "item_name": "Mega Rush P",
+    "id": 77772114,
+    "progression": "useful",
+    "rom_id": 267,
+    "frequency": 1
+  },
+  {
+    "item_name": "Meteor Meal",
+    "id": 77772227,
+    "progression": "filler",
+    "rom_id": 217,
+    "frequency": 1
+  },
+  {
+    "item_name": "Mini Mr. Mini",
+    "id": 77772115,
+    "progression": "filler",
+    "rom_id": 146,
+    "frequency": 2
+  },
+  {
+    "item_name": "Money Money",
+    "id": 77772116,
+    "progression": "useful",
+    "rom_id": 313,
+    "frequency": 1
+  },
+  {
+    "item_name": "Moon Stone",
+    "id": 77772117,
+    "progression": "progression",
+    "rom_id": 61,
+    "frequency": 1
+  },
+  {
+    "item_name": "Mr. Softener",
+    "id": 77772118,
+    "progression": "filler",
+    "rom_id": 147,
+    "frequency": 2
+  },
+  {
+    "item_name": "Ms. Mowz",
+    "id": 77772222,
+    "progression": "useful",
+    "rom_id": 112,
+    "frequency": 1
+  },
+  {
+    "item_name": "Multibounce",
+    "id": 77772119,
+    "progression": "useful",
+    "rom_id": 241,
+    "frequency": 2
+  },
+  {
+    "item_name": "Mushroom",
+    "id": 77772120,
+    "progression": "progression",
+    "rom_id": 148,
+    "frequency": 13
+  },
+  {
+    "item_name": "Mystery",
+    "id": 77772121,
+    "progression": "filler",
+    "rom_id": 163,
+    "frequency": 3
+  },
+  {
+    "item_name": "Mystic Egg",
+    "id": 77772122,
+    "progression": "progression",
+    "rom_id": 168,
+    "frequency": 1
+  },
+  {
+    "item_name": "Necklace",
+    "id": 77772123,
+    "progression": "progression",
+    "rom_id": 63,
+    "frequency": 1
+  },
+  {
+    "item_name": "Old Letter",
+    "id": 77772124,
+    "progression": "progression",
+    "rom_id": 69,
+    "frequency": 1
+  },
+  {
+    "item_name": "Omelette Meal",
+    "id": 77772125,
+    "progression": "filler",
+    "rom_id": 221,
+    "frequency": 1
+  },
+  {
+    "item_name": "P-Down, D-Up",
+    "id": 77772126,
+    "progression": "useful",
+    "rom_id": 270,
+    "frequency": 1
+  },
+  {
+    "item_name": "P-Down, D-Up P",
+    "id": 77772127,
+    "progression": "useful",
+    "rom_id": 271,
+    "frequency": 1
+  },
+  {
+    "item_name": "P-Up, D-Down",
+    "id": 77772128,
+    "progression": "useful",
+    "rom_id": 262,
+    "frequency": 1
+  },
+  {
+    "item_name": "P-Up, D-Down P",
+    "id": 77772129,
+    "progression": "useful",
+    "rom_id": 263,
+    "frequency": 1
+  },
+  {
+    "item_name": "Package",
+    "id": 77772244,
+    "progression": "progression",
+    "rom_id": 109,
+    "frequency": 1
+  },
+  {
+    "item_name": "Present",
+    "id": 77772246,
+    "progression": "progression",
+    "rom_id": 100,
+    "frequency": 1
+  },
+  {
+    "item_name": "Palace Key",
+    "id": 77772130,
+    "progression": "progression",
+    "rom_id": 46,
+    "frequency": 3
+  },
+  {
+    "item_name": "Palace Key (Tower)",
+    "id": 77772131,
+    "progression": "progression",
+    "rom_id": 38,
+    "frequency": 8
+  },
+  {
+    "item_name": "Paper Mode",
+    "id": 77772132,
+    "progression": "progression",
+    "rom_id": 2,
+    "frequency": 1
+  },
+  {
+    "item_name": "Peachy Peach",
+    "id": 77772133,
+    "progression": "progression",
+    "rom_id": 176,
+    "frequency": 1
+  },
+  {
+    "item_name": "Peekaboo",
+    "id": 77772134,
+    "progression": "useful",
+    "rom_id": 309,
+    "frequency": 1
+  },
+  {
+    "item_name": "Piercing Blow",
+    "id": 77772135,
+    "progression": "useful",
+    "rom_id": 250,
+    "frequency": 1
+  },
+  {
+    "item_name": "Pity Flower",
+    "id": 77772136,
+    "progression": "useful",
+    "rom_id": 306,
+    "frequency": 1
+  },
+  {
+    "item_name": "Plane Mode",
+    "id": 77772137,
+    "progression": "progression",
+    "rom_id": 4,
+    "frequency": 1
+  },
+  {
+    "item_name": "Platinum Card",
+    "id": 77772242,
+    "progression": "useful",
+    "rom_id": 92,
+    "frequency": 1
+  },
+  {
+    "item_name": "Point Swap",
+    "id": 77772138,
+    "progression": "progression",
+    "rom_id": 161,
+    "frequency": 2
+  },
+  {
+    "item_name": "POW Block",
+    "id": 77772139,
+    "progression": "filler",
+    "rom_id": 139,
+    "frequency": 3
+  },
+  {
+    "item_name": "Power Bounce",
+    "id": 77772140,
+    "progression": "useful",
+    "rom_id": 242,
+    "frequency": 1
+  },
+  {
+    "item_name": "Power Jump",
+    "id": 77772141,
+    "progression": "useful",
+    "rom_id": 240,
+    "frequency": 2
+  },
+  {
+    "item_name": "Power Plus",
+    "id": 77772142,
+    "progression": "useful",
+    "rom_id": 260,
+    "frequency": 3
+  },
+  {
+    "item_name": "Power Plus P",
+    "id": 77772143,
+    "progression": "useful",
+    "rom_id": 261,
+    "frequency": 2
+  },
+  {
+    "item_name": "Power Punch",
+    "id": 77772144,
+    "progression": "filler",
+    "rom_id": 142,
+    "frequency": 3
+  },
+  {
+    "item_name": "Power Rush",
+    "id": 77772145,
+    "progression": "useful",
+    "rom_id": 268,
+    "frequency": 4
+  },
+  {
+    "item_name": "Power Rush P",
+    "id": 77772146,
+    "progression": "useful",
+    "rom_id": 269,
+    "frequency": 4
+  },
+  {
+    "item_name": "Power Smash",
+    "id": 77772147,
+    "progression": "useful",
+    "rom_id": 247,
+    "frequency": 2
+  },
+  {
+    "item_name": "Pretty Lucky",
+    "id": 77772148,
+    "progression": "useful",
+    "rom_id": 301,
+    "frequency": 2
+  },
+  {
+    "item_name": "Pretty Lucky P",
+    "id": 77772149,
+    "progression": "useful",
+    "rom_id": 302,
+    "frequency": 1
+  },
+  {
+    "item_name": "Puni Orb",
+    "id": 77772150,
+    "progression": "progression",
+    "rom_id": 64,
+    "frequency": 1
+  },
+  {
+    "item_name": "Quake Hammer",
+    "id": 77772151,
+    "progression": "useful",
+    "rom_id": 248,
+    "frequency": 2
+  },
+  {
+    "item_name": "Quick Change",
+    "id": 77772152,
+    "progression": "useful",
+    "rom_id": 308,
+    "frequency": 1
+  },
+  {
+    "item_name": "Ragged Diary",
+    "id": 77772153,
+    "progression": "progression",
+    "rom_id": 78,
+    "frequency": 1
+  },
+  {
+    "item_name": "Red Key",
+    "id": 77772154,
+    "progression": "progression",
+    "rom_id": 16,
+    "frequency": 1
+  },
+  {
+    "item_name": "Refund",
+    "id": 77772155,
+    "progression": "useful",
+    "rom_id": 305,
+    "frequency": 1
+  },
+  {
+    "item_name": "Repel Cape",
+    "id": 77772156,
+    "progression": "filler",
+    "rom_id": 136,
+    "frequency": 3
+  },
+  {
+    "item_name": "Return Postage",
+    "id": 77772157,
+    "progression": "useful",
+    "rom_id": 291,
+    "frequency": 1
+  },
+  {
+    "item_name": "Routing Slip",
+    "id": 77772240,
+    "progression": "progression",
+    "rom_id": 98,
+    "frequency": 1
+  },
+  {
+    "item_name": "Ruby Star",
+    "id": 77772158,
+    "progression": "progression",
+    "rom_id": 117,
+    "frequency": 1
+  },
+  {
+    "item_name": "Ruin Powder",
+    "id": 77772159,
+    "progression": "progression",
+    "rom_id": 137,
+    "frequency": 3
+  },
+  {
+    "item_name": "Sapphire Star",
+    "id": 77772160,
+    "progression": "progression",
+    "rom_id": 118,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shell Earrings",
+    "id": 77772161,
+    "progression": "progression",
+    "rom_id": 76,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shine Sprite",
+    "id": 77772162,
+    "progression": "useful",
+    "rom_id": 87,
+    "frequency": 40
+  },
+  {
+    "item_name": "Shooting Star",
+    "id": 77772164,
+    "progression": "progression",
+    "rom_id": 130,
+    "frequency": 6
+  },
+  {
+    "item_name": "Shop Key",
+    "id": 77772165,
+    "progression": "progression",
+    "rom_id": 21,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shrink Stomp",
+    "id": 77772166,
+    "progression": "useful",
+    "rom_id": 244,
+    "frequency": 2
+  },
+  {
+    "item_name": "Simplifier",
+    "id": 77772167,
+    "progression": "useful",
+    "rom_id": 324,
+    "frequency": 2
+  },
+  {
+    "item_name": "Skull Gem",
+    "id": 77772168,
+    "progression": "progression",
+    "rom_id": 71,
+    "frequency": 1
+  },
+  {
+    "item_name": "Sleepy Sheep",
+    "id": 77772169,
+    "progression": "filler",
+    "rom_id": 138,
+    "frequency": 4
+  },
+  {
+    "item_name": "Sleepy Stomp",
+    "id": 77772219,
+    "progression": "useful",
+    "rom_id": 245,
+    "frequency": 2
+  },
+  {
+    "item_name": "Slow Go",
+    "id": 77772170,
+    "progression": "useful",
+    "rom_id": 323,
+    "frequency": 1
+  },
+  {
+    "item_name": "Slow Shroom",
+    "id": 77772171,
+    "progression": "progression",
+    "rom_id": 157,
+    "frequency": 2
+  },
+  {
+    "item_name": "Snow Bunny",
+    "id": 77772228,
+    "progression": "progression",
+    "rom_id": 201,
+    "frequency": 1
+  },
+  {
+    "item_name": "Soft Stomp",
+    "id": 77772172,
+    "progression": "useful",
+    "rom_id": 246,
+    "frequency": 2
+  },
+  {
+    "item_name": "Space Food",
+    "id": 77772173,
+    "progression": "filler",
+    "rom_id": 198,
+    "frequency": 1
+  },
+  {
+    "item_name": "Spike Shield",
+    "id": 77772174,
+    "progression": "useful",
+    "rom_id": 284,
+    "frequency": 1
+  },
+  {
+    "item_name": "Spite Pouch",
+    "id": 77772175,
+    "progression": "filler",
+    "rom_id": 177,
+    "frequency": 2
+  },
+  {
+    "item_name": "Star Key",
+    "id": 77772176,
+    "progression": "progression",
+    "rom_id": 37,
+    "frequency": 1
+  },
+  {
+    "item_name": "Star Piece",
+    "id": 77772177,
+    "progression": "progression",
+    "rom_id": 125,
+    "frequency": 100
+  },
+  {
+    "item_name": "Station Key 1",
+    "id": 77772178,
+    "progression": "progression",
+    "rom_id": 24,
+    "frequency": 1
+  },
+  {
+    "item_name": "Station Key 2",
+    "id": 77772179,
+    "progression": "progression",
+    "rom_id": 25,
+    "frequency": 1
+  },
+  {
+    "item_name": "Steeple Key",
+    "id": 77772180,
+    "progression": "progression",
+    "rom_id": 22,
+    "frequency": 1
+  },
+  {
+    "item_name": "Stopwatch",
+    "id": 77772182,
+    "progression": "filler",
+    "rom_id": 140,
+    "frequency": 5
+  },
+  {
+    "item_name": "Storage Key 1",
+    "id": 77772183,
+    "progression": "progression",
+    "rom_id": 18,
+    "frequency": 1
+  },
+  {
+    "item_name": "Storage Key 2",
+    "id": 77772184,
+    "progression": "progression",
+    "rom_id": 19,
+    "frequency": 1
+  },
+  {
+    "item_name": "Strange Sack",
+    "id": 77772185,
+    "progression": "useful",
+    "rom_id": 1,
+    "frequency": 1
+  },
+  {
+    "item_name": "Sun Stone",
+    "id": 77772186,
+    "progression": "progression",
+    "rom_id": 62,
+    "frequency": 1
+  },
+  {
+    "item_name": "Super Appeal",
+    "id": 77772187,
+    "progression": "useful",
+    "rom_id": 258,
+    "frequency": 2
+  },
+  {
+    "item_name": "Super Appeal P",
+    "id": 77772188,
+    "progression": "useful",
+    "rom_id": 259,
+    "frequency": 2
+  },
+  {
+    "item_name": "Progressive Hammer",
+    "id": 77772190,
+    "progression": "progression",
+    "rom_id": 9,
+    "frequency": 2
+  },
+  {
+    "item_name": "Super Shroom",
+    "id": 77772191,
+    "progression": "progression",
+    "rom_id": 149,
+    "frequency": 11
+  },
+  {
+    "item_name": "Superbombomb",
+    "id": 77772192,
+    "progression": "progression",
+    "rom_id": 67,
+    "frequency": 1
+  },
+  {
+    "item_name": "Tasty Tonic",
+    "id": 77772193,
+    "progression": "progression",
+    "rom_id": 153,
+    "frequency": 2
+  },
+  {
+    "item_name": "The Letter \"p\"",
+    "id": 77772194,
+    "progression": "progression",
+    "rom_id": 68,
+    "frequency": 1
+  },
+  {
+    "item_name": "Thunder Bolt",
+    "id": 77772195,
+    "progression": "filler",
+    "rom_id": 128,
+    "frequency": 2
+  },
+  {
+    "item_name": "Thunder Rage",
+    "id": 77772196,
+    "progression": "filler",
+    "rom_id": 129,
+    "frequency": 8
+  },
+  {
+    "item_name": "Timing Tutor",
+    "id": 77772197,
+    "progression": "useful",
+    "rom_id": 310,
+    "frequency": 1
+  },
+  {
+    "item_name": "Tornado Jump",
+    "id": 77772198,
+    "progression": "useful",
+    "rom_id": 243,
+    "frequency": 2
+  },
+  {
+    "item_name": "Train Ticket",
+    "id": 77772199,
+    "progression": "progression",
+    "rom_id": 53,
+    "frequency": 1
+  },
+  {
+    "item_name": "Tube Mode",
+    "id": 77772200,
+    "progression": "progression",
+    "rom_id": 3,
+    "frequency": 1
+  },
+  {
+    "item_name": "Turtley Leaf",
+    "id": 77772201,
+    "progression": "progression",
+    "rom_id": 174,
+    "frequency": 2
+  },
+  {
+    "item_name": "Progressive Boots",
+    "id": 77772202,
+    "progression": "progression",
+    "rom_id": 6,
+    "frequency": 2
+  },
+  {
+    "item_name": "Ultra Shroom",
+    "id": 77772204,
+    "progression": "progression",
+    "rom_id": 150,
+    "frequency": 12
+  },
+  {
+    "item_name": "Unsimplifier",
+    "id": 77772205,
+    "progression": "useful",
+    "rom_id": 325,
+    "frequency": 2
+  },
+  {
+    "item_name": "Up Arrow",
+    "id": 77772206,
+    "progression": "useful",
+    "rom_id": 108,
+    "frequency": 1
+  },
+  {
+    "item_name": "Vital Paper",
+    "id": 77772207,
+    "progression": "progression",
+    "rom_id": 80,
+    "frequency": 1
+  },
+  {
+    "item_name": "Vivian",
+    "id": 77772208,
+    "progression": "progression",
+    "rom_id": 59,
+    "frequency": 1
+  },
+  {
+    "item_name": "Volt Shroom",
+    "id": 77772209,
+    "progression": "progression",
+    "rom_id": 135,
+    "frequency": 3
+  },
+  {
+    "item_name": "W Emblem",
+    "id": 77772210,
+    "progression": "useful",
+    "rom_id": 328,
+    "frequency": 1
+  },
+  {
+    "item_name": "Wedding Ring",
+    "id": 77772211,
+    "progression": "progression",
+    "rom_id": 73,
+    "frequency": 2
+  },
+  {
+    "item_name": "Wrestling Mag",
+    "id": 77772243,
+    "progression": "progression",
+    "rom_id": 99,
+    "frequency": 1
+  },
+  {
+    "item_name": "Whacka Bump",
+    "id": 77772212,
+    "progression": "progression",
+    "rom_id": 165,
+    "frequency": 8
+  },
+  {
+    "item_name": "Yoshi",
+    "id": 77772213,
+    "progression": "progression",
+    "rom_id": 58,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zap Tap",
+    "id": 77772214,
+    "progression": "useful",
+    "rom_id": 287,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zess Dynamite",
+    "id": 77772229,
+    "progression": "filler",
+    "rom_id": 196,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zess Special",
+    "id": 77772230,
+    "progression": "filler",
+    "rom_id": 194,
+    "frequency": 1
+  },
+  {
+    "item_name": "House Key",
+    "id": 77772231,
+    "progression": "progression",
+    "rom_id": 49,
+    "frequency": 1
+  },
+  {
+    "item_name": "Box",
+    "id": 77772232,
+    "progression": "progression",
+    "rom_id": 95,
+    "frequency": 1
+  },
+  {
+    "item_name": "Walrus Whiskers",
+    "id": 77772233,
+    "progression": "progression",
+    "rom_id": 105,
+    "frequency": 1
+  },
+  {
+    "item_name": "Special Card",
+    "id": 77772234,
+    "progression": "useful",
+    "rom_id": 91,
+    "frequency": 1
+  },
+  {
+    "item_name": "Courage Shell Pack",
+    "id": 77772235,
+    "progression": "progression",
+    "rom_id": 90,
+    "frequency": 1
+  },
+  {
+    "item_name": "Silver Card",
+    "id": 77772236,
+    "progression": "useful",
+    "rom_id": 94,
+    "frequency": 1
+  },
+  {
+    "item_name": "Battle Trunks",
+    "id": 77772237,
+    "progression": "progression",
+    "rom_id": 107,
+    "frequency": 0
+  },
+  {
+    "item_name": "Battle Trunk Pack",
+    "id": 77772238,
+    "progression": "progression",
+    "rom_id": 81,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shroom Fry",
+    "id": 77772247,
+    "progression": "progression",
+    "rom_id": 179,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shroom Roast",
+    "id": 77772248,
+    "progression": "filler",
+    "rom_id": 180,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shroom Steak",
+    "id": 77772249,
+    "progression": "filler",
+    "rom_id": 181,
+    "frequency": 1
+  },
+  {
+    "item_name": "Mistake",
+    "id": 77772250,
+    "progression": "filler",
+    "rom_id": 182,
+    "frequency": 1
+  },
+  {
+    "item_name": "Maple Shroom",
+    "id": 77772251,
+    "progression": "filler",
+    "rom_id": 184,
+    "frequency": 1
+  },
+  {
+    "item_name": "Jelly Shroom",
+    "id": 77772252,
+    "progression": "filler",
+    "rom_id": 185,
+    "frequency": 1
+  },
+  {
+    "item_name": "Honey Super",
+    "id": 77772253,
+    "progression": "filler",
+    "rom_id": 186,
+    "frequency": 1
+  },
+  {
+    "item_name": "Maple Super",
+    "id": 77772254,
+    "progression": "filler",
+    "rom_id": 187,
+    "frequency": 1
+  },
+  {
+    "item_name": "Jelly Super",
+    "id": 77772255,
+    "progression": "filler",
+    "rom_id": 188,
+    "frequency": 1
+  },
+  {
+    "item_name": "Honey Ultra",
+    "id": 77772256,
+    "progression": "filler",
+    "rom_id": 189,
+    "frequency": 1
+  },
+  {
+    "item_name": "Maple Ultra",
+    "id": 77772257,
+    "progression": "filler",
+    "rom_id": 190,
+    "frequency": 1
+  },
+  {
+    "item_name": "Jelly Ultra",
+    "id": 77772258,
+    "progression": "filler",
+    "rom_id": 191,
+    "frequency": 1
+  },
+  {
+    "item_name": "Spicy Soup",
+    "id": 77772259,
+    "progression": "progression",
+    "rom_id": 192,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zess Dinner",
+    "id": 77772260,
+    "progression": "progression",
+    "rom_id": 193,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zess Deluxe",
+    "id": 77772261,
+    "progression": "filler",
+    "rom_id": 195,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zess Tea",
+    "id": 77772262,
+    "progression": "filler",
+    "rom_id": 197,
+    "frequency": 1
+  },
+  {
+    "item_name": "Icicle Pop",
+    "id": 77772263,
+    "progression": "filler",
+    "rom_id": 199,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zess Frappe",
+    "id": 77772264,
+    "progression": "filler",
+    "rom_id": 200,
+    "frequency": 1
+  },
+  {
+    "item_name": "Coconut Bomb",
+    "id": 77772265,
+    "progression": "progression",
+    "rom_id": 202,
+    "frequency": 1
+  },
+  {
+    "item_name": "Courage Meal",
+    "id": 77772266,
+    "progression": "filler",
+    "rom_id": 203,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shroom Cake",
+    "id": 77772267,
+    "progression": "filler",
+    "rom_id": 204,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shroom Crepe",
+    "id": 77772268,
+    "progression": "filler",
+    "rom_id": 205,
+    "frequency": 1
+  },
+  {
+    "item_name": "Mousse Cake",
+    "id": 77772269,
+    "progression": "filler",
+    "rom_id": 206,
+    "frequency": 1
+  },
+  {
+    "item_name": "Fried Egg",
+    "id": 77772270,
+    "progression": "filler",
+    "rom_id": 207,
+    "frequency": 1
+  },
+  {
+    "item_name": "Fruit Parfait",
+    "id": 77772271,
+    "progression": "filler",
+    "rom_id": 208,
+    "frequency": 1
+  },
+  {
+    "item_name": "Egg Bomb",
+    "id": 77772272,
+    "progression": "progression",
+    "rom_id": 209,
+    "frequency": 1
+  },
+  {
+    "item_name": "Ink Pasta",
+    "id": 77772273,
+    "progression": "filler",
+    "rom_id": 210,
+    "frequency": 1
+  },
+  {
+    "item_name": "Spaghetti",
+    "id": 77772274,
+    "progression": "filler",
+    "rom_id": 211,
+    "frequency": 1
+  },
+  {
+    "item_name": "Shroom Broth",
+    "id": 77772275,
+    "progression": "filler",
+    "rom_id": 212,
+    "frequency": 1
+  },
+  {
+    "item_name": "Poison Shroom",
+    "id": 77772276,
+    "progression": "progression",
+    "rom_id": 213,
+    "frequency": 1
+  },
+  {
+    "item_name": "Mango Delight",
+    "id": 77772277,
+    "progression": "progression",
+    "rom_id": 215,
+    "frequency": 1
+  },
+  {
+    "item_name": "Love Pudding",
+    "id": 77772278,
+    "progression": "filler",
+    "rom_id": 216,
+    "frequency": 1
+  },
+  {
+    "item_name": "Trial Stew",
+    "id": 77772279,
+    "progression": "filler",
+    "rom_id": 218,
+    "frequency": 1
+  },
+  {
+    "item_name": "Inky Sauce",
+    "id": 77772280,
+    "progression": "progression",
+    "rom_id": 220,
+    "frequency": 1
+  },
+  {
+    "item_name": "Koopa Tea",
+    "id": 77772281,
+    "progression": "filler",
+    "rom_id": 222,
+    "frequency": 1
+  },
+  {
+    "item_name": "Koopasta",
+    "id": 77772282,
+    "progression": "filler",
+    "rom_id": 223,
+    "frequency": 1
+  },
+  {
+    "item_name": "Spicy Pasta",
+    "id": 77772283,
+    "progression": "filler",
+    "rom_id": 224,
+    "frequency": 1
+  },
+  {
+    "item_name": "Heartful Cake",
+    "id": 77772284,
+    "progression": "filler",
+    "rom_id": 225,
+    "frequency": 1
+  },
+  {
+    "item_name": "Peach Tart",
+    "id": 77772285,
+    "progression": "filler",
+    "rom_id": 226,
+    "frequency": 1
+  },
+  {
+    "item_name": "Electro Pop",
+    "id": 77772286,
+    "progression": "filler",
+    "rom_id": 227,
+    "frequency": 1
+  },
+  {
+    "item_name": "Fire Pop",
+    "id": 77772287,
+    "progression": "filler",
+    "rom_id": 228,
+    "frequency": 1
+  },
+  {
+    "item_name": "Coco Candy",
+    "id": 77772288,
+    "progression": "filler",
+    "rom_id": 230,
+    "frequency": 1
+  },
+  {
+    "item_name": "Jelly Candy",
+    "id": 77772289,
+    "progression": "filler",
+    "rom_id": 231,
+    "frequency": 1
+  },
+  {
+    "item_name": "Zess Cookie",
+    "id": 77772290,
+    "progression": "filler",
+    "rom_id": 232,
+    "frequency": 1
+  },
+  {
+    "item_name": "Healthy Salad",
+    "id": 77772291,
+    "progression": "filler",
+    "rom_id": 233,
+    "frequency": 1
+  },
+  {
+    "item_name": "Koopa Bun",
+    "id": 77772292,
+    "progression": "filler",
+    "rom_id": 234,
+    "frequency": 1
+  },
+  {
+    "item_name": "Fresh Juice",
+    "id": 77772293,
+    "progression": "filler",
+    "rom_id": 235,
+    "frequency": 1
+  }
+]
