@@ -128,7 +128,7 @@ class OnePerWorldShowDebug(Toggle):
     """Decide whether it should show debug stuff during generation"""
 
 
-class LinearFill(Toggle):
+class LinearFill(Range):
     """If true, will attempt a linear fill where each locked world's items are only available in spheres after that world is unlocked. (EXPERIMENTAL)"""
     default = 0
     range_start = 0
@@ -535,7 +535,6 @@ class SlotLockWorld(AutoWorld.World):
         for sphere in reversed(sorted(sphere_unlocks.keys())):
             logging.info(f"{self.player_name} Linear Fill Phase 2: Filling sphere {sphere+1}")
             for unlock_item in sphere_unlocks[sphere]:
-                logging.info(unlock_item.name)
                 fillpool += filter(lambda item,player=unlock_item.unlock_player: item.player == player and item not in fillpool, progitems)
 
             amount_of_items = floor((len(fillpool) * (self.options.linear_fill.value / 100)))
@@ -565,8 +564,6 @@ class SlotLockWorld(AutoWorld.World):
                                   name=f"{self.player_name} Linear Fill Sphere {sphere+1}")
             locations += filllocations
             fillpool += thisfillpool
-        logging.info(fillpool)
-        logging.info(progitems)
         progitems += fillpool
 
     def set_rules(self) -> None:
