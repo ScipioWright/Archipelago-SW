@@ -10,6 +10,7 @@ from worlds.generic import GenericWorld
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from NetUtils import Hint, SlotType
 from settings import Group
+from logging import warning, log
 
 def launch_client(*args):
     from .Client import launch
@@ -557,6 +558,11 @@ class SlotLockWorld(AutoWorld.World):
                     def rule(state: CollectionState, slot=slot):
                         return state.has(f"Unlock {slot}", self.player)
                     self.get_location(f"Free Item {slot} {i+1}").access_rule = rule
+
+    def debug_info(self, text: str):
+        if self.options.one_per_world_show_debug:
+            warning(text)
+
     def fill_slot_data(self):
         item_locations : Dict[str, list[tuple[int, int]]] = {}
         for item in self.multiworld.get_items():
