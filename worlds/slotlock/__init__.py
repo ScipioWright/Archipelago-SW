@@ -227,7 +227,6 @@ class SlotLockWorld(AutoWorld.World):
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
-
     def create_item(self, name: str):
         if "Unlock_" in name:
             return self.create_slotlock_item(self.multiworld.player_name[int(name.split("_")[1])])
@@ -238,7 +237,6 @@ class SlotLockWorld(AutoWorld.World):
         elif name == "Nothing":
             return Item(name,ItemClassification.filler,6999, self.player)
         raise Exception("Invalid item name")
-
     @classmethod
     def stage_generate_early(cls, multiworld: "MultiWorld"):
         item_name_to_id = {}
@@ -477,7 +475,6 @@ class SlotLockWorld(AutoWorld.World):
                   fill_locations: List["Location"]) -> None:
         if self.options.linear_fill.value == 1:
             self.linear_fill(progitempool, fill_locations)
-
     def get_temp_spheres(self, slot_locking_items, other_item_pool):
         state = CollectionState(self.multiworld)
         for i in other_item_pool:
@@ -501,7 +498,6 @@ class SlotLockWorld(AutoWorld.World):
                 if location.item:
                     state.collect(location.item, True, location)
             locations -= sphere
-
     def linear_fill(self, progitems: List[Item], locations: List[Location]):
         print(f"{self.player_name} Linear Fill phase 1: Filling slot unlock items.")
         slot_locking_items = []
@@ -548,7 +544,6 @@ class SlotLockWorld(AutoWorld.World):
                                   name=f"{self.player_name} Linear Fill Sphere {sphere}")
             locations += filllocations
             locations += filllocations_priority
-
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has_all([f"Unlock {i}" for i in self.slots_to_lock] + [f"Unlock Bonus Slot {i+1}" for i in range(self.options.bonus_item_slots.value)], self.player)
