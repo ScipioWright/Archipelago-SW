@@ -475,7 +475,7 @@ class SlotLockWorld(AutoWorld.World):
                   usefulitempool: List["Item"],
                   filleritempool: List["Item"],
                   fill_locations: List["Location"]) -> None:
-
+        logging.info("Fill hook starting now")
         unfilled_slot_locking_items = []
         for item in progitempool:
             if isinstance(item, LockItem):
@@ -484,6 +484,7 @@ class SlotLockWorld(AutoWorld.World):
         for location in self.multiworld.get_filled_locations():
             if location.item is not None and isinstance(location.item, LockItem):
                 slot_locking_items.append(location.item)
+                logging.info(location.item.name)
         self.slot_locking_items = list(filter(lambda i: i.player == self.player, slot_locking_items))
         if unfilled_slot_locking_items: # Only run this once.
             logging.info(f"SlotLock (World) Linear Fill Phase 1: Filling slot unlock items.")
@@ -534,6 +535,7 @@ class SlotLockWorld(AutoWorld.World):
         for sphere in reversed(sorted(sphere_unlocks.keys())):
             logging.info(f"{self.player_name} Linear Fill Phase 2: Filling sphere {sphere+1}")
             for unlock_item in sphere_unlocks[sphere]:
+                logging.info(unlock_item.name)
                 fillpool += filter(lambda item,player=unlock_item.unlock_player: item.player == player and item not in fillpool, progitems)
 
             amount_of_items = floor((len(fillpool) * (self.options.linear_fill.value / 100)))
@@ -563,6 +565,8 @@ class SlotLockWorld(AutoWorld.World):
                                   name=f"{self.player_name} Linear Fill Sphere {sphere+1}")
             locations += filllocations
             fillpool += thisfillpool
+        logging.info(fillpool)
+        logging.info(progitems)
         progitems += fillpool
 
     def set_rules(self) -> None:
