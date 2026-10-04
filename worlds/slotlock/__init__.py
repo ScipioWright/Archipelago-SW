@@ -573,6 +573,11 @@ class SlotLockWorld(AutoWorld.World):
                     def rule(state: CollectionState, slot=slot):
                         return state.has(f"Unlock {slot}", self.player)
                     self.get_location(f"Free Item {slot} {i+1}").access_rule = rule
+
+    def debug_info(self, text: str) -> None:
+        if self.options.one_per_world_show_debug:
+            logging.warning(text)
+
     def fill_slot_data(self):
         item_locations : Dict[str, list[tuple[int, int]]] = {}
         for item in self.multiworld.get_items():
