@@ -488,9 +488,9 @@ class SlotLockWorld(AutoWorld.World):
         self.slot_locking_items = list(filter(lambda i: i.player == self.player, slot_locking_items))
         if unfilled_slot_locking_items: # Only run this once.
             logging.info(f"SlotLock (World) Linear Fill Phase 1: Filling slot unlock items.")
-            for item in unfilled_slot_locking_items:
-                progitempool.remove(item)
             fillpool = unfilled_slot_locking_items.copy()
+            for item in fillpool:
+                progitempool.remove(item)
             fill_state = Fill.sweep_from_pool(self.multiworld.state, progitempool)
             Fill.fill_restrictive(self.multiworld, fill_state, fill_locations,fillpool, name=f"SlotLock Slot Unlocks")
         if self.options.linear_fill.value > 0:
@@ -527,7 +527,7 @@ class SlotLockWorld(AutoWorld.World):
             for loc in spheres[sphere]:
                 if loc.item in self.slot_locking_items and not any(map(lambda sphere: sphere in sphere_unlocks and loc.item in sphere_unlocks[sphere], range(sphere))):
                     sphere_unlocks[sphere].add(loc.item)
-                    logging.debug(f"{sphere}: {loc.name} has {loc.item.name}")
+                    logging.debug(f"{sphere}: {loc.name} ({self.multiworld.player_name[loc.player]}) has {loc.item.name}")
             if not sphere_unlocks[sphere]:
                 sphere_unlocks.pop(sphere)
         self.sphere_unlocks = sphere_unlocks
@@ -540,12 +540,14 @@ class SlotLockWorld(AutoWorld.World):
             amount_of_items = floor((len(fillpool) * (self.options.linear_fill.value / 100)))
             logging.debug(f"with {amount_of_items} / {len(fillpool)}")
             thisfillpool = fillpool.copy()
-            self.random.shuffle(thisfillpool)
-            for i in range(len(thisfillpool) - amount_of_items):
-                thisfillpool.pop()
             for i in thisfillpool:
                 fillpool.remove(i)
                 progitems.remove(i)
+            self.random.shuffle(thisfillpool)
+            for i in range(len(thisfillpool) - amount_of_items):
+                popped = thisfillpool.pop()
+                fillpool.append(popped)
+                progitems.append(popped)
             filllocations = []
             for later_sphere in range(sphere+1, len(spheres)):
                 filllocations += filter(lambda location: location.item is None, spheres[later_sphere])
@@ -563,8 +565,8 @@ class SlotLockWorld(AutoWorld.World):
             Fill.fill_restrictive(self.multiworld, fill_state, filllocations, thisfillpool,
                                   name=f"{self.player_name} Linear Fill Sphere {sphere+1}")
             locations += filllocations
+            progitems += thisfillpool
             fillpool += thisfillpool
-        progitems += fillpool
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has_all([f"Unlock {i}" for i in self.slots_to_lock] + [f"Unlock Bonus Slot {i+1}" for i in range(self.options.bonus_item_slots.value)], self.player)
