@@ -291,7 +291,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.fast_travel:  # vertical implied by access
             AWData(AWType.region, [[iname.activated_fish_fast_travel]]),
         lname.fruit_69:
-            AWData(AWType.location, loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.disc], [iname.wheel_hop], [iname.bubble], [iname.remote, iname.obscure_tricks]], loc_type=LocType.fruit),
         lname.egg_galaxy:
             AWData(AWType.location, [[iname.remote, iname.disc]]),
     },        
