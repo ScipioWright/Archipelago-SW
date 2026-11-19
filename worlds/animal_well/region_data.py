@@ -427,6 +427,7 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.bear_dark_maze:  # need one key to open the gate, or do downward bubbles to get to the button
             AWData(AWType.region, [[iname.key_ring], [iname.bubble_short, iname.precise_tricks],
+                                   [iname.disc_hop],  # or disc over from the right side platform
                                    [iname.ball_trick_medium]]),  # or hit it with a ball
         rname.value_egg_spot:
             AWData(AWType.region, [[iname.bubble_short], [iname.disc], [iname.wheel_climb]]),
