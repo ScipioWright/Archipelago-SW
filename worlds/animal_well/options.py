@@ -117,7 +117,7 @@ class BubbleJumping(Choice):
 
 class DiscHopping(Choice):
     """
-    Include jumping onto the disc without letting it bounce off of a wall first in logic.
+    Include tricks that require you to throw disc midair and then land on it before touching the ground again.
     Single means doing it once from the ground.
     Multiple means having to chain them in midair.
     """
