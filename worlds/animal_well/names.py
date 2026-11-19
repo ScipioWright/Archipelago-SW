@@ -96,6 +96,7 @@ class RegionNames(str, Enum):
     frog_ruby_egg_ledge = "Ruby Egg Ledge"  # the ledge with the ruby egg in the frog dark room
     frog_east_of_fast_travel = "Frog East of Fast Travel"  # one screen to the right of the fast travel spot
     frog_elevator_and_ostrich_wheel = "Frog Elevator and Ostrich Wheel Section"  # interdependent, so one big region
+    frog_under_kangaroo = "Frog Under Kangaroo"  # creating a fake region for a couple of treasures you can't lock yourself out of
     frog_travel_egg_spot = "Frog Travel Egg Spot"
     frog_above_tnt = "Frog Above TNT Spot"  # Straight up from the Kangaroo. Holds a single fruit and a cat song.
 
