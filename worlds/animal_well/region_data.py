@@ -209,6 +209,9 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     rname.fish_upper: {
         rname.fish_wand_pit:  # enter the fish wand pit
             AWData(AWType.region),
+        rname.fish_west:  # skip wand pit by breaking spikes and then flute jumping
+            AWData(AWType.region, [[iname.flute_jump, iname.can_break_spikes_below],
+                                   [iname.flute_jump, iname.disc]]),
         lname.match_fish_mural:  # right at the start, just some platforming
             AWData(AWType.location),
         lname.bunny_fish:
