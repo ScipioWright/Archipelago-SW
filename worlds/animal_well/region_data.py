@@ -1145,6 +1145,14 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
     rname.frog_east_of_fast_travel: {
         # lname.kangaroo_first_spot:
         #     AWData(AWType.location),
+        rname.frog_under_kangaroo:
+        # access to later areas is thru elevator_and_ostritch_wheel to prevent softlocks (see comment below),
+        # this is just for the couple of treasures you can't yoyo-lock yourself out of
+            AWData(AWType.region, [[iname.yoyo, iname.bubble], [iname.yoyo, iname.wheel_hop],
+                                   [iname.yoyo, iname.wheel_climb], [iname.yoyo, iname.disc]]),
+            lname.egg_obsidian:  # bounce disc between the moving walls, or do some cursed bubble jumps
+            AWData(AWType.location, [[iname.disc], [iname.bubble_short, iname.precise_tricks],
+                                     [iname.water_bounce, iname.yoyo], [iname.water_bounce, iname.ball]]),
         rname.frog_elevator_and_ostrich_wheel:
             AWData(AWType.region, [[iname.yoyo, iname.bubble]]),
         # logically requires bubble only -- you need vertical to get past the ledge. If that vertical isn't bubble,
@@ -1160,6 +1168,11 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.frog_above_tnt:
             AWData(AWType.region, [[iname.bubble_long], [iname.disc_hop_hard]]),
     },
+    rname.frog_under_kangaroo: {
+        lname.fruit_107:
+            AWData(AWType.location, [[iname.top, iname.wheel_hop], [iname.top, iname.disc],
+                                     [iname.top, iname.bubble]], loc_type=LocType.fruit),
+    },
     rname.frog_ruby_egg_ledge: {
         lname.egg_ruby:  # this whole region just for one egg
             AWData(AWType.location),
@@ -1174,11 +1187,6 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.frog_above_tnt:
             AWData(AWType.region, [[iname.bubble_short], [iname.disc_hop_hard]]),
             # if you have yoyo, you can swap the mouse direction and lock yourself out of the check without bubbles
-        lname.fruit_107:
-            AWData(AWType.location, [[iname.top]], loc_type=LocType.fruit),
-        lname.egg_obsidian:  # bounce disc between the moving walls, or do some cursed bubble jumps
-            AWData(AWType.location, [[iname.disc], [iname.bubble_short, iname.precise_tricks],
-                                     [iname.water_bounce, iname.yoyo], [iname.water_bounce, iname.ball]]),
         # simultaneous buttons, need an item to hold it down
         # I don't think top is unintuitive enough to warrant obscure, but disc definitely is
         lname.fruit_110:
