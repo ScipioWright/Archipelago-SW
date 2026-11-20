@@ -229,7 +229,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
                                      [iname.water_bounce, iname.yoyo], [iname.water_bounce, iname.ball]]),
         lname.fruit_75:
             AWData(AWType.location, [[iname.bubble], [iname.disc_hop], [iname.wheel_hop],
-                                     [iname.water_bounce, iname.yoyo], [iname.water_bounce, iname.ball]], loc_type=LocType.fruit),
+                                     [iname.water_bounce, iname.yoyo], [iname.water_bounce, iname.ball]],
+                   loc_type=LocType.fruit),
         lname.fruit_73:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.egg_normal:  # hidden wall in lower left of first bubble room
@@ -249,7 +250,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, [[iname.ball], [iname.yoyo], [iname.top], [iname.disc],
                                      [iname.wheel, iname.obscure_tricks]]),  # wheel while moving into the gap
         lname.fruit_72:
-            AWData(AWType.location, [[iname.ball], [iname.yoyo], [iname.top], [iname.disc], [iname.wheel]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.ball], [iname.yoyo], [iname.top], [iname.disc], [iname.wheel]],
+                   loc_type=LocType.fruit),
         lname.fruit_71:
             AWData(AWType.location, loc_type=LocType.fruit),
         rname.water_spike_bunny_spot:
@@ -269,9 +271,11 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.fish_wand_pit: 
             AWData(AWType.region, [[iname.bubble], [iname.disc], [iname.wheel, iname.obscure_tricks]]),
         lname.fruit_54:
-            AWData(AWType.location, [[iname.bubble], [iname.disc_hop_hard], [iname.wheel_hard]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble], [iname.disc_hop_hard], [iname.wheel_hard]],
+                   loc_type=LocType.fruit),
         lname.fruit_63:
-            AWData(AWType.location, [[iname.bubble], [iname.disc_hop_hard], [iname.wheel_hard]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble], [iname.disc_hop_hard], [iname.wheel_hard]],
+                   loc_type=LocType.fruit),
         lname.egg_ancient:  # one room up and left of save point, vines in top right
         # single bubble possible, but it's much tighter than doing bubble_short, so it's not logical
             AWData(AWType.location, [[iname.bubble_short], [iname.disc_hop_hard], 
@@ -291,7 +295,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         rname.fast_travel:  # vertical implied by access
             AWData(AWType.region, [[iname.activated_fish_fast_travel]]),
         lname.fruit_69:
-            AWData(AWType.location, [[iname.disc], [iname.wheel_hop], [iname.bubble], [iname.remote, iname.obscure_tricks]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.disc], [iname.wheel_hop], [iname.bubble],
+                                     [iname.remote, iname.obscure_tricks]], loc_type=LocType.fruit),
         lname.egg_galaxy:
             AWData(AWType.location, [[iname.remote, iname.disc]]),
     },        
@@ -643,7 +648,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         # you need 3 firecrackers minimum if you want to get through without yoyo or flute
         # alternatively, use ball to hit the two door switches + the trapdoor switch
         lname.fruit_10:
-            AWData(AWType.location, [[iname.slink, iname.yoyo, iname.flute], [iname.slink, iname.firecrackers]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.slink, iname.yoyo, iname.flute], [iname.slink, iname.firecrackers]],
+                   loc_type=LocType.fruit),
         rname.bear_shadow_egg_spot:
             AWData(AWType.region, [[iname.top, iname.slink, iname.yoyo, iname.flute],
                                    [iname.top, iname.slink, iname.firecrackers]]),
@@ -799,9 +805,11 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_6:
             AWData(AWType.location, [[iname.disc], [iname.bubble], [iname.wheel_hop], [iname.key_ring], 
-                                     [iname.can_break_spikes], [iname.remote, iname.obscure_tricks]], loc_type=LocType.fruit),
+                                     [iname.can_break_spikes], [iname.remote, iname.obscure_tricks]],
+                   loc_type=LocType.fruit),
         lname.fruit_4:
-            AWData(AWType.location, [[iname.disc_hop_hard], [iname.bubble_short], [iname.wheel_hop], [iname.key_ring]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.disc_hop_hard], [iname.bubble_short], [iname.wheel_hop], [iname.key_ring]],
+                   loc_type=LocType.fruit),
         lname.egg_raw:
             AWData(AWType.location, [[iname.slink, iname.disc_hop_hard],
                                      [iname.slink, iname.bubble_short],
@@ -861,7 +869,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.egg_plant:
             AWData(AWType.location, [[iname.disc, iname.slink], [iname.bubble_short, iname.obscure_tricks]]),
         lname.fruit_35:
-            AWData(AWType.location, [[iname.disc, iname.slink], [iname.bubble_short, iname.obscure_tricks]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.disc, iname.slink], [iname.bubble_short, iname.obscure_tricks]],
+                   loc_type=LocType.fruit),
         rname.kangaroo_blocks:
             AWData(AWType.region, [[iname.ball]]),
     },
@@ -1200,7 +1209,8 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
         lname.fruit_114:
             AWData(AWType.location, loc_type=LocType.fruit),
         lname.fruit_113:
-            AWData(AWType.location, [[iname.bubble, iname.slink], [iname.bubble_short, iname.obscure_tricks]], loc_type=LocType.fruit),
+            AWData(AWType.location, [[iname.bubble, iname.slink], [iname.bubble_short, iname.obscure_tricks]],
+                   loc_type=LocType.fruit),
         lname.flame_green:
             AWData(AWType.location, [[iname.can_open_flame]], event=iname.green_flame),
         # bird_area:  # pipe after flame, you need bubble to be here so no need to put the item requirement
@@ -1252,9 +1262,11 @@ traversal_requirements: Dict[Union[lname, rname], Dict[Union[lname, rname], AWDa
             AWData(AWType.location, [[iname.bubble, iname.top, iname.wheel], [iname.disc, iname.top, iname.wheel],
                                      [iname.wheel_hop, iname.top]], loc_type=LocType.fruit),
         rname.hippo_fireworks:  # If you pre-hold the button, top can push the button incidentally enough to get you through
-            AWData(AWType.region, [[iname.slink, iname.yoyo, iname.disc], [iname.top, iname.yoyo, iname.disc, iname.obscure_tricks]]),
+            AWData(AWType.region, [[iname.slink, iname.yoyo, iname.disc],
+                                   [iname.top, iname.yoyo, iname.disc, iname.obscure_tricks]]),
         rname.hippo_skull_room:
-            AWData(AWType.region, [[iname.slink, iname.yoyo, iname.disc], [iname.top, iname.yoyo, iname.disc, iname.obscure_tricks]]),
+            AWData(AWType.region, [[iname.slink, iname.yoyo, iname.disc],
+                                   [iname.top, iname.yoyo, iname.disc, iname.obscure_tricks]]),
     },
     rname.hippo_skull_room: {
         lname.bb_wand_chest:
